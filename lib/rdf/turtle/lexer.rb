@@ -282,6 +282,7 @@ module RDF::Turtle
       match_string_long_2   ||
       match_string_1        ||
       match_string_2        ||
+      match_keyword         ||
       match_langtag         ||
       match_double          ||
       match_decimal         ||
@@ -290,7 +291,6 @@ module RDF::Turtle
       match_blank_node_label||
       match_nil             ||
       match_anon            ||
-      match_keyword         ||
       match_delimiter       ||
       match_operator
     end
@@ -399,7 +399,7 @@ module RDF::Turtle
 
     def match_keyword
       if matched = scanner.scan(KEYWORD)
-        token(nil, matched.upcase.to_s)
+        token(nil, matched.to_s)
       end
     end
 

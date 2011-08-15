@@ -137,12 +137,13 @@ module RDF::Turtle
             :production => cur_prod, :token => token) if prod_branch.nil?
           sequence = prod_branch[token.representation]
           debug("parse(production)", "cur_prod #{cur_prod}, token #{token.representation.inspect} prod_branch #{prod_branch.keys.inspect}, sequence #{sequence.inspect}")
-          if sequence.nil? && !prod_branch.has_key?(:"ebnf:empty")
+          if sequence.nil? #&& !prod_branch.has_key?(:"ebnf:empty")
             expected = prod_branch.values.uniq.map {|u| u.map {|v| abbr(v).inspect}.join(",")}
-            error("parse", "Found '#{token.inspect}' when parsing #{abbr(cur_prod)}. expected #{expected.join(' | ')}",
+            error("parse", "expected #{expected.inspect}",
               :production => cur_prod, :token => token)
-          else
-            sequence ||= []
+#          else
+#            debug("parse(production)", "empty sequence for ebnf:empty")
+#            sequence ||= []
           end
           todo_stack.last[:terms] += sequence
         end
@@ -264,7 +265,11 @@ module RDF::Turtle
     def error(node, message, options = {})
       depth = options[:depth] || @productions.length
       node ||= options[:production]
-      raise Error.new("Error on production #{options[:production].inspect}#{' with input ' + options[:token].inspect if options[:token]} at line #{@lineno}: #{message}", options)
+
+      message = "#{options[:token].representation.dump} was not expected: #{message}" if options[:token]
+      message += " at line #{@lineno}" if @lineno
+      message += ", production = #{options[:production].inspect}" if options[:production] #&& options[:debug]
+      raise RDF::ReaderError, message
     end
 
     ##
@@ -372,58 +377,5 @@ module RDF::Turtle
         tokens.shift
       end
     end
-
-  public
-    ##
-    # Raised for errors during parsing.
-    #
-    # @example Raising a parser error
-    #   raise SPARQL::Grammar::Parser::Error.new(
-    #     "FIXME on line 10",
-    #     :input => query, :production => '%', :lineno => 9)
-    #
-    # @see http://ruby-doc.org/core/classes/StandardError.html
-    class Error < StandardError
-      ##
-      # The input string associated with the error.
-      #
-      # @return [String]
-      attr_reader :input
-
-      ##
-      # The grammar production where the error was found.
-      #
-      # @return [String]
-      attr_reader :production
-
-      ##
-      # The line number where the error occurred.
-      #
-      # @return [Integer]
-      attr_reader :lineno
-
-      ##
-      # Position within line of error.
-      #
-      # @return [Integer]
-      attr_reader :position
-
-      ##
-      # Initializes a new lexer error instance.
-      #
-      # @param  [String, #to_s]          message
-      # @param  [Hash{Symbol => Object}] options
-      # @option options [String]         :input  (nil)
-      # @option options [String]         :production  (nil)
-      # @option options [Integer]        :lineno (nil)
-      # @option options [Integer]        :position (nil)
-      def initialize(message, options = {})
-        @input  = options[:input]
-        @production  = options[:production]
-        @lineno = options[:lineno]
-        @position = options[:position]
-        super(message.to_s)
-      end
-    end # class Error
   end # class Reader
 end # module RDF::Turtle

@@ -223,6 +223,12 @@ class GramLL1
       end
     end
   
+    # Add follow rules
+    (@follow[lhs] || []).each do |f|
+      chatty("  Follow: #{resource_rep(f).dump}")
+      branchDict[f] ||= []
+    end
+
     @branch[lhs] = branchDict
   end
   
