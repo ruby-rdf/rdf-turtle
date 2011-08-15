@@ -1,0 +1,2375 @@
+#Processed by Id: cwm.py,v 1.197 2007-12-13 15:38:39 syosi Exp 
+        #    using base file:///Users/gregg/Projects/swap/grammar/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.201 2010-10-23 04:14:48 timbl Exp
+
+#   Base was: file:///Users/gregg/Projects/swap/grammar/
+     @prefix : <http://www.w3.org/2000/10/swap/grammar/turtle#> .
+    @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#> .
+    
+     @forSome <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6>,
+                <#_g7> .
+    
+    "."     g:follow "(",
+                "[",
+                :ANON,
+                :BASE,
+                :BLANK_NODE_LABEL,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :PREFIX .
+    
+    "a"     g:follow "(",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2 .
+    
+    "false"     g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2 .
+    
+    "true"     g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2 .
+    
+    <ebnf2bnf.n3>     <http://purl.org/dc/elements/1.1/description> "$Id: ebnf2bnf.n3,v 1.7 2006-11-15 19:46:59 connolly Exp $",
+                """reduce EBNF to BNF;
+i.e. rewrite ?, +, * operators using alt and seq
+""";
+         rdfs:seeAlso <ebnf>,
+                <ebnf.n3>,
+                <ebnf.rdf> .
+    
+    <first_follow.n3>     <http://purl.org/dc/elements/1.1/description> "$Id: first_follow.n3,v 1.4 2006-06-22 22:04:51 connolly Exp $";
+         <http://purl.org/dc/elements/1.1/source> <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>;
+         <http://purl.org/dc/elements/1.1/title> "first and follow rules for LL(1) grammars" .
+    
+    <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>     <http://purl.org/dc/elements/1.1/description> "The same material is covered in page 44-48 of Aho, Sethi, Ullman";
+         <http://purl.org/dc/elements/1.1/relation> <http://en.wikipedia.org/wiki/Compilers:_Principles%2C_Techniques%2C_and_Tools>;
+         <http://purl.org/dc/elements/1.1/title> "Constructing an LL(1) parsing table" .
+    
+    g:alt     rdfs:domain g:Production .
+    
+    g:empty     g:first g:eps;
+         g:follow "(",
+                ",",
+                ";",
+                "[",
+                "false",
+                "true",
+                g:eof,
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:seq () .
+    
+    re:alt     rdfs:domain re:Regex .
+    
+    re:diff     rdfs:domain re:Regex .
+    
+    re:matches     rdfs:domain re:Regex .
+    
+    re:opt     rdfs:domain re:Regex .
+    
+    re:plus     rdfs:domain re:Regex .
+    
+    re:seq     rdfs:domain re:Regex .
+    
+    re:star     rdfs:domain re:Regex .
+    
+    :ANON     a re:Regex;
+         rdf:value "94s";
+         rdfs:comment "[94s]    ANON      ::=       '[' WS* ']'";
+         rdfs:label "ANON";
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "["
+         [
+                 a re:Regex;
+                 re:star :WS ]
+        "]" ) .
+    
+    :BASE     a re:Regex;
+         rdf:value "0";
+         rdfs:comment "[0] BASE ::= '@base'";
+         rdfs:label "BASE";
+         re:seq  (
+        "@base" ) .
+    
+    :BLANK_NODE_LABEL     a re:Regex;
+         rdf:value "73s";
+         rdfs:comment "[73s]    BLANK_NODE_LABEL      ::=       '_:' PN_LOCAL";
+         rdfs:label "BLANK_NODE_LABEL";
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "_:"
+        :PN_LOCAL ) .
+    
+    :BlankNode     a g:Production;
+         rdf:value "69s";
+         rdfs:comment "[69s]    BlankNode     ::=       BLANK_NODE_LABEL | ANON";
+         rdfs:label "BlankNode";
+         g:alt  (
+        :BLANK_NODE_LABEL
+        :ANON );
+         g:first :ANON,
+                :BLANK_NODE_LABEL;
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :BooleanLiteral     a g:Production;
+         rdf:value "65s";
+         rdfs:comment "[65s]    BooleanLiteral    ::=       'true' | 'false'";
+         rdfs:label "BooleanLiteral";
+         g:alt  (
+        "true"
+        "false" );
+         g:first "false",
+                "true";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :DECIMAL     a re:Regex;
+         rdf:value "78s";
+         rdfs:comment "[78s]    DECIMAL       ::=       [0-9]+ '.' [0-9]* | '.' [0-9]+";
+         rdfs:label "DECIMAL";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:alt  (
+         [
+                 a re:Regex;
+                 re:seq  (
+                 [
+                         a re:Regex;
+                         re:plus  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ]
+                "."
+                 [
+                         a re:Regex;
+                         re:star  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ] ) ]
+         [
+                 a re:Regex;
+                 re:seq  (
+                "."
+                 [
+                         a re:Regex;
+                         re:plus  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ] ) ] ) .
+    
+    :DECIMAL_NEGATIVE     a re:Regex;
+         rdf:value "84s";
+         rdfs:comment "[84s]    DECIMAL_NEGATIVE      ::=       '-' DECIMAL";
+         rdfs:label "DECIMAL_NEGATIVE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "-"
+        :DECIMAL ) .
+    
+    :DECIMAL_POSITIVE     a re:Regex;
+         rdf:value "81s";
+         rdfs:comment "[81s]    DECIMAL_POSITIVE      ::=       '+' DECIMAL";
+         rdfs:label "DECIMAL_POSITIVE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "+"
+        :DECIMAL ) .
+    
+    :DOUBLE     a re:Regex;
+         rdf:value "79s";
+         rdfs:comment "[79s]    DOUBLE    ::=       [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT";
+         rdfs:label "DOUBLE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:alt  (
+         [
+                 a re:Regex;
+                 re:seq  (
+                 [
+                         a re:Regex;
+                         re:plus  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ]
+                "."
+                 [
+                         a re:Regex;
+                         re:star  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ]
+                :EXPONENT ) ]
+         [
+                 a re:Regex;
+                 re:seq  (
+                "."
+                 [
+                         a re:Regex;
+                         re:plus  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ]
+                :EXPONENT ) ]
+         [
+                 a re:Regex;
+                 re:seq  (
+                 [
+                         a re:Regex;
+                         re:plus  [
+                             a re:Regex;
+                             re:matches "[0-9]" ] ]
+                :EXPONENT ) ] ) .
+    
+    :DOUBLE_NEGATIVE     a re:Regex;
+         rdf:value "85s";
+         rdfs:comment "[85s]    DOUBLE_NEGATIVE       ::=       '-' DOUBLE";
+         rdfs:label "DOUBLE_NEGATIVE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "-"
+        :DOUBLE ) .
+    
+    :DOUBLE_POSITIVE     a re:Regex;
+         rdf:value "82s";
+         rdfs:comment "[82s]    DOUBLE_POSITIVE       ::=       '+' DOUBLE";
+         rdfs:label "DOUBLE_POSITIVE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "+"
+        :DOUBLE ) .
+    
+    :ECHAR     a re:Regex;
+         rdf:value "91s";
+         rdfs:comment """[91s]    ECHAR     ::=       '\\\\' [tbnrf\\\\"']""";
+         rdfs:label "ECHAR";
+         re:seq  (
+        "\\\\"
+         [
+                 a re:Regex;
+                 re:matches "[tbnrf\\\\\"']" ] ) .
+    
+    :EXPONENT     a re:Regex;
+         rdf:value "86s";
+         rdfs:comment "[86s]    EXPONENT      ::=       [eE] [+-]? [0-9]+";
+         rdfs:label "EXPONENT";
+         re:seq  (
+         [
+                 a re:Regex;
+                 re:matches "[eE]" ]
+         [
+                 a re:Regex;
+                 re:opt  [
+                     a re:Regex;
+                     re:matches "[+-]" ] ]
+         [
+                 a re:Regex;
+                 re:plus  [
+                     a re:Regex;
+                     re:matches "[0-9]" ] ] ) .
+    
+    :INTEGER     a re:Regex;
+         rdf:value "77s";
+         rdfs:comment "[77s]    INTEGER       ::=       [0-9]+";
+         rdfs:label "INTEGER";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:plus  [
+             a re:Regex;
+             re:matches "[0-9]" ] .
+    
+    :INTEGER_NEGATIVE     a re:Regex;
+         rdf:value "83s";
+         rdfs:comment "[83s]    INTEGER_NEGATIVE      ::=       '-' INTEGER";
+         rdfs:label "INTEGER_NEGATIVE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "-"
+        :INTEGER ) .
+    
+    :INTEGER_POSITIVE     a re:Regex;
+         rdf:value "80s";
+         rdfs:comment "[80s]    INTEGER_POSITIVE      ::=       '+' INTEGER";
+         rdfs:label "INTEGER_POSITIVE";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "+"
+        :INTEGER ) .
+    
+    :IRI_REF     a re:Regex;
+         rdf:value "70s";
+         rdfs:comment """[70s]    IRI_REF       ::=       '<' ([^<>\\"{}|^`\\\\]-[#x00-#x20])* '>'""";
+         rdfs:label "IRI_REF";
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        "<"
+         [
+                 a re:Regex;
+                 re:star  [
+                     a re:Regex;
+                     re:diff  (
+                     [
+                             a re:Regex;
+                             re:matches "[^<>\\\"{}|^`\\\\]" ]
+                     [
+                             a re:Regex;
+                             re:matches "[ - ]" ] ) ] ]
+        ">" ) .
+    
+    :IRIref     a g:Production;
+         rdf:value "67s";
+         rdfs:comment "[67s]    IRIref    ::=       IRI_REF | PrefixedName";
+         rdfs:label "IRIref";
+         g:alt  (
+        :IRI_REF
+        :PrefixedName );
+         g:first :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :LANGTAG     a re:Regex;
+         rdf:value "76s";
+         rdfs:comment "[76s]    LANGTAG       ::=       BASE | PREFIX | '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*";
+         rdfs:label "LANGTAG";
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:alt  (
+        :BASE
+        :PREFIX
+         [
+                 a re:Regex;
+                 re:seq  (
+                "@"
+                 [
+                         a re:Regex;
+                         re:plus  [
+                             a re:Regex;
+                             re:matches "[a-zA-Z]" ] ]
+                 [
+                         a re:Regex;
+                         re:star  [
+                             a re:Regex;
+                             re:seq  (
+                            "-"
+                             [
+                                     a re:Regex;
+                                     re:plus  [
+                                         a re:Regex;
+                                         re:matches "[a-zA-Z0-9]" ] ] ) ] ] ) ] ) .
+    
+    :NIL     a re:Regex;
+         rdf:value "92s";
+         rdfs:comment "[92s]    NIL       ::=       '(' WS* ')'";
+         rdfs:label "NIL";
+         re:seq  (
+        "("
+         [
+                 a re:Regex;
+                 re:star :WS ]
+        ")" ) .
+    
+    :NumericLiteral     a g:Production;
+         rdf:value "61s";
+         rdfs:comment "[61s]    NumericLiteral    ::=       NumericLiteralUnsigned | NumericLiteralPositive | NumericLiteralNegative";
+         rdfs:label "NumericLiteral";
+         g:alt  (
+        :NumericLiteralUnsigned
+        :NumericLiteralPositive
+        :NumericLiteralNegative );
+         g:first :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :NumericLiteralNegative     a g:Production;
+         rdf:value "64s";
+         rdfs:comment "[64s]    NumericLiteralNegative    ::=       INTEGER_NEGATIVE | DECIMAL_NEGATIVE | DOUBLE_NEGATIVE";
+         rdfs:label "NumericLiteralNegative";
+         g:alt  (
+        :INTEGER_NEGATIVE
+        :DECIMAL_NEGATIVE
+        :DOUBLE_NEGATIVE );
+         g:first :DECIMAL_NEGATIVE,
+                :DOUBLE_NEGATIVE,
+                :INTEGER_NEGATIVE;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :NumericLiteralPositive     a g:Production;
+         rdf:value "63s";
+         rdfs:comment "[63s]    NumericLiteralPositive    ::=       INTEGER_POSITIVE | DECIMAL_POSITIVE | DOUBLE_POSITIVE";
+         rdfs:label "NumericLiteralPositive";
+         g:alt  (
+        :INTEGER_POSITIVE
+        :DECIMAL_POSITIVE
+        :DOUBLE_POSITIVE );
+         g:first :DECIMAL_POSITIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER_POSITIVE;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :NumericLiteralUnsigned     a g:Production;
+         rdf:value "62s";
+         rdfs:comment "[62s]    NumericLiteralUnsigned    ::=       INTEGER | DECIMAL | DOUBLE";
+         rdfs:label "NumericLiteralUnsigned";
+         g:alt  (
+        :INTEGER
+        :DECIMAL
+        :DOUBLE );
+         g:first :DECIMAL,
+                :DOUBLE,
+                :INTEGER;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :PNAME_LN     a re:Regex;
+         rdf:value "72s";
+         rdfs:comment "[72s]    PNAME_LN      ::=       PNAME_NS PN_LOCAL";
+         rdfs:label "PNAME_LN";
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+        :PNAME_NS
+        :PN_LOCAL ) .
+    
+    :PNAME_NS     a re:Regex;
+         rdf:value "71s";
+         rdfs:comment "[71s]    PNAME_NS      ::=       PN_PREFIX? ':'";
+         rdfs:label "PNAME_NS";
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         re:seq  (
+         [
+                 a re:Regex;
+                 re:opt :PN_PREFIX ]
+        ":" ) .
+    
+    :PN_CHARS     a re:Regex;
+         rdf:value "98s";
+         rdfs:comment "[98s]    PN_CHARS      ::=       PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]";
+         rdfs:label "PN_CHARS";
+         re:alt  (
+        :PN_CHARS_U
+        "-"
+         [
+                 a re:Regex;
+                 re:matches "[0-9]" ]
+         [
+                 a re:Regex;
+                 re:matches "[·]" ]
+         [
+                 a re:Regex;
+                 re:matches "[̀-ͯ]" ]
+         [
+                 a re:Regex;
+                 re:matches "[‿-⁀]" ] ) .
+    
+    :PN_CHARS_BASE     a re:Regex;
+         rdf:value "95s";
+         rdfs:comment "[95s]    PN_CHARS_BASE     ::=       [A-Z] | [a-z] | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF] | [#x0370-#x037D] | [#x037F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]";
+         rdfs:label "PN_CHARS_BASE";
+         re:alt  (
+         [
+                 a re:Regex;
+                 re:matches "[A-Z]" ]
+         [
+                 a re:Regex;
+                 re:matches "[a-z]" ]
+         [
+                 a re:Regex;
+                 re:matches "[À-Ö]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ø-ö]" ]
+         [
+                 a re:Regex;
+                 re:matches "[ø-˿]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ͱ-ͽ]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ϳ-῿]" ]
+         [
+                 a re:Regex;
+                 re:matches "[‌-‍]" ]
+         [
+                 a re:Regex;
+                 re:matches "[⁰-↏]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ⰰ-⿯]" ]
+         [
+                 a re:Regex;
+                 re:matches "[、-퟿]" ]
+         [
+                 a re:Regex;
+                 re:matches "[豈-﷏]" ]
+         [
+                 a re:Regex;
+                 re:matches "[ﷰ-�]" ]
+         [
+                 a re:Regex;
+                 re:matches "[ -￿]" ] ) .
+    
+    :PN_CHARS_U     a re:Regex;
+         rdf:value "96s";
+         rdfs:comment "[96s]    PN_CHARS_U    ::=       PN_CHARS_BASE | '_'";
+         rdfs:label "PN_CHARS_U";
+         re:alt  (
+        :PN_CHARS_BASE
+        "_" ) .
+    
+    :PN_LOCAL     a re:Regex;
+         rdf:value "100s";
+         rdfs:comment "[100s]       PN_LOCAL      ::=       ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?";
+         rdfs:label "PN_LOCAL";
+         re:seq  (
+         [
+                 a re:Regex;
+                 re:alt  (
+                :PN_CHARS_U
+                 [
+                         a re:Regex;
+                         re:matches "[0-9]" ] ) ]
+         [
+                 a re:Regex;
+                 re:opt  [
+                     a re:Regex;
+                     re:seq  (
+                     [
+                             a re:Regex;
+                             re:star  [
+                                 a re:Regex;
+                                 re:alt  (
+                                :PN_CHARS
+                                "." ) ] ]
+                    :PN_CHARS ) ] ] ) .
+    
+    :PN_PREFIX     a re:Regex;
+         rdf:value "99s";
+         rdfs:comment "[99s]    PN_PREFIX     ::=       PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?";
+         rdfs:label "PN_PREFIX";
+         re:seq  (
+        :PN_CHARS_BASE
+         [
+                 a re:Regex;
+                 re:opt  [
+                     a re:Regex;
+                     re:seq  (
+                     [
+                             a re:Regex;
+                             re:star  [
+                                 a re:Regex;
+                                 re:alt  (
+                                :PN_CHARS
+                                "." ) ] ]
+                    :PN_CHARS ) ] ] ) .
+    
+    :PREFIX     a re:Regex;
+         rdf:value "0";
+         rdfs:comment "[0] PREFIX ::= '@prefix'";
+         rdfs:label "PREFIX";
+         re:seq  (
+        "@prefix" ) .
+    
+    :PrefixedName     a g:Production;
+         rdf:value "68s";
+         rdfs:comment "[68s]    PrefixedName      ::=       PNAME_LN | PNAME_NS";
+         rdfs:label "PrefixedName";
+         g:alt  (
+        :PNAME_LN
+        :PNAME_NS );
+         g:first :PNAME_LN,
+                :PNAME_NS;
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :RDFLiteral     a g:Production;
+         rdf:value "60s";
+         rdfs:comment "[60s]    RDFLiteral    ::=       String ( LANGTAG | ( '^^' IRIref ) )?";
+         rdfs:label "RDFLiteral";
+         g:first :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language;
+         g:seq  (
+        :String
+        <#_g6> ) .
+    
+    :STRING_LITERAL1     a re:Regex;
+         rdf:value "87s";
+         rdfs:comment "[87s]    STRING_LITERAL1       ::=       \"'\" ( ([^#x27#x5C#xA#xD]) | ECHAR )* \"'\"";
+         rdfs:label "STRING_LITERAL1";
+         g:follow "^^",
+                :LANGTAG;
+         re:seq  (
+        "'"
+         [
+                 a re:Regex;
+                 re:star  [
+                     a re:Regex;
+                     re:alt  (
+                     [
+                             a re:Regex;
+                             re:matches "[^'\\\\\n\r]" ]
+                    :ECHAR ) ] ]
+        "'" ) .
+    
+    :STRING_LITERAL2     a re:Regex;
+         rdf:value "88s";
+         rdfs:comment """[88s]    STRING_LITERAL2       ::=       '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'""";
+         rdfs:label "STRING_LITERAL2";
+         g:follow "^^",
+                :LANGTAG;
+         re:seq  (
+        "\""
+         [
+                 a re:Regex;
+                 re:star  [
+                     a re:Regex;
+                     re:alt  (
+                     [
+                             a re:Regex;
+                             re:matches "[^\"\\\\\n\r]" ]
+                    :ECHAR ) ] ]
+        "\"" ) .
+    
+    :STRING_LITERAL_LONG1     a re:Regex;
+         rdf:value "89s";
+         rdfs:comment "[89s]    STRING_LITERAL_LONG1      ::=       \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\\\] | ECHAR ) )* \"'''\"";
+         rdfs:label "STRING_LITERAL_LONG1";
+         g:follow "^^",
+                :LANGTAG;
+         re:seq  (
+        "'''"
+         [
+                 a re:Regex;
+                 re:star  [
+                     a re:Regex;
+                     re:seq  (
+                     [
+                             a re:Regex;
+                             re:opt  [
+                                 a re:Regex;
+                                 re:alt  (
+                                "'"
+                                "''" ) ] ]
+                     [
+                             a re:Regex;
+                             re:alt  (
+                             [
+                                     a re:Regex;
+                                     re:matches "[^'\\\\]" ]
+                            :ECHAR ) ] ) ] ]
+        "'''" ) .
+    
+    :STRING_LITERAL_LONG2     a re:Regex;
+         rdf:value "90s";
+         rdfs:comment """[90s]    STRING_LITERAL_LONG2      ::=       '\"""' ( ( '"' | '""' )? ( [^"\\\\] | ECHAR ) )* '\"""'""";
+         rdfs:label "STRING_LITERAL_LONG2";
+         g:follow "^^",
+                :LANGTAG;
+         re:seq  (
+        "\"\"\""
+         [
+                 a re:Regex;
+                 re:star  [
+                     a re:Regex;
+                     re:seq  (
+                     [
+                             a re:Regex;
+                             re:opt  [
+                                 a re:Regex;
+                                 re:alt  (
+                                "\""
+                                "\"\"" ) ] ]
+                     [
+                             a re:Regex;
+                             re:alt  (
+                             [
+                                     a re:Regex;
+                                     re:matches "[^\"\\\\]" ]
+                            :ECHAR ) ] ) ] ]
+        "\"\"\"" ) .
+    
+    :String     a g:Production;
+         rdf:value "66s";
+         rdfs:comment "[66s]    String    ::=       STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2";
+         rdfs:label "String";
+         g:alt  (
+        :STRING_LITERAL1
+        :STRING_LITERAL2
+        :STRING_LITERAL_LONG1
+        :STRING_LITERAL_LONG2 );
+         g:first :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:follow "^^",
+                :LANGTAG;
+         g:nonTerminal :language .
+    
+    :VAR1     a re:Regex;
+         rdf:value "74s";
+         rdfs:comment "[74s]    VAR1      ::=       '?' VARNAME";
+         rdfs:label "VAR1";
+         re:seq  (
+        "?"
+        :VARNAME ) .
+    
+    :VAR2     a re:Regex;
+         rdf:value "75s";
+         rdfs:comment "[75s]    VAR2      ::=       '$' VARNAME";
+         rdfs:label "VAR2";
+         re:seq  (
+        "$"
+        :VARNAME ) .
+    
+    :VARNAME     a re:Regex;
+         rdf:value "97s";
+         rdfs:comment "[97s]    VARNAME       ::=       ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*";
+         rdfs:label "VARNAME";
+         re:seq  (
+         [
+                 a re:Regex;
+                 re:alt  (
+                :PN_CHARS_U
+                 [
+                         a re:Regex;
+                         re:matches "[0-9]" ] ) ]
+         [
+                 a re:Regex;
+                 re:star  [
+                     a re:Regex;
+                     re:alt  (
+                    :PN_CHARS_U
+                     [
+                             a re:Regex;
+                             re:matches "[0-9]" ]
+                     [
+                             a re:Regex;
+                             re:matches "[·]" ]
+                     [
+                             a re:Regex;
+                             re:matches "[̀-ͯ]" ]
+                     [
+                             a re:Regex;
+                             re:matches "[‿-⁀]" ] ) ] ] ) .
+    
+    :WS     a re:Regex;
+         rdf:value "93s";
+         rdfs:comment "[93s]    WS    ::=       #x20 | #x9 | #xD | #xA";
+         rdfs:label "WS";
+         re:alt  (
+         [
+                 a re:Regex;
+                 re:matches "[ ]" ]
+         [
+                 a re:Regex;
+                 re:matches "[\t]" ]
+         [
+                 a re:Regex;
+                 re:matches "[\r]" ]
+         [
+                 a re:Regex;
+                 re:matches "[\n]" ] ) .
+    
+    :base     a g:Production;
+         rdf:value "5";
+         rdfs:comment "[5]\tbase \t::= \tBASE IRI_REF";
+         rdfs:label "base";
+         g:first :BASE;
+         g:nonTerminal :language;
+         g:seq  (
+        :BASE
+        :IRI_REF ) .
+    
+    :blank     a g:Production;
+         rdf:value "21";
+         rdfs:comment "[21]\tblank \t::= \tBlankNode  | '[' predicateObjectList ']' | collection";
+         rdfs:label "blank";
+         g:alt  (
+        :BlankNode
+         [
+                 a g:Production;
+                 g:first "[";
+                 g:follow "(",
+                        ",",
+                        "[",
+                        "a",
+                        "false",
+                        "true",
+                        :ANON,
+                        :BLANK_NODE_LABEL,
+                        :DECIMAL,
+                        :DECIMAL_NEGATIVE,
+                        :DECIMAL_POSITIVE,
+                        :DOUBLE,
+                        :DOUBLE_NEGATIVE,
+                        :DOUBLE_POSITIVE,
+                        :INTEGER,
+                        :INTEGER_NEGATIVE,
+                        :INTEGER_POSITIVE,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS,
+                        :STRING_LITERAL1,
+                        :STRING_LITERAL2,
+                        :STRING_LITERAL_LONG1,
+                        :STRING_LITERAL_LONG2;
+                 g:nonTerminal :language;
+                 g:seq  (
+                "["
+                :predicateObjectList
+                "]" ) ]
+        :collection );
+         g:first "(",
+                "[",
+                :ANON,
+                :BLANK_NODE_LABEL;
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :collection     a g:Production;
+         rdf:value "23";
+         rdfs:comment "[23]\tcollection \t::= \t'(' object* ')'";
+         rdfs:label "collection";
+         g:first "(";
+         g:follow "(",
+                ",",
+                "[",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language;
+         g:seq  (
+        "("
+        <#_g5>
+        ")" ) .
+    
+    :directive     a g:Production;
+         rdf:value "3";
+         rdfs:comment "[3]\tdirective \t::= \tprefixID | base";
+         rdfs:label "directive";
+         g:alt  (
+        :prefixID
+        :base );
+         g:first :BASE,
+                :PREFIX;
+         g:nonTerminal :language .
+    
+    :language     rdfs:isDefinedBy <../../rdf-turtle/etc/turtle.n3>;
+         g:start :turtleDoc;
+         g:terminal "(",
+                ")",
+                ",",
+                ".",
+                ";",
+                "[",
+                "]",
+                "^^",
+                "a",
+                "false",
+                "true",
+                :ANON,
+                :BASE,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :LANGTAG,
+                :PNAME_LN,
+                :PNAME_NS,
+                :PREFIX,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2 .
+    
+    :literal     a g:Production;
+         rdf:value "14";
+         rdfs:comment "[14]\tliteral \t::= \tRDFLiteral | NumericLiteral | BooleanLiteral";
+         rdfs:label "literal";
+         g:alt  (
+        :RDFLiteral
+        :NumericLiteral
+        :BooleanLiteral );
+         g:first "false",
+                "true",
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :object     a g:Production;
+         rdf:value "13";
+         rdfs:comment "[13]\tobject \t::= \tIRIref | blank | literal";
+         rdfs:label "object";
+         g:alt  (
+        :IRIref
+        :blank
+        :literal );
+         g:first "(",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    :objectList     a g:Production;
+         rdf:value "8";
+         rdfs:comment "[8]\tobjectList \t::= \tobject ( ',' object)*";
+         rdfs:label "objectList";
+         g:first "(",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:follow ";";
+         g:nonTerminal :language;
+         g:seq  (
+        :object
+        <#_g3> ) .
+    
+    :predicate     a g:Production;
+         rdf:value "12";
+         rdfs:comment "[12]\tpredicate \t::= \tIRIref";
+         rdfs:label "predicate";
+         g:first :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:follow "(",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language;
+         g:seq  (
+        :IRIref ) .
+    
+    :predicateObjectList     a g:Production;
+         rdf:value "7";
+         rdfs:comment "[7]\tpredicateObjectList \t::= \tverb objectList ( ';' verb objectList )* ( ';')?";
+         rdfs:label "predicateObjectList";
+         g:first "a",
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:nonTerminal :language;
+         g:seq  (
+        :verb
+        :objectList
+        <#_g0>
+        <#_g2> ) .
+    
+    :prefixID     a g:Production;
+         rdf:value "4";
+         rdfs:comment "[4]\tprefixID \t::= \tPREFIX PNAME_NS IRI_REF";
+         rdfs:label "prefixID";
+         g:first :PREFIX;
+         g:nonTerminal :language;
+         g:seq  (
+        :PREFIX
+        :PNAME_NS
+        :IRI_REF ) .
+    
+    :statement     a g:Production;
+         rdf:value "2";
+         rdfs:comment "[2]\tstatement \t::= \tdirective '.' | triples '.'";
+         rdfs:label "statement";
+         g:alt  (
+         [
+                 a g:Production;
+                 g:first :BASE,
+                        :PREFIX;
+                 g:follow "(",
+                        "[",
+                        :ANON,
+                        :BASE,
+                        :BLANK_NODE_LABEL,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS,
+                        :PREFIX;
+                 g:nonTerminal :language;
+                 g:seq  (
+                :directive
+                "." ) ]
+         [
+                 a g:Production;
+                 g:first "(",
+                        "[",
+                        :ANON,
+                        :BLANK_NODE_LABEL,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS;
+                 g:follow "(",
+                        "[",
+                        :ANON,
+                        :BASE,
+                        :BLANK_NODE_LABEL,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS,
+                        :PREFIX;
+                 g:nonTerminal :language;
+                 g:seq  (
+                :triples
+                "." ) ] );
+         g:first "(",
+                "[",
+                :ANON,
+                :BASE,
+                :BLANK_NODE_LABEL,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :PREFIX;
+         g:follow "(",
+                "[",
+                :ANON,
+                :BASE,
+                :BLANK_NODE_LABEL,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :PREFIX;
+         g:nonTerminal :language .
+    
+    :subject     a g:Production;
+         rdf:value "11";
+         rdfs:comment "[11]\tsubject \t::= \tIRIref | blank";
+         rdfs:label "subject";
+         g:alt  (
+        :IRIref
+        :blank );
+         g:first "(",
+                "[",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:follow "a",
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:nonTerminal :language .
+    
+    :triples     a g:Production;
+         rdf:value "6";
+         rdfs:comment "[6]\ttriples \t::= \tsubject predicateObjectList";
+         rdfs:label "triples";
+         g:first "(",
+                "[",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:nonTerminal :language;
+         g:seq  (
+        :subject
+        :predicateObjectList ) .
+    
+    :turtleDoc     a g:Production;
+         rdf:value "1";
+         rdfs:comment "[1]\tturtleDoc \t::= \tstatement*";
+         rdfs:label "turtleDoc";
+         g:alt  (
+        g:empty
+         [
+                 a g:Production;
+                 g:first "(",
+                        "[",
+                        :ANON,
+                        :BASE,
+                        :BLANK_NODE_LABEL,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS,
+                        :PREFIX;
+                 g:follow g:eof;
+                 g:nonTerminal :language;
+                 g:seq  (
+                :statement
+                :turtleDoc ) ] );
+         g:first "(",
+                "[",
+                g:eps,
+                :ANON,
+                :BASE,
+                :BLANK_NODE_LABEL,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :PREFIX;
+         g:follow g:eof;
+         g:nonTerminal :language;
+         g:star :statement .
+    
+    :verb     a g:Production;
+         rdf:value "9";
+         rdfs:comment "[9]\tverb \t::= \tpredicate | 'a'";
+         rdfs:label "verb";
+         g:alt  (
+        :predicate
+        "a" );
+         g:first "a",
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:follow "(",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+    
+    <#_g0>     a g:Production;
+         g:alt  (
+        g:empty
+         [
+                 a g:Production;
+                 g:first ";";
+                 g:follow ";";
+                 g:nonTerminal :language;
+                 g:seq  (
+                <#_g1>
+                <#_g0> ) ] );
+         g:first ";",
+                g:eps;
+         g:follow ";";
+         g:nonTerminal :language;
+         g:star <#_g1> .
+    
+    <#_g1>     a g:Production;
+         g:first ";";
+         g:follow ";";
+         g:nonTerminal :language;
+         g:seq  (
+        ";"
+        :verb
+        :objectList ) .
+    
+    <#_g2>     a g:Production;
+         g:alt  (
+        g:empty
+        ";" );
+         g:first ";",
+                g:eps;
+         g:nonTerminal :language;
+         g:opt ";" .
+    
+    <#_g3>     a g:Production;
+         g:alt  (
+        g:empty
+         [
+                 a g:Production;
+                 g:first ",";
+                 g:follow ";";
+                 g:nonTerminal :language;
+                 g:seq  (
+                <#_g4>
+                <#_g3> ) ] );
+         g:first ",",
+                g:eps;
+         g:follow ";";
+         g:nonTerminal :language;
+         g:star <#_g4> .
+    
+    <#_g4>     a g:Production;
+         g:first ",";
+         g:follow ",";
+         g:nonTerminal :language;
+         g:seq  (
+        ","
+        :object ) .
+    
+    <#_g5>     a g:Production;
+         g:alt  (
+        g:empty
+         [
+                 a g:Production;
+                 g:first "(",
+                        "[",
+                        "false",
+                        "true",
+                        :ANON,
+                        :BLANK_NODE_LABEL,
+                        :DECIMAL,
+                        :DECIMAL_NEGATIVE,
+                        :DECIMAL_POSITIVE,
+                        :DOUBLE,
+                        :DOUBLE_NEGATIVE,
+                        :DOUBLE_POSITIVE,
+                        :INTEGER,
+                        :INTEGER_NEGATIVE,
+                        :INTEGER_POSITIVE,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS,
+                        :STRING_LITERAL1,
+                        :STRING_LITERAL2,
+                        :STRING_LITERAL_LONG1,
+                        :STRING_LITERAL_LONG2;
+                 g:nonTerminal :language;
+                 g:seq  (
+                :object
+                <#_g5> ) ] );
+         g:first "(",
+                "[",
+                "false",
+                "true",
+                g:eps,
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language;
+         g:star :object .
+    
+    <#_g6>     a g:Production;
+         g:alt  (
+        g:empty
+        <#_g7> );
+         g:first "^^",
+                g:eps,
+                :LANGTAG;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language;
+         g:opt <#_g7> .
+    
+    <#_g7>     a g:Production;
+         g:alt  (
+        :LANGTAG
+         [
+                 a g:Production;
+                 g:first "^^";
+                 g:follow "(",
+                        ",",
+                        "[",
+                        "false",
+                        "true",
+                        :ANON,
+                        :BLANK_NODE_LABEL,
+                        :DECIMAL,
+                        :DECIMAL_NEGATIVE,
+                        :DECIMAL_POSITIVE,
+                        :DOUBLE,
+                        :DOUBLE_NEGATIVE,
+                        :DOUBLE_POSITIVE,
+                        :INTEGER,
+                        :INTEGER_NEGATIVE,
+                        :INTEGER_POSITIVE,
+                        :IRI_REF,
+                        :PNAME_LN,
+                        :PNAME_NS,
+                        :STRING_LITERAL1,
+                        :STRING_LITERAL2,
+                        :STRING_LITERAL_LONG1,
+                        :STRING_LITERAL_LONG2;
+                 g:nonTerminal :language;
+                 g:seq  (
+                "^^"
+                :IRIref ) ] );
+         g:first "^^",
+                :LANGTAG;
+         g:follow "(",
+                ",",
+                "[",
+                "false",
+                "true",
+                :ANON,
+                :BLANK_NODE_LABEL,
+                :DECIMAL,
+                :DECIMAL_NEGATIVE,
+                :DECIMAL_POSITIVE,
+                :DOUBLE,
+                :DOUBLE_NEGATIVE,
+                :DOUBLE_POSITIVE,
+                :INTEGER,
+                :INTEGER_NEGATIVE,
+                :INTEGER_POSITIVE,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS,
+                :STRING_LITERAL1,
+                :STRING_LITERAL2,
+                :STRING_LITERAL_LONG1,
+                :STRING_LITERAL_LONG2;
+         g:nonTerminal :language .
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    g:eps,
+                    :ANON,
+                    :BASE,
+                    :BLANK_NODE_LABEL,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :PREFIX;
+             g:seq  (
+            :turtleDoc ) ].
+    
+      [      a g:Production;
+             g:first ";",
+                    g:eps;
+             g:seq  (
+            <#_g0> ) ].
+    
+      [      a g:Production;
+             g:first ",",
+                    g:eps;
+             g:seq  (
+            <#_g3> ) ].
+    
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    "false",
+                    "true",
+                    g:eps,
+                    :ANON,
+                    :BLANK_NODE_LABEL,
+                    :DECIMAL,
+                    :DECIMAL_NEGATIVE,
+                    :DECIMAL_POSITIVE,
+                    :DOUBLE,
+                    :DOUBLE_NEGATIVE,
+                    :DOUBLE_POSITIVE,
+                    :INTEGER,
+                    :INTEGER_NEGATIVE,
+                    :INTEGER_POSITIVE,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :STRING_LITERAL1,
+                    :STRING_LITERAL2,
+                    :STRING_LITERAL_LONG1,
+                    :STRING_LITERAL_LONG2;
+             g:seq  (
+            <#_g5> ) ].
+    
+      [      a g:Production;
+             g:first "^^",
+                    g:eps,
+                    :LANGTAG;
+             g:seq  (
+            <#_g6> ) ].
+    
+      [      a g:Production;
+             g:first :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS;
+             g:seq  (
+            :IRIref ) ].
+    
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    "false",
+                    "true",
+                    g:eps,
+                    :ANON,
+                    :BLANK_NODE_LABEL,
+                    :DECIMAL,
+                    :DECIMAL_NEGATIVE,
+                    :DECIMAL_POSITIVE,
+                    :DOUBLE,
+                    :DOUBLE_NEGATIVE,
+                    :DOUBLE_POSITIVE,
+                    :INTEGER,
+                    :INTEGER_NEGATIVE,
+                    :INTEGER_POSITIVE,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :STRING_LITERAL1,
+                    :STRING_LITERAL2,
+                    :STRING_LITERAL_LONG1,
+                    :STRING_LITERAL_LONG2;
+             g:seq  (
+            <#_g5>
+            ")" ) ].
+    
+      [      a g:Production;
+             g:first "a",
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS;
+             g:seq  (
+            :predicateObjectList
+            "]" ) ].
+    
+      [      g:first g:eps;
+             g:seq () ].
+    
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    "false",
+                    "true",
+                    :ANON,
+                    :BLANK_NODE_LABEL,
+                    :DECIMAL,
+                    :DECIMAL_NEGATIVE,
+                    :DECIMAL_POSITIVE,
+                    :DOUBLE,
+                    :DOUBLE_NEGATIVE,
+                    :DOUBLE_POSITIVE,
+                    :INTEGER,
+                    :INTEGER_NEGATIVE,
+                    :INTEGER_POSITIVE,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :STRING_LITERAL1,
+                    :STRING_LITERAL2,
+                    :STRING_LITERAL_LONG1,
+                    :STRING_LITERAL_LONG2;
+             g:seq  (
+            :object ) ].
+    
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    "false",
+                    "true",
+                    :ANON,
+                    :BLANK_NODE_LABEL,
+                    :DECIMAL,
+                    :DECIMAL_NEGATIVE,
+                    :DECIMAL_POSITIVE,
+                    :DOUBLE,
+                    :DOUBLE_NEGATIVE,
+                    :DOUBLE_POSITIVE,
+                    :INTEGER,
+                    :INTEGER_NEGATIVE,
+                    :INTEGER_POSITIVE,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :STRING_LITERAL1,
+                    :STRING_LITERAL2,
+                    :STRING_LITERAL_LONG1,
+                    :STRING_LITERAL_LONG2;
+             g:seq  (
+            :objectList
+            <#_g0>
+            <#_g2> ) ].
+    
+      [      a g:Production;
+             g:first "a",
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS;
+             g:seq  (
+            :verb
+            :objectList ) ].
+    
+      [      a g:Production;
+             g:first "a",
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS;
+             g:seq  (
+            :predicateObjectList ) ].
+    
+      [      a g:Production;
+             g:seq  (
+            :IRI_REF ) ].
+    
+      [      a g:Production;
+             g:seq  (
+            :PNAME_NS
+            :IRI_REF ) ].
+    
+      [      a g:Production;
+             g:seq  (
+            "." ) ].
+    
+      [      a g:Production;
+             g:seq  (
+            ")" ) ].
+    
+      [      a g:Production;
+             g:seq  (
+            "]" ) ].
+    
+      [      a g:Production;
+             g:first ";",
+                    g:eps;
+             g:seq  (
+            <#_g0>
+            <#_g2> ) ].
+    
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    "false",
+                    "true",
+                    :ANON,
+                    :BLANK_NODE_LABEL,
+                    :DECIMAL,
+                    :DECIMAL_NEGATIVE,
+                    :DECIMAL_POSITIVE,
+                    :DOUBLE,
+                    :DOUBLE_NEGATIVE,
+                    :DOUBLE_POSITIVE,
+                    :INTEGER,
+                    :INTEGER_NEGATIVE,
+                    :INTEGER_POSITIVE,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :STRING_LITERAL1,
+                    :STRING_LITERAL2,
+                    :STRING_LITERAL_LONG1,
+                    :STRING_LITERAL_LONG2;
+             g:seq  (
+            :objectList ) ].
+    
+      [      a g:Production;
+             g:first ";",
+                    g:eps;
+             g:seq  (
+            <#_g2> ) ].
+    
+#ENDS

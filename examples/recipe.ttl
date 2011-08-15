@@ -1,0 +1,33 @@
+@prefix v: <http://rdf.data-vocabulary.org/#> .
+
+_:c14n0
+   <http://rdf.data-vocabulary.org/#description> "Crush lime juice, mint and sugar together in glass.";
+   <http://rdf.data-vocabulary.org/#step> "1"^^<http://www.w3.org/2001/XMLSchema#integer>.
+_:c14n1
+   <http://rdf.data-vocabulary.org/#description> "Fill glass to top with ice cubes.";
+   <http://rdf.data-vocabulary.org/#step> "2"^^<http://www.w3.org/2001/XMLSchema#integer>.
+_:c14n2
+   <http://rdf.data-vocabulary.org/#description> "Fill the rest of glass with club soda, stir.";
+   <http://rdf.data-vocabulary.org/#step> "4"^^<http://www.w3.org/2001/XMLSchema#integer>.
+_:c14n3
+   <http://rdf.data-vocabulary.org/#description> "Garnish with a lime wedge.";
+   <http://rdf.data-vocabulary.org/#step> "5"^^<http://www.w3.org/2001/XMLSchema#integer>.
+_:c14n4
+   <http://rdf.data-vocabulary.org/#description> "Pour white rum over ice.";
+   <http://rdf.data-vocabulary.org/#step> "3"^^<http://www.w3.org/2001/XMLSchema#integer>.
+_:c14n5
+   <http://rdf.data-vocabulary.org/#ingredients> 
+      "1 cup ice cubes",
+      "1 tablespoons white sugar",
+      "1/2 cup club soda",
+      "1/2 lime, juiced with pulp",
+      "12 fresh mint leaves",
+      "2 fluid ounces white rum";
+   <http://rdf.data-vocabulary.org/#instructions> 
+      _:c14n0,
+      _:c14n1,
+      _:c14n2,
+      _:c14n3,
+      _:c14n4;
+   <http://rdf.data-vocabulary.org/#name> "Mojito";
+   <http://rdf.data-vocabulary.org/#yield> "1 cocktail".

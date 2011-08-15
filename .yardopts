@@ -1,0 +1,12 @@
+--title "Notation-3 and Turtle reader/writer for RDF.rb."
+--output-dir doc/yard
+--protected
+--no-private
+--hide-void-return
+--markup markdown
+--readme README.markdown
+-
+History
+AUTHORS
+VERSION
+UNLICENSE
