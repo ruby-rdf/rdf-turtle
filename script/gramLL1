@@ -12,6 +12,10 @@ require 'getoptlong'
 class EBNF < RDF::Vocabulary("http://www.w3.org/2000/10/swap/grammar/ebnf#"); end
 class REGEX < RDF::Vocabulary("http://www.w3.org/2000/10/swap/grammar/regex#"); end
 
+class Symbol
+  def dump; inspect; end
+end
+
 class GramLL1
   attr_accessor :graph
   attr_accessor :lang
@@ -43,12 +47,6 @@ class GramLL1
 
     @first = sets(EBNF['first'])
     @follow = sets(EBNF['follow'])
-
-    if options[:debug]
-      outputTable(STDOUT, 'RULES', @rules, 0)
-      outputTable(STDOUT, 'FIRST', @first, 0)
-      outputTable(STDOUT, 'FOLLOW', @follow, 0)
-    end
   end
   
   def run_production
@@ -57,7 +55,6 @@ class GramLL1
     do_production(@start)
     while !@agenda.empty?
       x = @agenda.shift
-      @already << x
       do_production(x)
     end
 
@@ -135,8 +132,9 @@ class GramLL1
     query.execute(graph).each do |solution|
       #chatty "sets(#{pred}) solution: #{solution.inspect}"
       lhs = solution[:lhs]
-      fi[lhs] ||= []
       o = solution[:o]
+      next if o == EBNF.empty || o == EBNF.eps
+      fi[lhs] ||= []
       fi[lhs] << o
     end
   
@@ -153,9 +151,10 @@ class GramLL1
       return
     end
     unless @non_terminals.include?(lhs)
-      progress("Terminal: '#{lhs}'")
+      progress("Terminal: #{resource_rep(lhs).dump}")
       return
     end
+    @already << lhs
 
     branchDict = {}
 
@@ -171,7 +170,7 @@ class GramLL1
       return
     end
 
-    progress("Production '#{lhs}'")
+    progress("Production #{resource_rep(lhs).dump}")
     if @options[:verbose]
       (@first[lhs] || []).each do |first|
         chatty("  First: '#{resource_rep(first)}'")
@@ -191,11 +190,24 @@ class GramLL1
       @alt[lhs].each do |prod|
         chatty("  Alt: '#{resource_rep(prod)}'")
         @agenda << prod unless @already.include?(prod) || @agenda.include?(prod)
-        (@first[prod] || []).each do |f|
-          if branchDict.has_key?(f)
-            recordError("Conflict: #{f} is also the condition for #{branchDict[f]}")
+        if prod == EBNF.empty
+          branchDict[prod] = []
+        elsif @first[prod].nil?
+          branchDict[prod] = [prod]
+        else
+          (@first[prod] || []).each do |f|
+            if branchDict.has_key?(f)
+              recordError("Conflict: #{f} is also the condition for #{branchDict[f]}")
+            end
+            branchDict[f] = if @seq[prod]
+              @seq[prod]
+            elsif @alt[prod]
+              [f]
+            else
+              chatty ("    no seq or alt")
+              []
+            end
           end
-          branchDict[f] = @seq[prod] || []
         end
       end
     else
@@ -218,11 +230,11 @@ class GramLL1
     if value.literal?
       value.to_s == "a" ? "a" : value.to_s
     elsif value.node?
-      value.to_s
+      value.to_s.to_sym
     elsif value.start_with?(EBNF)
-      ":" + "ebnf:#{value.fragment}"
+      "ebnf:#{value.fragment}".to_sym
     else
-      ":#{value.fragment}"
+      value.fragment.to_s.to_sym
     end
   end
 
@@ -282,7 +294,7 @@ unless output == STDOUT
     output.puts "#   #{pp.conflicts.map{|c| c.join("\n#      ")}.join("\n#   ")}"
   end
   output.puts "module RDF::Turtle::Meta"
-  output.puts "  START = '#{g.start}'.freeze"
+  output.puts "  START = :#{g.start.fragment}"
   output.puts
 end
 g.outputTable(output, 'BRANCH', g.branch, 1)

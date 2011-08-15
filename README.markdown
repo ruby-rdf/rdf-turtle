@@ -115,4 +115,4 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD-GS]:    http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:        http://unlicense.org/#unlicensing-contributions
 [Backports]:  http://rubygems.org/gems/backports
-[Turtle]:     http://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/index.html
+[Turtle]:     http://www.w3.org/TR/2011/WD-turtle-20110809/

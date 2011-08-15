@@ -85,7 +85,7 @@ module RDF::Turtle
                          EOS
     end
 
-    KEYWORD              = /#{KEYWORDS.join('|')}/i
+    KEYWORD              = /#{KEYWORDS.join('|')}/i                             # [17] & [18]
     DELIMITER            = /\^\^|[()\[\],;\.]/
     OPERATOR             = /a|[<>+\-*\/]/
     COMMENT              = /#.*/

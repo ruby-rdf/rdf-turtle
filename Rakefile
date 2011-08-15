@@ -74,12 +74,12 @@ file "etc/turtle-bnf.n3" => "etc/turtle.n3" do
   }
 end
 
-#file "etc/turtle.n3" => "etc/turtle.bnf" do
+file "etc/turtle.n3" => "etc/turtle.bnf" do
   # Don't run this, as bnf generation didn't create correct Turtle for @base and @prefix
-  #sh %{
-  #( cd ../swap/grammar;
-  #  PYTHONPATH=../.. python ebnf2turtle.py #{TTL_DIR}/etc/turtle.bnf \
-  #    ttl language 'http://www.w3.org/2000/10/swap/grammar/turtle#'
-  #) > etc/turtle.n3
-  #}
-#end
+  sh %{
+  ( cd ../swap/grammar;
+    PYTHONPATH=../.. python ebnf2turtle.py #{TTL_DIR}/etc/turtle.bnf \
+      ttl language 'http://www.w3.org/2000/10/swap/grammar/turtle#'
+  ) | sed -e 's/^  ".*"$/  g:seq (&)/'  > etc/turtle.n3
+  }
+end
