@@ -308,7 +308,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :DECIMAL     a re:Regex;
          rdf:value "78s";
-         rdfs:comment """[78s] DECIMAL ::= [0-9]+ "." [0-9]* | "." [0-9]+""";
+         rdfs:comment """[78s] DECIMAL ::= [0-9]+ "." [0-9]+ | "." [0-9]+""";
          rdfs:label "DECIMAL";
          g:follow "(",
                 ",",
@@ -345,7 +345,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                 "."
                  [
                          a re:Regex;
-                         re:star  [
+                         re:plus  [
                              a re:Regex;
                              re:matches "[0-9]" ] ] ) ]
          [
@@ -422,7 +422,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :DOUBLE     a re:Regex;
          rdf:value "79s";
-         rdfs:comment """[79s] DOUBLE ::= [0-9]+ "." [0-9]* EXPONENT | "." ( [0-9] )+ EXPONENT | ( [0-9] )+ EXPONENT""";
+         rdfs:comment """[79s] DOUBLE ::= [0-9]+ "." [0-9]+ EXPONENT | "." ( [0-9] )+ EXPONENT | ( [0-9] )+ EXPONENT""";
          rdfs:label "DOUBLE";
          g:follow "(",
                 ",",
@@ -459,7 +459,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                 "."
                  [
                          a re:Regex;
-                         re:star  [
+                         re:plus  [
                              a re:Regex;
                              re:matches "[0-9]" ] ]
                 :EXPONENT ) ]
@@ -962,26 +962,6 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :STRING_LITERAL_LONG2;
          g:nonTerminal :language .
     
-    :PASSED_TOKENS     a re:Regex;
-         rdf:value "101";
-         rdfs:comment """[101] PASSED_TOKENS ::= [ \\t\\r\\n]+ | "#" [^\\r\\n]*""";
-         rdfs:label "PASSED_TOKENS";
-         re:alt  (
-         [
-                 a re:Regex;
-                 re:plus  [
-                     a re:Regex;
-                     re:matches "[ \\t\\r\\n]" ] ]
-         [
-                 a re:Regex;
-                 re:seq  (
-                "#"
-                 [
-                         a re:Regex;
-                         re:star  [
-                             a re:Regex;
-                             re:matches "[^\\r\\n]" ] ] ) ] ) .
-    
     :PNAME_LN     a re:Regex;
          rdf:value "72s";
          rdfs:comment "[72s] PNAME_LN ::= PNAME_NS PN_LOCAL";
@@ -1293,7 +1273,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :STRING_LITERAL_LONG1     a re:Regex;
          rdf:value "89s";
-         rdfs:comment "[89s] STRING_LITERAL_LONG1 ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\\\] | ECHAR ) )* \"'''\"";
+         rdfs:comment "[89s] STRING_LITERAL_LONG1 ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\\\] | ECHAR | UCHAR ) )* \"'''\"";
          rdfs:label "STRING_LITERAL_LONG1";
          g:follow "^^",
                 :LANGTAG;
@@ -1317,12 +1297,13 @@ i.e. rewrite ?, +, * operators using alt and seq
                              [
                                      a re:Regex;
                                      re:matches "[^'\\\\]" ]
-                            :ECHAR ) ] ) ] ]
+                            :ECHAR
+                            :UCHAR ) ] ) ] ]
         "'''" ) .
     
     :STRING_LITERAL_LONG2     a re:Regex;
          rdf:value "90s";
-         rdfs:comment """[90s] STRING_LITERAL_LONG2 ::= '\"""' ( ( '"' | '""' )? ( [^\\"\\\\] | ECHAR ) )* '\"""'""";
+         rdfs:comment """[90s] STRING_LITERAL_LONG2 ::= '\"""' ( ( '"' | '""' )? ( [^\\"\\\\] | ECHAR | UCHAR ) )* '\"""'""";
          rdfs:label "STRING_LITERAL_LONG2";
          g:follow "^^",
                 :LANGTAG;
@@ -1346,7 +1327,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                              [
                                      a re:Regex;
                                      re:matches "[^\\\"\\\\]" ]
-                            :ECHAR ) ] ) ] ]
+                            :ECHAR
+                            :UCHAR ) ] ) ] ]
         "\"\"\"" ) .
     
     :String     a g:Production;
@@ -1372,53 +1354,6 @@ i.e. rewrite ?, +, * operators using alt and seq
          rdfs:label "UCHAR";
          g:seq  (
         "\\\\uffff" ) .
-    
-    :VAR1     a re:Regex;
-         rdf:value "74s";
-         rdfs:comment """[74s] VAR1 ::= "?" VARNAME""";
-         rdfs:label "VAR1";
-         re:seq  (
-        "?"
-        :VARNAME ) .
-    
-    :VAR2     a re:Regex;
-         rdf:value "75s";
-         rdfs:comment """[75s] VAR2 ::= "$" VARNAME""";
-         rdfs:label "VAR2";
-         re:seq  (
-        "$"
-        :VARNAME ) .
-    
-    :VARNAME     a re:Regex;
-         rdf:value "97s";
-         rdfs:comment "[97s] VARNAME ::= ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #00B7 | [#0300-#036F] | [# 203F-#2040] )*";
-         rdfs:label "VARNAME";
-         re:seq  (
-         [
-                 a re:Regex;
-                 re:alt  (
-                :PN_CHARS_U
-                 [
-                         a re:Regex;
-                         re:matches "[0-9]" ] ) ]
-         [
-                 a re:Regex;
-                 re:star  [
-                     a re:Regex;
-                     re:alt  (
-                    :PN_CHARS_U
-                     [
-                             a re:Regex;
-                             re:matches "[0-9]" ]
-                     [
-                             a re:Regex;
-                             re:matches "[#00B7]" ]
-                     [
-                             a re:Regex;
-                             re:matches "[#0300-#036F]" ]
-                     [
-                             a re:Regex;
-                             re:matches "[# 203F-#2040]" ] ) ] ] ) .
     
     :WS     a re:Regex;
          rdf:value "93s";

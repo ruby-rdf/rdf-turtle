@@ -306,22 +306,6 @@
    )
 .
 
-:VAR1 rdfs:label "VAR1"; rdf:value "74s";
- rdfs:comment "[74s] VAR1 ::= \"?\" VARNAME";
-  re:seq (
-    "?"
-    :VARNAME
-   )
-.
-
-:VAR2 rdfs:label "VAR2"; rdf:value "75s";
- rdfs:comment "[75s] VAR2 ::= \"$\" VARNAME";
-  re:seq (
-    "$"
-    :VARNAME
-   )
-.
-
 :LANGTAG rdfs:label "LANGTAG"; rdf:value "76s";
  rdfs:comment "[76s] LANGTAG ::= BASE | PREFIX | \"@\" [a-zA-Z]+ ( \"-\" [a-zA-Z0-9]+ )*";
   re:alt (
@@ -351,14 +335,14 @@
 .
 
 :DECIMAL rdfs:label "DECIMAL"; rdf:value "78s";
- rdfs:comment "[78s] DECIMAL ::= [0-9]+ \".\" [0-9]* | \".\" [0-9]+";
+ rdfs:comment "[78s] DECIMAL ::= [0-9]+ \".\" [0-9]+ | \".\" [0-9]+";
   re:alt (
     [ re:seq (
       [ re:plus 
         [  re:matches "[0-9]"  ]
        ]
       "."
-      [ re:star 
+      [ re:plus 
         [  re:matches "[0-9]"  ]
        ]
      ) ]
@@ -372,14 +356,14 @@
 .
 
 :DOUBLE rdfs:label "DOUBLE"; rdf:value "79s";
- rdfs:comment "[79s] DOUBLE ::= [0-9]+ \".\" [0-9]* EXPONENT | \".\" ( [0-9] )+ EXPONENT | ( [0-9] )+ EXPONENT";
+ rdfs:comment "[79s] DOUBLE ::= [0-9]+ \".\" [0-9]+ EXPONENT | \".\" ( [0-9] )+ EXPONENT | ( [0-9] )+ EXPONENT";
   re:alt (
     [ re:seq (
       [ re:plus 
         [  re:matches "[0-9]"  ]
        ]
       "."
-      [ re:star 
+      [ re:plus 
         [  re:matches "[0-9]"  ]
        ]
       :EXPONENT
@@ -492,7 +476,7 @@
 .
 
 :STRING_LITERAL_LONG1 rdfs:label "STRING_LITERAL_LONG1"; rdf:value "89s";
- rdfs:comment "[89s] STRING_LITERAL_LONG1 ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\\\] | ECHAR ) )* \"'''\"";
+ rdfs:comment "[89s] STRING_LITERAL_LONG1 ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\\\] | ECHAR | UCHAR ) )* \"'''\"";
   re:seq (
     "'''"
     [ re:star 
@@ -506,6 +490,7 @@
         [ re:alt (
           [  re:matches "[^'\\\\]"  ]
           :ECHAR
+          :UCHAR
          ) ]
        ) ]
      ]
@@ -514,7 +499,7 @@
 .
 
 :STRING_LITERAL_LONG2 rdfs:label "STRING_LITERAL_LONG2"; rdf:value "90s";
- rdfs:comment "[90s] STRING_LITERAL_LONG2 ::= '\"\"\"' ( ( '\"' | '\"\"' )? ( [^\\\"\\\\] | ECHAR ) )* '\"\"\"'";
+ rdfs:comment "[90s] STRING_LITERAL_LONG2 ::= '\"\"\"' ( ( '\"' | '\"\"' )? ( [^\\\"\\\\] | ECHAR | UCHAR ) )* '\"\"\"'";
   re:seq (
     "\"\"\""
     [ re:star 
@@ -528,6 +513,7 @@
         [ re:alt (
           [  re:matches "[^\\\"\\\\]"  ]
           :ECHAR
+          :UCHAR
          ) ]
        ) ]
      ]
@@ -609,25 +595,6 @@
    )
 .
 
-:VARNAME rdfs:label "VARNAME"; rdf:value "97s";
- rdfs:comment "[97s] VARNAME ::= ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #00B7 | [#0300-#036F] | [# 203F-#2040] )*";
-  re:seq (
-    [ re:alt (
-      :PN_CHARS_U
-      [  re:matches "[0-9]"  ]
-     ) ]
-    [ re:star 
-      [ re:alt (
-        :PN_CHARS_U
-        [  re:matches "[0-9]"  ]
-        [  re:matches "[#00B7]"  ]
-        [  re:matches "[#0300-#036F]"  ]
-        [  re:matches "[# 203F-#2040]"  ]
-       ) ]
-     ]
-   )
-.
-
 :PN_CHARS rdfs:label "PN_CHARS"; rdf:value "98s";
  rdfs:comment "[98s] PN_CHARS ::= PN_CHARS_U | \"-\" | [0-9] | #00B7 | [#0300-#036F] | [#203F-#2040]";
   re:alt (
@@ -676,20 +643,5 @@
         :PN_CHARS
        ) ]
      ]
-   )
-.
-
-:PASSED_TOKENS rdfs:label "PASSED_TOKENS"; rdf:value "101";
- rdfs:comment "[101] PASSED_TOKENS ::= [ \\t\\r\\n]+ | \"#\" [^\\r\\n]*";
-  re:alt (
-    [ re:plus 
-      [  re:matches "[ \\t\\r\\n]"  ]
-     ]
-    [ re:seq (
-      "#"
-      [ re:star 
-        [  re:matches "[^\\r\\n]"  ]
-       ]
-     ) ]
    )
 .

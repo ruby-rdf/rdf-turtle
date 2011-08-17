@@ -12,10 +12,6 @@ require 'getoptlong'
 class EBNF < RDF::Vocabulary("http://www.w3.org/2000/10/swap/grammar/ebnf#"); end
 class REGEX < RDF::Vocabulary("http://www.w3.org/2000/10/swap/grammar/regex#"); end
 
-class Symbol
-  def dump; inspect; end
-end
-
 class GramLL1
   attr_accessor :graph
   attr_accessor :lang
@@ -37,6 +33,7 @@ class GramLL1
     @already = []
     @agenda = []
     @errors = []
+    @terminals = []
     @non_terminals = []
     @alt = {}
     @seq = {}
@@ -78,13 +75,13 @@ class GramLL1
       table.keys.sort_by(&:to_s).each do |prod|
         case table[prod]
         when Array
-          list = table[prod].map {|t| resource_rep(t).dump}.join(",\n#{ind2}")
-          io.puts "#{ind1}#{resource_rep(prod).dump} => [\n#{ind2}#{list}],"
+          list = table[prod].map {|t| resource_rep(t).inspect}.join(",\n#{ind2}")
+          io.puts "#{ind1}#{resource_rep(prod).inspect} => [\n#{ind2}#{list}],"
         when Hash
-          io.puts "#{ind1}#{resource_rep(prod).dump} => {"
+          io.puts "#{ind1}#{resource_rep(prod).inspect} => {"
           table[prod].keys.sort_by(&:to_s).each do |term|
-            list = table[prod][term].map {|t2| resource_rep(t2).dump}.join(", ")
-            io.puts "#{ind2}#{resource_rep(term).dump} => [#{list}],"
+            list = table[prod][term].map {|t2| resource_rep(t2).inspect}.join(", ")
+            io.puts "#{ind2}#{resource_rep(term).inspect} => [#{list}],"
           end
           io.puts "#{ind1}},"
         else
@@ -93,7 +90,9 @@ class GramLL1
       end
       io.puts "#{ind0}}.freeze\n"
     else
-      "Unknown table type: #{table.class}"
+      io.puts "#{ind0}#{name} = [\n#{ind1}" +
+        table.sort.map {|prod| resource_rep(prod).inspect}.join(",\n#{ind1}") +
+        "\n#{ind0}].freeze\n"
     end
   end
 
@@ -142,16 +141,12 @@ class GramLL1
   end
   
   def do_production(lhs)
-    if lhs == EBNF.empty
-      progress("void")
+    if [EBNF.empty, EBNF.eps, EBNF.eof].include?(lhs)
+      progress "Skip: #{resource_rep(lhs).inspect}"
       return
-    end
-    if lhs == EBNF.eof
-      progress("EOF")
-      return
-    end
-    unless @non_terminals.include?(lhs)
-      progress("Terminal: #{resource_rep(lhs).dump}")
+    elsif !@non_terminals.include?(lhs)
+      progress("Terminal: #{resource_rep(lhs).inspect}")
+      @terminals << lhs unless @terminals.include?(lhs)
       return
     end
     @already << lhs
@@ -170,7 +165,7 @@ class GramLL1
       return
     end
 
-    progress("Production #{resource_rep(lhs).dump}")
+    progress("Production #{resource_rep(lhs).inspect}")
     if @options[:verbose]
       (@first[lhs] || []).each do |first|
         chatty("  First: '#{resource_rep(first)}'")
@@ -191,8 +186,10 @@ class GramLL1
         chatty("  Alt: '#{resource_rep(prod)}'")
         @agenda << prod unless @already.include?(prod) || @agenda.include?(prod)
         if prod == EBNF.empty
+          chatty "    ebnf:empty"
           branchDict[prod] = []
         elsif @first[prod].nil?
+          chatty "    no first => #{prod}"
           branchDict[prod] = [prod]
         else
           (@first[prod] || []).each do |f|
@@ -200,11 +197,13 @@ class GramLL1
               recordError("Conflict: #{f} is also the condition for #{branchDict[f]}")
             end
             branchDict[f] = if @seq[prod]
+              chatty "    seq[#{prod}] => #{@seq[prod].inspect}"
               @seq[prod]
             elsif @alt[prod]
-              [f]
+              chatty "    alt[#{prod}] => #{prod}"
+              [prod]
             else
-              chatty ("    no seq or alt")
+              chatty ("    no seq or alt => []")
               []
             end
           end
@@ -225,7 +224,7 @@ class GramLL1
   
     # Add follow rules
     (@follow[lhs] || []).each do |f|
-      chatty("  Follow: #{resource_rep(f).dump}")
+      chatty("  Follow: #{resource_rep(f).inspect}")
       branchDict[f] ||= []
     end
 
@@ -304,6 +303,7 @@ unless output == STDOUT
   output.puts
 end
 g.outputTable(output, 'BRANCH', g.branch, 1)
+g.outputTable(output, 'TERMINALS', g.terminals, 1)
 if options[:debug]
   g.outputTable(output, 'SEQ', g.seq, 1)
   g.outputTable(output, 'ALT', g.alt, 1)

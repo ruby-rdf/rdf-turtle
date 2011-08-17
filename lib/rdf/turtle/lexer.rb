@@ -208,7 +208,8 @@ module RDF::Turtle
         else input.to_s
       end
       @input = self.class.unescape_codepoints(@input) if ESCAPE_CHAR === @input
-      @lineno = 0
+      @lineno = 1
+      @scanner = StringScanner.new(@input)
     end
 
     ##
@@ -234,26 +235,47 @@ module RDF::Turtle
     # @return [Enumerator]
     def each_token(&block)
       if block_given?
-        @lineno  = 0
-        @scanner = StringScanner.new(@input)
-        until scanner.eos?
-          case
-            when skip_whitespace
-            when skip_comment
-            when token = match_token
-              yield token
-            else
-              lexeme = (@scanner.rest.split(/#{WS}|#{COMMENT}/).first rescue nil) || @scanner.rest
-              raise Error.new("invalid token #{lexeme.inspect} on line #{lineno + 1}",
-                :input => input, :token => lexeme, :lineno => lineno)
-          end
+        while token = shift
+          yield token
         end
-        @scanner = nil
       end
       enum_for(:each_token)
     end
     alias_method :each, :each_token
 
+    ##
+    # Returns first token in input stream
+    #
+    # @return [Token]
+    def first
+      return nil unless scanner
+
+      if @first.nil?
+        {} while !scanner.eos? && (skip_whitespace || skip_comment)
+        return @scanner = nil if scanner.eos?
+
+        @first = match_token
+        
+        if @first.nil?
+          lexme = (@scanner.rest.split(/#{WS}|#{COMMENT}/).first rescue nil) || @scanner.rest
+          raise Error.new("Invalid token #{lexme.inspect} on line #{lineno + 1}",
+            :input => input, :token => lexme, :lineno => lineno)
+        end
+      end
+
+      @first
+    end
+
+    ##
+    # Returns current token and shifts to next
+    #
+    # @return [Token]
+    def shift
+      cur = first
+      @first = nil
+      cur
+    end
+    
   protected
 
     # @return [StringScanner]
@@ -520,6 +542,12 @@ module RDF::Turtle
         {:type => @type, :value => @value}
       end
       
+      ##
+      # Readable version of token
+      def to_s
+        @type ? @type.inspect : @value
+      end
+
       ##
       # Returns type, if not nil, otherwise value
       def representation

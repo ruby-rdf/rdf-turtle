@@ -14,12 +14,6 @@ module RDF::Turtle
     end
 
     ##
-    # The current input tokens being processed.
-    #
-    # @return [Array<Token>]
-    attr_reader   :tokens
-
-    ##
     # Initializes a new parser instance.
     #
     # @param  [String, #to_s]          input
@@ -44,16 +38,9 @@ module RDF::Turtle
     def initialize(input = nil, options = {})
       super do
         @options = {:anon_base => "b0", :validate => false}.merge(options)
-        lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, @options)
-        @input  = lexer.input
-        @tokens = lexer.to_a
+        @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, @options)
         @productions = []
 
-        # Spec Confusion, not mentioned in Turtle spec
-        #if options[:base_uri]
-        #  add_debug("@uri", "#{base_uri.inspect}")
-        #  namespace(nil, uri("#{base_uri}#"))
-        #end
         add_debug("validate", "#{validate?.inspect}")
         add_debug("canonicalize", "#{canonicalize?.inspect}")
         add_debug("intern", "#{intern?.inspect}")
@@ -123,64 +110,80 @@ module RDF::Turtle
         pushed = false
         if todo_stack.last[:terms].nil?
           todo_stack.last[:terms] = []
-          token = tokens.first
+          token = @lexer.first
           @lineno = token.lineno if token
-          debug("parse(token)", "#{token.inspect}, prod #{todo_stack.last[:prod]}, depth #{todo_stack.length}")
+          debug("parse(production)",
+                "#{token ? token.representation.inspect : 'nil'}, " + 
+                "prod #{todo_stack.last[:prod].inspect}, " + 
+                "depth #{todo_stack.length}")
           
           # Got an opened production
           onStart(abbr(todo_stack.last[:prod]))
           break if token.nil?
           
           cur_prod = todo_stack.last[:prod]
-          prod_branch = BRANCH[cur_prod.to_sym]
-          error("parse", "No branches found for #{cur_prod.to_sym.inspect}",
-            :production => cur_prod, :token => token) if prod_branch.nil?
+          prod_branch = BRANCH[cur_prod]
+          error("parse", "No branches found for #{cur_prod.inspect}",
+            :production => cur_prod, :token => token) unless prod_branch
           sequence = prod_branch[token.representation]
-          debug("parse(production)", "cur_prod #{cur_prod}, token #{token.representation.inspect} prod_branch #{prod_branch.keys.inspect}, sequence #{sequence.inspect}")
-          if sequence.nil? #&& !prod_branch.has_key?(:"ebnf:empty")
-            expected = prod_branch.values.uniq.map {|u| u.map {|v| abbr(v).inspect}.join(",")}
-            error("parse", "expected #{expected.inspect}",
-              :production => cur_prod, :token => token)
-#          else
-#            debug("parse(production)", "empty sequence for ebnf:empty")
-#            sequence ||= []
+          debug("parse(production)",
+                "#{token.representation.inspect} " +
+                "prod #{cur_prod.inspect}, " + 
+                "prod_branch #{prod_branch.keys.inspect}, " +
+                "sequence #{sequence.inspect}")
+          if sequence.nil?
+            if prod_branch.has_key?(:"ebnf:empty")
+              debug("parse(production)", "empty sequence for ebnf:empty")
+              sequence ||= []
+            else
+              expected = prod_branch.values.uniq.map {|u| u.map {|v| abbr(v).inspect}.join(",")}
+              error("parse", "expected #{expected.inspect}",
+                :production => cur_prod, :token => token)
+            end
           end
           todo_stack.last[:terms] += sequence
         end
         
-        debug("parse(terms)", "stack #{todo_stack.last.inspect}, depth #{todo_stack.length}")
+        debug("parse(terms)", "todo #{todo_stack.last.inspect}, depth #{todo_stack.length}")
         while !todo_stack.last[:terms].to_a.empty?
+          # Get the next term in this sequence
           term = todo_stack.last[:terms].shift
-          debug("parse tokens(#{term})", tokens.inspect)
-          if tokens.map(&:representation).include?(term)  # FIXME: Shouldn't this just look at the current token?
-            token = accept(term)
+          if token = accept(term)
+            debug("parse(token)", "#{token.inspect}, term #{term.inspect}")
             @lineno = token.lineno if token
-            debug("parse", "term(#{token.inspect}): #{term}")
-            if token
-              onToken(abbr(term), token.value)
-            else
-              error("parse", "Found '#{word}...'; #{term} expected",
-                :production => todo_stack.last[:prod], :token => tokens.first)
-            end
+            onToken(abbr(term), token.value)
+          elsif TERMINALS.include?(term)
+            error("parse", "#{term.inspect} expected",
+              :production => todo_stack.last[:prod], :token => @lexer.first)
           else
+            # If it's not a string (a symbol), it is a non-terminal and we push the new state
             todo_stack << {:prod => term, :terms => nil}
-            debug("parse(push)", "stack #{term}, depth #{todo_stack.length}")
+            debug("parse(push)", "term #{term.inspect}, depth #{todo_stack.length}")
             pushed = true
             break
           end
         end
         
+        # After completing the last production in a sequence, pop down until we find a production
         while !pushed && !todo_stack.empty? && todo_stack.last[:terms].to_a.empty?
-          debug("parse(pop)", "stack #{todo_stack.last.inspect}, depth #{todo_stack.length}")
+          debug("parse(pop)", "todo #{todo_stack.last.inspect}, depth #{todo_stack.length}")
           todo_stack.pop
           onFinish
         end
       end
+
+      error("parse(eof)", "Finished processing before end of file", :token => @lexer.first) if @lexer.first
+
+      # Continue popping contexts off of the stack
       while !todo_stack.empty?
-        debug("parse(pop)", "stack #{todo_stack.last.inspect}, depth #{todo_stack.length}")
+        debug("parse(eof)", "stack #{todo_stack.last.inspect}, depth #{todo_stack.length}")
         todo_stack.pop
         onFinish
       end
+
+    rescue RDF::Turtle::Lexer::Error => e
+      @lineno = e.lineno
+      error("parse", "With intput #{e.input.inspect}: #{e.message}")
     end
 
     # Handlers used to define actions for each productions.
@@ -263,10 +266,7 @@ module RDF::Turtle
     # @option options [URI, #to_s] :production
     # @option options [Token] :token
     def error(node, message, options = {})
-      depth = options[:depth] || @productions.length
-      node ||= options[:production]
-
-      message = "#{options[:token].representation.dump} was not expected: #{message}" if options[:token]
+      message += ", found #{options[:token].representation.inspect}" if options[:token]
       message += " at line #{@lineno}" if @lineno
       message += ", production = #{options[:production].inspect}" if options[:production] #&& options[:debug]
       raise RDF::ReaderError, message
@@ -373,8 +373,9 @@ module RDF::Turtle
     # @param  [Symbol, String] type_or_value
     # @return [Token]
     def accept(type_or_value)
-      if (token = tokens.first) && token === type_or_value
-        tokens.shift
+      if (token = @lexer.first) && token === type_or_value
+        debug("accept", "#{token.inspect} === #{type_or_value}.inspect")
+        @lexer.shift
       end
     end
   end # class Reader

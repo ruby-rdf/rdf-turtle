@@ -59,6 +59,9 @@
  | PNAME_NS 
 [69s] BlankNode ::= BLANK_NODE_LABEL 
  | ANON 
+
+@terminals
+
 [17] BASE ::= "@base" 
  
 [18] PREFIX ::= "@prefix" 
@@ -71,18 +74,14 @@
  
 [73s] BLANK_NODE_LABEL ::= "_:" PN_LOCAL 
  
-[74s] VAR1 ::= "?" VARNAME 
- 
-[75s] VAR2 ::= "$" VARNAME 
- 
 [76s] LANGTAG ::= BASE 
  | PREFIX 
  | "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* 
 [77s] INTEGER ::= [0-9]+ 
  
-[78s] DECIMAL ::= [0-9]+ "." [0-9]* 
+[78s] DECIMAL ::= [0-9]+ "." [0-9]+ 
  | "." [0-9]+ 
-[79s] DOUBLE ::= [0-9]+ "." [0-9]* EXPONENT 
+[79s] DOUBLE ::= [0-9]+ "." [0-9]+ EXPONENT 
  | "." ( [0-9] )+ EXPONENT 
  | ( [0-9] )+ EXPONENT 
 [80s] INTEGER_POSITIVE ::= "+" INTEGER 
@@ -103,9 +102,9 @@
  
 [88s] STRING_LITERAL2 ::= '"' ( ( [^\"\\\n\r] ) | ECHAR | UCHAR )* '"' 
  
-[89s] STRING_LITERAL_LONG1 ::= "'''" ( ( "'" | "''" )? ( [^'\\] | ECHAR ) )* "'''" 
+[89s] STRING_LITERAL_LONG1 ::= "'''" ( ( "'" | "''" )? ( [^'\\] | ECHAR | UCHAR ) )* "'''" 
  
-[90s] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^\"\\] | ECHAR ) )* '"""' 
+[90s] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^\"\\] | ECHAR | UCHAR ) )* '"""' 
  
 /* [19] UCHAR ::= ( "\\u" [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] ) */
 /* | ( "\\U" [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] */
@@ -139,8 +138,6 @@
  | UCHAR 
 [96s] PN_CHARS_U ::= PN_CHARS_BASE 
  | "_" 
-[97s] VARNAME ::= ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #00B7 | [#0300-#036F] | [# 
- 203F-#2040] )* 
 [98s] PN_CHARS ::= PN_CHARS_U 
  | "-" 
  | [0-9] 
@@ -150,6 +147,3 @@
 [99s] PN_PREFIX ::= PN_CHARS_BASE ( ( PN_CHARS | "." )* PN_CHARS )? 
  
 [100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] ) ( ( PN_CHARS | "." )* PN_CHARS )? 
- 
-[101] PASSED_TOKENS ::= [ \t\r\n]+ 
- | "#" [^\r\n]*
