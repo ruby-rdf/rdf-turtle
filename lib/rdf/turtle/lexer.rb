@@ -36,7 +36,7 @@ module RDF::Turtle
     }
     ESCAPE_CHAR4         = /\\u([0-9A-Fa-f]{4,4})/                              # \uXXXX
     ESCAPE_CHAR8         = /\\U([0-9A-Fa-f]{8,8})/                              # \UXXXXXXXX
-    ESCAPE_CHAR          = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/
+    UCHAR               = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/                     # [19]
 
     if RUBY_VERSION >= '1.9'
       ##
@@ -87,7 +87,7 @@ module RDF::Turtle
 
     KEYWORD              = /#{KEYWORDS.join('|')}/i                             # [17] & [18]
     DELIMITER            = /\^\^|[()\[\],;\.]/
-    OPERATOR             = /a|[<>+\-*\/]/
+    OPERATOR             = /a|true|false/
     COMMENT              = /#.*/
 
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/                            # [95s]
@@ -97,27 +97,22 @@ module RDF::Turtle
     PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                   # [99s]
     PN_LOCAL             = /(?:[0-9]|#{PN_CHARS_U})#{PN_CHARS_BODY}/            # [100s]
 
-    IRI_REF              = /<([^<>"{}|^`\\\x00-\x20]*)>/                        # [70s]
+    IRI_REF              = /<(([^<>"{}|^`\\\x00-\x20]|#{U_CHARS1})*)>/          # [70s]
     PNAME_NS             = /(#{PN_PREFIX}?):/                                   # [71s]
     PNAME_LN             = /#{PNAME_NS}(#{PN_LOCAL})/                           # [72s]
     BLANK_NODE_LABEL     = /_:(#{PN_LOCAL})/                                    # [73s]
     LANGTAG              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*)/                     # [76s]
-    INTEGER              = /[0-9]+/                                             # [77s]
-    DECIMAL              = /(?:[0-9]+\.[0-9]*|\.[0-9]+)/                        # [78s]
+    INTEGER              = /[+\-]?[0-9]+/                                       # [77s]
+    DECIMAL              = /[+\-]?(?:[0-9]+\.[0-9]*|\.[0-9]+)/                  # [78s]
     EXPONENT             = /[eE][+-]?[0-9]+/                                    # [86s]
-    DOUBLE               = /(?:[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
+    DOUBLE               = /[+\-]?(?:[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)#{EXPONENT}/# [79s]
     ECHAR                = /\\[tbnrf\\"']/                                      # [91s]
     STRING_LITERAL1      = /'((?:[^\x27\x5C\x0A\x0D]|#{ECHAR})*)'/              # [87s]
     STRING_LITERAL2      = /"((?:[^\x22\x5C\x0A\x0D]|#{ECHAR})*)"/              # [88s]
     STRING_LITERAL_LONG1 = /'''((?:(?:'|'')?(?:[^'\\]|#{ECHAR})+)*)'''/m        # [89s]
     STRING_LITERAL_LONG2 = /"""((?:(?:"|"")?(?:[^"\\]|#{ECHAR})+)*)"""/m        # [90s]
     WS                   = /\x20|\x09|\x0D|\x0A/                                # [93s]
-    NIL                  = /\(#{WS}*\)/                                         # [92s]
     ANON                 = /\[#{WS}*\]/                                         # [94s]
-
-    BooleanLiteral       = /true|false/                                         # [65s]
-    String               = /#{STRING_LITERAL_LONG1}|#{STRING_LITERAL_LONG2}|
-                            #{STRING_LITERAL1}|#{STRING_LITERAL2}/x             # [66s]
 
     # Make all defined regular expression constants immutable:
     constants.each { |name| const_get(name).freeze }
@@ -135,7 +130,7 @@ module RDF::Turtle
       string.force_encoding(Encoding::ASCII_8BIT) if string.respond_to?(:force_encoding) # Ruby 1.9+
 
       # Decode \uXXXX and \UXXXXXXXX code points:
-      string.gsub!(ESCAPE_CHAR) do
+      string.gsub!(UCHAR) do
         s = [($1 || $2).hex].pack('U*')
         s.respond_to?(:force_encoding) ? s.force_encoding(Encoding::ASCII_8BIT) : s
       end
@@ -207,7 +202,7 @@ module RDF::Turtle
         when IO, StringIO then input.read
         else input.to_s
       end
-      @input = self.class.unescape_codepoints(@input) if ESCAPE_CHAR === @input
+      @input = self.class.unescape_codepoints(@input) if UCHAR === @input
       @lineno = 1
       @scanner = StringScanner.new(@input)
     end
@@ -309,9 +304,7 @@ module RDF::Turtle
       match_double          ||
       match_decimal         ||
       match_integer         ||
-      match_boolean_literal ||
       match_blank_node_label||
-      match_nil             ||
       match_anon            ||
       match_delimiter       ||
       match_operator
@@ -379,37 +372,43 @@ module RDF::Turtle
 
     def match_double
       if matched = scanner.scan(DOUBLE)
-        token(:DOUBLE, matched)
+        if matched.to_s[0,1] == '-'
+          token(:DOUBLE_NEGATIVE, matched)
+        elsif matched.to_s[0,1] == '+'
+          token(:DOUBLE_POSITIVE, matched)
+        else
+          token(:DOUBLE, matched)
+        end
       end
     end
 
     def match_decimal
       if matched = scanner.scan(DECIMAL)
-        token(:DECIMAL, matched)
+        if matched.to_s[0,1] == '-'
+          token(:DECIMAL_NEGATIVE, matched)
+        elsif matched.to_s[0,1] == '+'
+          token(:DECIMAL_POSITIVE, matched)
+        else
+          token(:DECIMAL, matched)
+        end
       end
     end
 
     def match_integer
       if matched = scanner.scan(INTEGER)
-        token(:INTEGER, matched)
-      end
-    end
-
-    def match_boolean_literal
-      if matched = scanner.scan(BooleanLiteral)
-        token(:BooleanLiteral, matched)
+        if matched.to_s[0,1] == '-'
+          token(:INTEGER_NEGATIVE, matched)
+        elsif matched.to_s[0,1] == '+'
+          token(:INTEGER_POSITIVE, matched)
+        else
+          token(:INTEGER, matched)
+        end
       end
     end
 
     def match_blank_node_label
       if matched = scanner.scan(BLANK_NODE_LABEL)
         token(:BLANK_NODE_LABEL, scanner[1].to_s)
-      end
-    end
-
-    def match_nil
-      if matched = scanner.scan(NIL)
-        token(:NIL)
       end
     end
 

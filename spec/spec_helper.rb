@@ -34,3 +34,21 @@ end
   c.include(Matchers)
   c.include(RDF::Spec::Matchers)
 end
+
+# Heuristically detect the input stream
+def detect_format(stream)
+  # Got to look into the file to see
+  if stream.is_a?(IO) || stream.is_a?(StringIO)
+    stream.rewind
+    string = stream.read(1000)
+    stream.rewind
+  else
+    string = stream.to_s
+  end
+  case string
+  when /<(\w+:)?RDF/ then :rdfxml
+  when /<html/i   then :rdfa
+  when /@prefix/i then :ttl
+  else                 :ttl
+  end
+end

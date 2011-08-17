@@ -41,21 +41,21 @@ describe RDF::Turtle::Lexer do
   end
 
   describe "when matching Unicode input" do
+    strings = [
+      ["\xC3\x80",         "\xC3\x96"],         # \u00C0-\u00D6
+      ["\xC3\x98",         "\xC3\xB6"],         # \u00D8-\u00F6
+      ["\xC3\xB8",         "\xCB\xBF"],         # \u00F8-\u02FF
+      ["\xCD\xB0",         "\xCD\xBD"],         # \u0370-\u037D
+      ["\xCD\xBF",         "\xE1\xBF\xBF"],     # \u037F-\u1FFF
+      ["\xE2\x80\x8C",     "\xE2\x80\x8D"],     # \u200C-\u200D
+      ["\xE2\x81\xB0",     "\xE2\x86\x8F"],     # \u2070-\u218F
+      ["\xE2\xB0\x80",     "\xE2\xBF\xAF"],     # \u2C00-\u2FEF
+      ["\xE3\x80\x81",     "\xED\x9F\xBF"],     # \u3001-\uD7FF
+      ["\xEF\xA4\x80",     "\xEF\xB7\x8F"],     # \uF900-\uFDCF
+      ["\xEF\xB7\xB0",     "\xEF\xBF\xBD"],     # \uFDF0-\uFFFD
+      ["\xF0\x90\x80\x80", "\xF3\xAF\xBF\xBF"], # \u{10000}-\u{EFFFF}]
+    ]
     it "matches the PN_CHARS_BASE production correctly" do
-      strings = [
-        ["\xC3\x80",         "\xC3\x96"],         # \u00C0-\u00D6
-        ["\xC3\x98",         "\xC3\xB6"],         # \u00D8-\u00F6
-        ["\xC3\xB8",         "\xCB\xBF"],         # \u00F8-\u02FF
-        ["\xCD\xB0",         "\xCD\xBD"],         # \u0370-\u037D
-        ["\xCD\xBF",         "\xE1\xBF\xBF"],     # \u037F-\u1FFF
-        ["\xE2\x80\x8C",     "\xE2\x80\x8D"],     # \u200C-\u200D
-        ["\xE2\x81\xB0",     "\xE2\x86\x8F"],     # \u2070-\u218F
-        ["\xE2\xB0\x80",     "\xE2\xBF\xAF"],     # \u2C00-\u2FEF
-        ["\xE3\x80\x81",     "\xED\x9F\xBF"],     # \u3001-\uD7FF
-        ["\xEF\xA4\x80",     "\xEF\xB7\x8F"],     # \uF900-\uFDCF
-        ["\xEF\xB7\xB0",     "\xEF\xBF\xBD"],     # \uFDF0-\uFFFD
-        ["\xF0\x90\x80\x80", "\xF3\xAF\xBF\xBF"], # \u{10000}-\u{EFFFF}]
-      ]
       strings.each do |range|
         range.each do |string|
           string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
@@ -63,13 +63,44 @@ describe RDF::Turtle::Lexer do
         end
       end
     end
+
+    it "matches the IRI_REF production correctly" do
+      strings.each do |range|
+        range.each do |string|
+          string = "<#{string}>"
+          string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+          string.should match(RDF::Turtle::Lexer::IRI_REF)
+        end
+      end
+    end
+    
+    #%w(
+    #  \u0001 \u0002 \u0003 \u0004 \u0005 \u0006 \u0007 \u0008 \t \n \
+    #  \u000B \u000C \r \u000E \u000F \u0010 \u0011 \u0012 \u0013 \u0014 \u0015 \u0016 \u0017 \u0018 \u0019
+    #  \u001A \u001B \u001C \u001D \u001E \u001F
+    #  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : / < = \u003E ? @
+    #  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+    #  [ \\ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ \u007F
+    #).each do |string|
+    #  it "matches <scheme:#{string.inspect}>" do
+    #    string = "<scheme:#{string}>"
+    #    string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+    #    string.should match(RDF::Turtle::Lexer::IRI_REF)
+    #  end
+    #end
+
+    it "matches a long unicode IRI_REF" do
+      string = %q(<scheme:\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F !"#$%&'()*+,-./0123456789:/<=\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F>)
+      string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+      string.should match(RDF::Turtle::Lexer::IRI_REF)
+    end
   end
 
   describe "when tokenizing boolean literals" do
     it "tokenizes the true literal" do
       tokenize(%q(true)) do |tokens|
         tokens.should have(1).element
-        tokens.first.type.should  == :BooleanLiteral
+        tokens.first.type.should  == nil
         tokens.first.value.should == "true"
       end
     end
@@ -77,16 +108,8 @@ describe RDF::Turtle::Lexer do
     it "tokenizes the false literal" do
       tokenize(%q(false)) do |tokens|
         tokens.should have(1).element
-        tokens.first.type.should  == :BooleanLiteral
+        tokens.first.type.should  == nil
         tokens.first.value.should == "false"
-      end
-    end
-
-    it "tokenizes the nil literal" do
-      tokenize(%q(()), %q(( )), %q((  ))) do |tokens|
-        tokens.should have(1).element
-        tokens.first.type.should  == :NIL
-        tokens.first.value.should == nil
       end
     end
   end
@@ -102,21 +125,17 @@ describe RDF::Turtle::Lexer do
 
     it "tokenizes positive integer literals" do
       tokenize(%q(+42)) do |tokens|
-        tokens.should have(2).element
-        tokens.first.type.should be_nil
-        tokens.first.value.should == "+"
-        tokens.last.type.should  == :INTEGER
-        tokens.last.value.should == "42"
+        tokens.should have(1).element
+        tokens.last.type.should  == :INTEGER_POSITIVE
+        tokens.last.value.should == "+42"
       end
     end
 
     it "tokenizes negative integer literals" do
       tokenize(%q(-42)) do |tokens|
-        tokens.should have(2).element
-        tokens.first.type.should be_nil
-        tokens.first.value.should == "-"
-        tokens.last.type.should  == :INTEGER
-        tokens.last.value.should == "42"
+        tokens.should have(1).element
+        tokens.last.type.should  == :INTEGER_NEGATIVE
+        tokens.last.value.should == "-42"
       end
     end
 
@@ -130,21 +149,17 @@ describe RDF::Turtle::Lexer do
 
     it "tokenizes positive decimal literals" do
       tokenize(%q(+3.1415)) do |tokens|
-        tokens.should have(2).element
-        tokens.first.type.should be_nil
-        tokens.first.value.should == "+"
-        tokens.last.type.should  == :DECIMAL
-        tokens.last.value.should == "3.1415"
+        tokens.should have(1).element
+        tokens.last.type.should  == :DECIMAL_POSITIVE
+        tokens.last.value.should == "+3.1415"
       end
     end
 
     it "tokenizes negative decimal literals" do
       tokenize(%q(-3.1415)) do |tokens|
-        tokens.should have(2).element
-        tokens.first.type.should be_nil
-        tokens.first.value.should == "-"
-        tokens.last.type.should  == :DECIMAL
-        tokens.last.value.should == "3.1415"
+        tokens.should have(1).element
+        tokens.last.type.should  == :DECIMAL_NEGATIVE
+        tokens.last.value.should == "-3.1415"
       end
     end
 
@@ -158,21 +173,17 @@ describe RDF::Turtle::Lexer do
 
     it "tokenizes positive double literals" do
       tokenize(%q(+1e6)) do |tokens|
-        tokens.should have(2).element
-        tokens.first.type.should be_nil
-        tokens.first.value.should == "+"
-        tokens.last.type.should  == :DOUBLE
-        tokens.last.value.should == "1e6"
+        tokens.should have(1).element
+        tokens.last.type.should  == :DOUBLE_POSITIVE
+        tokens.last.value.should == "+1e6"
       end
     end
 
     it "tokenizes negative double literals" do
       tokenize(%q(-1e6)) do |tokens|
-        tokens.should have(2).element
-        tokens.first.type.should be_nil
-        tokens.first.value.should == "-"
-        tokens.last.type.should  == :DOUBLE
-        tokens.last.value.should == "1e6"
+        tokens.should have(1).element
+        tokens.last.type.should  == :DOUBLE_NEGATIVE
+        tokens.last.value.should == "-1e6"
       end
     end
   end
@@ -343,7 +354,7 @@ describe RDF::Turtle::Lexer do
   end
 
   describe "when tokenizing operators" do
-    %w(a + -).each do |operator|
+    %w(a true false).each do |operator|
       it "tokenizes the #{operator.inspect} operator" do
         tokenize(operator) do |tokens|
           tokens.should have(1).element

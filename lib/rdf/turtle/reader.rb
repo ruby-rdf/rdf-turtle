@@ -35,7 +35,7 @@ module RDF::Turtle
     # @option options [Boolean] :debug
     #   Detailed debug output
     # @return [SPARQL::Grammar::Parser]
-    def initialize(input = nil, options = {})
+    def initialize(input = nil, options = {}, &block)
       super do
         @options = {:anon_base => "b0", :validate => false}.merge(options)
         @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, @options)
@@ -136,8 +136,8 @@ module RDF::Turtle
               debug("parse(production)", "empty sequence for ebnf:empty")
               sequence ||= []
             else
-              expected = prod_branch.values.uniq.map {|u| u.map {|v| abbr(v).inspect}.join(",")}
-              error("parse", "expected #{expected.inspect}",
+              expected = prod_branch.keys.map {|v| v.inspect}.join(", ")
+              error("parse", "expected one of #{expected}",
                 :production => cur_prod, :token => token)
             end
           end
@@ -183,7 +183,7 @@ module RDF::Turtle
 
     rescue RDF::Turtle::Lexer::Error => e
       @lineno = e.lineno
-      error("parse", "With intput #{e.input.inspect}: #{e.message}")
+      error("parse", "With input #{e.input.inspect}: #{e.message}")
     end
 
     # Handlers used to define actions for each productions.
@@ -285,7 +285,9 @@ module RDF::Turtle
     # @param [String] str
     def debug(node, message, options = {})
       depth = options[:depth] || @productions.length
-      $stderr.puts("[#{@lineno}]#{' ' * depth}#{node}: #{message}") if @options[:debug]
+      str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
+      @options[:debug] << str if @options[:debug].is_a?(Array)
+      $stderr.puts("[#{@lineno}]#{' ' * depth}#{node}: #{message}") if RDF::Turtle.debug?
     end
 
     ##

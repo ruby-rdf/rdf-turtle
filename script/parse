@@ -14,7 +14,11 @@ def run(input, options)
 
   start = Time.new
   num = 0
-  if options[:output_format] == :ntriples || options[:quiet]
+  if options[:lex_only]
+    RDF::Turtle::Lexer.new(input).each do |token|
+      puts "[#{token.lineno}: #{token}]" unless options[:quiet]
+    end
+  elsif options[:output_format] == :ntriples || options[:quiet]
     reader_class.new(input, options[:parser_options]).each do |statement|
       num += 1
       if options[:quiet]
@@ -64,7 +68,7 @@ opts = GetoptLong.new(
   ["--format", GetoptLong::REQUIRED_ARGUMENT],
   ["--input-format", GetoptLong::REQUIRED_ARGUMENT],
   ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
-  ["--parse-only", GetoptLong::NO_ARGUMENT],
+  ["--lex-only", GetoptLong::NO_ARGUMENT],
   ["--progress", GetoptLong::NO_ARGUMENT],
   ["--quiet", GetoptLong::NO_ARGUMENT],
   ["--uri", GetoptLong::REQUIRED_ARGUMENT],
@@ -77,7 +81,7 @@ opts.each do |opt, arg|
   when '--format'       then options[:output_format] = arg.to_sym
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
-  when '--parse-only'   then options[:parse_only] = true
+  when '--lex-only'     then options[:lex_only] = true
   when '--progress'     then parser_options[:progress] = true
   when '--quiet'        then options[:quiet] = true
   when '--uri'          then parser_options[:base_uri] = arg
