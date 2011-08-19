@@ -125,6 +125,9 @@ module RDF::LL1
       @whitespace = @options[:whitespace] || WS
       @comment = @options[:comment] || COMMENT
       @terminals = terminals
+
+      raise Error, "Terminal patterns not defined" unless @terminals && @terminals.length > 0
+
       self.input = input if input
     end
 

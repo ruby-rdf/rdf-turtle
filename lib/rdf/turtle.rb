@@ -22,6 +22,7 @@ module RDF
     require  'rdf/turtle/format'
     autoload :Lexer,   'rdf/turtle/lexer'
     autoload :Reader,  'rdf/turtle/reader'
+    autoload :Tokens,  'rdf/turtle/tokens'
     autoload :VERSION, 'rdf/turtle/version'
     autoload :Writer,  'rdf/turtle/writer'
 

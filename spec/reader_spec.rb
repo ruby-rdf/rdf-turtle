@@ -202,14 +202,10 @@ describe "RDF::Turtle::Reader" do
       statement.object.to_s.should == "http://example.org/resource2"
     end
 
-    it "should create named predicate bnode" do
-      graph = parse("<http://example.org/resource2> _:anon <http://example.org/object> .")
-      graph.size.should == 1
-      statement = graph.statements.first
-      statement.subject.to_s.should == "http://example.org/resource2"
-      statement.predicate.should be_a(RDF::Node)
-      statement.predicate.id.should =~ /anon/
-      statement.object.to_s.should == "http://example.org/object"
+    it "should not create named predicate bnode" do
+      lambda {
+        parse("<http://example.org/resource2> _:anon <http://example.org/object> .")
+      }.should raise_error RDF::ReaderError
     end
 
     it "should create named object bnode" do
@@ -548,14 +544,12 @@ describe "RDF::Turtle::Reader" do
         n3 = %(@prefix a: <http://foo/a#> . [] a:p a:v .)
         nt = %(_:bnode0 <http://foo/a#p> <http://foo/a#v> .)
         g = parse(n3, :base_uri => "http://a/b")
-        normalize_bnodes(g, "bnode0").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug, :compare => :array)
+        g.should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug, :compare => :array)
       end
       
-      it "should create BNode for [] as predicate" do
+      it "should note create BNode for [] as predicate" do
         n3 = %(@prefix a: <http://foo/a#> . a:s [] a:o .)
-        nt = %(<http://foo/a#s> _:bnode0 <http://foo/a#o> .)
-        g = parse(n3, :base_uri => "http://a/b")
-        normalize_bnodes(g, "bnode0").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug, :compare => :array, :anon => "bnode")
+        lambda {parse(n3)}.should raise_error RDF::ReaderError
       end
       
       it "should create BNode for [] as object" do
@@ -564,10 +558,9 @@ describe "RDF::Turtle::Reader" do
         parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
       end
       
-      it "should create BNode for [] as statement" do
+      it "should not create BNode for [] as statement" do
         n3 = %([:a :b] .)
-        nt = %(_:bnode0 <http://a/b#a> <http://a/b#b> .)
-        parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
+        lambda {parse(n3)}.should raise_error RDF::ReaderError
       end
       
       it "should create statements with BNode subjects using [ pref obj]" do
@@ -620,83 +613,6 @@ describe "RDF::Turtle::Reader" do
         <http://foo/a#a> <http://foo/a#p> _:bnode1 .
         )
         parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-      end
-
-      describe "from paths" do
-        it "should create bnode for path x!p" do
-          n3 = %(:x2!:y2 :p2 "3" .)
-          nt = %(:x2 :y2 _:bnode0 . _:bnode0 :p2 "3" .)
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
-      
-        it "should create bnode for path x^p" do
-          n3 = %(:x2^:y2 :p2 "3" .)
-          nt = %(_:bnode0 :y2 :x2 . _:bnode0 :p2 "3" .)
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
-      
-        it "should decode :joe!fam:mother!loc:office!loc:zip as Joe's mother's office's zipcode" do
-          n3 = %(
-          @prefix fam: <http://foo/fam#> .
-          @prefix loc: <http://foo/loc#> .
-
-          :joe!fam:mother!loc:office!loc:zip .
-          )
-          nt = %(
-          :joe <http://foo/fam#mother> _:bnode0 .
-          _:bnode0 <http://foo/loc#office> _:bnode1 .
-          _:bnode1 <http://foo/loc#zip> _:bnode2 .
-          )
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
-
-        it "should decode :joe!fam:mother^fam:mother Anyone whose mother is Joe's mother." do
-          n3 = %(
-          @prefix fam: <http://foo/fam#> .
-          @prefix loc: <http://foo/loc#> .
-
-          :joe!fam:mother^fam:mother .
-          )
-          nt = %(
-          :joe <http://foo/fam#mother> _:bnode0 .
-          _:bnode1 <http://foo/fam#mother> _:bnode0 .
-          )
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
-
-        it "should decode path with property list." do
-          n3 = %(
-          @prefix a: <http://a/ns#>.
-          :a2!a:b2!a:c2 :q1 "3" ; :q2 "4" , "5" .
-          )
-          nt = %(
-          :a2 <http://a/ns#b2> _:bnode0 .
-          _:bnode0 <http://a/ns#c2> _:bnode1 .
-          _:bnode1 :q1 "3" .
-          _:bnode1 :q2 "4" .
-          _:bnode1 :q2 "5" .
-          )
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
-
-        it "should decode path as object(1)" do
-          n3 = %(:a  :b "lit"^:c.)
-          nt = %(
-            :a :b _:bnode .
-            _:bnode :c "lit" .
-          )
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
-
-        it "should decode path as object(2)" do
-          n3 = %(@prefix a: <http://a/ns#>. :r :p :o!a:p1!a:p2 .)
-          nt = %(
-          :o <http://a/ns#p1> _:bnode0 .
-          _:bnode0 <http://a/ns#p2> _:bnode1 .
-          :r :p _:bnode1 .
-          )
-          parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
-        end
       end
     end
     
@@ -758,7 +674,7 @@ describe "RDF::Turtle::Reader" do
         parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
       end
       
-      it "should parse unattached lists" do
+      it "should not parse unattached lists" do
         n3 = %(
         @prefix a: <http://foo/a#> .
 
@@ -766,15 +682,7 @@ describe "RDF::Turtle::Reader" do
         # This is not a statement.
         () .
         )
-        nt = %(
-        _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "1" .
-        _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bnode1 .
-        _:bnode1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "2" .
-        _:bnode1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bnode2 .
-        _:bnode2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "3" .
-        _:bnode2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
-        )
-        parse(n3, :base_uri => "http://a/b").should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
+        lambda {parse(n3)}.should raise_error RDF::ReaderError
       end
       
       it "should add property to nil list" do
