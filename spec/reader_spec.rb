@@ -249,7 +249,7 @@ describe "RDF::Turtle::Reader" do
       specify "test #{name}" do
         graph = parse([statement].flatten.first)
         graph.size.should == 1
-        graph.to_ntriples.chomp.should == [statement].flatten.last.gsub(/\s+/, " ").strip
+        graph.dump(:ntriples).chomp.should == [statement].flatten.last.gsub(/\s+/, " ").strip
       end
     end
 

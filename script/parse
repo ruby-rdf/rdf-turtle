@@ -72,6 +72,7 @@ opts = GetoptLong.new(
   ["--progress", GetoptLong::NO_ARGUMENT],
   ["--quiet", GetoptLong::NO_ARGUMENT],
   ["--uri", GetoptLong::REQUIRED_ARGUMENT],
+  ["--validate", GetoptLong::NO_ARGUMENT],
   ["--verbose", GetoptLong::NO_ARGUMENT]
 )
 opts.each do |opt, arg|
@@ -85,6 +86,7 @@ opts.each do |opt, arg|
   when '--progress'     then parser_options[:progress] = true
   when '--quiet'        then options[:quiet] = true
   when '--uri'          then parser_options[:base_uri] = arg
+  when '--validate'     then parser_options[:base_uri] = true
   when '--verbose'      then $verbose = true
   end
 end

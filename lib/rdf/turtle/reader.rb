@@ -11,26 +11,156 @@ module RDF::Turtle
     include RDF::Turtle::Tokens
 
     # Tokens passed to lexer. Order matters!
-    terminal :ANON,                 ANON
-    terminal :BLANK_NODE_LABEL,     BLANK_NODE_LABEL
-    terminal :IRI_REF,              IRI_REF
-    terminal :DOUBLE,               DOUBLE
-    terminal :DOUBLE_NEGATIVE,      DOUBLE_NEGATIVE
-    terminal :DOUBLE_POSITIVE,      DOUBLE_POSITIVE
-    terminal :DECIMAL,              DECIMAL
-    terminal :DECIMAL_NEGATIVE,     DECIMAL_NEGATIVE
-    terminal :DECIMAL_POSITIVE,     DECIMAL_POSITIVE
-    terminal :INTEGER,              INTEGER
-    terminal :INTEGER_NEGATIVE,     INTEGER_NEGATIVE
-    terminal :INTEGER_POSITIVE,     INTEGER_POSITIVE
-    terminal :PNAME_LN,             PNAME_LN
-    terminal :PNAME_NS,             PNAME_NS
-    terminal :STRING_LITERAL_LONG1, STRING_LITERAL_LONG1
-    terminal :STRING_LITERAL_LONG2, STRING_LITERAL_LONG2
-    terminal :STRING_LITERAL1,      STRING_LITERAL1
-    terminal :STRING_LITERAL2,      STRING_LITERAL2
-    terminal nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)
-    terminal :LANGTAG,              LANGTAG
+    terminal(:ANON,                 ANON) do |reader, prod, token, input|
+      input[:resource] = reader.bnode
+    end
+    terminal(:BLANK_NODE_LABEL,     BLANK_NODE_LABEL) do |reader, prod, token, input|
+      input[:resource] = reader.bnode(token.scanner[1])
+    end
+    terminal(:IRI_REF,              IRI_REF) do |reader, prod, token, input|
+      input[:resource] = reader.process_iri(token.scanner[1])
+    end
+    terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
+    end
+    terminal(:DOUBLE_NEGATIVE,      DOUBLE_NEGATIVE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
+    end
+    terminal(:DOUBLE_POSITIVE,      DOUBLE_POSITIVE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
+    end
+    terminal(:DECIMAL,              DECIMAL) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
+    end
+    terminal(:DECIMAL_NEGATIVE,     DECIMAL_NEGATIVE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
+    end
+    terminal(:DECIMAL_POSITIVE,     DECIMAL_POSITIVE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
+    end
+    terminal(:INTEGER,              INTEGER) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
+    end
+    terminal(:INTEGER_NEGATIVE,     INTEGER_NEGATIVE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
+    end
+    terminal(:INTEGER_POSITIVE,     INTEGER_POSITIVE) do |reader, prod, token, input|
+      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
+    end
+    terminal(:PNAME_LN,             PNAME_LN) do |reader, prod, token, input|
+      prefix = token.scanner[1]
+      suffix = token.scanner[2]
+      raise RDF::ReaderError, "undefined prefix used in PNAME_LN #{token.value}" unless reader.prefix(prefix)
+      input[:resource] = reader.ns(prefix, suffix)
+    end
+    terminal(:PNAME_NS,             PNAME_NS) do |reader, prod, token, input|
+      input[:prefix] = token.scanner[1]
+    end
+    terminal(:STRING_LITERAL_LONG1, STRING_LITERAL_LONG1) do |reader, prod, token, input|
+      input[:string_value] = token.scanner[1]
+    end
+    terminal(:STRING_LITERAL_LONG2, STRING_LITERAL_LONG2) do |reader, prod, token, input|
+      input[:string_value] = token.scanner[1]
+    end
+    terminal(:STRING_LITERAL1,      STRING_LITERAL1) do |reader, prod, token, input|
+      input[:string_value] = token.scanner[1]
+    end
+    terminal(:STRING_LITERAL2,      STRING_LITERAL2) do |reader, prod, token, input|
+      input[:string_value] = token.scanner[1]
+    end
+    terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |reader, prod, token, input|
+      case token.value
+      when 'a'             then input[:resource] = RDF.type
+      when 'true', 'false' then input[:resource] = RDF::Literal::Boolean.new(token.value)
+      else                      input[:string] = token.value
+      end
+    end
+    terminal(:LANGTAG,              LANGTAG)do |reader, prod, token, input|
+      input[:lang] = token.scanner[1]
+    end
+
+    # Productions
+    
+    # [4] prefixID defines a prefix mapping
+    production(:prefixID) do |reader, phase, input, current, callback|
+      prefix = current[:prefix]
+      iri = current[:resource]
+      callback.call(:trace, "prefixID", "Defined prefix #{prefix} mapping to #{iri}")
+      reader.namespace(prefix, iri)
+    end
+    
+    # [5] base set base_uri
+    production(:base) do |reader, phase, input, current, callback|
+      iri = current[:resource]
+      callback.call(:trace, "base", "Defined base as #{iri}")
+      reader.options[:base_uri] = iri
+    end
+    
+    # [9] verb ::= predicate | "a"
+    production(:verb) do |reader, phase, input, current, callback|
+      input[:predicate] = current[:resource] if phase == :finish
+    end
+
+    # [10] subject ::= IRIref | blank
+    production(:subject) do |reader, phase, input, current, callback|
+      input[:subject] = current[:resource] if phase == :finish
+    end
+
+    # [12] object ::= IRIref | blank | literal
+    production(:object) do |reader, phase, input, current, callback|
+      next unless phase == :finish
+      if input[:object_list]
+        input[:object_list] << current[:resource]
+      else
+        callback.call(:statement, "object", input[:subject], input[:predicate], current[:resource])
+      end
+    end
+
+    # [15] blankNodePropertyList ::= "[" predicateObjectList "]"
+    production(:blankNodePropertyList) do |reader, phase, input, current, callback|
+      if phase == :start
+        current[:subject] = reader.bnode
+      else
+        input[:object] = current[:subject]
+      end
+    end
+    
+    # [16] collection ::= "(" object* ")"
+    production(:collection) do |reader, phase, input, current, callback|
+      if phase == :start
+        current[:object_list] = []  # Tells the object production to collect and not generate statements
+      else
+        # Create an RDF list
+        objects = current[:object_list]
+
+        last = objects.pop
+        first_bnode = bnode = reader.bnode
+        objects.each do |object|
+          callback.call(:statement, "collection", first_bnode, RDF.first, object)
+          rest_bnode = reader.bnode
+          callback.call(:statement, "collection", first_bnode, RDF.rest, rest_bnode)
+          first_bnode = rest_bnode
+        end
+        if last
+          callback.call(:statement, "collection", first_bnode, RDF.first, last)
+          callback.call(:statement, "collection", first_bnode, RDF.rest, RDF.nil)
+        else
+          bnode = RDF.nil
+        end
+        
+        # Generate the triple for which the collection is an object
+        callback.call(:statement, "collection", input[:subject], input[:predicate], bnode)
+      end
+    end
+    
+    # [60s] RDFLiteral ::= String ( LANGTAG | ( "^^" IRIref ) )? 
+    production(:RDFLiteral) do |reader, phase, input, current, callback|
+      next unless phase == :finish
+      opts = {}
+      opts[:datatype] = current[:iri] if current[:iri]
+      opts[:language] = current[:lang] if current[:lang]
+      input[:resource] = reader.literal(current[:string_value], opts)
+    end
 
     ##
     # Missing in 0.3.2
@@ -64,6 +194,9 @@ module RDF::Turtle
       super do
         @options = {:anon_base => "b0", :validate => false}.merge(options)
 
+        debug("def prefix", "#{base_uri.inspect}")
+        namespace(nil, iri("#{base_uri}#"))
+
         debug("validate", "#{validate?.inspect}")
         debug("canonicalize", "#{canonicalize?.inspect}")
         debug("intern", "#{intern?.inspect}")
@@ -93,7 +226,7 @@ module RDF::Turtle
       parse(@input, START.to_sym, @options.merge(:branch => BRANCH)) do |context, *data|
         case context
         when :statement
-          block.call(*data)
+          add_triple(*data)
         when :trace
           debug(*data)
         end
@@ -116,42 +249,51 @@ module RDF::Turtle
       end
     end
 
-  private
-
-    # Create URIs
-    def uri(value)
-      # If we have a base URI, use that when constructing a new URI
-      uri = if self.base_uri
-        u = self.base_uri.join(value.to_s)
-        u.lexical = "<#{value}>" unless u.to_s == value.to_s || options[:resolve_uris]
-        u
-      else
-        RDF::URI(value)
-      end
-
-      #uri.validate! if validate? && uri.respond_to?(:validate)
-      #uri.canonicalize! if canonicalize?
-      #uri = RDF::URI.intern(uri) if intern?
-      uri
+    # add a statement, object can be literal or URI or bnode
+    #
+    # @param [Nokogiri::XML::Node, any] node:: XML Node or string for showing context
+    # @param [URI, Node] subject:: the subject of the statement
+    # @param [URI] predicate:: the predicate of the statement
+    # @param [URI, Node, Literal] object:: the object of the statement
+    # @return [Statement]:: Added statement
+    # @raise [RDF::ReaderError]:: Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
+    def add_triple(node, subject, predicate, object)
+      statement = RDF::Statement.new(subject, predicate, object)
+      debug(node, statement.to_s)
+      @callback.call(statement)
     end
 
-    def namespace(prefix, uri)
-      uri = uri.to_s
-      if uri == '#'
-        uri = prefix(nil).to_s + '#'
-      end
-      debug("namespace", "'#{prefix}' <#{uri}>")
-      prefix(prefix, uri(uri))
+    def process_iri(iri)
+      iri(base_uri, RDF::NTriples.unescape(iri))
+    end
+
+    # Create IRIs
+    def iri(value, append = nil)
+      value = RDF::URI.new(value)
+      value = value.join(append) if append
+      value.validate! if validate? && value.respond_to?(:validate)
+      value.canonicalize! if canonicalize?
+      value = RDF::URI.intern(value) if intern?
+      value
+    end
+
+    # Create a literal
+    def literal(value, options = {})
+      options = options.dup
+      options[:datatype] = RDF::XSD.string if options.empty?
+      RDF::Literal.new(value, options.merge(:validate => validate?, :canonicalize => canonicalize?))
+    end
+
+    def namespace(prefix, iri)
+      debug("namespace", "'#{prefix}' <#{iri}>")
+      prefix(prefix, iri(iri))
     end
     
     def ns(prefix, suffix)
       base = prefix(prefix).to_s
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      debug("ns(#{prefix.inspect})", "base: '#{base}', suffix: '#{suffix}'")
-      uri = uri(base + suffix.to_s)
-      # Cause URI to be serialized as a lexical
-      uri.lexical = "#{prefix}:#{suffix}" unless options[:resolve_uris]
-      uri
+      debug("ns", "base: '#{base}', suffix: '#{suffix}'")
+      iri(base + suffix.to_s)
     end
     
     # Keep track of allocated BNodes

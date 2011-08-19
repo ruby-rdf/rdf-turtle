@@ -25,7 +25,9 @@ module RDF::LL1
       #
       # @param [Symbol] term
       #   Term which is a key in the branch table
-      # @yield [phase, input, current]
+      # @yield [reader, phase, input, current]
+      # @yieldparam [RDF::Reader] reader
+      #   Reader instance
       # @yieldparam [Symbol] phase
       #   Phase of parsing, one of :start, or :finish
       # @yieldparam [Hash] input
@@ -53,7 +55,9 @@ module RDF::LL1
       #   Defines a terminal production, which appears as within a sequence in the branch table
       # @param [Regexp] regexp
       #   Pattern used to scan for this terminal
-      # @yield [term, token, input]
+      # @yield [reader, term, token, input]
+      # @yieldparam [RDF::Reader] reader
+      #   Reader instance
       # @yieldparam [Symbol] term
       #   A symbol indicating the production which referenced this terminal
       # @yieldparam [String] token
@@ -88,14 +92,14 @@ module RDF::LL1
     #     # current production
     #     #
     #     # Yield to generate a triple
-    #     production :object do |phase, input, current|
+    #     production :object do |reader, phase, input, current|
     #       object = current[:resource]
     #       yield :statement, RDF::Statement.new(input[:subject], input[:predicate], object)
     #     end
     #     
     #     ##
     #     # Defines the pattern for a terminal node
-    #     terminal :BLANK_NODE_LABEL, %r(_:(#{PN_LOCAL})) do |production, terminal, token, input|
+    #     terminal :BLANK_NODE_LABEL, %r(_:(#{PN_LOCAL})) do |reader, production, token, input|
     #       input[:BLANK_NODE_LABEL] = RDF::Node.new(token)
     #     end
     #     
@@ -138,7 +142,7 @@ module RDF::LL1
       @branch  = options[:branch]
       @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options)
       @productions = []
-      @callback = block
+      @parse_callback = block
       terminals = self.class.patterns.map(&:first)  # Get defined terminals to help with branching
 
       raise Error, "Branch table not defined" unless @branch && @branch.length > 0
@@ -194,7 +198,7 @@ module RDF::LL1
           if token = accept(term)
             debug("parse(token)", "#{token.inspect}, term #{term.inspect}")
             @lineno = token.lineno if token
-            onToken(term, token.value)
+            onToken(term, token)
           elsif terminals.include?(term)
             error("parse", "#{term.inspect} expected",
               :production => todo_stack.last[:prod], :token => @lexer.first)
@@ -242,9 +246,7 @@ module RDF::LL1
         # to customize before pushing on the @prod_data stack
         progress("#{prod}(:start):#{@prod_data.length}", @prod_data.last)
         data = {}
-        handler.call(:start, @prod_data.last, data) do |context, *data|
-          @callback.call(context, data) if @callback
-        end
+        handler.call(self, :start, @prod_data.last, data, @parse_callback)
         @prod_data << data
       else
         progress("#{prod}(:start)", '')
@@ -259,12 +261,10 @@ module RDF::LL1
       if handler
         # Pop production data element from stack, potentially allowing handler to use it
         data = @prod_data.pop
-        handler.call(:finish, @prod_data.last, data) do |context, *data|
-          @callback.call(context, data) if @callback
-        end
-        progress("#{prod}(:finish):#{@prod_data.length}", prod_data, :depth => depth)
+        handler.call(self, :finish, @prod_data.last, data, @parse_callback)
+        progress("#{prod}(:finish):#{@prod_data.length}", @prod_data.last)
       else
-        progress("#{prod}(:finish)", '', :depth => depth)
+        progress("#{prod}(:finish)", '')
       end
       @productions.pop
     end
@@ -275,12 +275,10 @@ module RDF::LL1
         parentProd = @productions.last
         handler = self.class.terminal_handlers[prod]
         if handler
-          handler.call(parentProd, token, @prod_data.last) do |context, *data|
-            @callback.call(context, data) if @callback
-          end
-          progress("#{prod}<#{parentProd}(:token)", "#{token}: #{prod_data}", :depth => (depth + 1))
+          handler.call(self, parentProd, token, @prod_data.last)
+          progress("#{prod}(:token)", "#{token}: #{@prod_data.last}", :depth => (depth + 1))
         else
-          progress("#{prod}<#{parentProd}(:token)", token, :depth => (depth + 1))
+          progress("#{prod}(:token)", token.to_s, :depth => (depth + 1))
         end
       else
         error("#{parentProd}(:token)", "Token has no parent production", :production => prod)
@@ -324,7 +322,7 @@ module RDF::LL1
       when TrueClass
         $stderr.puts str
       when :yield
-        @callback.call(:debug, node, message, options)
+        @parse_callback.call(:debug, node, message, options)
       end
     end
 

@@ -334,8 +334,9 @@ module RDF::LL1
       def [](key)
         key = key.to_s.to_sym unless key.is_a?(Integer) || key.is_a?(Symbol)
         case key
-          when 0, :type  then @type
-          when 1, :value then @value
+          when 0, :type    then @type
+          when 1, :value   then @value
+          when 2, :scanner then @scanner
           else nil
         end
       end
@@ -365,7 +366,7 @@ module RDF::LL1
       #
       # @return [Hash]
       def to_hash
-        {:type => @type, :value => @value}
+        {:type => @type, :value => @value, :scanner => @scanner}
       end
       
       ##

@@ -196,16 +196,8 @@ class GramLL1
             if branchDict.has_key?(f)
               recordError("Conflict: #{f} is also the condition for #{branchDict[f]}")
             end
-            branchDict[f] = if @seq[prod]
-              chatty "    seq[#{prod}] => #{@seq[prod].inspect}"
-              @seq[prod]
-            elsif @alt[prod]
-              chatty "    alt[#{prod}] => #{prod}"
-              [prod]
-            else
-              chatty ("    no seq or alt => []")
-              []
-            end
+            chatty "    alt[#{prod}] => #{prod}"
+            branchDict[f] = [prod]
           end
         end
       end
