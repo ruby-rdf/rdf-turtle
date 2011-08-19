@@ -61,19 +61,20 @@
 .
 
 :predicateObjectList rdfs:label "predicateObjectList"; rdf:value "7";
- rdfs:comment "[7] predicateObjectList ::= verb objectList ( \";\" verb objectList )* (\";\")?";
+ rdfs:comment "[7] predicateObjectList ::= verb objectList ( \";\" ( verb objectList)? )*";
   g:seq (
     :verb
     :objectList
     [ g:star 
       [ g:seq (
         ";"
-        :verb
-        :objectList
+        [ g:opt 
+          [ g:seq (
+            :verb
+            :objectList
+           ) ]
+         ]
        ) ]
-     ]
-    [ g:opt 
-      ";"
      ]
    )
 .

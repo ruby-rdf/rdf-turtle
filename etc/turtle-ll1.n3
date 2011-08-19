@@ -18,7 +18,8 @@
                 <#_g4>,
                 <#_g5>,
                 <#_g6>,
-                <#_g7> .
+                <#_g7>,
+                <#_g8> .
     
     "."     g:follow "(",
                 "@base",
@@ -1229,7 +1230,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language;
          g:seq  (
         :String
-        <#_g6> ) .
+        <#_g7> ) .
     
     :STRING_LITERAL1     a re:Regex;
          rdf:value "87s";
@@ -1480,7 +1481,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language;
          g:seq  (
         "("
-        <#_g5>
+        <#_g6>
         ")" ) .
     
     :directive     a g:Production;
@@ -1662,7 +1663,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language;
          g:seq  (
         :object
-        <#_g3> ) .
+        <#_g4> ) .
     
     :predicate     a g:Production;
          rdf:value "11";
@@ -1699,7 +1700,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :predicateObjectList     a g:Production;
          rdf:value "7";
-         rdfs:comment """[7] predicateObjectList ::= verb objectList ( ";" verb objectList )* (";")?""";
+         rdfs:comment """[7] predicateObjectList ::= verb objectList ( ";" ( verb objectList)? )*""";
          rdfs:label "predicateObjectList";
          g:first "a",
                 :IRI_REF,
@@ -1709,8 +1710,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:seq  (
         :verb
         :objectList
-        <#_g0>
-        <#_g2> ) .
+        <#_g0> ) .
     
     :prefixID     a g:Production;
          rdf:value "4";
@@ -1900,14 +1900,12 @@ i.e. rewrite ?, +, * operators using alt and seq
          [
                  a g:Production;
                  g:first ";";
-                 g:follow ";";
                  g:nonTerminal :language;
                  g:seq  (
                 <#_g1>
                 <#_g0> ) ] );
          g:first ";",
                 g:eps;
-         g:follow ";";
          g:nonTerminal :language;
          g:star <#_g1> .
     
@@ -1917,19 +1915,33 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language;
          g:seq  (
         ";"
-        :verb
-        :objectList ) .
+        <#_g2> ) .
     
     <#_g2>     a g:Production;
          g:alt  (
         g:empty
-        ";" );
-         g:first ";",
-                g:eps;
+        <#_g3> );
+         g:first "a",
+                g:eps,
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:follow ";";
          g:nonTerminal :language;
-         g:opt ";" .
+         g:opt <#_g3> .
     
     <#_g3>     a g:Production;
+         g:first "a",
+                :IRI_REF,
+                :PNAME_LN,
+                :PNAME_NS;
+         g:follow ";";
+         g:nonTerminal :language;
+         g:seq  (
+        :verb
+        :objectList ) .
+    
+    <#_g4>     a g:Production;
          g:alt  (
         g:empty
          [
@@ -1938,15 +1950,15 @@ i.e. rewrite ?, +, * operators using alt and seq
                  g:follow ";";
                  g:nonTerminal :language;
                  g:seq  (
-                <#_g4>
-                <#_g3> ) ] );
+                <#_g5>
+                <#_g4> ) ] );
          g:first ",",
                 g:eps;
          g:follow ";";
          g:nonTerminal :language;
-         g:star <#_g4> .
+         g:star <#_g5> .
     
-    <#_g4>     a g:Production;
+    <#_g5>     a g:Production;
          g:first ",";
          g:follow ",";
          g:nonTerminal :language;
@@ -1954,7 +1966,7 @@ i.e. rewrite ?, +, * operators using alt and seq
         ","
         :object ) .
     
-    <#_g5>     a g:Production;
+    <#_g6>     a g:Production;
          g:alt  (
         g:empty
          [
@@ -1984,7 +1996,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                  g:nonTerminal :language;
                  g:seq  (
                 :object
-                <#_g5> ) ] );
+                <#_g6> ) ] );
          g:first "(",
                 "[",
                 "false",
@@ -2011,10 +2023,10 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language;
          g:star :object .
     
-    <#_g6>     a g:Production;
+    <#_g7>     a g:Production;
          g:alt  (
         g:empty
-        <#_g7> );
+        <#_g8> );
          g:first "^^",
                 g:eps,
                 :LANGTAG;
@@ -2042,9 +2054,9 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :STRING_LITERAL_LONG1,
                 :STRING_LITERAL_LONG2;
          g:nonTerminal :language;
-         g:opt <#_g7> .
+         g:opt <#_g8> .
     
-    <#_g7>     a g:Production;
+    <#_g8>     a g:Production;
          g:alt  (
         :LANGTAG
          [
@@ -2127,7 +2139,7 @@ i.e. rewrite ?, +, * operators using alt and seq
              g:first ",",
                     g:eps;
              g:seq  (
-            <#_g3> ) ].
+            <#_g4> ) ].
     
       [      a g:Production;
              g:first "(",
@@ -2154,7 +2166,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                     :STRING_LITERAL_LONG1,
                     :STRING_LITERAL_LONG2;
              g:seq  (
-            <#_g5> ) ].
+            <#_g6> ) ].
     
       [      g:first g:eps;
              g:seq () ].
@@ -2164,7 +2176,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                     g:eps,
                     :LANGTAG;
              g:seq  (
-            <#_g6> ) ].
+            <#_g7> ) ].
     
       [      a g:Production;
              g:first :IRI_REF,
@@ -2198,7 +2210,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                     :STRING_LITERAL_LONG1,
                     :STRING_LITERAL_LONG2;
              g:seq  (
-            <#_g5>
+            <#_g6>
             ")" ) ].
     
       [      a g:Production;
@@ -2261,16 +2273,41 @@ i.e. rewrite ?, +, * operators using alt and seq
                     :STRING_LITERAL_LONG2;
              g:seq  (
             :objectList
-            <#_g0>
-            <#_g2> ) ].
+            <#_g0> ) ].
     
       [      a g:Production;
              g:first "a",
+                    g:eps,
                     :IRI_REF,
                     :PNAME_LN,
                     :PNAME_NS;
              g:seq  (
-            :verb
+            <#_g2> ) ].
+    
+      [      a g:Production;
+             g:first "(",
+                    "[",
+                    "false",
+                    "true",
+                    :ANON,
+                    :BLANK_NODE_LABEL,
+                    :DECIMAL,
+                    :DECIMAL_NEGATIVE,
+                    :DECIMAL_POSITIVE,
+                    :DOUBLE,
+                    :DOUBLE_NEGATIVE,
+                    :DOUBLE_POSITIVE,
+                    :INTEGER,
+                    :INTEGER_NEGATIVE,
+                    :INTEGER_POSITIVE,
+                    :IRI_REF,
+                    :PNAME_LN,
+                    :PNAME_NS,
+                    :STRING_LITERAL1,
+                    :STRING_LITERAL2,
+                    :STRING_LITERAL_LONG1,
+                    :STRING_LITERAL_LONG2;
+             g:seq  (
             :objectList ) ].
     
       [      a g:Production;
@@ -2301,44 +2338,5 @@ i.e. rewrite ?, +, * operators using alt and seq
       [      a g:Production;
              g:seq  (
             "]" ) ].
-    
-      [      a g:Production;
-             g:first ";",
-                    g:eps;
-             g:seq  (
-            <#_g0>
-            <#_g2> ) ].
-    
-      [      a g:Production;
-             g:first "(",
-                    "[",
-                    "false",
-                    "true",
-                    :ANON,
-                    :BLANK_NODE_LABEL,
-                    :DECIMAL,
-                    :DECIMAL_NEGATIVE,
-                    :DECIMAL_POSITIVE,
-                    :DOUBLE,
-                    :DOUBLE_NEGATIVE,
-                    :DOUBLE_POSITIVE,
-                    :INTEGER,
-                    :INTEGER_NEGATIVE,
-                    :INTEGER_POSITIVE,
-                    :IRI_REF,
-                    :PNAME_LN,
-                    :PNAME_NS,
-                    :STRING_LITERAL1,
-                    :STRING_LITERAL2,
-                    :STRING_LITERAL_LONG1,
-                    :STRING_LITERAL_LONG2;
-             g:seq  (
-            :objectList ) ].
-    
-      [      a g:Production;
-             g:first ";",
-                    g:eps;
-             g:seq  (
-            <#_g2> ) ].
     
 #ENDS

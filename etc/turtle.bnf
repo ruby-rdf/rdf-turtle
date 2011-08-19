@@ -10,7 +10,7 @@
  
 [6] triples ::= subject predicateObjectList 
  
-[7] predicateObjectList ::= verb objectList ( ";" verb objectList )* (";")? 
+[7] predicateObjectList ::= verb objectList ( ";" ( verb objectList)? )* 
  
 [8] objectList ::= object ( "," object )* 
  
