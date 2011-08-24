@@ -131,23 +131,15 @@ module RDF::Turtle
         current[:object_list] = []  # Tells the object production to collect and not generate statements
       else
         # Create an RDF list
+        bnode = reader.bnode
         objects = current[:object_list]
+        list = RDF::List.new(bnode, nil, objects)
+        list.each_statement do |statement|
+          next if statement.predicate == RDF.type && statement.object == RDF.List
+          callback.call(:statement, "collection", statement.subject, statement.predicate, statement.object)
+        end
+        bnode = RDF.nil if list.empty?
 
-        last = objects.pop
-        first_bnode = bnode = reader.bnode
-        objects.each do |object|
-          callback.call(:statement, "collection", first_bnode, RDF.first, object)
-          rest_bnode = reader.bnode
-          callback.call(:statement, "collection", first_bnode, RDF.rest, rest_bnode)
-          first_bnode = rest_bnode
-        end
-        if last
-          callback.call(:statement, "collection", first_bnode, RDF.first, last)
-          callback.call(:statement, "collection", first_bnode, RDF.rest, RDF.nil)
-        else
-          bnode = RDF.nil
-        end
-        
         # Generate the triple for which the collection is an object
         callback.call(:statement, "collection", input[:subject], input[:predicate], bnode)
       end
