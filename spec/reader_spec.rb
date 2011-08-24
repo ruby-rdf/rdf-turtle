@@ -218,56 +218,21 @@ describe "RDF::Turtle::Reader" do
       statement.object.id.should =~ /anon/
     end
 
-    {
-      "three uris"  => "<http://example.org/resource1> <http://example.org/property> <http://example.org/resource2> .",
-      "spaces and tabs throughout" => " 	 <http://example.org/resource3> 	 <http://example.org/property>	 <http://example.org/resource2> 	.	 ",
-      "line ending with CR NL" => "<http://example.org/resource4> <http://example.org/property> <http://example.org/resource2> .\r\n",
-      "literal escapes (1)" => '<http://example.org/resource7> <http://example.org/property> "simple literal" .',
-      "literal escapes (2)" => '<http://example.org/resource8> <http://example.org/property> "backslash:\\\\" .',
-      "literal escapes (3)" => '<http://example.org/resource9> <http://example.org/property> "dquote:\"" .',
-      "literal escapes (4)" => '<http://example.org/resource10> <http://example.org/property> "newline:\n" .',
-      "literal escapes (5)" => '<http://example.org/resource11> <http://example.org/property> "return:\r" .',
-      "literal escapes (6)" => '<http://example.org/resource12> <http://example.org/property> "tab:\t" .',
-      "Space is optional before final . (1)" => ['<http://example.org/resource13> <http://example.org/property> <http://example.org/resource2>.', '<http://example.org/resource13> <http://example.org/property> <http://example.org/resource2> .'],
-      "Space is optional before final . (2)" => ['<http://example.org/resource14> <http://example.org/property> "x".', '<http://example.org/resource14> <http://example.org/property> "x" .'],
-
-      "XML Literals as Datatyped Literals (1)" => '<http://example.org/resource21> <http://example.org/property> ""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (2)" => '<http://example.org/resource22> <http://example.org/property> " "^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (3)" => '<http://example.org/resource23> <http://example.org/property> "x"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (4)" => '<http://example.org/resource23> <http://example.org/property> "\""^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (5)" => '<http://example.org/resource24> <http://example.org/property> "<a></a>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (6)" => '<http://example.org/resource25> <http://example.org/property> "a <b></b>"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (7)" => '<http://example.org/resource26> <http://example.org/property> "a <b></b> c"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (8)" => '<http://example.org/resource26> <http://example.org/property> "a\n<b></b>\nc"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      "XML Literals as Datatyped Literals (9)" => '<http://example.org/resource27> <http://example.org/property> "chat"^^<http://www.w3.org/2000/01/rdf-schema#XMLLiteral> .',
-      
-      "Plain literals with languages (1)" => '<http://example.org/resource30> <http://example.org/property> "chat"@fr .',
-      "Plain literals with languages (2)" => '<http://example.org/resource31> <http://example.org/property> "chat"@en .',
-      
-      "Typed Literals" => '<http://example.org/resource32> <http://example.org/property> "abc"^^<http://example.org/datatype1> .',
-    }.each_pair do |name, statement|
-      specify "test #{name}" do
-        graph = parse([statement].flatten.first)
-        graph.size.should == 1
-        graph.dump(:ntriples).chomp.should == [statement].flatten.last.gsub(/\s+/, " ").strip
-      end
-    end
-
     it "should allow mixed-case language" do
-      n3doc = %(:x2 :p "xyz"@EN .)
-      statement = parse(n3doc).statements.first
+      ttl = %(:x2 :p "xyz"@EN .)
+      statement = parse(ttl).statements.first
       statement.object.to_ntriples.should == %("xyz"@EN)
     end
 
     it "should create typed literals" do
-      n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"^^<http://www.w3.org/2001/XMLSchema#string> ."
-      statement = parse(n3doc).statements.first
+      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"^^<http://www.w3.org/2001/XMLSchema#string> ."
+      statement = parse(ttl).statements.first
       statement.object.class.should == RDF::Literal
     end
 
     it "should create BNodes" do
-      n3doc = "_:a a _:c ."
-      statement = parse(n3doc).statements.first
+      ttl = "_:a a _:c ."
+      statement = parse(ttl).statements.first
       statement.subject.class.should == RDF::Node
       statement.object.class.should == RDF::Node
     end
@@ -322,15 +287,15 @@ describe "RDF::Turtle::Reader" do
     end
     
     it "should create URIs" do
-      n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> ."
-      statement = parse(n3doc).statements.first
+      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> ."
+      statement = parse(ttl).statements.first
       statement.subject.class.should == RDF::URI
       statement.object.class.should == RDF::URI
     end
 
     it "should create literals" do
-      n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"."
-      statement = parse(n3doc).statements.first
+      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"."
+      statement = parse(ttl).statements.first
       statement.object.class.should == RDF::Literal
     end
   end
@@ -338,13 +303,13 @@ describe "RDF::Turtle::Reader" do
   describe "with turtle grammar" do
     describe "syntactic expressions" do
       it "should create typed literals with qname" do
-        n3doc = %(
+        ttl = %(
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
           @prefix foaf: <http://xmlns.com/foaf/0.1/> .
           @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
           <http://example.org/joe> foaf:name \"Joe\"^^xsd:string .
         )
-        statement = parse(n3doc).statements.first
+        statement = parse(ttl).statements.first
         statement.object.class.should == RDF::Literal
       end
 
