@@ -2,7 +2,7 @@ require 'rdf/n3/patches/graph_properties'
 
 module RDF::Turtle
   ##
-  # A Turtle serialiser in Ruby
+  # A Turtle serialiser
   #
   # Note that the natural interface is to write a whole graph at a time.
   # Writing statements or Triples will create a graph to add them to
@@ -165,7 +165,6 @@ module RDF::Turtle
         return nil
       end
 
-      add_debug "get_qname(#{resource}), std? #{RDF::Vocabulary.each.to_a.detect {|v| uri.index(v.to_uri.to_s) == 0}}"
       qname = case
       when @uri_to_qname.has_key?(uri)
         return @uri_to_qname[uri]
@@ -419,34 +418,20 @@ module RDF::Turtle
 
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
     def is_valid_list(l)
-      props = @graph.properties(l)
-      #add_debug "is_valid_list: #{props.inspect}"
-      return false unless props.has_key?(RDF.first.to_s) || l == RDF.nil
-      while l && l != RDF.nil do
-        #add_debug "is_valid_list(length): #{props.length}"
-        return false unless props.has_key?(RDF.first.to_s) && props.has_key?(RDF.rest.to_s)
-        n = props[RDF.rest.to_s]
-        #add_debug "is_valid_list(n): #{n.inspect}"
-        return false unless n.is_a?(Array) && n.length == 1
-        l = n.first
-        props = @graph.properties(l)
-      end
-      #add_debug "is_valid_list: valid"
-      true
+      #add_debug "is_valid_list: #{l.inspect}"
+      return RDF::List.new(l, @graph).valid?
     end
     
     def do_list(l)
-      add_debug "do_list: #{l.inspect}"
+      list = RDF::List.new(l, @graph)
+      add_debug "do_list: #{list.inspect}"
       position = :subject
-      while l do
-        p = @graph.properties(l)
-        item = p.fetch(RDF.first.to_s, []).first
-        if item
-          path(item, position)
-          subject_done(l)
-          position = :object
-        end
-        l = p.fetch(RDF.rest.to_s, []).first
+      list.each_statement do |st|
+        next unless st.predicate == RDF.first
+        add_debug " list this: #{st.subject} first: #{st.object}[#{position}]"
+        path(st.object, position)
+        subject_done(st.subject)
+        position = :object
       end
     end
     
@@ -506,7 +491,7 @@ module RDF::Turtle
       return if objects.empty?
 
       objects.each_with_index do |obj, i|
-        @output.write(",\n#{indent(2)}") if i > 0
+        @output.write(",\n#{indent(4)}") if i > 0
         path(obj, :object)
       end
     end
@@ -557,6 +542,7 @@ module RDF::Turtle
       add_debug "statement: #{subject.inspect}, s2?: #{s_squared?(subject)}"
       subject_done(subject)
       s_squared(subject) || s_default(subject)
+      @output.puts
     end
     
     def is_done?(subject)
