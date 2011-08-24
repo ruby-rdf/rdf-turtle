@@ -295,7 +295,7 @@ describe RDF::LL1::Lexer do
       end
     end
 
-    describe "when tokenizing RDF literals" do
+    describe "RDF literals" do
       it "tokenizes language-tagged literals" do
         tokenize(%q("Hello, world!"@en)) do |tokens|
           tokens.should have(2).elements
@@ -315,7 +315,7 @@ describe RDF::LL1::Lexer do
         end
       end
 
-      it "tokenizes datatyped literals" do
+      it "datatyped literals" do
         tokenize(%q('3.1415'^^<http://www.w3.org/2001/XMLSchema#double>)) do |tokens|
           tokens.should have(3).elements
           tokens[0].type.should  == :STRING_LITERAL1
@@ -339,7 +339,7 @@ describe RDF::LL1::Lexer do
       end
     end
 
-    describe "string productions" do
+    describe "string terminals" do
       %w|^^ ( ) [ ] , ; . a true false @base @prefix|.each do |string|
         it "tokenizes the #{string.inspect} string" do
           tokenize(string) do |tokens|
@@ -391,9 +391,10 @@ describe RDF::LL1::Lexer do
 
     describe "yielding tokens" do
       it "annotates tokens with the current line number" do
-        tokenize("1\n2\n3\n4") do |tokens|
-          tokens.should have(4).elements
-          4.times { |line| tokens[line].lineno.should == line + 1 }
+        results = %w(1 2 3 4)
+        RDF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals).each_token do |token|
+          token.type.should == :INTEGER
+          token.value.should == results.shift
         end
       end
     end
@@ -429,6 +430,64 @@ describe RDF::LL1::Lexer do
         end
       end
     end
+    
+    describe "reader tests" do
+      {
+        :bbc => %q(
+          @prefix dc: <http://purl.org/dc/elements/1.1/>.
+          @prefix po: <http://purl.org/ontology/po/>.
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+          _:broadcast
+           a po:Broadcast;
+           po:schedule_date """2008-06-24T12:00:00Z""";
+           po:broadcast_of _:version;
+           po:broadcast_on <http://www.bbc.co.uk/programmes/service/6music>;
+          .
+          _:version
+           a po:Version;
+          .
+          <http://www.bbc.co.uk/programmes/b0072l93>
+           dc:title """Nemone""";
+           a po:Brand;
+          .
+          <http://www.bbc.co.uk/programmes/b00c735d>
+           a po:Episode;
+           po:episode <http://www.bbc.co.uk/programmes/b0072l93>;
+           po:version _:version;
+           po:long_synopsis """Actor and comedian Rhys Darby chats to Nemone.""";
+           dc:title """Nemone""";
+           po:synopsis """Actor and comedian Rhys Darby chats to Nemone.""";
+          .
+          <http://www.bbc.co.uk/programmes/service/6music>
+           a po:Service;
+           dc:title """BBC 6 Music""";
+          .
+
+          #_:abcd a po:Episode.
+        ),
+        "muti-line" => %q(
+          :a :b """Foo
+          <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">
+            bar
+            <rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+              <a:b xmlns:a="foo:"></a:b>
+              here
+              <a:c xmlns:a="foo:"></a:c>
+            </rd
+            f:Thing>
+          </html:b>
+          baz
+          <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>"""
+        ),
+      }.each do |test, input|
+        it "tokenizes #{test}" do
+          tokenize(input) do |tokens|
+            tokens.should_not be_empty
+          end
+        end
+      end
+    end
+    
   end
 
   def tokenize(*inputs, &block)

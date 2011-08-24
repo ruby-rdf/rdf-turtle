@@ -6,18 +6,18 @@ describe RDF::LL1::Scanner do
   describe ".new" do
     it "initializes with an #read" do
       thing = File.open(__FILE__)
-      thing.should_receive(:gets).at_least(1).times.and_return("line1\n")
+      thing.should_receive(:read).and_return("line1\n", "", "", "")
+      thing.should_receive(:gets).at_least(1).times.and_return("")
       thing.should_receive(:eof?).at_least(1).times.and_return(false)
       scanner = RDF::LL1::Scanner.open(thing)
       scanner.rest.should == "line1\n"
       scanner.scan(/.*/).should == "line1"
       scanner.scan(/\s*/m).should == "\n"
-      scanner.eos?.should be_false
     end
 
     it "initializes with a StringIO" do
       scanner = RDF::LL1::Scanner.open(StringIO.new("line1\nline2\n"))
-      scanner.rest.should == "line1\n"
+      scanner.rest.should == "line1\nline2\n"
       scanner.eos?.should be_false
     end
 
@@ -42,7 +42,7 @@ describe RDF::LL1::Scanner do
     
     it "returns next line from file if at eos" do
       scanner = RDF::LL1::Scanner.open(StringIO.new("\nfoo\n"))
-      scanner.rest.should == "\n"
+      scanner.rest.should == "\nfoo\n"
       scanner.scan(/\s*/m)
       scanner.rest.should == "foo\n"
     end
@@ -68,6 +68,24 @@ describe RDF::LL1::Scanner do
       it "returns a STRING_LITERAL_LONG1" do
         scanner = RDF::LL1::Scanner.open(StringIO.new("'''\nstring\nstring''' foo"), :ml_start => /'''|"""/)
         scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should == "'''\nstring\nstring'''"
+      end
+      
+      it "scans a multi-line string" do
+         string = %q('''
+          <html:a="b"/>
+          '''
+        )
+        scanner = RDF::LL1::Scanner.open(StringIO.new(string), :ml_start => /'''|"""/)
+        scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should_not be_empty
+      end
+      
+      it "scans a longer multi-line string" do
+         string = %q('''
+          <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b"/>
+          '''
+        )
+        scanner = RDF::LL1::Scanner.open(StringIO.new(string), :ml_start => /'''|"""/)
+        scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should_not be_empty
       end
     end
   end
