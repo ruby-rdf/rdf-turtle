@@ -23,16 +23,22 @@ module RDF::LL1
     # @param [Hash{Symbol => Object}] options
     # @option options[Integer] :high_water (HIGH_WATER)
     # @option options[Integer] :low_water (LOW_WATER)
-    def self.open(file, options = {})
+    # @yield [string]
+    # @yieldparam [String] string data read from input file
+    # @yieldreturn [String] replacement read data, useful for decoding escapes.
+    # @return [Scanner]
+    def self.open(file, options = {}, &block)
       scanner = new("")
-      scanner.set_input(file, options.merge(:high_water => HIGH_WATER, :low_water => LOW_WATER))
+      scanner.set_input(file, options.merge(:high_water => HIGH_WATER, :low_water => LOW_WATER), &block)
       scanner
     end
 
     ##
     # Set input file
     # @param [String, IO, #read] file
-    def set_input(file, options = {})
+    def set_input(file, options = {}, &block)
+      @block = block
+
       @options = options
       @input = case file
       when IO, StringIO
@@ -97,8 +103,10 @@ module RDF::LL1
       if rest_size < @options[:low_water] && @input && !@input.eof?
         # Read up to high-water mark ensuring we're at an end of line
         diff = @options[:high_water] - rest_size
-        self << @input.read(diff)
-        self << @input.gets unless @input.eof?
+        string = @input.read(diff)
+        string << @input.gets unless @input.eof?
+        string = @block.call(string) if @block
+        self << string
       end
     end
   end

@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 require 'rdf/ll1/scanner'
 
 describe RDF::LL1::Scanner do
-  describe ".new" do
+  describe ".open" do
     it "initializes with an #read" do
       thing = File.open(__FILE__)
       thing.should_receive(:read).and_return("line1\n", "", "", "")
@@ -24,6 +24,16 @@ describe RDF::LL1::Scanner do
     it "initializes with a filename" do
       File.should_receive(:open).with("foo").and_return(StringIO.new("foo"))
       scanner = RDF::LL1::Scanner.open("foo")
+    end
+    
+    it "passes input data to block" do
+      block_called = false
+      scanner = RDF::LL1::Scanner.open(StringIO.new("foo")) do |string|
+        block_called = true
+        "bar"
+      end
+      scanner.rest.should == "bar"
+      block_called.should be_true
     end
   end
   

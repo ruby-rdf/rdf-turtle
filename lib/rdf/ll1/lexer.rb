@@ -68,11 +68,9 @@ module RDF::LL1
     # @param  [String] input
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-sparql-query/#codepointEscape
-    def self.unescape_codepoints(input)
-      string = input.dup
-
+    def self.unescape_codepoints(string)
       # Decode \uXXXX and \UXXXXXXXX code points:
-      string.gsub!(UCHAR) do
+      string = string.gsub(UCHAR) do
         s = [($1 || $2).hex].pack('U*')
         s.respond_to?(:force_encoding) ? s.force_encoding(Encoding::ASCII_8BIT) : s
       end
@@ -162,7 +160,10 @@ module RDF::LL1
       end
 
       @lineno = 1
-      @scanner = Scanner.open(@input, :ml_start => @ml_start)
+      @scanner = Scanner.open(@input, :ml_start => @ml_start) do |string|
+        # decode input
+        self.class.unescape_string(self.class.unescape_codepoints(string))
+      end
     end
 
     ##
@@ -207,17 +208,15 @@ module RDF::LL1
         {} while !scanner.eos? && skip_whitespace
         return @scanner = nil if scanner.eos?
 
-        string = match_token
+        token = match_token
 
-        if string.nil?
+        if token.nil?
           lexme = (@scanner.rest.split(/#{@whitespace}|#{@comment}/).first rescue nil) || @scanner.rest
           raise Error.new("Invalid token #{lexme.inspect} on line #{lineno + 1}",
-            :input => input, :token => lexme, :lineno => lineno)
+            :input => scanner.rest[0..100], :token => lexme, :lineno => lineno)
         end
 
-        string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-        string = self.class.unescape_codepoints(string) if UCHAR === string
-        string
+        token
       end
     end
 
@@ -250,6 +249,10 @@ module RDF::LL1
       end
     end
 
+    ##
+    # Return the matched token
+    #
+    # @return [Token]
     def match_token
       @terminals.each do |(term, regexp)|
         if matched = scanner.scan(regexp)
