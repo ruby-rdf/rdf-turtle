@@ -88,7 +88,6 @@ To install the latest official release of the `SPARQL::Grammar` gem, do:
 * [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
 
 ## Contributing
-------------
 * Do your best to adhere to the existing coding conventions and idioms.
 * Don't use hard tabs, and don't leave trailing whitespace on any line.
 * Do document every method you add using [YARD][] annotations. Read the
