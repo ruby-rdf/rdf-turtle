@@ -35,21 +35,21 @@ module RDF::LL1
     include Enumerable
 
     ESCAPE_CHARS         = {
-      '\t'   => "\t",    # \u0009 (tab)
-      '\n'   => "\n",    # \u000A (line feed)
-      '\r'   => "\r",    # \u000D (carriage return)
-      '\b'   => "\b",    # \u0008 (backspace)
-      '\f'   => "\f",    # \u000C (form feed)
-      '\\"'  => '"',     # \u0022 (quotation mark, double quote mark)
-      '\\\'' => '\'',    # \u0027 (apostrophe-quote, single quote mark)
-      '\\\\' => '\\'     # \u005C (backslash)
+      '\\t'   => "\t",  # \u0009 (tab)
+      '\\n'   => "\n",  # \u000A (line feed)
+      '\\r'   => "\r",  # \u000D (carriage return)
+      '\\b'   => "\b",  # \u0008 (backspace)
+      '\\f'   => "\f",  # \u000C (form feed)
+      '\\"'  => '"',    # \u0022 (quotation mark, double quote mark)
+      "\\'"  => '\'',   # \u0027 (apostrophe-quote, single quote mark)
+      '\\\\' => '\\'    # \u005C (backslash)
     }
-    ESCAPE_CHAR4         = /\\u([0-9A-Fa-f]{4,4})/                              # \uXXXX
-    ESCAPE_CHAR8         = /\\U([0-9A-Fa-f]{8,8})/                              # \UXXXXXXXX
-    ECHAR                = /\\[tbnrf\\"']/                                      # [91s]
+    ESCAPE_CHAR4        = /\\u([0-9A-Fa-f]{4,4})/                              # \uXXXX
+    ESCAPE_CHAR8        = /\\U([0-9A-Fa-f]{8,8})/                              # \UXXXXXXXX
+    ECHAR               = /\\[tbnrf\\"']/                                      # [91s]
     UCHAR               = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/
-    COMMENT              = /#.*/
-    WS                   = /\x20|\x09|\x0D|\x0A/
+    COMMENT             = /#.*/
+    WS                  = /\x20|\x09|\x0D|\x0A/
 
     ##
     # @attr [Regexp] defines whitespace, defaults to WS
@@ -69,7 +69,6 @@ module RDF::LL1
     # @see    http://www.w3.org/TR/rdf-sparql-query/#codepointEscape
     def self.unescape_codepoints(input)
       string = input.dup
-      string.force_encoding(Encoding::ASCII_8BIT) if string.respond_to?(:force_encoding) # Ruby 1.9+
 
       # Decode \uXXXX and \UXXXXXXXX code points:
       string.gsub!(UCHAR) do
@@ -158,6 +157,8 @@ module RDF::LL1
         when IO, StringIO then input.read
         else input.to_s
       end
+      @input = @input.dup
+      @input.force_encoding(Encoding::UTF_8) if @input.respond_to?(:force_encoding) # Ruby 1.9+
       @input = self.class.unescape_codepoints(@input) if UCHAR === @input
       @lineno = 1
       @scanner = StringScanner.new(@input)
@@ -212,6 +213,8 @@ module RDF::LL1
           raise Error.new("Invalid token #{lexme.inspect} on line #{lineno + 1}",
             :input => input, :token => lexme, :lineno => lineno)
         end
+
+        @first.force_encoding(Encoding::UTF_8) if @first.respond_to?(:force_encoding) # Ruby 1.9+
       end
 
       @first

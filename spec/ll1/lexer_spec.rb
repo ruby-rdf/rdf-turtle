@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+# coding: utf-8
+require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 require 'rdf/ll1/lexer'
 
 describe RDF::LL1::Lexer do
@@ -56,14 +57,45 @@ describe RDF::LL1::Lexer do
         RDF::LL1::Lexer.unescape_codepoints(input).should == output
       end
     end
+
+    
+    context "escaped strings" do
+      {
+        'Dürst' => 'D\\u00FCrst',
+        "é" => '\\u00E9',
+        "€" => '\\u20AC',
+        "resumé" => 'resum\\u00E9',
+      }.each_pair do |unescaped, escaped|
+        it "unescapes #{unescaped.inspect}" do
+          RDF::LL1::Lexer.unescape_codepoints(escaped).should == unescaped
+        end
+      end
+    end
   end
 
   describe ".unescape_string" do
     # @see http://www.w3.org/TR/rdf-sparql-query/#grammarEscapes
 
-    RDF::LL1::Lexer::ESCAPE_CHARS.each do |escaped, unescaped|
-      it "unescapes #{escaped} escape sequences" do
-        RDF::LL1::Lexer.unescape_string(escaped).should == unescaped
+    context "escape sequences" do
+      RDF::LL1::Lexer::ESCAPE_CHARS.each do |escaped, unescaped|
+        it "unescapes #{unescaped.inspect}" do
+          RDF::LL1::Lexer.unescape_string(escaped).should == unescaped
+        end
+      end
+    end
+    
+    context "escaped strings" do
+      {
+        'simple literal' => 'simple literal',
+        'backslash:\\' => 'backslash:\\\\',
+        'dquote:"' => 'dquote:\\"',
+        "newline:\n" => 'newline:\\n',
+        "return\r" => 'return\\r',
+        "tab:\t" => 'tab:\\t',
+      }.each_pair do |unescaped, escaped|
+        it "unescapes #{unescaped.inspect}" do
+          RDF::LL1::Lexer.unescape_string(escaped).should == unescaped
+        end
       end
     end
   end
