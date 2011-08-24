@@ -75,6 +75,18 @@ module RDF::LL1
     end
     
     ##
+    # Attempts to skip over the given `pattern` beginning with the scan pointer.
+    # If it matches, the scan pointer is advanced to the end of the match,
+    # and the length of the match is returned. Otherwise, `nil` is returned.
+    #
+    # It’s similar to {scan}, but without returning the matched string.
+    # @param [Regexp] pattern
+    def skip(pattern)
+      str = scan(pattern)
+      str.to_s.empty? ? nil : str.to_s.length
+    end
+    
+    ##
     # Tries to match with `pattern` at the current position.
     #
     # If there’s a match, the scanner advances the "scan pointer" and returns the matched string.
@@ -101,6 +113,8 @@ module RDF::LL1
         while !match?(pattern) && !input.eof
           self << input.gets
         end
+      else
+        self << input.gets if input && !input.eof? && rest_size == 0
       end
       
       super

@@ -1,7 +1,6 @@
-require 'strscan'    unless defined?(StringScanner)
-require 'bigdecimal' unless defined?(BigDecimal)
-
 module RDF::LL1
+  require 'rdf/ll1/scanner'    unless defined?(Scanner)
+
   ##
   # A lexical analyzer
   #
@@ -50,6 +49,8 @@ module RDF::LL1
     UCHAR               = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/
     COMMENT             = /#.*/
     WS                  = /\x20|\x09|\x0D|\x0A/
+
+    ML_START            = /\'\'\'|\"\"\"/                                       # Beginning of tokens that may span lines
 
     ##
     # @attr [Regexp] defines whitespace, defaults to WS
@@ -119,15 +120,18 @@ module RDF::LL1
     # @param  [Hash{Symbol => Object}]        options
     # @option options [Regexp]                :whitespace (WS)
     # @option options [Regexp]                :comment (COMMENT)
+    # @option options [Regexp]                :ml_start (ML_START)
+    #   Regular expression matching the beginning of tokens that may cross newlines
     def initialize(input = nil, terminals = nil, options = {})
-      @options = options.dup
+      @options    = options.dup
       @whitespace = @options[:whitespace] || WS
-      @comment = @options[:comment] || COMMENT
-      @terminals = terminals
+      @comment    = @options[:comment]    || COMMENT
+      @ml_start    = @options[:ml_start]   || ML_START
+      @terminals  = terminals
 
       raise Error, "Terminal patterns not defined" unless @terminals && @terminals.length > 0
 
-      self.input = input if input
+      self.input = input
     end
 
     ##
@@ -153,15 +157,12 @@ module RDF::LL1
     # @return [void]
     def input=(input)
       @input = case input
-        when ::String     then input
-        when IO, StringIO then input.read
-        else input.to_s
+        when IO, StringIO then input
+        else StringIO.new(input.to_s)
       end
-      @input = @input.dup
-      @input.force_encoding(Encoding::UTF_8) if @input.respond_to?(:force_encoding) # Ruby 1.9+
-      @input = self.class.unescape_codepoints(@input) if UCHAR === @input
+
       @lineno = 1
-      @scanner = StringScanner.new(@input)
+      @scanner = Scanner.open(@input, :ml_start => @ml_start)
     end
 
     ##
@@ -200,24 +201,24 @@ module RDF::LL1
     #
     # @return [Token]
     def first
-      return nil unless scanner
+      return nil unless scanner && input
 
-      if @first.nil?
-        {} while !scanner.eos? && (skip_whitespace)
+      @first ||= begin
+        {} while !scanner.eos? && skip_whitespace
         return @scanner = nil if scanner.eos?
 
-        @first = match_token
+        string = match_token
 
-        if @first.nil?
+        if string.nil?
           lexme = (@scanner.rest.split(/#{@whitespace}|#{@comment}/).first rescue nil) || @scanner.rest
           raise Error.new("Invalid token #{lexme.inspect} on line #{lineno + 1}",
             :input => input, :token => lexme, :lineno => lineno)
         end
 
-        @first.force_encoding(Encoding::UTF_8) if @first.respond_to?(:force_encoding) # Ruby 1.9+
+        string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+        string = self.class.unescape_codepoints(string) if UCHAR === string
+        string
       end
-
-      @first
     end
 
     ##
@@ -240,9 +241,9 @@ module RDF::LL1
     def skip_whitespace
       # skip all white space, but keep track of the current line number
       while !scanner.eos?
-        if matched = scanner.scan(@whitespace)
+       if matched = scanner.scan(@whitespace)
           @lineno += matched.count("\n")
-        elsif scanner.skip(@comment)
+        elsif (com = scanner.scan(@comment))
         else
           return
         end
