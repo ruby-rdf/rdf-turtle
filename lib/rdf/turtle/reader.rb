@@ -15,10 +15,10 @@ module RDF::Turtle
       input[:resource] = reader.bnode
     end
     terminal(:BLANK_NODE_LABEL,     BLANK_NODE_LABEL) do |reader, prod, token, input|
-      input[:resource] = reader.bnode(token.scanner[1])
+      input[:resource] = reader.bnode(token.value[2..-1])
     end
-    terminal(:IRI_REF,              IRI_REF) do |reader, prod, token, input|
-      input[:resource] = reader.process_iri(token.scanner[1])
+    terminal(:IRI_REF,              IRI_REF, :unescape => true) do |reader, prod, token, input|
+      input[:resource] = reader.iri(token.value[1..-2])
     end
     terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
@@ -48,25 +48,24 @@ module RDF::Turtle
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
     end
     terminal(:PNAME_LN,             PNAME_LN) do |reader, prod, token, input|
-      prefix = token.scanner[1]
-      suffix = token.scanner[2]
+      prefix, suffix = token.value.split(":", 2)
       raise RDF::ReaderError, "undefined prefix used in PNAME_LN #{token.value}" unless reader.prefix(prefix)
       input[:resource] = reader.ns(prefix, suffix)
     end
     terminal(:PNAME_NS,             PNAME_NS) do |reader, prod, token, input|
-      input[:prefix] = token.scanner[1]
+      input[:prefix] = token.value[0..-2]
     end
-    terminal(:STRING_LITERAL_LONG1, STRING_LITERAL_LONG1) do |reader, prod, token, input|
-      input[:string_value] = token.scanner[1]
+    terminal(:STRING_LITERAL_LONG1, STRING_LITERAL_LONG1, :unescape => true) do |reader, prod, token, input|
+      input[:string_value] = token.value[3..-4]
     end
-    terminal(:STRING_LITERAL_LONG2, STRING_LITERAL_LONG2) do |reader, prod, token, input|
-      input[:string_value] = token.scanner[1]
+    terminal(:STRING_LITERAL_LONG2, STRING_LITERAL_LONG2, :unescape => true) do |reader, prod, token, input|
+      input[:string_value] = token.value[3..-4]
     end
-    terminal(:STRING_LITERAL1,      STRING_LITERAL1) do |reader, prod, token, input|
-      input[:string_value] = token.scanner[1]
+    terminal(:STRING_LITERAL1,      STRING_LITERAL1, :unescape => true) do |reader, prod, token, input|
+      input[:string_value] = token.value[1..-2]
     end
-    terminal(:STRING_LITERAL2,      STRING_LITERAL2) do |reader, prod, token, input|
-      input[:string_value] = token.scanner[1]
+    terminal(:STRING_LITERAL2,      STRING_LITERAL2, :unescape => true) do |reader, prod, token, input|
+      input[:string_value] = token.value[1..-2]
     end
     terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |reader, prod, token, input|
       case token.value
@@ -75,8 +74,8 @@ module RDF::Turtle
       else                      input[:string] = token.value
       end
     end
-    terminal(:LANGTAG,              LANGTAG)do |reader, prod, token, input|
-      input[:lang] = token.scanner[1]
+    terminal(:LANGTAG,              LANGTAG) do |reader, prod, token, input|
+      input[:lang] = token.value[1..-1]
     end
 
     # Productions
@@ -187,7 +186,9 @@ module RDF::Turtle
         @options = {:anon_base => "b0", :validate => false}.merge(options)
 
         debug("def prefix", "#{base_uri.inspect}")
-        namespace(nil, iri("#{base_uri}#"))
+        
+        # @prefix directives map a local name to an IRI, also resolved against the current In-Scope Base URI.
+        namespace(nil, iri(base_uri))
 
         debug("validate", "#{validate?.inspect}")
         debug("canonicalize", "#{canonicalize?.inspect}")
@@ -253,10 +254,6 @@ module RDF::Turtle
       statement = RDF::Statement.new(subject, predicate, object)
       debug(node, statement.to_s)
       @callback.call(statement)
-    end
-
-    def process_iri(iri)
-      iri(base_uri, RDF::NTriples.unescape(iri))
     end
 
     # Create IRIs

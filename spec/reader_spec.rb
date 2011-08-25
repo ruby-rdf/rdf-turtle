@@ -120,19 +120,15 @@ describe "RDF::Turtle::Reader" do
 
     describe "with literal encodings" do
       {
-        'Dürst' => ':a :b "D\u00FCrst" .',
         'simple literal' => ':a :b  "simple literal" .',
-        'backslash:\\' => ':a :b  "backslash:\\\\" .',
-        'dquote:"' => ':a :b  "dquote:\"" .',
-        "newline:\n" => ':a :b  "newline:\n" .',
-        "return\r" => ':a :b  "return\r" .',
-        "tab:\t" => ':a :b  "tab:\t" .',
-        "é" => ':a :b  "\u00E9" .',
-        "€" => ':a :b  "\u20AC" .',
-        "resumé" => ':a :resume  "resum\u00E9" .',
+        'backslash:\\'   => ':a :b  "backslash:\\\\" .',
+        'dquote:"'       => ':a :b  "dquote:\\"" .',
+        "newline:\n"     => ':a :b  "newline:\\n" .',
+        "return\r"       => ':a :b  "return\\r" .',
+        "tab:\t"         => ':a :b  "tab:\\t" .',
       }.each_pair do |contents, triple|
         specify "test #{triple}" do
-          graph = parse(triple, :base_uri => "http://a/b")
+          graph = parse(triple)
           statement = graph.statements.first
           graph.size.should == 1
           statement.object.value.should == contents
@@ -163,32 +159,48 @@ describe "RDF::Turtle::Reader" do
         end
       end
       
-      context "string3 literals" do
+      context "STRING_LITERAL_LONG" do
         {
           "simple" => %q(foo),
           "muti-line" => %q(
-              Foo
-              <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">
-                bar
-                <rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                  <a:b xmlns:a="foo:"></a:b>
-                  here
-                  <a:c xmlns:a="foo:"></a:c>
-                </rd
-                f:Thing>
-              </html:b>
-              baz
-              <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
-            ),
-          "trailing escaped double-quote" => %q( "),
-          "regression.n3" => %q(sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --n3="/" )
+            Foo
+            <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">
+              bar
+              <rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <a:b xmlns:a="foo:"></a:b>
+                here
+                <a:c xmlns:a="foo:"></a:c>
+              </rd
+              f:Thing>
+            </html:b>
+            baz
+            <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
+          ),
         }.each do |test, string|
-          it "parses #{test}" do
+          it "parses LONG1 #{test}" do
+            graph = parse(%(:a :b '''#{string}'''))
+            graph.size.should == 1
+            graph.statements.first.object.value.should == string
+          end
+
+          it "parses LONG2 #{test}" do
             graph = parse(%(:a :b """#{string}"""))
             graph.size.should == 1
             graph.statements.first.object.value.should == string
           end
         end
+      end
+      
+      it "LONG1 matches trailing escaped single-quote" do
+        graph = parse(%(:a :b '''\\''''))
+        graph.size.should == 1
+        graph.statements.first.object.value.should == %q(')
+      end
+      
+      it "LONG2 matches trailing escaped double-quote" do
+        graph = parse(%(:a :b """\\""""))
+        graph.size.should == 1
+        graph.statements.first.object.value.should == %q(")
       end
     end
 

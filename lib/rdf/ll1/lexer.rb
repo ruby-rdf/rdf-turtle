@@ -249,11 +249,12 @@ module RDF::LL1
     # @return [Token]
     def match_token
       @terminals.each do |(term, regexp)|
-        #STDERR.puts "match[#{term}] #{scanner.rest[0..100].inspect} against #{regexp.inspect}" if term == :PNAME_LN
+        #STDERR.puts "match[#{term}] #{scanner.rest[0..100].inspect} against #{regexp.inspect}" if term == :STRING_LITERAL2
         if matched = scanner.scan(regexp)
           matched = unescape(matched) if @unescape_terms.include?(term)
-          #STDERR.puts "  matched #{term.inspect}: #{matched.inspect}(#{scanner[1].inspect}, #{scanner[2].inspect}, #{scanner[3].inspect})"
-          return token(term, matched, scanner)
+          #STDERR.puts "  unescape? #{@unescape_terms.include?(term).inspect}"
+          #STDERR.puts "  matched #{term.inspect}: #{matched.inspect}"
+          return token(term, matched)
         end
       end
       nil
@@ -270,11 +271,10 @@ module RDF::LL1
     #
     # @param  [Symbol] type
     # @param  [String] value
-    # @param  [StringScanner] scanner
     #   Scanner instance with access to matched groups
     # @return [Token]
-    def token(type, value, scanner)
-      Token.new(type, value, scanner, :lineno => lineno)
+    def token(type, value)
+      Token.new(type, value, :lineno => lineno)
     end
 
     ##
@@ -291,11 +291,11 @@ module RDF::LL1
       # Initializes a new token instance.
       #
       # @param  [Symbol]                 type
-      # @param  [String]              value
+      # @param  [String]                 value
       # @param  [Hash{Symbol => Object}] options
       # @option options [Integer]        :lineno (nil)
-      def initialize(type, value, scanner, options = {})
-        @type, @value, @scanner = (type ? type.to_s.to_sym : nil), value, scanner.dup
+      def initialize(type, value, options = {})
+        @type, @value = (type ? type.to_s.to_sym : nil), value
         @options = options.dup
         @lineno  = @options.delete(:lineno)
       end
@@ -311,12 +311,6 @@ module RDF::LL1
       #
       # @return [String]
       attr_reader :value
-
-      ##
-      # The scanner at time of match, for access to matched group patterns.
-      #
-      # @return [StringScanner]
-      attr_reader :scanner
 
       ##
       # The line number where the token was encountered.
@@ -340,7 +334,6 @@ module RDF::LL1
         case key
           when 0, :type    then @type
           when 1, :value   then @value
-          when 2, :scanner then @scanner
           else nil
         end
       end
@@ -370,7 +363,7 @@ module RDF::LL1
       #
       # @return [Hash]
       def to_hash
-        {:type => @type, :value => @value, :scanner => @scanner}
+        {:type => @type, :value => @value}
       end
       
       ##

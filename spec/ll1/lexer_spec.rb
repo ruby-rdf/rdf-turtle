@@ -185,7 +185,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :STRING_LITERAL1
           tokens.first.value.should == %q('Hello, world!')
-          tokens.first.scanner[1].should == "Hello, world!"
         end
       end
 
@@ -194,7 +193,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :STRING_LITERAL2
           tokens.first.value.should == %q("Hello, world!")
-          tokens.first.scanner[1].should == "Hello, world!"
         end
       end
 
@@ -203,7 +201,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :STRING_LITERAL_LONG1
           tokens.first.value.should == %q('''Hello, world!''')
-          tokens.first.scanner[1].should == "Hello, world!"
         end
       end
 
@@ -212,7 +209,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :STRING_LITERAL_LONG2
           tokens.first.value.should == %q("""Hello, world!""")
-          tokens.first.scanner[1].should == "Hello, world!"
         end
       end
     end
@@ -223,7 +219,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :BLANK_NODE_LABEL
           tokens.first.value.should == "_:foobar"
-          tokens.first.scanner[1].should == "foobar"
         end
       end
 
@@ -244,7 +239,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :IRI_REF
           tokens.first.value.should == '<http://example.org/foobar>'
-          tokens.first.scanner[1].should == 'http://example.org/foobar'
         end
       end
 
@@ -253,7 +247,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :IRI_REF
           tokens.first.value.should == '<foobar>'
-          tokens.first.scanner[1].should == 'foobar'
         end
       end
     end
@@ -272,7 +265,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should  == :PNAME_NS
           tokens.first.value.should == "dc:"
-          tokens.first.scanner[1].should == "dc"
         end
       end
     end
@@ -283,8 +275,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should == :PNAME_LN
           tokens.first.value.should == "dc:title"
-          tokens.first.scanner[1].should == "dc"
-          tokens.first.scanner[2].should == "title"
         end
       end
 
@@ -293,8 +283,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(1).element
           tokens.first.type.should == :PNAME_LN
           tokens.first.value.should == ":title"
-          tokens.first.scanner[1].should == ""
-          tokens.first.scanner[2].should == "title"
         end
       end
     end
@@ -307,7 +295,6 @@ describe RDF::LL1::Lexer do
           tokens[0].value.should == '"Hello, world!"'
           tokens[1].type.should  == :LANGTAG
           tokens[1].value.should == "@en"
-          tokens[1].scanner[1].should == "en"
         end
         tokenize(%q("Hello, world!"@en-US)) do |tokens|
           tokens.should have(2).elements
@@ -315,7 +302,6 @@ describe RDF::LL1::Lexer do
           tokens[0].value.should == '"Hello, world!"'
           tokens[1].type.should  == :LANGTAG
           tokens[1].value.should == '@en-US'
-          tokens[1].scanner[1].should == "en-US"
         end
       end
 
@@ -324,7 +310,6 @@ describe RDF::LL1::Lexer do
           tokens.should have(3).elements
           tokens[0].type.should  == :STRING_LITERAL1
           tokens[0].value.should == "'3.1415'"
-          tokens[0].scanner[1].should == "3.1415"
           tokens[1].type.should  == nil
           tokens[1].value.should == '^^'
           tokens[2].type.should  == :IRI_REF

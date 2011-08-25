@@ -17,6 +17,7 @@ module RDF::LL1
       def production_handlers; @production_handlers || {}; end
       def terminal_handlers; @terminal_handlers || {}; end
       def patterns; @patterns || []; end
+      def unescape_terms; @unescape_terms || []; end
 
       ##
       # Defines a production called durring different phases of parsing
@@ -145,7 +146,7 @@ module RDF::LL1
     def parse(input = nil, prod = nil, options = {}, &block)
       @options = options.dup
       @branch  = options[:branch]
-      @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options.merge(:unescape_terms => @unescape_terms))
+      @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options.merge(:unescape_terms => self.class.unescape_terms))
       @productions = []
       @parse_callback = block
       terminals = self.class.patterns.map(&:first)  # Get defined terminals to help with branching
