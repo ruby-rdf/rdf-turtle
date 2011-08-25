@@ -55,6 +55,9 @@ module RDF::LL1
       #   Defines a terminal production, which appears as within a sequence in the branch table
       # @param [Regexp] regexp
       #   Pattern used to scan for this terminal
+      # @param [Hash] options
+      # @option options [Boolean] :unescape
+      #   Cause strings and codepoints to be unescaped.
       # @yield [reader, term, token, input]
       # @yieldparam [RDF::Reader] reader
       #   Reader instance
@@ -67,11 +70,13 @@ module RDF::LL1
       # @yieldparam [Prod] block
       #   Block passed to initialization for yielding to calling reader.
       #   Should conform to the yield specs for #initialize
-      def terminal(term, regexp, &block)
+      def terminal(term, regexp, options = {}, &block)
         @patterns ||= []
         @patterns << [term, regexp]  # Passed in order to define evaulation sequence
         @terminal_handlers ||= {}
         @terminal_handlers[term] = block
+        @unescape_terms ||= []
+        @unescape_terms << term if options[:unescape]
       end
     end
 
@@ -140,7 +145,7 @@ module RDF::LL1
     def parse(input = nil, prod = nil, options = {}, &block)
       @options = options.dup
       @branch  = options[:branch]
-      @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options)
+      @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options.merge(:unescape_terms => @unescape_terms))
       @productions = []
       @parse_callback = block
       terminals = self.class.patterns.map(&:first)  # Get defined terminals to help with branching
@@ -230,7 +235,7 @@ module RDF::LL1
 
     rescue RDF::LL1::Lexer::Error => e
       @lineno = e.lineno
-      error("parse", "With input '#{e.input[0..100]}': #{e.message}",
+      error("parse", "With input '#{e.input}': #{e.message}",
             :production => @productions.last)
     end
 

@@ -28,6 +28,10 @@ describe RDF::LL1::Lexer do
       [:STRING_LITERAL1,      RDF::Turtle::Tokens::STRING_LITERAL1],
       [:STRING_LITERAL2,      RDF::Turtle::Tokens::STRING_LITERAL2],
     ]
+    
+    @unescape_terms = [
+      :IRI_REF, :STRING_LITERAL1, :STRING_LITERAL2, :STRING_LITERAL_LONG1, :STRING_LITERAL_LONG2
+    ]
   end
   
   describe ".unescape_codepoints" do
@@ -382,7 +386,7 @@ describe RDF::LL1::Lexer do
           "\r\n" => 2,
         }
         inputs.each do |input, lineno|
-          lexer = RDF::LL1::Lexer.tokenize(input, @terminals)
+          lexer = RDF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
           lexer.to_a # consumes the input
           lexer.lineno.should == lineno
         end
@@ -392,7 +396,7 @@ describe RDF::LL1::Lexer do
     describe "yielding tokens" do
       it "annotates tokens with the current line number" do
         results = %w(1 2 3 4)
-        RDF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals).each_token do |token|
+        RDF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals, :unescape_terms => @unescape_terms).each_token do |token|
           token.type.should == :INTEGER
           token.value.should == results.shift
         end
@@ -481,10 +485,10 @@ describe RDF::LL1::Lexer do
         ),
         'simple literal' => ':a :b  "simple literal" .',
         'backslash:\\' => ':a :b  "backslash:\\\\" .',
-        'dquote:"' => ':a :b  "dquote:\"" .',
-        "newline:\n" => ':a :b  "newline:\n" .',
-        "return\r" => ':a :b  "return\r" .',
-        "tab:\t" => ':a :b  "tab:\t" .',
+        'dquote:"' => ':a :b  "dquote:\\"" .',
+        "newline:\n" => ':a :b  "newline:\\n" .',
+        "return\r" => ':a :b  "return\\r" .',
+        "tab:\t" => ':a :b  "tab:\\t" .',
         'Dürst' => ':a :b "Dürst" .',
         "é" => ':a :b  "é" .',
         "€" => ':a :b  "€" .',
@@ -502,7 +506,7 @@ describe RDF::LL1::Lexer do
   def tokenize(*inputs, &block)
     options = inputs.last.is_a?(Hash) ? inputs.pop : {}
     inputs.each do |input|
-      tokens = RDF::LL1::Lexer.tokenize(input, @terminals)
+      tokens = RDF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
       tokens.should be_a(RDF::LL1::Lexer)
       block.call(tokens.to_a)
     end

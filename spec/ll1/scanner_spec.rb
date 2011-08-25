@@ -66,7 +66,7 @@ describe RDF::LL1::Scanner do
       end
       
       it "returns a STRING_LITERAL_LONG1" do
-        scanner = RDF::LL1::Scanner.new(StringIO.new("'''\nstring\nstring''' foo"), :ml_start => /'''|"""/)
+        scanner = RDF::LL1::Scanner.new(StringIO.new("'''\nstring\nstring''' foo"))
         scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should == "'''\nstring\nstring'''"
       end
       
@@ -75,7 +75,7 @@ describe RDF::LL1::Scanner do
           <html:a="b"/>
           '''
         )
-        scanner = RDF::LL1::Scanner.new(StringIO.new(string), :ml_start => /'''|"""/)
+        scanner = RDF::LL1::Scanner.new(StringIO.new(string))
         scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should_not be_empty
       end
       
@@ -84,7 +84,7 @@ describe RDF::LL1::Scanner do
           <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b"/>
           '''
         )
-        scanner = RDF::LL1::Scanner.new(StringIO.new(string), :ml_start => /'''|"""/)
+        scanner = RDF::LL1::Scanner.new(StringIO.new(string))
         scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should_not be_empty
       end
     end

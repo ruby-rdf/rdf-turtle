@@ -43,12 +43,12 @@ module RDF::LL1
       "\\'"  => '\'',   # \u0027 (apostrophe-quote, single quote mark)
       '\\\\' => '\\'    # \u005C (backslash)
     }
-    ESCAPE_CHAR4        = /\\u([0-9A-Fa-f]{4,4})/                              # \uXXXX
-    ESCAPE_CHAR8        = /\\U([0-9A-Fa-f]{8,8})/                              # \UXXXXXXXX
+    ESCAPE_CHAR4        = /\\u(?:[0-9A-Fa-f]{4,4})/                              # \uXXXX
+    ESCAPE_CHAR8        = /\\U(?:[0-9A-Fa-f]{8,8})/                              # \UXXXXXXXX
     ECHAR               = /\\[tbnrf\\"']/                                      # [91s]
     UCHAR               = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/
     COMMENT             = /#.*/
-    WS                  = /\x20|\x09|\x0D|\x0A/
+    WS                  = / |\t|\r|\n/m
 
     ML_START            = /\'\'\'|\"\"\"/                                       # Beginning of tokens that may span lines
 
@@ -70,8 +70,8 @@ module RDF::LL1
     # @see    http://www.w3.org/TR/rdf-sparql-query/#codepointEscape
     def self.unescape_codepoints(string)
       # Decode \uXXXX and \UXXXXXXXX code points:
-      string = string.gsub(UCHAR) do
-        s = [($1 || $2).hex].pack('U*')
+      string = string.gsub(UCHAR) do |c|
+        s = [(c[2..-1]).hex].pack('U*')
         s.respond_to?(:force_encoding) ? s.force_encoding(Encoding::ASCII_8BIT) : s
       end
 
@@ -118,21 +118,20 @@ module RDF::LL1
     # @param  [Hash{Symbol => Object}]        options
     # @option options [Regexp]                :whitespace (WS)
     # @option options [Regexp]                :comment (COMMENT)
-    # @option options [Regexp]                :ml_start (ML_START)
+    # @option options [Array<Symbol>]         :unescape_terms ([])
     #   Regular expression matching the beginning of tokens that may cross newlines
     def initialize(input = nil, terminals = nil, options = {})
-      @options    = options.dup
-      @whitespace = @options[:whitespace] || WS
-      @comment    = @options[:comment]    || COMMENT
-      @ml_start    = @options[:ml_start]   || ML_START
-      @terminals  = terminals
+      @options        = options.dup
+      @whitespace     = @options[:whitespace]     || WS
+      @comment        = @options[:comment]        || COMMENT
+      @unescape_terms = @options[:unescape_terms] || []
+      @terminals      = terminals
 
       raise Error, "Terminal patterns not defined" unless @terminals && @terminals.length > 0
 
       @lineno = 1
-      @scanner = Scanner.new(input, :ml_start => @ml_start) do |string|
-        # decode input
-        self.class.unescape_string(self.class.unescape_codepoints(string))
+      @scanner = Scanner.new(input) do |string|
+        string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)      # Ruby 1.9+
       end
     end
 
@@ -223,6 +222,13 @@ module RDF::LL1
     # @return [StringScanner]
     attr_reader :scanner
 
+    # Perform string and codepoint unescaping
+    # @param [String] string
+    # @return [String]
+    def unescape(string)
+      self.class.unescape_string(self.class.unescape_codepoints(string))
+    end
+
     ##
     # Skip whitespace or comments, as defined through input options or defaults
     def skip_whitespace
@@ -243,7 +249,10 @@ module RDF::LL1
     # @return [Token]
     def match_token
       @terminals.each do |(term, regexp)|
+        #STDERR.puts "match[#{term}] #{scanner.rest[0..100].inspect} against #{regexp.inspect}" if term == :PNAME_LN
         if matched = scanner.scan(regexp)
+          matched = unescape(matched) if @unescape_terms.include?(term)
+          #STDERR.puts "  matched #{term.inspect}: #{matched.inspect}(#{scanner[1].inspect}, #{scanner[2].inspect}, #{scanner[3].inspect})"
           return token(term, matched, scanner)
         end
       end
