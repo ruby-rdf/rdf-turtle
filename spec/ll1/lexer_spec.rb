@@ -35,10 +35,10 @@ describe RDF::LL1::Lexer do
 
     it "unescapes \\uXXXX codepoint escape sequences" do
       inputs = {
-        %q(\u0020)       => %q( ),
-        %q(<ab\u00E9xy>) => %Q(<ab\xC3\xA9xy>),
-        %q(\u03B1:a)     => %Q(\xCE\xB1:a),
-        %q(a\u003Ab)     => %Q(a\x3Ab),
+        %q(\\u0020)       => %q( ),
+        %q(<ab\\u00E9xy>) => %Q(<ab\xC3\xA9xy>),
+        %q(\\u03B1:a)     => %Q(\xCE\xB1:a),
+        %q(a\\u003Ab)     => %Q(a\x3Ab),
       }
       inputs.each do |input, output|
         output.force_encoding(Encoding::UTF_8) if output.respond_to?(:force_encoding) # Ruby 1.9+
@@ -48,9 +48,9 @@ describe RDF::LL1::Lexer do
 
     it "unescapes \\UXXXXXXXX codepoint escape sequences" do
       inputs = {
-        %q(\U00000020)   => %q( ),
-        %q(\U00010000)   => %Q(\xF0\x90\x80\x80),
-        %q(\U000EFFFF)   => %Q(\xF3\xAF\xBF\xBF),
+        %q(\\U00000020)   => %q( ),
+        %q(\\U00010000)   => %Q(\xF0\x90\x80\x80),
+        %q(\\U000EFFFF)   => %Q(\xF3\xAF\xBF\xBF),
       }
       inputs.each do |input, output|
         output.force_encoding(Encoding::UTF_8) if output.respond_to?(:force_encoding) # Ruby 1.9+
@@ -479,6 +479,16 @@ describe RDF::LL1::Lexer do
           baz
           <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>"""
         ),
+        'simple literal' => ':a :b  "simple literal" .',
+        'backslash:\\' => ':a :b  "backslash:\\\\" .',
+        'dquote:"' => ':a :b  "dquote:\"" .',
+        "newline:\n" => ':a :b  "newline:\n" .',
+        "return\r" => ':a :b  "return\r" .',
+        "tab:\t" => ':a :b  "tab:\t" .',
+        'Dürst' => ':a :b "Dürst" .',
+        "é" => ':a :b  "é" .',
+        "€" => ':a :b  "€" .',
+        "resumé" => ':a :resume  "resumé" .',
       }.each do |test, input|
         it "tokenizes #{test}" do
           tokenize(input) do |tokens|
@@ -487,7 +497,6 @@ describe RDF::LL1::Lexer do
         end
       end
     end
-    
   end
 
   def tokenize(*inputs, &block)

@@ -17,7 +17,7 @@ module RDF::LL1
     attr_reader :input
 
     ##
-    # Open the file or stream for scanning
+    # Create a scanner, from an IO or String
     #
     # @param [String, IO, #read] file
     # @param [Hash{Symbol => Object}] options
@@ -27,30 +27,17 @@ module RDF::LL1
     # @yieldparam [String] string data read from input file
     # @yieldreturn [String] replacement read data, useful for decoding escapes.
     # @return [Scanner]
-    def self.open(file, options = {}, &block)
-      scanner = new("")
-      scanner.set_input(file, options.merge(:high_water => HIGH_WATER, :low_water => LOW_WATER), &block)
-      scanner
-    end
-
-    ##
-    # Set input file
-    # @param [String, IO, #read] file
-    def set_input(file, options = {}, &block)
+    def initialize(input, options = {}, &block)
       @block = block
+      @options = options.merge(:high_water => HIGH_WATER, :low_water => LOW_WATER)
 
-      @options = options
-      @input = case file
-      when IO, StringIO
-        file
+      if input.respond_to?(:read)
+        @input = input
+        super("")
+        feed_me
       else
-        if file.respond_to?(:read)
-          file
-        else
-          File.open(file)
-        end
+        super(input.to_s)
       end
-      feed_me
     end
 
     ##

@@ -15,7 +15,29 @@ def run(input, options)
   start = Time.new
   num = 0
   if options[:lex_only]
-    RDF::Turtle::Lexer.new(input).each do |token|
+    @terminals = [
+      [:ANON,                 RDF::Turtle::Tokens::ANON],
+      [nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)],
+      [:BLANK_NODE_LABEL,     RDF::Turtle::Tokens::BLANK_NODE_LABEL],
+      [:IRI_REF,              RDF::Turtle::Tokens::IRI_REF],
+      [:DECIMAL,              RDF::Turtle::Tokens::DECIMAL],
+      [:DECIMAL_NEGATIVE,     RDF::Turtle::Tokens::DECIMAL_NEGATIVE],
+      [:DECIMAL_POSITIVE,     RDF::Turtle::Tokens::DECIMAL_POSITIVE],
+      [:DOUBLE,               RDF::Turtle::Tokens::DOUBLE],
+      [:DOUBLE_NEGATIVE,      RDF::Turtle::Tokens::DOUBLE_NEGATIVE],
+      [:DOUBLE_POSITIVE,      RDF::Turtle::Tokens::DOUBLE_POSITIVE],
+      [:INTEGER,              RDF::Turtle::Tokens::INTEGER],
+      [:INTEGER_NEGATIVE,     RDF::Turtle::Tokens::INTEGER_NEGATIVE],
+      [:INTEGER_POSITIVE,     RDF::Turtle::Tokens::INTEGER_POSITIVE],
+      [:LANGTAG,              RDF::Turtle::Tokens::LANGTAG],
+      [:PNAME_LN,             RDF::Turtle::Tokens::PNAME_LN],
+      [:PNAME_NS,             RDF::Turtle::Tokens::PNAME_NS],
+      [:STRING_LITERAL_LONG1, RDF::Turtle::Tokens::STRING_LITERAL_LONG1],
+      [:STRING_LITERAL_LONG2, RDF::Turtle::Tokens::STRING_LITERAL_LONG2],
+      [:STRING_LITERAL1,      RDF::Turtle::Tokens::STRING_LITERAL1],
+      [:STRING_LITERAL2,      RDF::Turtle::Tokens::STRING_LITERAL2],
+    ]
+    RDF::LL1::Lexer.new(input, @terminals).each do |token|
       puts "[#{token.lineno}: #{token}]" unless options[:quiet]
     end
   elsif options[:output_format] == :ntriples || options[:quiet]
@@ -86,7 +108,7 @@ opts.each do |opt, arg|
   when '--progress'     then parser_options[:progress] = true
   when '--quiet'        then options[:quiet] = true
   when '--uri'          then parser_options[:base_uri] = arg
-  when '--validate'     then parser_options[:base_uri] = true
+  when '--validate'     then parser_options[:validate] = true
   when '--verbose'      then $verbose = true
   end
 end

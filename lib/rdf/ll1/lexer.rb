@@ -129,7 +129,11 @@ module RDF::LL1
 
       raise Error, "Terminal patterns not defined" unless @terminals && @terminals.length > 0
 
-      self.input = input
+      @lineno = 1
+      @scanner = Scanner.new(input, :ml_start => @ml_start) do |string|
+        # decode input
+        self.class.unescape_string(self.class.unescape_codepoints(string))
+      end
     end
 
     ##
@@ -149,22 +153,6 @@ module RDF::LL1
     #
     # @return [Integer]
     attr_reader   :lineno
-
-    ##
-    # @param  [String, #to_s] input
-    # @return [void]
-    def input=(input)
-      @input = case input
-        when IO, StringIO then input
-        else StringIO.new(input.to_s)
-      end
-
-      @lineno = 1
-      @scanner = Scanner.open(@input, :ml_start => @ml_start) do |string|
-        # decode input
-        self.class.unescape_string(self.class.unescape_codepoints(string))
-      end
-    end
 
     ##
     # Returns `true` if the input string is lexically valid.
@@ -202,7 +190,7 @@ module RDF::LL1
     #
     # @return [Token]
     def first
-      return nil unless scanner && input
+      return nil unless scanner
 
       @first ||= begin
         {} while !scanner.eos? && skip_whitespace
