@@ -198,7 +198,7 @@ module RDF::LL1
         token = match_token
 
         if token.nil?
-          lexme = (@scanner.rest.split(/#{@whitespace}|#{@comment}/).first rescue nil) || @scanner.rest
+          lexme = (scanner.rest.split(/#{@whitespace}|#{@comment}/).first rescue nil) || scanner.rest
           raise Error.new("Invalid token #{lexme.inspect} on line #{lineno + 1}",
             :input => scanner.rest[0..100], :token => lexme, :lineno => lineno)
         end
@@ -217,6 +217,21 @@ module RDF::LL1
       cur
     end
     
+    ##
+    # Skip input until a token is matched
+    #
+    # @return [Token]
+    def recover
+      scanner.skip(/./)
+      until scanner.eos? do
+        begin
+          return first
+        rescue Error
+          # Ignore errors until something scans, or EOS.
+          scanner.skip(/./)
+        end
+      end
+    end
   protected
 
     # @return [StringScanner]

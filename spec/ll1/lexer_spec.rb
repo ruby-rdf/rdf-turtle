@@ -304,6 +304,18 @@ describe RDF::LL1::Lexer do
           tokens[1].value.should == '@en-US'
         end
       end
+      
+      it "tokenizes multiple string literals" do
+        tokenize(%q("1", "2")) do |tokens|
+          tokens.should have(3).elements
+          tokens[0].type.should  == :STRING_LITERAL2
+          tokens[0].value.should == '"1"'
+          tokens[1].type.should  == nil
+          tokens[1].value.should == ','
+          tokens[2].type.should  == :STRING_LITERAL2
+          tokens[2].value.should == '"2"'
+        end
+      end
 
       it "datatyped literals" do
         tokenize(%q('3.1415'^^<http://www.w3.org/2001/XMLSchema#double>)) do |tokens|
