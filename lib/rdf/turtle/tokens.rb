@@ -78,8 +78,8 @@ module RDF::Turtle
     PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                     # [99s]
     PNAME_NS             = /#{PN_PREFIX}?:/                                       # [71s]
     PNAME_LN             = /#{PNAME_NS}(#{PN_LOCAL})/                             # [72s]
-    STRING_LITERAL1      = /'(?:[^\\\n\r]|#{ECHAR}|#{UCHAR})*'/                   # [87s]
-    STRING_LITERAL2      = /"(?:[^\\\n\r]|#{ECHAR}|#{UCHAR})*"/                   # [88s]
+    STRING_LITERAL1      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/                   # [87s]
+    STRING_LITERAL2      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/                   # [88s]
     STRING_LITERAL_LONG1 = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m    # [89s]
     STRING_LITERAL_LONG2 = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m    # [90s]
   end
