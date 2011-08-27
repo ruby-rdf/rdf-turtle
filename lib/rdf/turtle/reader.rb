@@ -122,8 +122,10 @@ module RDF::Turtle
     production(:object) do |reader, phase, input, current, callback|
       next unless phase == :finish
       if input[:object_list]
+        # Part of an rdf:List collection
         input[:object_list] << current[:resource]
       else
+        callback.call(:trace, "object", "current: #{current.inspect}")
         callback.call(:statement, "object", input[:subject], input[:predicate], current[:resource])
       end
     end
@@ -133,7 +135,7 @@ module RDF::Turtle
       if phase == :start
         current[:subject] = reader.bnode
       else
-        input[:object] = current[:subject]
+        input[:resource] = current[:subject]
       end
     end
     
@@ -155,8 +157,8 @@ module RDF::Turtle
         end
         bnode = RDF.nil if list.empty?
 
-        # Generate the triple for which the collection is an object
-        callback.call(:statement, "collection", input[:subject], input[:predicate], bnode)
+        # Return bnode as resource
+        input[:resource] = bnode
       end
     end
     
@@ -164,7 +166,7 @@ module RDF::Turtle
     production(:RDFLiteral) do |reader, phase, input, current, callback|
       next unless phase == :finish
       opts = {}
-      opts[:datatype] = current[:iri] if current[:iri]
+      opts[:datatype] = current[:resource] if current[:resource]
       opts[:language] = current[:lang] if current[:lang]
       input[:resource] = reader.literal(current[:string_value], opts)
     end
@@ -239,7 +241,7 @@ module RDF::Turtle
         end
       end
     rescue RDF::LL1::Parser::Error => e
-      raise RDF::ReaderError, e.message, e.backtrace
+      error("each_statement", e.message, :backtrace => e.backtrace)
     end
     
     ##
@@ -266,8 +268,12 @@ module RDF::Turtle
     # @raise [RDF::ReaderError]:: Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
     def add_triple(node, subject, predicate, object)
       statement = RDF::Statement.new(subject, predicate, object)
-      debug(node, statement.to_s)
-      @callback.call(statement)
+      if statement.valid?
+        debug(node, "generate statement: #{statement}")
+        @callback.call(statement)
+      else
+        error(node, "Statement is invalid: #{statement.inspect}")
+      end
     end
 
     def process_iri(iri)
@@ -287,7 +293,9 @@ module RDF::Turtle
     # Create a literal
     def literal(value, options = {})
       options = options.dup
-      options[:datatype] = RDF::XSD.string if options.empty?
+      # Internal representation is to not use xsd:string, although it could arguably go the other way.
+      options.delete(:datatype) if options[:datatype] == RDF::XSD.string
+      debug("literal", "value: #{value.inspect}, options: #{options.inspect}, validate: #{validate?.inspect}, c14n?: #{canonicalize?.inspect}")
       RDF::Literal.new(value, options.merge(:validate => validate?, :canonicalize => canonicalize?))
     end
 
@@ -313,7 +321,7 @@ module RDF::Turtle
       elsif prefix.to_s.empty?
         base = base_uri.to_s
       else
-        raise RDF::ReaderError, "undefined prefix #{prefix.inspect}" unless prefix(prefix) || prefix.to_s.empty?
+        error("pname", "undefined prefix #{prefix.inspect}") unless prefix(prefix) || prefix.to_s.empty?
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
       debug("pname", "base: '#{base}', suffix: '#{suffix}'")
@@ -324,6 +332,18 @@ module RDF::Turtle
     def bnode(value = nil)
       @bnode_cache ||= {}
       @bnode_cache[value.to_s] ||= RDF::Node.new(value)
+    end
+
+    # @param [String] str Error string
+    # @param [Hash] options
+    # @option options [URI, #to_s] :production
+    # @option options [Token] :token
+    def error(node, message, options = {})
+      if !@options[:validate] && !options[:fatal]
+        debug(node, message, options)
+      else
+        raise RDF::ReaderError, message, options[:backtrace]
+      end
     end
 
     ##

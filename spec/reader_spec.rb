@@ -242,7 +242,7 @@ describe "RDF::Turtle::Reader" do
     end
 
     it "should create typed literals" do
-      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"^^<http://www.w3.org/2001/XMLSchema#string> ."
+      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\" ."
       statement = parse(ttl).statements.first
       statement.object.class.should == RDF::Literal
     end
@@ -254,7 +254,7 @@ describe "RDF::Turtle::Reader" do
       statement.object.class.should == RDF::Node
     end
 
-    describe "should create URIs" do
+    describe "IRIs" do
       {
         %(<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .) =>
           %(<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .),
@@ -267,7 +267,7 @@ describe "RDF::Turtle::Reader" do
         %(@base <http://a/b/> . </joe> :knows <jane> .) =>
           %(<http://a/joe> <http://a/b/knows> <http://a/b/jane> .),
         %(<#D%C3%BCrst>  a  "URI percent ^encoded as C3, BC".) =>
-          %(<#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC"^^<http://www.w3.org/2001/XMLSchema#string> .),
+          %(<#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
           parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
@@ -277,8 +277,8 @@ describe "RDF::Turtle::Reader" do
       {
         %(<#Dürst> :knows :jane.) => '<#D\u00FCrst> <knows> <jane> .',
         %(:Dürst :knows :jane.) => '<D\u00FCrst> <knows> <jane> .',
-        %(:bob :resumé "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé"^^<http://www.w3.org/2001/XMLSchema#string> .',
-        %(:alice :resumé "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé"^^<http://www.w3.org/2001/XMLSchema#string> .',
+        %(:bob :resumé "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
+        %(:alice :resumé "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
           it "for '#{ttl}'" do
             begin
@@ -294,7 +294,7 @@ describe "RDF::Turtle::Reader" do
         end
 
       {
-        %(<#Dürst> a  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8"^^<http://www.w3.org/2001/XMLSchema#string> .),
+        %(<#Dürst> a  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(:a :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
@@ -309,25 +309,13 @@ describe "RDF::Turtle::Reader" do
           end
         end
       end
-    end
-    
-    it "should create URIs" do
-      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> ."
-      statement = parse(ttl).statements.first
-      statement.subject.class.should == RDF::URI
-      statement.object.class.should == RDF::URI
-    end
 
-    it "should create literals" do
-      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"^^<http://www.w3.org/2001/XMLSchema#string> ."
-      statement = parse(ttl).statements.first
-      statement.object.class.should == RDF::Literal
     end
   end
   
   describe "with turtle grammar" do
     describe "syntactic expressions" do
-      it "should create typed literals with qname" do
+      it "typed literals" do
         ttl = %(
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
           @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -338,13 +326,13 @@ describe "RDF::Turtle::Reader" do
         statement.object.class.should == RDF::Literal
       end
 
-      it "should use <> as a prefix and as a triple node" do
+      it "empty @prefix" do
         ttl = %(@prefix : <> . <a> a :a.)
         nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <a> .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "should use <#> as a prefix and as a triple node" do
+      it "<#> as a prefix and as a triple node" do
         ttl = %(@prefix : <#> . <#> a :a.)
         nt = %(
         <#> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <#a> .
@@ -352,7 +340,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "should generate rdf:type for 'a'" do
+      it "rdf:type for 'a'" do
         ttl = %(@prefix a: <http://foo/a#> . a:b a <http://www.w3.org/2000/01/rdf-schema#resource> .)
         nt = %(<http://foo/a#b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#resource> .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
@@ -394,6 +382,52 @@ describe "RDF::Turtle::Reader" do
         ttl = %(@prefix : <http://foo/bar> . :a : :b .)
         nt = %(<http://foo/bara> <http://foo/bar> <http://foo/barb> .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+      end
+
+      it "ignores _ as prefix identifier" do
+        ttl = %(
+        _:a a :p.
+        @prefix _: <http://underscore/> .
+        _:a a :q.
+        )
+        nt = %(
+        _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <p> .
+        _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <q> .
+        )
+        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
+        parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
+      end
+
+      it "redefine" do
+        ttl = %(
+        @prefix a: <http://host/A#>.
+        a:b a:p a:v .
+
+        @prefix a: <http://host/Z#>.
+        a:b a:p a:v .
+        )
+        nt = %(
+        <http://host/A#b> <http://host/A#p> <http://host/A#v> .
+        <http://host/Z#b> <http://host/Z#p> <http://host/Z#v> .
+        )
+        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+      end
+
+      it "returns defined prefixes" do
+        ttl = %(
+        @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+        @prefix : <http://test/> .
+        :foo a rdfs:Class.
+        :bar :d :c.
+        :a :d :c.
+        )
+        reader = RDF::Turtle::Reader.new(ttl)
+        reader.each {|statement|}
+        reader.prefixes.should == {
+          :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+          :rdfs => "http://www.w3.org/2000/01/rdf-schema#",
+          nil => "http://test/"}
       end
     end
 
@@ -445,55 +479,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "returns defined prefixes" do
-        ttl = %(
-        @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-        @prefix : <http://test/> .
-        :foo a rdfs:Class.
-        :bar :d :c.
-        :a :d :c.
-        )
-        reader = RDF::Turtle::Reader.new(ttl)
-        reader.each {|statement|}
-        reader.prefixes.should == {
-          :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-          :rdfs => "http://www.w3.org/2000/01/rdf-schema#",
-          nil => "http://test/"}
-      end
-    end
-    
-    describe "declaration ordering" do
-      it "should not process _ namespace" do
-        ttl = %(
-        _:a a :p.
-        @prefix _: <http://underscore/> .
-        _:a a :q.
-        )
-        nt = %(
-        _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <p> .
-        _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <q> .
-        )
-        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
-        parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "should allow a prefix to be redefined" do
-        ttl = %(
-        @prefix a: <http://host/A#>.
-        a:b a:p a:v .
-
-        @prefix a: <http://host/Z#>.
-        a:b a:p a:v .
-        )
-        nt = %(
-        <http://host/A#b> <http://host/A#p> <http://host/A#v> .
-        <http://host/Z#b> <http://host/Z#p> <http://host/Z#v> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-
-      it "should process sequential @base declarations (swap base.n3)" do
+      it "redefine" do
         ttl = %(
         @base <http://example.com/ontolgies>. <a> :b <foo/bar#baz>.
         @base <path/DIFFERENT/>. <a2> :b2 <foo/bar#baz2>.
@@ -538,24 +524,20 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "raises error for [] as statement" do
+      it "creates BNode for [] as statement" do
         ttl = %([:a :b] .)
-        lambda {parse(ttl)}.should raise_error RDF::ReaderError
-      end
-      
-      it "does not create BNode for [] as statement" do
-        ttl = %([:a :b] .)
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+        nt = %(_:a <a> <b> .)
+        parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
       
       it "should create BNode as a single object" do
         ttl = %q(@prefix a: <http://foo/a#> . a:b a:oneRef [ a:pp "1" ; a:qq "2" ] .)
         nt = %(
-        _:bnode0 <http://foo/a#pp> "1" .
-        _:bnode0 <http://foo/a#qq> "2" .
-        <http://foo/a#b> <http://foo/a#oneRef> _:bnode0 .
+        _:a <http://foo/a#pp> "1" .
+        _:a <http://foo/a#qq> "2" .
+        <http://foo/a#b> <http://foo/a#oneRef> _:a .
         )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+        parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
       
       it "should create a shared BNode" do
@@ -584,18 +566,18 @@ describe "RDF::Turtle::Reader" do
         a:a a:p [ a:p2 [ a:p3 "v1" , "v2" ; a:p4 "v3" ] ; a:p5 "v4" ] .
         )
         nt = %(
-        _:bnode0 <http://foo/a#p3> "v1" .
-        _:bnode0 <http://foo/a#p3> "v2" .
-        _:bnode0 <http://foo/a#p4> "v3" .
-        _:bnode1 <http://foo/a#p2> _:bnode0 .
-        _:bnode1 <http://foo/a#p5> "v4" .
-        <http://foo/a#a> <http://foo/a#p> _:bnode1 .
+        <http://foo/a#a> <http://foo/a#p> _:b .
+        _:a <http://foo/a#p3> "v1" .
+        _:a <http://foo/a#p3> "v2" .
+        _:a <http://foo/a#p4> "v3" .
+        _:b <http://foo/a#p2> _:a .
+        _:b <http://foo/a#p5> "v4" .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
     end
     
-    describe "object lists" do
+    describe "objectList" do
       it "IRIs" do
         ttl = %(:a :b :c, :d)
         nt = %(
@@ -608,8 +590,8 @@ describe "RDF::Turtle::Reader" do
       it "literals" do
         ttl = %(:a :b "1", "2" .)
         nt = %(
-          <a> <b> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
-          <a> <b> "2"^^<http://www.w3.org/2001/XMLSchema#string> .
+          <a> <b> "1" .
+          <a> <b> "2" .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -617,15 +599,15 @@ describe "RDF::Turtle::Reader" do
       it "mixed" do
         ttl = %(:a :b :c, "2" .)
         nt = %(
-          <a> <b> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
-          <a> <b> "2"^^<http://www.w3.org/2001/XMLSchema#string> .
+          <a> <b> <c> .
+          <a> <b> "2" .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
     end
     
-    describe "property lists" do
-      it "should parse property list" do
+    describe "predicateObjectList" do
+      it "does that" do
         ttl = %(
         @prefix a: <http://foo/a#> .
 
@@ -642,15 +624,15 @@ describe "RDF::Turtle::Reader" do
       end
     end
     
-    describe "lists" do
-      it "should parse empty list" do
+    describe "collection" do
+      it "empty list" do
         ttl = %(@prefix :<http://example.com/>. :empty :set ().)
         nt = %(
         <http://example.com/empty> <http://example.com/set> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "should parse list with single element" do
+      it "single element" do
         ttl = %(@prefix :<http://example.com/>. :gregg :wrote ("RdfContext").)
         nt = %(
         _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "RdfContext" .
@@ -660,7 +642,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "should parse list with multiple elements" do
+      it "multiple elements" do
         ttl = %(@prefix :<http://example.com/>. :gregg :name ("Gregg" "Barnum" "Kellogg").)
         nt = %(
         _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "Gregg" .
@@ -674,138 +656,59 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "raises error for unattached lists" do
+      it "as subject" do
         ttl = %(
-        @prefix a: <http://foo/a#> .
-
-        ("1" "2" "3") .
-        # This is not a statement.
-        () .
+          ("1" "2" "3") .
+          # This is not a statement.
+          () .
         )
-        lambda {parse(ttl)}.should raise_error RDF::ReaderError
+        nt = %(
+          _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "1" .
+          _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:b .
+          _:b <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "2" .
+          _:b <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:c .
+          _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "3" .
+          _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+        )
+        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
+        parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "does not create unattached lists" do
-        ttl = %(
-        @prefix a: <http://foo/a#> .
-
-        ("1" "2" "3") .
-        # This is not a statement.
-        () .
-        )
-        parse(ttl, :validate => false).should be_empty
-      end
-      
-      it "should add property to nil list" do
+      it "adds property to nil list" do
         ttl = %(@prefix a: <http://foo/a#> . () a:prop "nilProp" .)
         nt = %(<http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> <http://foo/a#prop> "nilProp" .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
 
-      it "should parse with compound items" do
+      it "compound items" do
         ttl = %(
-          @prefix a: <http://foo/a#> .
-          a:a a:p (
-            [ a:p2 "v1" ] 
+          :a :p (
+            [ :p2 "v1" ] 
             <http://resource1>
             <http://resource2>
             ("inner list")
+            "value"
           ) .
-          <http://resource1> a:p "value" .
         )
         nt = %(
-        <http://foo/a#a> <http://foo/a#p> _:bnode3 .
-        <http://resource1> <http://foo/a#p> "value" .
-        _:bnode3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:bnode5 .
-        _:bnode3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bnode2 .
-        _:bnode5 <http://foo/a#p2> "v1" .
-        _:bnode2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://resource1> .
-        _:bnode2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bnode1 .
-        _:bnode1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://resource2> .
-        _:bnode1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:bnode0 .
-        _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:bnode4 .
-        _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
-        _:bnode4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "inner list" .
-        _:bnode4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+          <a> <p> _:a .
+          _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:b .
+          _:b <p2> "v1" .
+          _:b <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:c .
+          _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://resource1> .
+          _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:d .
+          _:d <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://resource2> .
+          _:d <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e .
+          _:e <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:inner_list .
+          _:e <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:f .
+          _:inner_list <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "inner list" .
+          _:inner_list <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+          _:f <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "value" .
+          _:f <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         )
-        g = parse(ttl, :base_uri => "http://a/b")
-        g.subjects.to_a.length.should == 8
-        n = g.first_object(:subject => RDF::URI.new("http://foo/a#a"), :predicate => RDF::URI.new("http://foo/a#p"))
-        n.should be_a(RDF::Node)
-        seq = RDF::List.new(n, g)
-        seq.to_a.length.should == 4
-        seq.first.should be_a(RDF::Node)
-        seq.second.should == RDF::URI.new("http://resource1")
-        seq.third.should == RDF::URI.new("http://resource2")
-        seq.fourth.should be_a(RDF::Node)
+        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-    end
-
-    describe "with AggregateGraph tests" do
-      describe "with a type" do
-        it "should have 3 namespaces" do
-          ttl = %(
-          @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-          @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-          @prefix : <http://test/> .
-          :foo a rdfs:Class.
-          :bar :d :c.
-          :a :d :c.
-          )
-          nt = %(
-          <http://test/foo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
-          <http://test/bar> <http://test/d> <http://test/c> .
-          <http://test/a> <http://test/d> <http://test/c> .
-          )
-          parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-        end
-      end
-    
-      describe "with blank clause" do
-        it "should have 4 namespaces" do
-          ttl = %(
-          @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-          @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-          @prefix : <http://test/> .
-          @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-          :foo a rdfs:Resource.
-          :bar rdfs:isDefinedBy [ a log:Formula ].
-          :a :d :e.
-          )
-          nt = %(
-          <http://test/foo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Resource> .
-          _:g2160128180 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/swap/log#Formula> .
-          <http://test/bar> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> _:g2160128180 .
-          <http://test/a> <http://test/d> <http://test/e> .
-          )
-          parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-        end
-      end
-    
-      describe "with empty subject" do
-        before(:each) do
-          @graph = parse(%(
-          @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-          @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-          @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-          @prefix : <http://test/> .
-          <> a log:N3Document.
-          ), :base_uri => "http://test/")
-        end
-        
-        it "should have 4 namespaces" do
-          nt = %(
-          <http://test/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/swap/log#N3Document> .
-          )
-          @graph.should be_equivalent_graph(nt, :about => "http://test/", :trace => @debug)
-        end
-        
-        it "should have default subject" do
-          @graph.size.should == 1
-          @graph.statements.first.subject.to_s.should == "http://test/"
-        end
-      end
     end
   end
 
@@ -818,18 +721,18 @@ describe "RDF::Turtle::Reader" do
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
         ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{input} .)
-        nt = %(<http://a/b#a> <http://a/b#b> #{result} .)
-        parse(ttl, :base_uri => "http://a/b", :canonicalize => true).should be_equivalent_graph(nt, :about => "http://a/b", :trace => @debug)
+        nt = %(<a> <b> #{result} .)
+        parse(ttl, :canonicalize => true).should be_equivalent_graph(nt, :trace => @debug)
       end
     end
   end
   
   describe "validation" do
     {
-      %(:y :p1 "xyz"^^xsd:integer .) => %r("xyz" is not a valid .*),
-      %(:y :p1 "12xyz"^^xsd:integer .) => %r("12xyz" is not a valid .*),
-      %(:y :p1 "xy.z"^^xsd:double .) => %r("xy\.z" is not a valid .*),
-      %(:y :p1 "+1.0z"^^xsd:double .) => %r("\+1.0z" is not a valid .*),
+      %(:y :p1 "xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("xyz" is not a valid .*),
+      %(:y :p1 "12xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("12xyz" is not a valid .*),
+      %(:y :p1 "xy.z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("xy\.z" is not a valid .*),
+      %(:y :p1 "+1.0z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("\+1.0z" is not a valid .*),
       %(:a :b .) =>RDF::ReaderError,
       %(:a :b 'single quote' .) => RDF::ReaderError,
       %(:a "literal value" :b .) => RDF::ReaderError,
@@ -841,25 +744,6 @@ describe "RDF::Turtle::Reader" do
         }.should raise_error(error)
       end
     end
-  end
-  
-  it "should parse rdf_core testcase" do
-    sampledoc = <<-EOF;
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#PositiveParserTest> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#approval> <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#inputDocument> <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test001.rdf> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#issue> <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#outputDocument> <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test001.nt> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#status> "APPROVED"^^<http://www.w3.org/2001/XMLSchema#string> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test001.nt> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#NT-Document> .
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test001.rdf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#RDF-XML-Document> .
-EOF
-    graph = parse(sampledoc, :base_uri => "http://www.w3.org/2000/10/rdf-tests/rdfcore/amp-in-url/Manifest.rdf")
-
-    graph.should be_equivalent_graph(sampledoc,
-      :about => "http://www.w3.org/2000/10/rdf-tests/rdfcore/amp-in-url/Manifest.rdf",
-      :trace => @debug
-    )
   end
   
   def parse(input, options = {})
