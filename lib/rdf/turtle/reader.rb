@@ -18,7 +18,7 @@ module RDF::Turtle
       input[:resource] = reader.bnode(token.value[2..-1])
     end
     terminal(:IRI_REF,              IRI_REF, :unescape => true) do |reader, prod, token, input|
-      input[:resource] = reader.iri(token.value[1..-2])
+      input[:resource] = reader.process_iri(token.value[1..-2])
     end
     terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
@@ -49,11 +49,18 @@ module RDF::Turtle
     end
     terminal(:PNAME_LN,             PNAME_LN) do |reader, prod, token, input|
       prefix, suffix = token.value.split(":", 2)
-      raise RDF::ReaderError, "undefined prefix used in PNAME_LN #{token.value}" unless reader.prefix(prefix)
-      input[:resource] = reader.ns(prefix, suffix)
+      input[:resource] = reader.pname(prefix, suffix)
     end
     terminal(:PNAME_NS,             PNAME_NS) do |reader, prod, token, input|
-      input[:prefix] = token.value[0..-2]
+      prefix = token.value[0..-2]
+      
+      # Two contexts, one when prefix is being defined, the other when being used
+      case prod
+      when :prefixID
+        input[:prefix] = prefix
+      else
+        input[:resource] = reader.pname(prefix, '')
+      end
     end
     terminal(:STRING_LITERAL_LONG1, STRING_LITERAL_LONG1, :unescape => true) do |reader, prod, token, input|
       input[:string_value] = token.value[3..-4]
@@ -67,6 +74,8 @@ module RDF::Turtle
     terminal(:STRING_LITERAL2,      STRING_LITERAL2, :unescape => true) do |reader, prod, token, input|
       input[:string_value] = token.value[1..-2]
     end
+    
+    # String terminals
     terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |reader, prod, token, input|
       case token.value
       when 'a'             then input[:resource] = RDF.type
@@ -82,14 +91,16 @@ module RDF::Turtle
     
     # [4] prefixID defines a prefix mapping
     production(:prefixID) do |reader, phase, input, current, callback|
+      next unless phase == :finish
       prefix = current[:prefix]
       iri = current[:resource]
-      callback.call(:trace, "prefixID", "Defined prefix #{prefix} mapping to #{iri}")
-      reader.namespace(prefix, iri)
+      callback.call(:trace, "prefixID", "Defined prefix #{prefix.inspect} mapping to #{iri.inspect}")
+      reader.prefix(prefix, iri)
     end
     
     # [5] base set base_uri
     production(:base) do |reader, phase, input, current, callback|
+      next unless phase == :finish
       iri = current[:resource]
       callback.call(:trace, "base", "Defined base as #{iri}")
       reader.options[:base_uri] = iri
@@ -97,11 +108,13 @@ module RDF::Turtle
     
     # [9] verb ::= predicate | "a"
     production(:verb) do |reader, phase, input, current, callback|
+      next unless phase == :finish
       input[:predicate] = current[:resource] if phase == :finish
     end
 
     # [10] subject ::= IRIref | blank
     production(:subject) do |reader, phase, input, current, callback|
+      next unless phase == :finish
       input[:subject] = current[:resource] if phase == :finish
     end
 
@@ -134,6 +147,9 @@ module RDF::Turtle
         objects = current[:object_list]
         list = RDF::List.new(bnode, nil, objects)
         list.each_statement do |statement|
+          # Spec Confusion, referenced section "Collection" is missing from the spec.
+          # Anicdodal evidence indicates that some expect each node to be of type rdf:list,
+          # but existing Notation3 and Turtle tests (http://www.w3.org/2001/sw/DataAccess/df1/tests/manifest.ttl) do not.
           next if statement.predicate == RDF.type && statement.object == RDF.List
           callback.call(:statement, "collection", statement.subject, statement.predicate, statement.object)
         end
@@ -175,7 +191,8 @@ module RDF::Turtle
     #   as S-Expressions, use the original prefixed and relative URIs along with `base` and `prefix`
     #   definitions.
     # @option options [Boolean]  :validate     (false)
-    #   whether to validate the parsed statements and values
+    #   whether to validate the parsed statements and values. If not validating,
+    #   the parser will attempt to recover from errors.
     # @option options [Boolean] :progress
     #   Show progress of parser productions
     # @option options [Boolean] :debug
@@ -187,9 +204,6 @@ module RDF::Turtle
 
         debug("def prefix", "#{base_uri.inspect}")
         
-        # @prefix directives map a local name to an IRI, also resolved against the current In-Scope Base URI.
-        namespace(nil, iri(base_uri))
-
         debug("validate", "#{validate?.inspect}")
         debug("canonicalize", "#{canonicalize?.inspect}")
         debug("intern", "#{intern?.inspect}")
@@ -216,7 +230,7 @@ module RDF::Turtle
     def each_statement(&block)
       @callback = block
 
-      parse(@input, START.to_sym, @options.merge(:branch => BRANCH)) do |context, *data|
+      parse(@input, START.to_sym, @options.merge(:branch => BRANCH, :follow => FOLLOW)) do |context, *data|
         case context
         when :statement
           add_triple(*data)
@@ -225,7 +239,7 @@ module RDF::Turtle
         end
       end
     rescue RDF::LL1::Parser::Error => e
-      raise RDF::ReaderError, e.message
+      raise RDF::ReaderError, e.message, e.backtrace
     end
     
     ##
@@ -256,6 +270,10 @@ module RDF::Turtle
       @callback.call(statement)
     end
 
+    def process_iri(iri)
+      iri(base_uri, iri)
+    end
+    
     # Create IRIs
     def iri(value, append = nil)
       value = RDF::URI.new(value)
@@ -273,15 +291,32 @@ module RDF::Turtle
       RDF::Literal.new(value, options.merge(:validate => validate?, :canonicalize => canonicalize?))
     end
 
-    def namespace(prefix, iri)
-      debug("namespace", "'#{prefix}' <#{iri}>")
-      prefix(prefix, iri(iri))
+    ##
+    # Override #prefix to take a relative IRI
+    #
+    # @prefix directives map a local name to an IRI, also resolved against the current In-Scope Base URI.
+    # Spec confusion, presume that an undefined empty prefix has an empty relative IRI, which uses
+    # string contatnation rules against the in-scope IRI at the time of use
+    def prefix(prefix, iri = nil)
+      debug("prefix", "'#{prefix}' <#{iri}>")
+      # Relative IRIs are resolved against @base
+      iri = process_iri(iri) if iri
+      super(prefix, iri)
     end
     
-    def ns(prefix, suffix)
-      base = prefix(prefix).to_s
+    ##
+    # Expand a PNAME using string concatenation
+    def pname(prefix, suffix)
+      # Prefixes must be defined, except special case for empty prefix being alias for current @base
+      if prefix(prefix)
+        base = prefix(prefix).to_s
+      elsif prefix.to_s.empty?
+        base = base_uri.to_s
+      else
+        raise RDF::ReaderError, "undefined prefix #{prefix.inspect}" unless prefix(prefix) || prefix.to_s.empty?
+      end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      debug("ns", "base: '#{base}', suffix: '#{suffix}'")
+      debug("pname", "base: '#{base}', suffix: '#{suffix}'")
       iri(base + suffix.to_s)
     end
     

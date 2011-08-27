@@ -84,6 +84,8 @@ module RDF::LL1
     ##
     # Initializes a new parser instance.
     #
+    # Attempts to recover from errors.
+    #
     # @example
     #   require 'rdf/ll1/parser'
     #   
@@ -132,6 +134,13 @@ module RDF::LL1
     # @param [Symbol, #to_s] prod The starting production for the parser.
     #   It may be a URI from the grammar, or a symbol representing the local_name portion of the grammar URI.
     # @param  [Hash{Symbol => Object}] options
+    # @option options [Hash{Symbol,String => Hash{Symbol,String => Array<Symbol,String>}}] :branch
+    #   LL1 branch table.
+    # @option options [HHash{Symbol,String => Array<Symbol,String>}] :follow ({})
+    #   Lists valid terminals that can follow each production (for error recovery).
+    # @option options [Boolean]  :validate     (false)
+    #   whether to validate the parsed statements and values. If not validating,
+    #   the parser will attempt to recover from errors.
     # @option options [Boolean] :progress
     #   Show progress of parser productions
     # @option options [Boolean] :debug
@@ -143,14 +152,18 @@ module RDF::LL1
     # @yieldparam [Symbol] *data
     #   Data specific to the call
     # @return [RDF::LL1::Parser]
+    # @see http://cs.adelaide.edu.au/~charles/lt/Lectures/07-ErrorRecovery.pdf
     def parse(input = nil, prod = nil, options = {}, &block)
       @options = options.dup
       @branch  = options[:branch]
+      @follow  = options[:follow] ||= {}
       @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options.merge(:unescape_terms => self.class.unescape_terms))
       @productions = []
       @parse_callback = block
+      @recovering = false
       terminals = self.class.patterns.map(&:first)  # Get defined terminals to help with branching
 
+      # Unrecoverable errors
       raise Error, "Branch table not defined" unless @branch && @branch.length > 0
       raise Error, "Starting production not defined" unless prod
 
@@ -162,7 +175,17 @@ module RDF::LL1
         pushed = false
         if todo_stack.last[:terms].nil?
           todo_stack.last[:terms] = []
-          token = @lexer.first
+          begin
+            token = @lexer.first
+          rescue RDF::LL1::Lexer::Error => e
+            # Recover from lexer error
+            @lineno = e.lineno
+            error("parse(production)", "With input '#{e.input}': #{e.message}",
+                  :production => @productions.last)
+
+            # Retrieve next valid token
+            token = @lexer.recover
+          end
           @lineno = token.lineno if token
           debug("parse(production)",
                 "#{token ? token.representation.inspect : 'nil'}, " + 
@@ -175,51 +198,75 @@ module RDF::LL1
           onStart(cur_prod)
           break if token.nil?
           
-          prod_branch = @branch[cur_prod]
-          error("parse", "No branches found for #{cur_prod.inspect}",
-            :production => cur_prod, :token => token) unless prod_branch
-          sequence = prod_branch[token.representation]
-          debug("parse(production)",
-                "#{token.representation.inspect} " +
-                "prod #{cur_prod.inspect}, " + 
-                "prod_branch #{prod_branch.keys.inspect}, " +
-                "sequence #{sequence.inspect}")
-          if sequence.nil?
-            if prod_branch.has_key?(:"ebnf:empty")
-              debug("parse(production)", "empty sequence for ebnf:empty")
-              sequence ||= []
-            else
-              expected = prod_branch.keys.map {|v| v.inspect}.join(", ")
-              error("parse", "expected one of #{expected}",
-                :production => cur_prod, :token => token)
+          if prod_branch = @branch[cur_prod]
+            sequence = prod_branch[token.representation]
+            debug("parse(production)",
+                  "#{token.representation.inspect} " +
+                  "prod #{cur_prod.inspect}, " + 
+                  "prod_branch #{prod_branch.keys.inspect}, " +
+                  "sequence #{sequence.inspect}")
+            if sequence.nil?
+              if prod_branch.has_key?(:"ebnf:empty")
+                debug("parse(production)", "empty sequence for ebnf:empty")
+              else
+                expected = prod_branch.keys.map {|v| v.inspect}.join(", ")
+                error("parse", "expected one of #{expected}",
+                  :production => cur_prod, :token => token)
+
+                # Skip input until we find something that can follow the current production
+                skip_until_follow(todo_stack)
+                todo_stack.last[:terms] = []
+              end
             end
+            @recovering = false
+            todo_stack.last[:terms] += sequence if sequence
+          else
+            error("parse", "No branches found for #{cur_prod.inspect}",
+              :production => cur_prod, :token => token)
+            todo_stack.last[:terms] = []
           end
-          todo_stack.last[:terms] += sequence
         end
         
         debug("parse(terms)", "todo #{todo_stack.last.inspect}, depth #{depth}")
         while !todo_stack.last[:terms].to_a.empty?
-          # Get the next term in this sequence
-          term = todo_stack.last[:terms].shift
-          if token = accept(term)
-            debug("parse(token)", "#{token.inspect}, term #{term.inspect}")
-            @lineno = token.lineno if token
-            onToken(term, token)
-          elsif terminals.include?(term)
-            error("parse", "#{term.inspect} expected",
-              :production => todo_stack.last[:prod], :token => @lexer.first)
-          else
-            # If it's not a string (a symbol), it is a non-terminal and we push the new state
-            todo_stack << {:prod => term, :terms => nil}
-            debug("parse(push)", "term #{term.inspect}, depth #{depth}")
-            pushed = true
-            break
+          begin
+            # Get the next term in this sequence
+            term = todo_stack.last[:terms].shift
+            if token = accept(term)
+              debug("parse(token)", "#{token.inspect}, term #{term.inspect}")
+              @lineno = token.lineno if token
+              onToken(term, token)
+            elsif terminals.include?(term)
+              error("parse", "#{term.inspect} expected",
+                :production => todo_stack.last[:prod], :token => @lexer.first)
+            
+              # Recover until we find something that can follow this term
+              skip_until_follow(todo_stack)
+            else
+              # If it's not a string (a symbol), it is a non-terminal and we push the new state
+              todo_stack << {:prod => term, :terms => nil}
+              debug("parse(push)", "term #{term.inspect}, depth #{depth}")
+              pushed = true
+              break
+            end
+          rescue RDF::LL1::Lexer::Error => e
+            # Skip forward for acceptable lexer input
+            error("parse", "#{term.inspect} expected: #{e.message}",
+              :production => todo_stack.last[:prod])
+            @lexer.recover
           end
         end
         
         # After completing the last production in a sequence, pop down until we find a production
-        while !pushed && !todo_stack.empty? && todo_stack.last[:terms].to_a.empty?
-          debug("parse(pop)", "todo #{todo_stack.last.inspect}, depth #{depth}")
+        #
+        # If in recovery mode, continue popping until we find a term with a follow list
+        while !pushed &&
+              !todo_stack.empty? &&
+              ( todo_stack.last[:terms].to_a.empty? ||
+                (@recovering && @follow[todo_stack.last[:term]].nil?))
+          debug("parse(pop)", "todo #{todo_stack.last.inspect}, depth #{depth}, recovering? #{@recovering.inspect}")
+          prod = todo_stack.last[:prod]
+          @recovering = false if @follow[prod] # Stop recovering when we might have a match
           todo_stack.pop
           onFinish
         end
@@ -280,6 +327,7 @@ module RDF::LL1
       unless @productions.empty?
         parentProd = @productions.last
         handler = self.class.terminal_handlers[prod]
+        handler ||= self.class.terminal_handlers[nil] if prod.is_a?(String) # Allows catch-all for simple string terminals
         if handler
           handler.call(self, parentProd, token, @prod_data.last)
           progress("#{prod}(:token)", "#{token}: #{@prod_data.last}", :depth => (depth + 1))
@@ -290,22 +338,46 @@ module RDF::LL1
         error("#{parentProd}(:token)", "Token has no parent production", :production => prod)
       end
     end
+    
+    # Skip throught the input stream until something is found that follows the last production with a list of follows
+    def skip_until_follow(todo_stack)
+      debug("recovery", "stack follows:")
+      todo_stack.each do |todo|
+        debug("recovery", "  #{todo[:prod]}: #{@follow[todo[:prod]].inspect}")
+      end
+      follows = todo_stack.inject([]) do |follow, todo|
+        prod = todo[:prod]
+        follow += @follow[prod] || []
+      end.uniq
+      progress("recovery", "first #{@lexer.first.inspect}, follows: #{follows.inspect}")
+      while (token = @lexer.first) && follows.none? {|t| token === t}
+        skipped = @lexer.shift
+        progress("recovery", "skip #{skipped.inspect}")
+      end
+    end
 
     # @param [String] str Error string
     # @param [Hash] options
     # @option options [URI, #to_s] :production
     # @option options [Token] :token
     def error(node, message, options = {})
+      return if @recovering
+      @recovering = true
       message += ", found #{options[:token].representation.inspect}" if options[:token]
       message += " at line #{@lineno}" if @lineno
-      message += ", production = #{options[:production].inspect}" if options[:production] #&& options[:debug]
-      raise Error, message
+      message += ", production = #{options[:production].inspect}" if options[:production] && options[:debug]
+      if !@options[:validate] && !options[:fatal]
+        debug(node, message, options)
+      else
+        raise Error, message
+      end
     end
 
     ##
     # Progress output when parsing
     # @param [String] str
     def progress(node, message, options = {})
+      return debug(node, message, options) if @options[:debug]
       return unless @options[:progress]
       depth = options[:depth] || self.depth
       str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
