@@ -63,10 +63,11 @@ def run(input, options)
   puts
   secs = Time.new - start
   puts "Parsed #{num} statements in #{secs} seconds @ #{num/secs} statements/second."
-rescue
+rescue Exception => e
   fname = input.respond_to?(:path) ? input.path : "-stdin-"
-  STDERR.puts("Error in #{fname}")
-  raise
+  STDERR.puts("Error in #{fname}: #{e.message}")
+  STDERR.puts "Backtrace: " + e.backtrace.join("\n  ")
+  raise e
 end
 
 parser_options = {
