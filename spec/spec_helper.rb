@@ -49,6 +49,6 @@ def detect_format(stream)
   when /<(\w+:)?RDF/ then :rdfxml
   when /<html/i   then :rdfa
   when /@prefix/i then :ttl
-  else                 :ttl
+  else                 :ntriples
   end
 end
