@@ -8,7 +8,7 @@ describe RDF::Turtle::Reader do
 
     describe "positive parser tests" do
       Fixtures::TurtleTest::Good.each do |t|
-        next unless t.comment
+        next if !t.comment || t.name =~ /manifest/
         #puts t.inspect
         
         # modified test-10 results to be canonical
@@ -27,6 +27,7 @@ describe RDF::Turtle::Reader do
                   :base_uri => t.inputDocument,
                   :strict => true,
                   :canonicalize => true,
+                  :validate => true,
                   :debug => t.debug).each do |statement|
                 g << statement
               end
@@ -39,7 +40,7 @@ describe RDF::Turtle::Reader do
 
     describe "negative parser tests" do
       Fixtures::TurtleTest::Bad.each do |t|
-        next unless t.comment
+        next if !t.comment || t.name =~ /manifest/
         #puts t.inspect
         specify "#{t.name}: #{t.comment}" do
           begin
@@ -49,14 +50,12 @@ describe RDF::Turtle::Reader do
                  g = RDF::Graph.new
                  RDF::Turtle::Reader.new(t.input,
                      :base_uri => t.inputDocument,
-                     :strict => true,
+                     :validate => true,
                      :debug => t.debug).each do |statement|
                    g << statement
                  end
               end.should raise_error(RDF::ReaderError)
             end
-          rescue RSpec::Expectations::ExpectationNotMetError => e
-            pending() {  raise }
           end
         end
       end

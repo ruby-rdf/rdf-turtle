@@ -79,7 +79,7 @@ module Fixtures
     turtle = RDF::Repository.load("http://www.w3.org/2001/sw/DataAccess/df1/tests/manifest.ttl")
 
     # Add types to entries
-    turtle.subjects(:predicate => MF["name"]).each do |s|
+    turtle.subjects(:predicate => MF["action"]).each do |s|
       turtle << RDF::Statement.new(s, RDF.type, MF["Entry"])
     end
 
@@ -88,7 +88,7 @@ module Fixtures
     turtle_bad = RDF::Repository.load("http://www.w3.org/2001/sw/DataAccess/df1/tests/manifest-bad.ttl")
 
     # Add types to entries
-    turtle_bad.subjects(:predicate => MF["name"]).each do |s|
+    turtle_bad.subjects(:predicate => MF["action"]).each do |s|
       turtle_bad << RDF::Statement.new(s, RDF.type, MF["Entry"])
     end
 
