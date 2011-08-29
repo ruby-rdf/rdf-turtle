@@ -99,7 +99,7 @@ Using SWAP utilities, this is done as follows:
 ## Installation
 
 The recommended installation method is via [RubyGems](http://rubygems.org/).
-To install the latest official release of the `SPARQL::Grammar` gem, do:
+To install the latest official release of the `RDF::Turtle` gem, do:
 
     % [sudo] gem install rdf-turtle
 

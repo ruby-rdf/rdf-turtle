@@ -359,10 +359,10 @@ module RDF::LL1
       # of this token.
       #
       # @example Matching using the symbolic type
-      #   SPARQL::Grammar::Lexer::Token.new(:NIL) === :NIL     #=> true
+      #   RDF::LL1::Lexer::Token.new(:NIL) === :NIL     #=> true
       #
       # @example Matching using the string value
-      #   SPARQL::Grammar::Lexer::Token.new(nil, "{") === "{"  #=> true
+      #   RDF::LL1::Lexer::Token.new(nil, "{") === "{"  #=> true
       #
       # @param  [Symbol, String] value
       # @return [Boolean]
@@ -415,7 +415,7 @@ module RDF::LL1
     # Raised for errors during lexical analysis.
     #
     # @example Raising a lexer error
-    #   raise SPARQL::Grammar::Lexer::Error.new(
+    #   raise RDF::LL1::Lexer::Error.new(
     #     "invalid token '%' on line 10",
     #     :input => query, :token => '%', :lineno => 9)
     #
