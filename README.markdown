@@ -16,18 +16,11 @@ Install with `gem install rdf-turtle`
 ## Usage
 Instantiate a reader from a local file:
 
-    RDF::Turtle::Reader.open("etc/foaf.ttl") do |reader|
-       reader.each_statement do |statement|
-         puts statement.inspect
-       end
-    end
-    
-or
+    graph = RDF::Graph.load("etc/doap.ttl", :format => :ttl)
 
-    graph = RDF::Graph.load("etc/foaf.ttl", :format => :ttl)
-    
+Define `@base` and `@prefix` definitions, and use for serialization using `:base_uri` an `:prefixes` options.
 
-Define `@base` and `@prefix` definitions, and use for serialization using `:base_uri` an `:prefixes` options
+Canonicalize and validate using `:canonicalize` and `:validate` options.
 
 Write a graph to a file:
 
@@ -65,6 +58,9 @@ In some cases, the specification is unclear on certain issues:
   forms, or the examples should be changed such that ( ... ) and [ ... ] are used only in the context of being
   a subject or object. This implementation will generate triples, however an error will be generated if the
   parser is run in validation mode.
+* For the time being, plain literals are generated without an xsd:string datatype, but literals with an xsd:string
+  datatype are saved as non-datatyped triples in the graph. This will be updated in the future when the rest of the
+  library suite is brought up to date.
 
 ## Implementation Notes
 The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
