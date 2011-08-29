@@ -330,6 +330,7 @@ module RDF::Turtle
     
     # Keep track of allocated BNodes
     def bnode(value = nil)
+      return RDF::Node.new unless value
       @bnode_cache ||= {}
       @bnode_cache[value.to_s] ||= RDF::Node.new(value)
     end

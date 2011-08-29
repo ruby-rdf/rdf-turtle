@@ -542,36 +542,32 @@ describe "RDF::Turtle::Reader" do
       
       it "should create a shared BNode" do
         ttl = %(
-        @prefix a: <http://foo/a#> .
+        :b1 :twoRef _:a .
+        :b2 :twoRef _:a .
 
-        a:b1 a:twoRef _:a .
-        a:b2 a:twoRef _:a .
-
-        _:a :pred [ a:pp "1" ; a:qq "2" ].
+        _:a :pred [ :pp "1" ; :qq "2" ].
         )
         nt = %(
-        <http://foo/a#b1> <http://foo/a#twoRef> _:a .
-        <http://foo/a#b2> <http://foo/a#twoRef> _:a .
-        _:bnode0 <http://foo/a#pp> "1" .
-        _:bnode0 <http://foo/a#qq> "2" .
-        _:a :pred _:bnode0 .
+        <b1> <twoRef> _:a .
+        <b2> <twoRef> _:a .
+        _:b <pp> "1" .
+        _:b <qq> "2" .
+        _:a <pred> _:b .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
       it "should create nested BNodes" do
         ttl = %(
-        @prefix a: <http://foo/a#> .
-
-        a:a a:p [ a:p2 [ a:p3 "v1" , "v2" ; a:p4 "v3" ] ; a:p5 "v4" ] .
+        :a :p [ :p2 [ :p3 "v1" , "v2" ; :p4 "v3" ] ; :p5 "v4" ] .
         )
         nt = %(
-        <http://foo/a#a> <http://foo/a#p> _:b .
-        _:a <http://foo/a#p3> "v1" .
-        _:a <http://foo/a#p3> "v2" .
-        _:a <http://foo/a#p4> "v3" .
-        _:b <http://foo/a#p2> _:a .
-        _:b <http://foo/a#p5> "v4" .
+        <a> <p> _:a .
+        _:a <p2> _:b .
+        _:a <p5> "v4" .
+        _:b <p3> "v1" .
+        _:b <p3> "v2" .
+        _:b <p4> "v3" .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -694,7 +690,7 @@ describe "RDF::Turtle::Reader" do
           <a> <p> _:a .
           _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:b .
           _:b <p2> "v1" .
-          _:b <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:c .
+          _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:c .
           _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://resource1> .
           _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:d .
           _:d <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://resource2> .
@@ -734,7 +730,6 @@ describe "RDF::Turtle::Reader" do
       %(:y :p1 "xy.z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("xy\.z" is not a valid .*),
       %(:y :p1 "+1.0z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("\+1.0z" is not a valid .*),
       %(:a :b .) =>RDF::ReaderError,
-      %(:a :b 'single quote' .) => RDF::ReaderError,
       %(:a "literal value" :b .) => RDF::ReaderError,
       %(@keywords prefix. :e prefix :f .) => RDF::ReaderError
     }.each_pair do |ttl, error|
