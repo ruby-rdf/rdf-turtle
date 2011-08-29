@@ -21,11 +21,11 @@ module RDF
   module Turtle
     require  'rdf/turtle/format'
     require  'rdf/turtle/patches'
-    autoload :Lexer,   'rdf/turtle/lexer'
-    autoload :Reader,  'rdf/turtle/reader'
-    autoload :Tokens,  'rdf/turtle/tokens'
-    autoload :VERSION, 'rdf/turtle/version'
-    autoload :Writer,  'rdf/turtle/writer'
+    autoload :Lexer,      'rdf/turtle/lexer'
+    autoload :Reader,     'rdf/turtle/reader'
+    autoload :Terminals,  'rdf/turtle/terminals'
+    autoload :VERSION,    'rdf/turtle/version'
+    autoload :Writer,     'rdf/turtle/writer'
 
     KEYWORDS  = %w(@base @prefix).map(&:to_sym)
     

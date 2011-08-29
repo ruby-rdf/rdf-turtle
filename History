@@ -1,0 +1,9 @@
+### 0.0.3
+ * Completed RDF 1.1 Turtle based on http://www.w3.org/TR/2011/WD-turtle-20110809/
+    * Reader
+    * Writer
+ * Issues:
+    * IRI lexical representations
+    * PNAMES not unescaped, should they be?
+    * Assume undefined empty prefix is synonym for base
+    * Can a list be used on it's own? Used in Turtle example.

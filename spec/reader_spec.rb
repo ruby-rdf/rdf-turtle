@@ -741,6 +741,104 @@ describe "RDF::Turtle::Reader" do
     end
   end
   
+  
+  describe "spec examples" do
+    {
+      "example 1" => [
+        %q(
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+          @prefix dc: <http://purl.org/dc/elements/1.1/> .
+          @prefix ex: <http://example.org/stuff/1.0/> .
+
+          <http://www.w3.org/TR/rdf-syntax-grammar>
+            dc:title "RDF/XML Syntax Specification (Revised)" ;
+            ex:editor [
+              ex:fullname "Dave Beckett";
+              ex:homePage <http://purl.org/net/dajobe/>
+            ] .
+        ),
+        %q(
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+          @prefix dc: <http://purl.org/dc/elements/1.1/> .
+          @prefix ex: <http://example.org/stuff/1.0/> .
+
+          <http://www.w3.org/TR/rdf-syntax-grammar>
+            dc:title "RDF/XML Syntax Specification (Revised)";
+            ex:editor _:a .
+          _:a ex:fullname "Dave Beckett";
+            ex:homePage <http://purl.org/net/dajobe/> .
+        )
+      ],
+      "example 2" => [
+        %q(
+          @prefix : <http://example.org/stuff/1.0/> .
+          :a :b ( "apple" "banana" ) .
+        ),
+        %q(
+          @prefix : <http://example.org/stuff/1.0/> .
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+          :a :b
+            [ rdf:first "apple";
+              rdf:rest [ rdf:first "banana";
+                         rdf:rest rdf:nil ]
+            ] .
+        )
+      ],
+      "example 3" => [
+        %q(
+          @prefix : <http://example.org/stuff/1.0/> .
+
+          :a :b "The first line\nThe second line\n  more" .
+
+          :a :b """The first line
+The second line
+  more""" .
+        ),
+        %q(
+        @prefix : <http://example.org/stuff/1.0/> .
+
+        <http://example.org/stuff/1.0/a> <http://example.org/stuff/1.0/b>
+        "The first line\nThe second line\n  more" .
+        )
+      ],
+      "example 4" => [
+        %q((1 2.0 3E1) :p "w" .),
+        %q(
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+          _:b0  rdf:first  1 ;
+                rdf:rest   _:b1 .
+          _:b1  rdf:first  2.0 ;
+                rdf:rest   _:b2 .
+          _:b2  rdf:first  3E1 ;
+                rdf:rest   rdf:nil .
+          _:b0  :p         "w" . 
+        )
+      ],
+      # Spec confusion: Can list be subject w/o object?
+      "example 5" => [
+        %q((1 [:p :q] ( 2 ) ) .),
+        %q(
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+          _:b0  rdf:first  1 ;
+                rdf:rest   _:b1 .
+          _:b1  rdf:first  _:b2 .
+          _:b2  :p         :q .
+          _:b1  rdf:rest   _:b3 .
+          _:b3  rdf:first  _:b4 .
+          _:b4  rdf:first  2 ;
+                rdf:rest   rdf:nil .
+          _:b3  rdf:rest   rdf:nil .
+        )
+      ]
+    }.each do |name, (results, expected)|
+      it "matches Turtle spec #{name}" do
+        g2 = parse(expected)
+        g1 = parse(results)
+        g1.should be_equivalent_graph(g2, :trace => @debug)
+      end
+    end
+  end
+
   def parse(input, options = {})
     @debug = []
     graph = options[:graph] || RDF::Graph.new

@@ -1,7 +1,7 @@
 require 'rdf/ll1/lexer'
 
 module RDF::Turtle
-  module Tokens
+  module Terminals
     # Definitions of token regular expressions used for lexical analysis
   
     if RUBY_VERSION >= '1.9'
@@ -73,13 +73,15 @@ module RDF::Turtle
     INTEGER              = /[0-9]+/                                               # [77s]
     INTEGER_NEGATIVE     = /\-[0-9]+/                                             # [83s]
     INTEGER_POSITIVE     = /\+[0-9]+/                                             # [80s]
+    # Spec confusion: the EBNF definition of IRI_REF seems malformed, and has no
+    # provision for \^, as discussed elsewhere in the spec.
     IRI_REF              = /<(?:[^<>"{}|^`\\\x00-\x20]|#{U_CHARS1})*>/            # [70s]
     LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/                         # [76s]
     PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                     # [99s]
     PNAME_NS             = /#{PN_PREFIX}?:/                                       # [71s]
-    PNAME_LN             = /#{PNAME_NS}(#{PN_LOCAL})/                             # [72s]
-    STRING_LITERAL1      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/                   # [87s]
-    STRING_LITERAL2      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/                   # [88s]
+    PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/                               # [72s]
+    STRING_LITERAL1      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/                 # [87s]
+    STRING_LITERAL2      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/                 # [88s]
     STRING_LITERAL_LONG1 = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m    # [89s]
     STRING_LITERAL_LONG2 = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m    # [90s]
   end

@@ -19,10 +19,6 @@ module Fixtures
       property :result, :predicate => MF.result
       has_many :action, :predicate => MF["action"]
 
-      def name
-        inputDocument.to_s.split("/").last
-      end
-
       def input
         Kernel.open(self.inputDocument)
       end

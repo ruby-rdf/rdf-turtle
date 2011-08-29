@@ -8,14 +8,9 @@ describe RDF::Turtle::Reader do
 
     describe "positive parser tests" do
       Fixtures::TurtleTest::Good.each do |t|
-        next if !t.comment || t.name =~ /manifest/
+        next unless t.name
         #puts t.inspect
-        
-        # modified test-10 results to be canonical
-        # modified test-21&22 results exponent to be E not e
-        # modified test-28 2.30 => 2.3 representation
         specify "#{t.name}: #{t.comment}" do
-          #puts t.inspect
           # Skip tests for very long files, too long
           if !defined?(::Encoding) && %w(test-18).include?(t.name)
             pending("Not supported in Ruby 1.8")
@@ -40,8 +35,7 @@ describe RDF::Turtle::Reader do
 
     describe "negative parser tests" do
       Fixtures::TurtleTest::Bad.each do |t|
-        next if !t.comment || t.name =~ /manifest/
-        #puts t.inspect
+        next unless t.name
         specify "#{t.name}: #{t.comment}" do
           begin
             t.run_test do

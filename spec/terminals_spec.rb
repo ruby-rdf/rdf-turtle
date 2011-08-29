@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe RDF::Turtle::Tokens do
+describe RDF::Turtle::Terminals do
   describe "when matching Unicode input" do
     strings = [
       ["\xC3\x80",         "\xC3\x96"],         # \u00C0-\u00D6
@@ -20,7 +20,7 @@ describe RDF::Turtle::Tokens do
       strings.each do |range|
         range.each do |string|
           string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-          string.should match(RDF::Turtle::Tokens::PN_CHARS_BASE)
+          string.should match(RDF::Turtle::Terminals::PN_CHARS_BASE)
         end
       end
     end
@@ -30,30 +30,26 @@ describe RDF::Turtle::Tokens do
         range.each do |string|
           string = "<#{string}>"
           string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-          string.should match(RDF::Turtle::Tokens::IRI_REF)
+          string.should match(RDF::Turtle::Terminals::IRI_REF)
         end
       end
     end
     
-    #%w(
-    #  \u0001 \u0002 \u0003 \u0004 \u0005 \u0006 \u0007 \u0008 \t \n \
-    #  \u000B \u000C \r \u000E \u000F \u0010 \u0011 \u0012 \u0013 \u0014 \u0015 \u0016 \u0017 \u0018 \u0019
-    #  \u001A \u001B \u001C \u001D \u001E \u001F
-    #  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : / < = \u003E ? @
-    #  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
-    #  [ \\ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ \u007F
-    #).each do |string|
-    #  it "matches <scheme:#{string.inspect}>" do
-    #    string = "<scheme:#{string}>"
-    #    string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-    #    string.should match(RDF::LL1::Lexer::IRI_REF)
-    #  end
-    #end
-
-    it "matches a long unicode IRI_REF" do
-      string = %q(<scheme:\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F !"#$%&'()*+,-./0123456789:/<=\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F>)
-      string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-      string.should match(RDF::Turtle::Tokens::IRI_REF)
+    %w(
+      ! # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : / < = ? @
+      A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+      _ a b c d e f g h i j k l m n o p q r s t u v w x y z ~
+      ab\\u00E9xy ab\xC3\xA9xy>
+      \\u03B1:a \xCE\xB1:a
+      a\\u003Ab a\x3Ab
+      \\U00010000 \xF0\x90\x80\x80
+      \\U000EFFFF \xF3\xAF\xBF\xBF
+    ).each do |string|
+      it "matches <scheme:#{string.inspect}>" do
+        string = "<scheme:#{string}>"
+        string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+        string.should match(RDF::Turtle::Terminals::IRI_REF)
+      end
     end
   end
 end

@@ -8,9 +8,9 @@ module RDF::Turtle
     format Format
     include RDF::Turtle::Meta
     include RDF::LL1::Parser
-    include RDF::Turtle::Tokens
+    include RDF::Turtle::Terminals
 
-    # Tokens passed to lexer. Order matters!
+    # Terminals passed to lexer. Order matters!
     terminal(:ANON,                 ANON) do |reader, prod, token, input|
       input[:resource] = reader.bnode
     end
@@ -47,10 +47,12 @@ module RDF::Turtle
     terminal(:INTEGER_POSITIVE,     INTEGER_POSITIVE) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
     end
+    # Spec confusion: spec says : "Literals , prefixed names and IRIs may also contain escape sequences"
     terminal(:PNAME_LN,             PNAME_LN) do |reader, prod, token, input|
       prefix, suffix = token.value.split(":", 2)
       input[:resource] = reader.pname(prefix, suffix)
     end
+    # Spec confusion: spec says : "Literals , prefixed names and IRIs may also contain escape sequences"
     terminal(:PNAME_NS,             PNAME_NS) do |reader, prod, token, input|
       prefix = token.value[0..-2]
       
@@ -302,7 +304,7 @@ module RDF::Turtle
     ##
     # Override #prefix to take a relative IRI
     #
-    # @prefix directives map a local name to an IRI, also resolved against the current In-Scope Base URI.
+    # prefix directives map a local name to an IRI, also resolved against the current In-Scope Base URI.
     # Spec confusion, presume that an undefined empty prefix has an empty relative IRI, which uses
     # string contatnation rules against the in-scope IRI at the time of use
     def prefix(prefix, iri = nil)

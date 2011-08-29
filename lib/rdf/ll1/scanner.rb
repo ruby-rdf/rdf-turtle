@@ -55,7 +55,7 @@ module RDF::LL1
     # If it matches, the scan pointer is advanced to the end of the match,
     # and the length of the match is returned. Otherwise, `nil` is returned.
     #
-    # It’s similar to {scan}, but without returning the matched string.
+    # similar to `scan`, but without returning the matched string.
     # @param [Regexp] pattern
     def skip(pattern)
       feed_me
@@ -65,7 +65,7 @@ module RDF::LL1
     ##
     # Tries to match with `pattern` at the current position.
     #
-    # If there’s a match, the scanner advances the "scan pointer" and returns the matched string.
+    # If there is a match, the scanner advances the "scan pointer" and returns the matched string.
     # Otherwise, the scanner returns nil.
     #
     # If the scanner begins with the multi-line start expression
@@ -93,7 +93,7 @@ module RDF::LL1
         string = @input.read(diff)
         string << @input.gets unless @input.eof?
         string = @block.call(string) if @block
-        self << string
+        self << string if string
       end
     end
   end

@@ -43,14 +43,14 @@ module RDF::LL1
       "\\'"  => '\'',   # \u0027 (apostrophe-quote, single quote mark)
       '\\\\' => '\\'    # \u005C (backslash)
     }
-    ESCAPE_CHAR4        = /\\u(?:[0-9A-Fa-f]{4,4})/                              # \uXXXX
-    ESCAPE_CHAR8        = /\\U(?:[0-9A-Fa-f]{8,8})/                              # \UXXXXXXXX
-    ECHAR               = /\\[tbnrf\\"']/                                      # [91s]
+    ESCAPE_CHAR4        = /\\u(?:[0-9A-Fa-f]{4,4})/           # \uXXXX
+    ESCAPE_CHAR8        = /\\U(?:[0-9A-Fa-f]{8,8})/           # \UXXXXXXXX
+    ECHAR               = /\\[tbnrf\\"']/                     # [91s]
     UCHAR               = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/
     COMMENT             = /#.*/
     WS                  = / |\t|\r|\n/m
 
-    ML_START            = /\'\'\'|\"\"\"/                                       # Beginning of tokens that may span lines
+    ML_START            = /\'\'\'|\"\"\"/                     # Beginning of terminals that may span lines
 
     ##
     # @attr [Regexp] defines whitespace, defaults to WS
@@ -119,7 +119,7 @@ module RDF::LL1
     # @option options [Regexp]                :whitespace (WS)
     # @option options [Regexp]                :comment (COMMENT)
     # @option options [Array<Symbol>]         :unescape_terms ([])
-    #   Regular expression matching the beginning of tokens that may cross newlines
+    #   Regular expression matching the beginning of terminals that may cross newlines
     def initialize(input = nil, terminals = nil, options = {})
       @options        = options.dup
       @whitespace     = @options[:whitespace]     || WS
@@ -132,6 +132,7 @@ module RDF::LL1
       @lineno = 1
       @scanner = Scanner.new(input) do |string|
         string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding)      # Ruby 1.9+
+        string
       end
     end
 
@@ -157,7 +158,7 @@ module RDF::LL1
     # Returns `true` if the input string is lexically valid.
     #
     # To be considered valid, the input string must contain more than zero
-    # tokens, and must not contain any invalid tokens.
+    # terminals, and must not contain any invalid terminals.
     #
     # @return [Boolean]
     def valid?

@@ -20,7 +20,7 @@ module RDF::LL1
       def unescape_terms; @unescape_terms || []; end
 
       ##
-      # Defines a production called durring different phases of parsing
+      # Defines a production called during different phases of parsing
       # with data from previous production along with data defined for the
       # current production
       #
@@ -95,7 +95,7 @@ module RDF::LL1
     #     branch      RDF::Turtle::Reader::BRANCH
     #     
     #     ##
-    #     # Defines a production called durring different phases of parsing
+    #     # Defines a production called during different phases of parsing
     #     # with data from previous production along with data defined for the
     #     # current production
     #     #

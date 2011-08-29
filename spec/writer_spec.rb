@@ -16,7 +16,7 @@ describe RDF::Turtle::Writer do
       )
     end
 
-    it "should use qname URIs with prefix" do
+    it "should use pname URIs with prefix" do
       input = %(<http://xmlns.com/foaf/0.1/b> <http://xmlns.com/foaf/0.1/c> <http://xmlns.com/foaf/0.1/d> .)
       serialize(input, nil,
         [%r(^@prefix foaf: <http://xmlns.com/foaf/0.1/> \.$),
@@ -25,7 +25,7 @@ describe RDF::Turtle::Writer do
       )
     end
 
-    it "should use qname URIs with empty prefix" do
+    it "should use pname URIs with empty prefix" do
       input = %(<http://xmlns.com/foaf/0.1/b> <http://xmlns.com/foaf/0.1/c> <http://xmlns.com/foaf/0.1/d> .)
       serialize(input, nil,
         [%r(^@prefix : <http://xmlns.com/foaf/0.1/> \.$),
@@ -35,7 +35,7 @@ describe RDF::Turtle::Writer do
     end
     
     # see example-files/arnau-registered-vocab.rb
-    it "should use qname URIs with empty suffix" do
+    it "should use pname URIs with empty suffix" do
       input = %(<http://xmlns.com/foaf/0.1/> <http://xmlns.com/foaf/0.1/> <http://xmlns.com/foaf/0.1/> .)
       serialize(input, nil,
         [%r(^@prefix foaf: <http://xmlns.com/foaf/0.1/> \.$),
@@ -44,7 +44,7 @@ describe RDF::Turtle::Writer do
       )
     end
     
-    it "should not use qname with illegal local part" do
+    it "should not use pname with illegal local part" do
       input = %(
         @prefix db: <http://dbpedia.org/resource/> .
         @prefix dbo: <http://dbpedia.org/ontology/> .
@@ -152,14 +152,6 @@ describe RDF::Turtle::Writer do
       )
     end
     
-    it "should generate empty list(2)" do
-      input = %(@prefix : <http://xmlns.com/foaf/0.1/> . :emptyList = () .)
-      serialize(input, nil,
-        [%r(^:emptyList (<.*sameAs>|owl:sameAs) \(\) \.$)],
-        :prefixes => { "" => RDF::FOAF}
-      )
-    end
-    
     it "should generate empty list as subject" do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . () :a :b .)
       serialize(input, nil,
@@ -177,17 +169,17 @@ describe RDF::Turtle::Writer do
     end
 
     it "should generate list of empties" do
-      input = %(@prefix : <http://xmlns.com/foaf/0.1/> . :listOf2Empties = (() ()) .)
+      input = %(@prefix : <http://xmlns.com/foaf/0.1/> . [:listOf2Empties (() ())] .)
       serialize(input, nil,
-        [%r(^:listOf2Empties (<.*sameAs>|owl:sameAs) \(\(\) \(\)\) \.$)],
+        [%r(\[ :listOf2Empties \(\(\) \(\)\)\] \.$)],
         :prefixes => { "" => RDF::FOAF}
       )
     end
     
     it "should generate list anon" do
-      input = %(@prefix : <http://xmlns.com/foaf/0.1/> . :twoAnons = ([a :mother] [a :father]) .)
+      input = %(@prefix : <http://xmlns.com/foaf/0.1/> . [:twoAnons ([a :mother] [a :father])] .)
       serialize(input, nil,
-        [%r(^:twoAnons (<.*sameAs>|owl:sameAs) \(\[\s*a :mother\] \[\s*a :father\]\) \.$)],
+        [%r(\[ :twoAnons \(\[ a :mother\] \[ a :father\]\)\] \.$)],
         :prefixes => { "" => RDF::FOAF}
       )
     end
@@ -356,9 +348,6 @@ describe RDF::Turtle::Writer do
 
     Fixtures::TurtleTest::Good.each do |t|
       next unless t.comment
-      #puts t.inspect
-      #next unless t.name == "test-04"
-      next if t.name == "test-29" # FIXME
       
       specify "#{t.name}: #{t.comment}" do
         @graph = parse(t.output, :base_uri => t.result, :format => :ntriples)

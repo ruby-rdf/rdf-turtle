@@ -1,4 +1,4 @@
-require 'rdf/n3/patches/graph_properties'
+require 'rdf/turtle/terminals'
 
 module RDF::Turtle
   ##
@@ -88,7 +88,7 @@ module RDF::Turtle
     def initialize(output = $stdout, options = {}, &block)
       super do
         @graph = RDF::Graph.new
-        @uri_to_qname = {}
+        @uri_to_pname = {}
         @uri_to_prefix = {}
         if block_given?
           case block.arity
@@ -155,7 +155,7 @@ module RDF::Turtle
     # Return a QName for the URI, or nil. Adds namespace of QName to defined prefixes
     # @param [RDF::Resource] resource
     # @return [String, nil] value to use to identify URI
-    def get_qname(resource)
+    def get_pname(resource)
       case resource
       when RDF::Node
         return resource.to_s
@@ -165,32 +165,32 @@ module RDF::Turtle
         return nil
       end
 
-      qname = case
-      when @uri_to_qname.has_key?(uri)
-        return @uri_to_qname[uri]
+      pname = case
+      when @uri_to_pname.has_key?(uri)
+        return @uri_to_pname[uri]
       when u = @uri_to_prefix.keys.detect {|u| uri.index(u.to_s) == 0}
         # Use a defined prefix
         prefix = @uri_to_prefix[u]
         prefix(prefix, u) unless u.to_s.empty? # Define for output
-        add_debug "get_qname: add prefix #{prefix.inspect} => #{u}"
+        add_debug "get_pname: add prefix #{prefix.inspect} => #{u}"
         uri.sub(u.to_s, "#{prefix}:")
       when @options[:standard_prefixes] && vocab = RDF::Vocabulary.each.to_a.detect {|v| uri.index(v.to_uri.to_s) == 0}
         prefix = vocab.__name__.to_s.split('::').last.downcase
         @uri_to_prefix[vocab.to_uri.to_s] = prefix
         prefix(prefix, vocab.to_uri) # Define for output
-        add_debug "get_qname: add standard prefix #{prefix.inspect} => #{vocab.to_uri}"
+        add_debug "get_pname: add standard prefix #{prefix.inspect} => #{vocab.to_uri}"
         uri.sub(vocab.to_uri.to_s, "#{prefix}:")
       else
         nil
       end
       
-      # Make sure qname is a valid qname
-      if qname
-        md = QNAME.match(qname)
-        qname = nil unless md.to_s.length == qname.length
+      # Make sure pname is a valid pname
+      if pname
+        md = Terminals::PNAME_LN.match(pname) || Terminals::PNAME_NS.match(pname)
+        pname = nil unless md.to_s.length == pname.length
       end
 
-      @uri_to_qname[uri] = qname
+      @uri_to_pname[uri] = pname
     rescue Addressable::URI::InvalidURIError => e
       raise RDF::WriterError, "Invalid URI #{resource.inspect}: #{e.message}"
     end
@@ -222,7 +222,7 @@ module RDF::Turtle
         prop_list << prop.to_s
       end
       
-      add_debug "sort_properties: #{prop_list.to_sentence}"
+      add_debug "sort_properties: #{prop_list.join(', ')}"
       prop_list
     end
 
@@ -261,7 +261,7 @@ module RDF::Turtle
     def format_uri(uri, options = {})
       md = relativize(uri)
       add_debug("relativize(#{uri.inspect}) => #{md.inspect}") if md != uri.to_s
-      md != uri.to_s ? "<#{md}>" : (get_qname(uri) || "<#{uri}>")
+      md != uri.to_s ? "<#{md}>" : (get_pname(uri) || "<#{uri}>")
     end
     
     ##
@@ -358,11 +358,11 @@ module RDF::Turtle
       @references[statement.object] = references
       @subjects[statement.subject] = true
       
-      # Pre-fetch qnames, to fill prefixes
-      get_qname(statement.subject)
-      get_qname(statement.predicate)
-      get_qname(statement.object)
-      get_qname(statement.object.datatype) if statement.object.literal? && statement.object.datatype
+      # Pre-fetch pnames, to fill prefixes
+      get_pname(statement.subject)
+      get_pname(statement.predicate)
+      get_pname(statement.object)
+      get_pname(statement.object.datatype) if statement.object.literal? && statement.object.datatype
 
       @references[statement.predicate] = ref_count(statement.predicate) + 1
     end
@@ -497,7 +497,12 @@ module RDF::Turtle
     end
     
     def predicate_list(subject)
-      properties = @graph.properties(subject)
+      properties = {}
+      @graph.query(:subject => subject) do |st|
+        properties[st.predicate.to_s] ||= []
+        properties[st.predicate.to_s] << st.object
+      end
+
       prop_list = sort_properties(properties) - [RDF.first.to_s, RDF.rest.to_s]
       add_debug "predicate_list: #{prop_list.inspect}"
       return if prop_list.empty?

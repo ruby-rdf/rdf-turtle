@@ -2,8 +2,7 @@
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
 ## Description
-This is a [Ruby][] implementation of a [Turtle][] parser for
-[RDF.rb][].
+This is a [Ruby][] implementation of a [Turtle][] parser for [RDF.rb][].
 
 ## Features
 RDF::Turtle parses [Turtle][Turtle] and [N-Triples][N-Triples] into statements or triples. It also serializes to Turtle.
@@ -37,7 +36,7 @@ Write a graph to a file:
     end
 
 ## Documentation
-Full documentation available on [RubyForge](http://rdf.rubyforge.org/turtle)
+Full documentation available on [Rubydoc.info][Turtle doc]
 
 ### Principle Classes
 * {RDF::Turtle::Format}
@@ -46,28 +45,55 @@ Full documentation available on [RubyForge](http://rdf.rubyforge.org/turtle)
 * {RDF::Turtle::Reader}
 * {RDF::Turtle::Writer}
 
+### Variations from the spec
+In some cases, the specification is unclear on certain issues:
+
+* In section 2.1, the [spec][Turtle] indicates that "Literals ,
+  prefixed names and IRIs may also contain escapes to encode surrounding syntax ...",
+  however the description in 5.2 indicates that only IRI\_REF and the various STRING\_LITERAL terms
+  are subject to unescaping. This means that an IRI which might otherwise be representable using a PNAME
+  cannot if the IRI contains any characters that might need escaping. This implementation currently abides
+  by this restriction. Presumably, this would affect both PNAME\_NS and PNAME\_LN terminals.
+* The empty prefix ':' does not have a default definition. In Notation, this definition was '<#>' which is specifically
+  not intended to be used in Turtle. However, example markup using the empty prefix is common among examples. This
+  implementation defines the empty prefix as an alias for the current base IRI (either defined using `@base`,
+  or based on the document's origin).
+* The EBNF definition of IRI_REF seems malformed, and has no provision for \^, as discussed elsewhere in the spec.
+  We presume that [#0000- ] is intended to be [#0000-#0020].
+* The list example in section 6 uses a list on it's own, without a predicate or object, which is not allowed
+  by the grammar (neither is a blankNodeProperyList). Either the EBNF should be updated to allow for these
+  forms, or the examples should be changed such that ( ... ) and [ ... ] are used only in the context of being
+  a subject or object. This implementation will generate triples, however an error will be generated if the
+  parser is run in validation mode.
+
 ## Implementation Notes
-The parser is driven through a rules table contained in lib/rdf/n3/reader/meta.rb. This includes
-branch rules to indicate productions to be taken based on a current production. Terminals are denoted
-through a set of regular expressions used to match each type of terminal.
+The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
+tables generated from the original [Turtle EBNF Grammar][Turtle EBNF] described in the [specification][Turtle]. Branch and Follow tables are specified in {RDF::Turtle::Meta}, which is in turn
+generated using etc/gramLL1.
 
-The [meta.rb][file:lib/rdf/turtle/reader/meta.rb] file is generated from etc/turtle.bnf
-(taken from http://www.w3.org/2000/10/swap/grammar/turtle.bnf) to generate a Turtle/N3 representation of the grammar, transform
-this to and LL1 representation and use this to create meta.rb.
+The branch rules indicate productions to be taken based on a current production. Terminals are denoted
+through a set of regular expressions used to match each type of terminal, described in {RDF::Turtle::Terminals}.
 
-[etc/turtle.bnf][file:etc/turtle.bnf] is itself used to generate meta.rb using script/build_meta.
+etc/turtle.bnf is used to to generate a Notation3 representation of the grammar, a transformed LL1 representation and ultimately {RDF::Turtle::Meta}.
 
 Using SWAP utilities, this is done as follows:
 
     python http://www.w3.org/2000/10/swap/grammar/ebnf2turtle.py \
       etc/turtle.bnf \
       ttl language \
-      'http://www.w3.org/2000/10/swap/grammar/turtle#' > etc/turtle.n3
+      'http://www.w3.org/2000/10/swap/grammar/turtle#' > |
+    sed -e 's/^  ".*"$/  g:seq (&)/'  > etc/turtle.n3
       
     python http://www.w3.org/2000/10/swap/cwm.py etc/turtle.n3 \
       http://www.w3.org/2000/10/swap/grammar/ebnf2bnf.n3 \
       http://www.w3.org/2000/10/swap/grammar/first_follow.n3 \
       --think --data > etc/turtle-bnf.n3
+    
+    script/gramLL1 \
+      --grammar etc/turtle-ll1.n3 \
+      --lang 'http://www.w3.org/2000/10/swap/grammar/turtle#language' \
+      --output lib/rdf/turtle/meta.rb
+    
       
 ## Dependencies
 
@@ -104,14 +130,13 @@ To install the latest official release of the `SPARQL::Grammar` gem, do:
 This is free and unencumbered public domain software. For more information,
 see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
-[Ruby]:       http://ruby-lang.org/
-[RDF]:        http://www.w3.org/RDF/
-[YARD]:       http://yardoc.org/
-[YARD-GS]:    http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:        http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[RDF.rb]:     http://rdf.rubyforge.org/
-[YARD]:       http://yardoc.org/
-[YARD-GS]:    http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:        http://unlicense.org/#unlicensing-contributions
-[Backports]:  http://rubygems.org/gems/backports
-[Turtle]:     http://www.w3.org/TR/2011/WD-turtle-20110809/
+[Ruby]:         http://ruby-lang.org/
+[RDF]:          http://www.w3.org/RDF/
+[YARD]:         http://yardoc.org/
+[YARD-GS]:      http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
+[PDD]:          http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[RDF.rb]:       http://rdf.rubyforge.org/
+[Backports]:    http://rubygems.org/gems/backports
+[Turtle]:       http://www.w3.org/TR/2011/WD-turtle-20110809/
+[Turtle doc]:   http://rubydoc.info/github/gkellogg/rdf-turtle/master/file/README.markdown
+[Turtle EBNF]:  http://www.w3.org/2000/10/swap/grammar/turtle.bnf
