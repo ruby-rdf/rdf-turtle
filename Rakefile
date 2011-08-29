@@ -5,12 +5,12 @@ require 'rubygems'
 namespace :gem do
   desc "Build the rdf-turtle-#{File.read('VERSION').chomp}.gem file"
   task :build => "lib/rdf/turtle/meta.rb" do
-    sh "gem build rdf-turtle.gemspec"
+    sh "gem build rdf-turtle.gemspec && mv rdf-turtle-#{File.read('VERSION').chomp}.gem pkg/"
   end
 
   desc "Release the rdf-turtle-#{File.read('VERSION').chomp}.gem file"
   task :release do
-    sh "gem push rdf-turtle-#{File.read('VERSION').chomp}.gem"
+    sh "gem push pkg/rdf-turtle-#{File.read('VERSION').chomp}.gem"
   end
 end
 
