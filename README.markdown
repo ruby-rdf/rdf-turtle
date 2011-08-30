@@ -47,10 +47,7 @@ In some cases, the specification is unclear on certain issues:
   are subject to unescaping. This means that an IRI which might otherwise be representable using a PNAME
   cannot if the IRI contains any characters that might need escaping. This implementation currently abides
   by this restriction. Presumably, this would affect both PNAME\_NS and PNAME\_LN terminals.
-* The empty prefix ':' does not have a default definition. In Notation, this definition was '<#>' which is specifically
-  not intended to be used in Turtle. However, example markup using the empty prefix is common among examples. This
-  implementation defines the empty prefix as an alias for the current base IRI (either defined using `@base`,
-  or based on the document's origin).
+  (This is being tracked as issues [67](http://www.w3.org/2011/rdf-wg/track/issues/67)).
 * The EBNF definition of IRI_REF seems malformed, and has no provision for \^, as discussed elsewhere in the spec.
   We presume that [#0000- ] is intended to be [#0000-#0020].
 * The list example in section 6 uses a list on it's own, without a predicate or object, which is not allowed

@@ -120,15 +120,15 @@ describe "RDF::Turtle::Reader" do
 
     describe "with literal encodings" do
       {
-        'simple literal' => ':a :b  "simple literal" .',
-        'backslash:\\'   => ':a :b  "backslash:\\\\" .',
-        'dquote:"'       => ':a :b  "dquote:\\"" .',
-        "newline:\n"     => ':a :b  "newline:\\n" .',
-        "return\r"       => ':a :b  "return\\r" .',
-        "tab:\t"         => ':a :b  "tab:\\t" .',
+        'simple literal' => '<a> <b>  "simple literal" .',
+        'backslash:\\'   => '<a> <b>  "backslash:\\\\" .',
+        'dquote:"'       => '<a> <b>  "dquote:\\"" .',
+        "newline:\n"     => '<a> <b>  "newline:\\n" .',
+        "return\r"       => '<a> <b>  "return\\r" .',
+        "tab:\t"         => '<a> <b>  "tab:\\t" .',
       }.each_pair do |contents, triple|
         specify "test #{triple}" do
-          graph = parse(triple)
+          graph = parse(triple, :prefixes => {nil => ''})
           statement = graph.statements.first
           graph.size.should == 1
           statement.object.value.should == contents
@@ -136,13 +136,13 @@ describe "RDF::Turtle::Reader" do
       end
       
       {
-        'Dürst' => ':a :b "Dürst" .',
-        "é" => ':a :b  "é" .',
-        "€" => ':a :b  "€" .',
+        'Dürst' => '<a> <b> "Dürst" .',
+        "é" => '<a> <b>  "é" .',
+        "€" => '<a> <b>  "€" .',
         "resumé" => ':a :resume  "resumé" .',
       }.each_pair do |contents, triple|
         specify "test #{triple}" do
-          graph = parse(triple)
+          graph = parse(triple, :prefixes => {nil => ''})
           statement = graph.statements.first
           graph.size.should == 1
           statement.object.value.should == contents
@@ -150,7 +150,7 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "should parse long literal with escape" do
-        ttl = %(@prefix : <http://example.org/foo#> . :a :b "\\U00015678another" .)
+        ttl = %(@prefix : <http://example.org/foo#> . <a> <b> "\\U00015678another" .)
         if defined?(::Encoding)
           statement = parse(ttl).statements.first
           statement.object.value.should == "\u{15678}another"
@@ -178,13 +178,13 @@ describe "RDF::Turtle::Reader" do
           ),
         }.each do |test, string|
           it "parses LONG1 #{test}" do
-            graph = parse(%(:a :b '''#{string}'''))
+            graph = parse(%(<a> <b> '''#{string}'''))
             graph.size.should == 1
             graph.statements.first.object.value.should == string
           end
 
           it "parses LONG2 #{test}" do
-            graph = parse(%(:a :b """#{string}"""))
+            graph = parse(%(<a> <b> """#{string}"""))
             graph.size.should == 1
             graph.statements.first.object.value.should == string
           end
@@ -192,13 +192,13 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "LONG1 matches trailing escaped single-quote" do
-        graph = parse(%(:a :b '''\\''''))
+        graph = parse(%(<a> <b> '''\\''''))
         graph.size.should == 1
         graph.statements.first.object.value.should == %q(')
       end
       
       it "LONG2 matches trailing escaped double-quote" do
-        graph = parse(%(:a :b """\\""""))
+        graph = parse(%(<a> <b> """\\""""))
         graph.size.should == 1
         graph.statements.first.object.value.should == %q(")
       end
@@ -237,7 +237,7 @@ describe "RDF::Turtle::Reader" do
 
     it "should allow mixed-case language" do
       ttl = %(:x2 :p "xyz"@EN .)
-      statement = parse(ttl).statements.first
+      statement = parse(ttl, :prefixes => {nil => ''}).statements.first
       statement.object.to_ntriples.should == %("xyz"@EN)
     end
 
@@ -258,13 +258,13 @@ describe "RDF::Turtle::Reader" do
       {
         %(<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .) =>
           %(<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .),
-        %(@base <http://a/b> . <joe> :knows <#jane> .) =>
-          %(<http://a/joe> <http://a/bknows> <http://a/b#jane> .),
-        %(@base <http://a/b#> . <joe> :knows <#jane> .) =>
-          %(<http://a/joe> <http://a/b#knows> <http://a/b#jane> .),
-        %(@base <http://a/b/> . <joe> :knows <#jane> .) =>
+        %(@base <http://a/b> . <joe> <knows> <#jane> .) =>
+          %(<http://a/joe> <http://a/knows> <http://a/b#jane> .),
+        %(@base <http://a/b#> . <joe> <knows> <#jane> .) =>
+          %(<http://a/joe> <http://a/knows> <http://a/b#jane> .),
+        %(@base <http://a/b/> . <joe> <knows> <#jane> .) =>
           %(<http://a/b/joe> <http://a/b/knows> <http://a/b/#jane> .),
-        %(@base <http://a/b/> . </joe> :knows <jane> .) =>
+        %(@base <http://a/b/> . </joe> <knows> <jane> .) =>
           %(<http://a/joe> <http://a/b/knows> <http://a/b/jane> .),
         %(<#D%C3%BCrst>  a  "URI percent ^encoded as C3, BC".) =>
           %(<#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
@@ -275,10 +275,10 @@ describe "RDF::Turtle::Reader" do
       end
 
       {
-        %(<#Dürst> :knows :jane.) => '<#D\u00FCrst> <knows> <jane> .',
-        %(:Dürst :knows :jane.) => '<D\u00FCrst> <knows> <jane> .',
-        %(:bob :resumé "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
-        %(:alice :resumé "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
+        %(<#Dürst> <knows> <jane>.) => '<#D\u00FCrst> <knows> <jane> .',
+        %(<Dürst> <knows> <jane>.) => '<D\u00FCrst> <knows> <jane> .',
+        %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
+        %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
           it "for '#{ttl}'" do
             begin
@@ -295,11 +295,11 @@ describe "RDF::Turtle::Reader" do
 
       {
         %(<#Dürst> a  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
-        %(:a :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
+        %(<a> :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
           begin
-            parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+            parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
           rescue
             if defined?(::Encoding)
               raise
@@ -326,20 +326,6 @@ describe "RDF::Turtle::Reader" do
         statement.object.class.should == RDF::Literal
       end
 
-      it "empty @prefix" do
-        ttl = %(@prefix : <> . <a> a :a.)
-        nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <a> .)
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "<#> as a prefix and as a triple node" do
-        ttl = %(@prefix : <#> . <#> a :a.)
-        nt = %(
-        <#> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <#a> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
       it "rdf:type for 'a'" do
         ttl = %(@prefix a: <http://foo/a#> . a:b a <http://www.w3.org/2000/01/rdf-schema#resource> .)
         nt = %(<http://foo/a#b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#resource> .)
@@ -347,16 +333,16 @@ describe "RDF::Turtle::Reader" do
       end
       
       {
-        %(:a :b true)  => %(<a> <b> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
-        %(:a :b false)  => %(<a> <b> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
-        %(:a :b 1)  => %(<a> <b> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
-        %(:a :b -1)  => %(<a> <b> "-1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
-        %(:a :b +1)  => %(<a> <b> "+1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
-        %(:a :b 1.0)  => %(<a> <b> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .),
-        %(:a :b 1.0e1)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(:a :b 1.0e-1)  => %(<a> <b> "1.0e-1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(:a :b 1.0e+1)  => %(<a> <b> "1.0e+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(:a :b 1.0E1)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> true)  => %(<a> <b> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
+        %(<a> <b> false)  => %(<a> <b> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
+        %(<a> <b> 1)  => %(<a> <b> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
+        %(<a> <b> -1)  => %(<a> <b> "-1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
+        %(<a> <b> +1)  => %(<a> <b> "+1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
+        %(<a> <b> 1.0)  => %(<a> <b> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .),
+        %(<a> <b> 1.0e1)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0e-1)  => %(<a> <b> "1.0e-1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0e+1)  => %(<a> <b> "1.0e+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0E1)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       }.each_pair do |ttl, nt|
         it "should create typed literal for '#{ttl}'" do
           parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
@@ -364,7 +350,7 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "should accept empty localname" do
-        ttl1 = %(: : : .)
+        ttl1 = %(@prefix : <> .: : : .)
         ttl2 = %(<> <> <> .)
         g2 = parse(ttl2)
         parse(ttl1).should be_equivalent_graph(g2, :trace => @debug)
@@ -378,12 +364,25 @@ describe "RDF::Turtle::Reader" do
     end
     
     describe "@prefix" do
-      it "does not append # for default empty prefix" do
-        ttl = %(@prefix : <http://foo/bar> . :a : :b .)
-        nt = %(<http://foo/bara> <http://foo/bar> <http://foo/barb> .)
+      it "no @prefix" do
+        ttl = %(<a> a :a .)
+        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
+      end
+      
+      it "empty relative-IRI" do
+        ttl = %(@prefix foo: <> . <a> a foo:a.)
+        nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <a> .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
 
+      it "<#> as a prefix and as a triple node" do
+        ttl = %(@prefix : <#> . <#> a :a.)
+        nt = %(
+        <#> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <#a> .
+        )
+        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+      end
+      
       it "ignores _ as prefix identifier" do
         ttl = %(
         _:a a :p.
@@ -433,16 +432,16 @@ describe "RDF::Turtle::Reader" do
 
     describe "@base" do
       it "sets absolute base" do
-        ttl = %(@base <http://foo/bar> . <> :a <b> . <#c> :d </e>.)
+        ttl = %(@base <http://foo/bar> . <> <a> <b> . <#c> <d> </e>.)
         nt = %(
-        <http://foo/bar> <http://foo/bara> <http://foo/b> .
-        <http://foo/bar#c> <http://foo/bard> <http://foo/e> .
+        <http://foo/bar> <http://foo/a> <http://foo/b> .
+        <http://foo/bar#c> <http://foo/d> <http://foo/e> .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
       it "sets absolute base (trailing /)" do
-        ttl = %(@base <http://foo/bar/> . <> :a <b> . <#c> :d </e>.)
+        ttl = %(@base <http://foo/bar/> . <> <a> <b> . <#c> <d> </e>.)
         nt = %(
         <http://foo/bar/> <http://foo/bar/a> <http://foo/bar/b> .
         <http://foo/bar/#c> <http://foo/bar/d> <http://foo/e> .
@@ -451,10 +450,10 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "should set absolute base (trailing #)" do
-        ttl = %(@base <http://foo/bar#> . <> :a <b> . <#c> :d </e>.)
+        ttl = %(@base <http://foo/bar#> . <> <a> <b> . <#c> <d> </e>.)
         nt = %(
-        <http://foo/bar#> <http://foo/bar#a> <http://foo/b> .
-        <http://foo/bar#c> <http://foo/bar#d> <http://foo/e> .
+        <http://foo/bar#> <http://foo/a> <http://foo/b> .
+        <http://foo/bar#c> <http://foo/d> <http://foo/e> .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -462,11 +461,11 @@ describe "RDF::Turtle::Reader" do
       it "sets a relative base" do
         ttl = %(
         @base <http://example.org/products/>.
-        <> :a <b>, <#c>.
+        <> <a> <b>, <#c>.
         @base <prod123/>.
-        <> :a <b>, <#c>.
+        <> <a> <b>, <#c>.
         @base <../>.
-        <> :a <d>, <#e>.
+        <> <a> <d>, <#e>.
         )
         nt = %(
         <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/b> .
@@ -481,12 +480,12 @@ describe "RDF::Turtle::Reader" do
       
       it "redefine" do
         ttl = %(
-        @base <http://example.com/ontolgies>. <a> :b <foo/bar#baz>.
-        @base <path/DIFFERENT/>. <a2> :b2 <foo/bar#baz2>.
+        @base <http://example.com/ontolgies>. <a> <b> <foo/bar#baz>.
+        @base <path/DIFFERENT/>. <a2> <b2> <foo/bar#baz2>.
         @prefix : <#>. <d3> :b3 <e3>.
         )
         nt = %(
-        <http://example.com/a> <http://example.com/ontolgiesb> <http://example.com/foo/bar#baz> .
+        <http://example.com/a> <http://example.com/b> <http://example.com/foo/bar#baz> .
         <http://example.com/path/DIFFERENT/a2> <http://example.com/path/DIFFERENT/b2> <http://example.com/path/DIFFERENT/foo/bar#baz2> .
         <http://example.com/path/DIFFERENT/d3> <http://example.com/path/DIFFERENT/#b3> <http://example.com/path/DIFFERENT/e3> .
         )
@@ -525,7 +524,7 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "creates BNode for [] as statement" do
-        ttl = %([:a :b] .)
+        ttl = %([<a> <b>] .)
         nt = %(_:a <a> <b> .)
         parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -554,7 +553,7 @@ describe "RDF::Turtle::Reader" do
         _:b <qq> "2" .
         _:a <pred> _:b .
         )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+        parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
       end
       
       it "should create nested BNodes" do
@@ -569,13 +568,13 @@ describe "RDF::Turtle::Reader" do
         _:b <p3> "v2" .
         _:b <p4> "v3" .
         )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+        parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
       end
     end
     
     describe "objectList" do
       it "IRIs" do
-        ttl = %(:a :b :c, :d)
+        ttl = %(<a> <b> <c>, <d>)
         nt = %(
           <a> <b> <c> .
           <a> <b> <d> .
@@ -584,7 +583,7 @@ describe "RDF::Turtle::Reader" do
       end
 
       it "literals" do
-        ttl = %(:a :b "1", "2" .)
+        ttl = %(<a> <b> "1", "2" .)
         nt = %(
           <a> <b> "1" .
           <a> <b> "2" .
@@ -593,7 +592,7 @@ describe "RDF::Turtle::Reader" do
       end
 
       it "mixed" do
-        ttl = %(:a :b :c, "2" .)
+        ttl = %(<a> <b> <c>, "2" .)
         nt = %(
           <a> <b> <c> .
           <a> <b> "2" .
@@ -702,7 +701,7 @@ describe "RDF::Turtle::Reader" do
           _:f <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "value" .
           _:f <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+        parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
       end
       
     end
@@ -716,7 +715,7 @@ describe "RDF::Turtle::Reader" do
       %("lang"@EN) => %("lang"@en),
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
-        ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{input} .)
+        ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <a> <b> #{input} .)
         nt = %(<a> <b> #{result} .)
         parse(ttl, :canonicalize => true).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -725,12 +724,12 @@ describe "RDF::Turtle::Reader" do
   
   describe "validation" do
     {
-      %(:y :p1 "xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("xyz" is not a valid .*),
-      %(:y :p1 "12xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("12xyz" is not a valid .*),
-      %(:y :p1 "xy.z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("xy\.z" is not a valid .*),
-      %(:y :p1 "+1.0z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("\+1.0z" is not a valid .*),
-      %(:a :b .) =>RDF::ReaderError,
-      %(:a "literal value" :b .) => RDF::ReaderError,
+      %(<a> <b> "xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("xyz" is not a valid .*),
+      %(<a> <b> "12xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("12xyz" is not a valid .*),
+      %(<a> <b> "xy.z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("xy\.z" is not a valid .*),
+      %(<a> <b> "+1.0z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("\+1.0z" is not a valid .*),
+      %(<a> <b> .) => RDF::ReaderError,
+      %(<a> "literal value" <b> .) => RDF::ReaderError,
       %(@keywords prefix. :e prefix :f .) => RDF::ReaderError
     }.each_pair do |ttl, error|
       it "should raise '#{error}' for '#{ttl}'" do
@@ -772,12 +771,12 @@ describe "RDF::Turtle::Reader" do
       "example 2" => [
         %q(
           @prefix : <http://example.org/stuff/1.0/> .
-          :a :b ( "apple" "banana" ) .
+          <a> :b ( "apple" "banana" ) .
         ),
         %q(
           @prefix : <http://example.org/stuff/1.0/> .
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-          :a :b
+          <a> :b
             [ rdf:first "apple";
               rdf:rest [ rdf:first "banana";
                          rdf:rest rdf:nil ]
@@ -795,8 +794,6 @@ The second line
   more""" .
         ),
         %q(
-        @prefix : <http://example.org/stuff/1.0/> .
-
         <http://example.org/stuff/1.0/a> <http://example.org/stuff/1.0/b>
         "The first line\nThe second line\n  more" .
         )
@@ -816,9 +813,10 @@ The second line
       ],
       # Spec confusion: Can list be subject w/o object?
       "example 5" => [
-        %q((1 [:p :q] ( 2 ) ) .),
+        %q(@prefix : <> . (1 [:p :q] ( 2 ) ) .),
         %q(
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+          @prefix : <> . 
           _:b0  rdf:first  1 ;
                 rdf:rest   _:b1 .
           _:b1  rdf:first  _:b2 .
@@ -841,8 +839,13 @@ The second line
 
   def parse(input, options = {})
     @debug = []
+    options = {
+      :debug => @debug,
+      :validate => true,
+      :canonicalize => false,
+    }.merge(options)
     graph = options[:graph] || RDF::Graph.new
-    RDF::Turtle::Reader.new(input, {:debug => @debug, :validate => true, :canonicalize => false}.merge(options)).each do |statement|
+    RDF::Turtle::Reader.new(input, options).each do |statement|
       graph << statement
     end
     graph

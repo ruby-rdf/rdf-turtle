@@ -308,7 +308,6 @@ module RDF::Turtle
     # Spec confusion, presume that an undefined empty prefix has an empty relative IRI, which uses
     # string contatnation rules against the in-scope IRI at the time of use
     def prefix(prefix, iri = nil)
-      debug("prefix", "'#{prefix}' <#{iri}>")
       # Relative IRIs are resolved against @base
       iri = process_iri(iri) if iri
       super(prefix, iri)
@@ -320,14 +319,13 @@ module RDF::Turtle
       # Prefixes must be defined, except special case for empty prefix being alias for current @base
       if prefix(prefix)
         base = prefix(prefix).to_s
-      elsif prefix.to_s.empty?
-        base = base_uri.to_s
-      else
-        error("pname", "undefined prefix #{prefix.inspect}") unless prefix(prefix) || prefix.to_s.empty?
+      elsif !prefix(prefix)
+        error("pname", "undefined prefix #{prefix.inspect}")
+        base = ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
       debug("pname", "base: '#{base}', suffix: '#{suffix}'")
-      iri(base + suffix.to_s)
+      process_iri(base + suffix.to_s)
     end
     
     # Keep track of allocated BNodes
@@ -342,7 +340,7 @@ module RDF::Turtle
     # @option options [URI, #to_s] :production
     # @option options [Token] :token
     def error(node, message, options = {})
-      if !@options[:validate] && !options[:fatal]
+      if !validate? && !options[:fatal]
         debug(node, message, options)
       else
         raise RDF::ReaderError, message, options[:backtrace]
