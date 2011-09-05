@@ -75,7 +75,7 @@ module RDF::LL1
         @patterns ||= []
         @patterns << [term, regexp]  # Passed in order to define evaulation sequence
         @terminal_handlers ||= {}
-        @terminal_handlers[term] = block
+        @terminal_handlers[term] = block if block_given?
         @unescape_terms ||= []
         @unescape_terms << term if options[:unescape]
       end
@@ -187,10 +187,11 @@ module RDF::LL1
             token = @lexer.recover
           end
           @lineno = token.lineno if token
-          debug("parse(production)",
-                "#{token ? token.representation.inspect : 'nil'}, " + 
-                "prod #{todo_stack.last[:prod].inspect}, " + 
-                "depth #{depth}")
+          debug("parse(production)") do
+            "#{token ? token.representation.inspect : 'nil'}, " + 
+            "prod #{todo_stack.last[:prod].inspect}, " + 
+            "depth #{depth}"
+          end
           
           # Got an opened production
           cur_prod = todo_stack.last[:prod]
@@ -200,14 +201,15 @@ module RDF::LL1
           
           if prod_branch = @branch[cur_prod]
             sequence = prod_branch[token.representation]
-            debug("parse(production)",
-                  "#{token.representation.inspect} " +
-                  "prod #{cur_prod.inspect}, " + 
-                  "prod_branch #{prod_branch.keys.inspect}, " +
-                  "sequence #{sequence.inspect}")
+            debug("parse(production)") do
+              "#{token.representation.inspect} " +
+              "prod #{cur_prod.inspect}, " + 
+              "prod_branch #{prod_branch.keys.inspect}, " +
+              "sequence #{sequence.inspect}"
+            end
             if sequence.nil?
               if prod_branch.has_key?(:"ebnf:empty")
-                debug("parse(production)", "empty sequence for ebnf:empty")
+                debug("parse(production)") {"empty sequence for ebnf:empty"}
               else
                 expected = prod_branch.keys.map {|v| v.inspect}.join(", ")
                 error("parse", "expected one of #{expected}",
@@ -227,13 +229,13 @@ module RDF::LL1
           end
         end
         
-        debug("parse(terms)", "todo #{todo_stack.last.inspect}, depth #{depth}")
+        debug("parse(terms)") {"todo #{todo_stack.last.inspect}, depth #{depth}"}
         while !todo_stack.last[:terms].to_a.empty?
           begin
             # Get the next term in this sequence
             term = todo_stack.last[:terms].shift
             if token = accept(term)
-              debug("parse(token)", "#{token.inspect}, term #{term.inspect}")
+              debug("parse(token)") {"#{token.inspect}, term #{term.inspect}"}
               @lineno = token.lineno if token
               onToken(term, token)
             elsif terminals.include?(term)
@@ -245,7 +247,7 @@ module RDF::LL1
             else
               # If it's not a string (a symbol), it is a non-terminal and we push the new state
               todo_stack << {:prod => term, :terms => nil}
-              debug("parse(push)", "term #{term.inspect}, depth #{depth}")
+              debug("parse(push)") {"term #{term.inspect}, depth #{depth}"}
               pushed = true
               break
             end
@@ -264,7 +266,7 @@ module RDF::LL1
               !todo_stack.empty? &&
               ( todo_stack.last[:terms].to_a.empty? ||
                 (@recovering && @follow[todo_stack.last[:term]].nil?))
-          debug("parse(pop)", "todo #{todo_stack.last.inspect}, depth #{depth}, recovering? #{@recovering.inspect}")
+          debug("parse(pop)") {"todo #{todo_stack.last.inspect}, depth #{depth}, recovering? #{@recovering.inspect}"}
           prod = todo_stack.last[:prod]
           @recovering = false if @follow[prod] # Stop recovering when we might have a match
           todo_stack.pop
@@ -276,7 +278,7 @@ module RDF::LL1
 
       # Continue popping contexts off of the stack
       while !todo_stack.empty?
-        debug("parse(eof)", "stack #{todo_stack.last.inspect}, depth #{depth}")
+        debug("parse(eof)") {"stack #{todo_stack.last.inspect}, depth #{depth}"}
         todo_stack.pop
         onFinish
       end
@@ -297,7 +299,7 @@ module RDF::LL1
       if handler
         # Create a new production data element, potentially allowing handler
         # to customize before pushing on the @prod_data stack
-        progress("#{prod}(:start):#{@prod_data.length}", @prod_data.last)
+        progress("#{prod}(:start):#{@prod_data.length}") {@prod_data.last}
         data = {}
         handler.call(self, :start, @prod_data.last, data, @parse_callback)
         @prod_data << data
@@ -315,7 +317,7 @@ module RDF::LL1
         # Pop production data element from stack, potentially allowing handler to use it
         data = @prod_data.pop
         handler.call(self, :finish, @prod_data.last, data, @parse_callback)
-        progress("#{prod}(:finish):#{@prod_data.length}", @prod_data.last)
+        progress("#{prod}(:finish):#{@prod_data.length}") {@prod_data.last}
       else
         progress("#{prod}(:finish)", '')
       end
@@ -330,9 +332,9 @@ module RDF::LL1
         handler ||= self.class.terminal_handlers[nil] if prod.is_a?(String) # Allows catch-all for simple string terminals
         if handler
           handler.call(self, parentProd, token, @prod_data.last)
-          progress("#{prod}(:token)", "#{token}: #{@prod_data.last}", :depth => (depth + 1))
+          progress("#{prod}(:token)", "", :depth => (depth + 1)) {"#{token}: #{@prod_data.last}"}
         else
-          progress("#{prod}(:token)", token.to_s, :depth => (depth + 1))
+          progress("#{prod}(:token)", "", :depth => (depth + 1)) {token.to_s}
         end
       else
         error("#{parentProd}(:token)", "Token has no parent production", :production => prod)
@@ -343,16 +345,16 @@ module RDF::LL1
     def skip_until_follow(todo_stack)
       debug("recovery", "stack follows:")
       todo_stack.each do |todo|
-        debug("recovery", "  #{todo[:prod]}: #{@follow[todo[:prod]].inspect}")
+        debug("recovery") {"  #{todo[:prod]}: #{@follow[todo[:prod]].inspect}"}
       end
       follows = todo_stack.inject([]) do |follow, todo|
         prod = todo[:prod]
         follow += @follow[prod] || []
       end.uniq
-      progress("recovery", "first #{@lexer.first.inspect}, follows: #{follows.inspect}")
+      progress("recovery") {"first #{@lexer.first.inspect}, follows: #{follows.inspect}"}
       while (token = @lexer.first) && follows.none? {|t| token === t}
         skipped = @lexer.shift
-        progress("recovery", "skip #{skipped.inspect}")
+        progress("recovery") {"skip #{skipped.inspect}"}
       end
     end
 
@@ -375,11 +377,17 @@ module RDF::LL1
 
     ##
     # Progress output when parsing
-    # @param [String] str
-    def progress(node, message, options = {})
+    # @param [String] node Relevant location associated with message
+    # @param [String] message ("")
+    # @param [Hash] options
+    # @option options [Integer] :depth
+    #   Recursion depth for indenting output
+    # @yieldreturn [String] added to message
+    def progress(node, message = "", options = {})
       return debug(node, message, options) if @options[:debug]
       return unless @options[:progress]
       depth = options[:depth] || self.depth
+      message += yield if block_given?
       str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
       $stderr.puts("[#{@lineno}]#{' ' * depth}#{node}: #{message}")
     end
@@ -387,12 +395,15 @@ module RDF::LL1
     ##
     # Progress output when debugging
     # @param [String] node Relevant location associated with message
-    # @param [String] message
+    # @param [String] message ("")
     # @param [Hash] options
     # @option options [Integer] :depth
     #   Recursion depth for indenting output
-    def debug(node, message, options = {})
+    # @yieldreturn [String] added to message
+    def debug(node, message = "", options = {})
+      return unless @options[:debug]
       depth = options[:depth] || self.depth
+      message += yield if block_given?
       str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
       case @options[:debug]
       when Array
@@ -400,7 +411,7 @@ module RDF::LL1
       when TrueClass
         $stderr.puts str
       when :yield
-        @parse_callback.call(:debug, node, message, options)
+        @parse_callback.call(:trace, node, message, options)
       end
     end
 
@@ -409,7 +420,7 @@ module RDF::LL1
     # @return [Token]
     def accept(type_or_value)
       if (token = @lexer.first) && token === type_or_value
-        debug("accept", "#{token.inspect} === #{type_or_value}.inspect")
+        debug("accept") {"#{token.inspect} === #{type_or_value}.inspect"}
         @lexer.shift
       end
     end

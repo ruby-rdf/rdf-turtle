@@ -7,7 +7,7 @@ module RDF
   # @example Requiring the `RDF::Turtle` module
   #   require 'rdf/turtle'
   #
-  # @example Parsing RDF statements from an N3 file
+  # @example Parsing RDF statements from an Turtle file
   #   RDF::Turtle::Reader.open("etc/foaf.ttl") do |reader|
   #     reader.each_statement do |statement|
   #       puts statement.inspect

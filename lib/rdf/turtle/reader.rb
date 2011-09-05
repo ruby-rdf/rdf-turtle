@@ -180,7 +180,7 @@ module RDF::Turtle
     end
 
     ##
-    # Initializes a new parser instance.
+    # Initializes a new reader instance.
     #
     # @param  [String, #to_s]          input
     # @param  [Hash{Symbol => Object}] options
@@ -206,11 +206,11 @@ module RDF::Turtle
       super do
         @options = {:anon_base => "b0", :validate => false}.merge(options)
 
-        debug("def prefix", "#{base_uri.inspect}")
+        debug("def prefix") {base_uri.inspect}
         
-        debug("validate", "#{validate?.inspect}")
-        debug("canonicalize", "#{canonicalize?.inspect}")
-        debug("intern", "#{intern?.inspect}")
+        debug("validate") {validate?.inspect}
+        debug("canonicalize") {canonicalize?.inspect}
+        debug("intern") {intern?.inspect}
 
         if block_given?
           case block.arity
@@ -271,7 +271,7 @@ module RDF::Turtle
     def add_triple(node, subject, predicate, object)
       statement = RDF::Statement.new(subject, predicate, object)
       if statement.valid?
-        debug(node, "generate statement: #{statement}")
+        debug(node) {"generate statement: #{statement}"}
         @callback.call(statement)
       else
         error(node, "Statement is invalid: #{statement.inspect}")
@@ -297,7 +297,12 @@ module RDF::Turtle
       options = options.dup
       # Internal representation is to not use xsd:string, although it could arguably go the other way.
       options.delete(:datatype) if options[:datatype] == RDF::XSD.string
-      debug("literal", "value: #{value.inspect}, options: #{options.inspect}, validate: #{validate?.inspect}, c14n?: #{canonicalize?.inspect}")
+      debug("literal") do
+        "value: #{value.inspect}, " +
+        "options: #{options.inspect}, " +
+        "validate: #{validate?.inspect}, " +
+        "c14n?: #{canonicalize?.inspect}"
+      end
       RDF::Literal.new(value, options.merge(:validate => validate?, :canonicalize => canonicalize?))
     end
 
@@ -324,7 +329,7 @@ module RDF::Turtle
         base = ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      debug("pname", "base: '#{base}', suffix: '#{suffix}'")
+      debug("pname") {"base: '#{base}', suffix: '#{suffix}'"}
       process_iri(base + suffix.to_s)
     end
     
@@ -349,9 +354,13 @@ module RDF::Turtle
 
     ##
     # Progress output when debugging
-    # @param [String] str
-    def debug(node, message, options = {})
+    # @param [String] node relative location in input
+    # @param [String] message ("")
+    # @yieldreturn [String] added to message
+    def debug(node, message = "", options = {})
+      return unless @options[:debug] || RDF::Turtle.debug?
       depth = options[:depth] || self.depth
+      message += yield if block_given?
       str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
       @options[:debug] << str if @options[:debug].is_a?(Array)
       $stderr.puts(str) if RDF::Turtle.debug?
