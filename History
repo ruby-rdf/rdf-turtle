@@ -1,3 +1,12 @@
+### 0.0.5
+* Update turtle and writer specs to use latest version of Turtle specs.
+* Use Spira Manifest w/list to order tests.
+* Change debug to use blocks to reduce computation overhead when not doing debugging, results in a reasonable performance boost.
+
+### 0.0.4
+* Make an un-defined empty prefix an error, rather than treating it as <>.
+* Replace remaining uses of SPARQL with RDF::Turtle or RDF::LL1
+
 ### 0.0.3
  * Completed RDF 1.1 Turtle based on http://www.w3.org/TR/2011/WD-turtle-20110809/
     * Reader
