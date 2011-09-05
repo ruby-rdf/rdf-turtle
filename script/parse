@@ -5,8 +5,59 @@ require 'rdf/turtle'
 require 'rdf/ntriples'
 require 'rdf/rdfxml' rescue nil
 require 'rdf/rdfa' rescue nil
+require 'rdf/turtle/meta'
+require 'rdf/ll1/parser'
 require 'getoptlong'
 require 'open-uri'
+
+TERMINALS = [
+  [:ANON,                 RDF::Turtle::Terminals::ANON],
+  [nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)],
+  [:BLANK_NODE_LABEL,     RDF::Turtle::Terminals::BLANK_NODE_LABEL],
+  [:IRI_REF,              RDF::Turtle::Terminals::IRI_REF],
+  [:DECIMAL,              RDF::Turtle::Terminals::DECIMAL],
+  [:DECIMAL_NEGATIVE,     RDF::Turtle::Terminals::DECIMAL_NEGATIVE],
+  [:DECIMAL_POSITIVE,     RDF::Turtle::Terminals::DECIMAL_POSITIVE],
+  [:DOUBLE,               RDF::Turtle::Terminals::DOUBLE],
+  [:DOUBLE_NEGATIVE,      RDF::Turtle::Terminals::DOUBLE_NEGATIVE],
+  [:DOUBLE_POSITIVE,      RDF::Turtle::Terminals::DOUBLE_POSITIVE],
+  [:INTEGER,              RDF::Turtle::Terminals::INTEGER],
+  [:INTEGER_NEGATIVE,     RDF::Turtle::Terminals::INTEGER_NEGATIVE],
+  [:INTEGER_POSITIVE,     RDF::Turtle::Terminals::INTEGER_POSITIVE],
+  [:LANGTAG,              RDF::Turtle::Terminals::LANGTAG],
+  [:PNAME_LN,             RDF::Turtle::Terminals::PNAME_LN],
+  [:PNAME_NS,             RDF::Turtle::Terminals::PNAME_NS],
+  [:STRING_LITERAL_LONG1, RDF::Turtle::Terminals::STRING_LITERAL_LONG1],
+  [:STRING_LITERAL_LONG2, RDF::Turtle::Terminals::STRING_LITERAL_LONG2],
+  [:STRING_LITERAL1,      RDF::Turtle::Terminals::STRING_LITERAL1],
+  [:STRING_LITERAL2,      RDF::Turtle::Terminals::STRING_LITERAL2],
+]
+
+class P
+  include RDF::LL1::Parser
+  include RDF::Turtle::Terminals
+
+  terminal(:ANON,                 ANON)
+  terminal(:BLANK_NODE_LABEL,     BLANK_NODE_LABEL)
+  terminal(:IRI_REF,              IRI_REF, :unescape => true)
+  terminal(:DOUBLE,               DOUBLE)
+  terminal(:DOUBLE_NEGATIVE,      DOUBLE_NEGATIVE)
+  terminal(:DOUBLE_POSITIVE,      DOUBLE_POSITIVE)
+  terminal(:DECIMAL,              DECIMAL)
+  terminal(:DECIMAL_NEGATIVE,     DECIMAL_NEGATIVE)
+  terminal(:DECIMAL_POSITIVE,     DECIMAL_POSITIVE)
+  terminal(:INTEGER,              INTEGER)
+  terminal(:INTEGER_NEGATIVE,     INTEGER_NEGATIVE)
+  terminal(:INTEGER_POSITIVE,     INTEGER_POSITIVE)
+  terminal(:PNAME_LN,             PNAME_LN)
+  terminal(:PNAME_NS,             PNAME_NS)
+  terminal(:STRING_LITERAL_LONG1, STRING_LITERAL_LONG1, :unescape => true)
+  terminal(:STRING_LITERAL_LONG2, STRING_LITERAL_LONG2, :unescape => true)
+  terminal(:STRING_LITERAL1,      STRING_LITERAL1, :unescape => true)
+  terminal(:STRING_LITERAL2,      STRING_LITERAL2, :unescape => true)
+  terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false))
+  terminal(:LANGTAG,              LANGTAG)
+end
 
 def run(input, options)
   reader_class = RDF::Reader.for(options[:input_format].to_sym)
@@ -15,30 +66,16 @@ def run(input, options)
   start = Time.new
   num = 0
   if options[:lex_only]
-    @terminals = [
-      [:ANON,                 RDF::Turtle::Terminals::ANON],
-      [nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)],
-      [:BLANK_NODE_LABEL,     RDF::Turtle::Terminals::BLANK_NODE_LABEL],
-      [:IRI_REF,              RDF::Turtle::Terminals::IRI_REF],
-      [:DECIMAL,              RDF::Turtle::Terminals::DECIMAL],
-      [:DECIMAL_NEGATIVE,     RDF::Turtle::Terminals::DECIMAL_NEGATIVE],
-      [:DECIMAL_POSITIVE,     RDF::Turtle::Terminals::DECIMAL_POSITIVE],
-      [:DOUBLE,               RDF::Turtle::Terminals::DOUBLE],
-      [:DOUBLE_NEGATIVE,      RDF::Turtle::Terminals::DOUBLE_NEGATIVE],
-      [:DOUBLE_POSITIVE,      RDF::Turtle::Terminals::DOUBLE_POSITIVE],
-      [:INTEGER,              RDF::Turtle::Terminals::INTEGER],
-      [:INTEGER_NEGATIVE,     RDF::Turtle::Terminals::INTEGER_NEGATIVE],
-      [:INTEGER_POSITIVE,     RDF::Turtle::Terminals::INTEGER_POSITIVE],
-      [:LANGTAG,              RDF::Turtle::Terminals::LANGTAG],
-      [:PNAME_LN,             RDF::Turtle::Terminals::PNAME_LN],
-      [:PNAME_NS,             RDF::Turtle::Terminals::PNAME_NS],
-      [:STRING_LITERAL_LONG1, RDF::Turtle::Terminals::STRING_LITERAL_LONG1],
-      [:STRING_LITERAL_LONG2, RDF::Turtle::Terminals::STRING_LITERAL_LONG2],
-      [:STRING_LITERAL1,      RDF::Turtle::Terminals::STRING_LITERAL1],
-      [:STRING_LITERAL2,      RDF::Turtle::Terminals::STRING_LITERAL2],
-    ]
-    RDF::LL1::Lexer.new(input, @terminals).each do |token|
+    RDF::LL1::Lexer.new(input, TERMINALS).each do |token|
       puts "[#{token.lineno}: #{token}]" unless options[:quiet]
+    end
+  elsif options[:parse_only]
+    P.new.parse(input, RDF::Turtle::Meta::START,
+      options[:parser_options].merge(
+        :branch => RDF::Turtle::Meta::BRANCH,
+        :follow => RDF::Turtle::Meta::FOLLOW)
+    ) do |context, *data|
+      puts('.')
     end
   elsif options[:output_format] == :ntriples || options[:quiet]
     reader_class.new(input, options[:parser_options]).each do |statement|
@@ -92,6 +129,7 @@ opts = GetoptLong.new(
   ["--input-format", GetoptLong::REQUIRED_ARGUMENT],
   ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
   ["--lex-only", GetoptLong::NO_ARGUMENT],
+  ["--parse-only", GetoptLong::NO_ARGUMENT],
   ["--progress", GetoptLong::NO_ARGUMENT],
   ["--quiet", GetoptLong::NO_ARGUMENT],
   ["--uri", GetoptLong::REQUIRED_ARGUMENT],
@@ -106,6 +144,7 @@ opts.each do |opt, arg|
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
   when '--lex-only'     then options[:lex_only] = true
+  when '--parse-only'   then options[:parse_only] = true
   when '--progress'     then parser_options[:progress] = true
   when '--quiet'        then options[:quiet] = true
   when '--uri'          then parser_options[:base_uri] = arg
