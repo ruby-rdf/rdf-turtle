@@ -200,20 +200,11 @@ module RDF::Turtle
     # @param [Hash{String => Array<Resource>}] properties A hash of Property to Resource mappings
     # @return [Array<String>}] Ordered list of properties. Uses predicate_order.
     def sort_properties(properties)
-      properties.keys.each do |k|
-        properties[k] = properties[k].sort do |a, b|
-          a_li = a.to_s.index(RDF._.to_s) == 0 ? a.to_s.match(/\d+$/).to_s.to_i : a.to_s
-          b_li = b.to_s.index(RDF._.to_s) == 0 ? b.to_s.match(/\d+$/).to_s.to_i : b.to_s
-          
-          a_li <=> b_li
-        end
-      end
-      
       # Make sorted list of properties
       prop_list = []
       
       predicate_order.each do |prop|
-        next unless properties[prop]
+        next unless properties[prop.to_s]
         prop_list << prop.to_s
       end
       
