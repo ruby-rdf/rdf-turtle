@@ -71,10 +71,12 @@ describe RDF::Turtle::Writer do
         :b rdfs:label "label" .
       )
       serialize(input, nil,
-        [%r(^\s+a :class;$),
-        %r(^\s+rdfs:label "label"),
-        %r(^:b dc:title \"title\"),
-        %r(^\s+:c :d)],
+        [
+          %r(^:b a :class;$),
+          %r(:class;\s+rdfs:label "label")m,
+          %r("label";\s+dc:title "title")m,
+          %r("title";\s+:c :d \.$)m
+        ],
         :prefixes => { "" => RDF::FOAF, :dc => "http://purl.org/dc/elements/1.1/", :rdfs => RDF::RDFS}
       )
     end
@@ -219,14 +221,14 @@ describe RDF::Turtle::Writer do
   describe "literals" do
     describe "plain" do
       it "encodes embedded \"\"\"" do
-        n3 = %(:a :b """testing string parsing in Turtle.
+        ttl = %(:a :b """testing string parsing in Turtle.
   """ .)
-        serialize(n3, nil, [/testing string parsing in Turtle.\n/])
+        serialize(ttl, nil, [/testing string parsing in Turtle.\n/])
       end
 
       it "encodes embedded \"" do
-        n3 = %(:a :b """string with " escaped quote marks""" .)
-        serialize(n3, nil, [/string with \\" escaped quote mark/])
+        ttl = %(:a :b """string with " escaped quote marks""" .)
+        serialize(ttl, nil, [/string with \\" escaped quote mark/])
       end
     end
     
@@ -342,18 +344,23 @@ describe RDF::Turtle::Writer do
     end
   end
   
-  # W3C Turtle Test suite from http://www.w3.org/2000/10/swap/test/regression.n3
+  # W3C Turtle Test suite from http://www.w3.org/TR/turtle/tests/
   describe "w3c turtle tests" do
     require 'turtle_test'
 
-    Fixtures::TurtleTest::Good.each do |t|
-      next unless t.comment
-      
-      specify "#{t.name}: #{t.comment}" do
-        @graph = parse(t.output, :base_uri => t.result, :format => :ntriples)
-        n3 = serialize(t.output, t.result, [], :format => :n3)
-        g2 = parse(n3, :base_uri => t.result)
-        g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
+    Fixtures::TurtleTest::Good.each do |m|
+      m.entries.each do |t|
+        specify "#{t.name}: #{t.comment}" do
+          # Skip tests for very long files, too long
+          if %w(test-14 test-15 test-16).include?(t.name)
+            pending("Skip long input file")
+          else
+            @graph = parse(t.output, :base_uri => t.result, :format => :ntriples)
+            ttl = serialize(t.output, t.result, [], :format => :ttl)
+            g2 = parse(ttl, :base_uri => t.result)
+            g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
+          end
+        end
       end
     end
   end

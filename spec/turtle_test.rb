@@ -2,11 +2,18 @@
 # Used for Turtle tests
 require 'spira'
 require 'rdf/turtle'
+require 'rdf/n3'    # XXX only needed because the manifest is currently returned as text/n3, not text/ttl
 require 'open-uri'
 
 module Fixtures
   module TurtleTest
     class MF < RDF::Vocabulary("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#"); end
+
+    class Manifest < Spira::Base
+      type MF.Manifest
+      property :entry_list, :predicate => MF['entries']
+      property :comment,    :predicate => RDFS.comment
+    end
 
     class Entry
       attr_accessor :debug
@@ -14,10 +21,10 @@ module Fixtures
       include Spira::Resource
       type MF["Entry"]
 
-      property :name, :predicate => MF["name"], :type => XSD.string
-      property :comment, :predicate => RDF::RDFS.comment, :type => XSD.string
-      property :result, :predicate => MF.result
-      has_many :action, :predicate => MF["action"]
+      property :name,     :predicate => MF["name"],         :type => XSD.string
+      property :comment,  :predicate => RDF::RDFS.comment,  :type => XSD.string
+      property :result,   :predicate => MF.result
+      has_many :action,   :predicate => MF["action"]
 
       def input
         Kernel.open(self.inputDocument)
@@ -29,6 +36,10 @@ module Fixtures
 
       def inputDocument
         self.class.repository.first_object(:subject => self.action.first)
+      end
+
+      def base_uri
+        inputDocument.to_s.sub('http://www.w3.org/TR/turtle/tests/', 'http://www.w3.org/2001/sw/DataAccess/df1/tests/')
       end
       
       def inspect
@@ -64,31 +75,35 @@ module Fixtures
       end
     end
 
-    class Good < Entry
+    class Good < Manifest
+      default_source :turtle
+
+      def entries
+        RDF::List.new(entry_list, self.class.repository).map { |entry| entry.as(GoodEntry) }
+      end
+    end
+    
+    class Bad < Manifest
+      default_source :turtle_bad
+
+      def entries
+        RDF::List.new(entry_list, self.class.repository).map { |entry| entry.as(BadEntry) }
+      end
+    end
+
+    class GoodEntry < Entry
       default_source :turtle
     end
-    
-    class Bad < Entry
+
+    class BadEntry < Entry
       default_source :turtle_bad
     end
-    
-    turtle = RDF::Repository.load("http://www.w3.org/2001/sw/DataAccess/df1/tests/manifest.ttl")
 
-    # Add types to entries
-    turtle.subjects(:predicate => MF["action"]).each do |s|
-      turtle << RDF::Statement.new(s, RDF.type, MF["Entry"])
-    end
-
+    # Note that the texts README says to use a different base URI
+    turtle = RDF::Repository.load("http://www.w3.org/TR/turtle/tests/manifest.ttl")
     Spira.add_repository! :turtle, turtle
     
-    turtle_bad = RDF::Repository.load("http://www.w3.org/2001/sw/DataAccess/df1/tests/manifest-bad.ttl")
-
-    # Add types to entries
-    turtle_bad.subjects(:predicate => MF["action"]).each do |s|
-      turtle_bad << RDF::Statement.new(s, RDF.type, MF["Entry"])
-    end
-
+    turtle_bad = RDF::Repository.load("http://www.w3.org/TR/turtle/tests/manifest-bad.ttl")
     Spira.add_repository! :turtle_bad, turtle_bad
-    
   end
 end
