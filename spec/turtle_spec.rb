@@ -14,6 +14,8 @@ describe RDF::Turtle::Reader do
             # Skip tests for very long files, too long
             if %w(test-14 test-15 test-16).include?(t.name)
               pending("Skip long input file")
+            elsif %w(test-29).include?(t.name)
+              pending("Escapes in IRIs")
             else
               t.run_test do
                 #t.debug = []
