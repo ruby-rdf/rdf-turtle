@@ -52,8 +52,6 @@ module RDF::Turtle
 
     # @return [Graph] Graph of statements serialized
     attr_accessor :graph
-    # @return [URI] Base URI used for relativizing URIs
-    attr_accessor :base_uri
     
     ##
     # Initializes the Turtle writer instance.
@@ -131,7 +129,6 @@ module RDF::Turtle
     # @see    #write_triple
     def write_epilogue
       @max_depth = @options[:max_depth] || 3
-      @base_uri = RDF::URI(@options[:base_uri])
 
       self.reset
 
@@ -265,7 +262,7 @@ module RDF::Turtle
     def start_document
       @started = true
       
-      @output.write("#{indent}@base <#{@base_uri}> .\n") unless @base_uri.to_s.empty?
+      @output.write("#{indent}@base <#{base_uri}> .\n") unless base_uri.to_s.empty?
       
       debug {"start_document: #{prefixes.inspect}"}
       prefixes.keys.sort_by(&:to_s).each do |prefix|
@@ -273,12 +270,12 @@ module RDF::Turtle
       end
     end
     
-    # If @base_uri is defined, use it to try to make uri relative
+    # If base_uri is defined, use it to try to make uri relative
     # @param [#to_s] uri
     # @return [String]
     def relativize(uri)
       uri = uri.to_s
-      @base_uri ? uri.sub(@base_uri.to_s, "") : uri
+      base_uri ? uri.sub(base_uri.to_s, "") : uri
     end
 
     # Defines rdf:type of subjects to be emitted at the beginning of the graph. Defaults to rdfs:Class

@@ -174,12 +174,6 @@ module RDF::Turtle
     end
 
     ##
-    # Missing in 0.3.2
-    def base_uri
-      @options[:base_uri]
-    end
-
-    ##
     # Initializes a new reader instance.
     #
     # @param  [String, #to_s]          input
