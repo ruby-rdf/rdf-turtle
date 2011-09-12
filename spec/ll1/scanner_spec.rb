@@ -1,5 +1,6 @@
 # coding: utf-8
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+$:.unshift ".."
+require 'spec_helper'
 require 'rdf/ll1/scanner'
 
 describe RDF::LL1::Scanner do

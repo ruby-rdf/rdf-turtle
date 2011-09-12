@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+$:.unshift "."
+require 'spec_helper'
 
 describe RDF::Turtle::Terminals do
   describe "when matching Unicode input" do

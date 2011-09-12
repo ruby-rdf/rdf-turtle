@@ -1,5 +1,5 @@
 $:.unshift "."
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require 'spec_helper'
 
 describe RDF::Turtle::Reader do
   # W3C Turtle Test suite from http://www.w3.org/TR/turtle/tests/

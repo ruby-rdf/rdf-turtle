@@ -1,7 +1,31 @@
 $:.unshift "."
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require 'spec_helper'
+require 'rdf/spec/writer'
 
 describe RDF::Turtle::Writer do
+  before(:each) do
+    @writer = RDF::Turtle::Writer.new(StringIO.new)
+  end
+  
+  it_should_behave_like RDF_Writer
+
+  # XXX This should work for Ruby 1.8, but don't have time to investigate further right now
+  describe ".for" do
+    formats = [
+      :turtle,
+      'etc/doap.ttl',
+      {:file_name      => 'etc/doap.ttl'},
+      {:file_extension => 'ttl'},
+      {:content_type   => 'text/turtle'},
+      {:content_type   => 'application/turtle'},
+      {:content_type   => 'application/x-turtle'},
+    ].each do |arg|
+      it "discovers with #{arg.inspect}" do
+        RDF::Writer.for(arg).should == RDF::Turtle::Writer
+      end
+    end
+  end
+
   describe "simple tests" do
     it "should use full URIs without base" do
       input = %(<http://a/b> <http://a/c> <http://a/d> .)

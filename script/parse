@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
+require 'rdf'
 require 'rdf/turtle'
 require 'rdf/ntriples'
 require 'rdf/rdfxml' rescue nil

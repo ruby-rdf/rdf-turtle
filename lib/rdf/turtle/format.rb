@@ -1,6 +1,6 @@
 module RDF::Turtle
   ##
-  # RDFa format specification.
+  # Turtle format specification.
   #
   # @example Obtaining an Turtle format class
   #     RDF::Format.for("etc/foaf.ttl")
@@ -24,6 +24,32 @@ module RDF::Turtle
 
     reader { RDF::Turtle::Reader }
     writer { RDF::Turtle::Writer }
+
+    ##
+    # Sample detection to see if it matches Turtle (or N-Triples)
+    #
+    # Use a text sample to detect the format of an input file. Sub-classes implement
+    # a matcher sufficient to detect probably format matches, including disambiguating
+    # between other similar formats.
+    #
+    # @param [String] sample Beginning several bytes (~ 1K) of input.
+    # @result [Boolean]
+    def self.detect(sample)
+      !!sample.match(%r(
+        (?:@(base|prefix|keywords)) |                                   # N3 keywords
+        ["']{3} |                                                       # STRING_LITERAL_LONG1/2
+        "[^"]*"^^ | "[^"]*"@ |                                          # Typed/Language literals
+        (?:
+          (?:\s*(?:(?:<[^>]*>) | (?:\w*:\w+) | (?:"[^"]*"))\s*[,;]) ||
+          (?:\s*(?:(?:<[^>]*>) | (?:\w*:\w+) | (?:"[^"]*"))){3}
+        )
+      )mx) && !(
+        sample.match(%r(@keywords|=>|\{)) ||                             # N3
+        sample.match(%r(<(?:\/|html|rdf))i) ||                          # HTML, RDF/XML
+        sample.match(%r(^(?:\s*<[^>]*>){4}.*\.\s*$)) ||                 # N-Quads
+        sample.match(%r("@(context|subject|iri)"))                      # JSON-LD
+      )
+    end
   end
   
   # Alias for TTL format
