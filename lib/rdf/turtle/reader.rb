@@ -200,7 +200,7 @@ module RDF::Turtle
       super do
         @options = {:anon_base => "b0", :validate => false}.merge(options)
 
-        debug("def prefix") {base_uri.inspect}
+        debug("base IRI") {base_uri.inspect}
         
         debug("validate") {validate?.inspect}
         debug("canonicalize") {canonicalize?.inspect}
