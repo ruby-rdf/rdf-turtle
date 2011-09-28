@@ -133,4 +133,4 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       http://www.w3.org/TR/2011/WD-turtle-20110809/
 [Turtle doc]:   http://rubydoc.info/github/gkellogg/rdf-turtle/master/file/README.markdown
-[Turtle EBNF]:  http://www.w3.org/2000/10/swap/grammar/turtle.bnf
+[Turtle EBNF]:  http://www.w3.org/TR/2011/WD-turtle-20110809/turtle.bnf

@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage              = "http://github.com/gkellogg/rdf-turtle"
   gem.license               = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary               = "Turtle reader/writer for Ruby."
-  gem.description           = gem.summary
+  gem.description           = %q{RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite.}
   gem.rubyforge_project     = 'rdf-turtle'
 
   gem.authors               = ['Gregg Kellogg']

@@ -12,8 +12,8 @@
   doap:homepage      <http://github.com/gkellogg/rdf-turtle> ;
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
-  doap:description   "Turtle reader/writer for Ruby."@en ;
-  doap:created       "2011-08-29" ;
+  doap:description   "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
+  doap:created       "2011-08-29"^^rdf:date;
   doap:programming-language "Ruby" ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
@@ -21,8 +21,8 @@
   doap:mailing-list  <http://lists.w3.org/Archives/Public/public-rdf-ruby/> ;
   doap:bug-database  <http://github.com/gkellogg/rdf-turtle/issues> ;
   doap:blog          <http://greggkellogg.net/> ;
-  doap:developer     <http://greggkellogg.net/foaf.rdf#me> ;
-  doap:maintainer    <http://greggkellogg.net/foaf.rdf#me> ;
-  doap:documenter    <http://greggkellogg.net/foaf.rdf#me> ;
-  foaf:maker         <http://greggkellogg.net/foaf.rdf#me> ;
-  dc:creator         <http://greggkellogg.net/foaf.rdf#me> .
+  doap:developer     <http://greggkellogg.net/foaf#me> ;
+  doap:maintainer    <http://greggkellogg.net/foaf#me> ;
+  doap:documenter    <http://greggkellogg.net/foaf#me> ;
+  foaf:maker         <http://greggkellogg.net/foaf#me> ;
+  dc:creator         <http://greggkellogg.net/foaf#me> .
