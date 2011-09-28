@@ -2,6 +2,12 @@
 # gramLL1 --- generator of parser tables for RDF::Turtle::Reader
 #     Based on:
 #        http://www.w3.org/2000/10/swap/grammar/gramLL1.py
+#
+# Takes a Notaion3 file generated from original grammar with EBNF rules with
+# reasoning to infer first/follow relationships between rules and generates
+# Branch, First and Follow tables used directly by the LL1 parser.
+#
+# @author Gregg Kellogg
 require 'rubygems'
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
 require 'rdf/n3'
