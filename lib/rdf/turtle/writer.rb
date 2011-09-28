@@ -52,6 +52,8 @@ module RDF::Turtle
 
     # @return [Graph] Graph of statements serialized
     attr_accessor :graph
+    # @return [URI] Base URI used for relativizing URIs
+    attr_accessor :base_uri
     
     ##
     # Initializes the Turtle writer instance.
@@ -129,6 +131,7 @@ module RDF::Turtle
     # @see    #write_triple
     def write_epilogue
       @max_depth = @options[:max_depth] || 3
+      @base_uri = RDF::URI(@options[:base_uri])
 
       self.reset
 
