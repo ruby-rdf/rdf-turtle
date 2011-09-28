@@ -33,7 +33,7 @@ module RDF::Turtle
     # between other similar formats.
     #
     # @param [String] sample Beginning several bytes (~ 1K) of input.
-    # @result [Boolean]
+    # @return [Boolean]
     def self.detect(sample)
       !!sample.match(%r(
         (?:@(base|prefix|keywords)) |                                   # N3 keywords
