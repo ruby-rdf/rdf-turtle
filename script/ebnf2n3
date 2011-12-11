@@ -1,0 +1,191 @@
+#!/usr/bin/env ruby
+# ebnf2n3 --- Generate reasoned Notation3 representation of EBNF input file
+# to be used in extracting parser branch tables (see gramLL1).
+#
+#     Based on:
+#        http://www.w3.org/2000/10/swap/grammar/ebnf2turtle.py
+#        http://www.w3.org/2000/10/swap/grammar/ebnf2bnf.n3
+#
+# @author Gregg Kellogg
+
+class EBNF
+  def initialize(input, prefix, ns, lang)
+    @token = @started = false
+    
+    scanner = StringScanner.new(input.read)
+
+    eachRule(scanner) do |r|
+      if r == '@terminals'
+        token = true
+      else
+        num, sym, expr = ruleParts(r)
+        unless started
+          startTurtle(prefix, ns, lang, sym)
+          started = true
+        end
+        
+        # all caps symbols are tokens
+        token = !!sym =~ /^[A-Z_]+$/
+        asTurtle(num, sym, expr, token, r)
+    end
+  end
+  
+  ##
+  # Iterate over rule strings.
+  # a line that starts with [ and a digit or @ starts a new rule
+  #
+  # @param [StringScanner] scanner
+  def eachRule(scanner)
+    r = ''
+    until scanner.eos?
+      case
+      when scanner.scan(%r(\s*)m)
+        # Eat whitespace
+      when scanner.scan(%r(/\*.*\*/)m)
+        # Eat comments
+      when scanner.scan(%r(^@termains\s*$))
+        yield '@terminals'
+      when scanner.scan(%r(^\[\d+\]))
+        # Found rule start, if we've already collected a rule, yield it
+        yield r unless r.empty?
+      else
+        # Collect until end of line, or start of comment
+        r += scanner.scan_until(%r((?:/\*)|[\r\n]))
+      end
+    end
+    yield r unless r.empty?
+  end
+  
+  ##
+  # Parse a rule into a rule number, a symbol and an expression
+  #
+  # @param [String] rule
+  def ruleParts(rule)
+    num_sym, expr = rule.split('::=').map(&:strip)
+    num, sym = num_sym.split(']').map(&:strip)
+    num = num[1,-1]
+    [num, sym, ebnf(expr).first]
+  end
+  
+  ##
+  # Parse a string into an expression tree and a remaining string
+  #
+  # @example
+  #     >>> ebnf("a b c")
+  #     ((',', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     
+  #     >>> ebnf("a? b+ c*")
+  #     ((',', [('?', ('id', 'a')), ('+', ('id', 'b')), ('*', ('id', 'c'))]), '')
+  #     
+  #     >>> ebnf(" | x xlist")
+  #     (('|', [(',', []), (',', [('id', 'x'), ('id', 'xlist')])]), '')
+  #     
+  #     >>> ebnf("a | (b - c)")
+  #     (('|', [('id', 'a'), ('-', [('id', 'b'), ('id', 'c')])]), '')
+  #     
+  #     >>> ebnf("a b | c d")
+  #     (('|', [(',', [('id', 'a'), ('id', 'b')]), (',', [('id', 'c'), ('id', 'd')])]), '')
+  #     
+  #     >>> ebnf("a | b | c")
+  #     (('|', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     
+  #     >>> ebnf("a) b c")
+  #     (('id', 'a'), ' b c')
+  #     
+  #     >>> ebnf("BaseDecl? PrefixDecl*")
+  #     ((',', [('?', ('id', 'BaseDecl')), ('*', ('id', 'PrefixDecl'))]), '')
+  #     
+  #     >>> ebnf("NCCHAR1 | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]")
+  #     (('|', [('id', 'NCCHAR1'), ("'", '-'), ('[', '0-9'), ('#', '#x00B7'), ('[', '#x0300-#x036F'), ('[', '#x203F-#x2040')]), '')
+  #     
+  # @param [String] s
+  def ebnf(s)
+    
+    e, s = alt(s)
+    if s
+      t, ss = token(s)
+      return e, ss if t[0,1] == ')'
+    end
+    [e, s]
+  end
+  
+  ##
+  # Parse alt
+  #     >>> alt("a | b | c")
+  #     (('|', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  def alt(s)
+    args = []
+    while s
+      e, s = seq(s)
+      unless e.empty?
+        break unless args.empty?
+        e = [',', []] # empty sequence
+      args << e
+      unless s.empty?
+        t, ss = token(s)
+        break unless t[0] == '|'
+        s = ss
+    end
+    args.length > 1 ? [['|', args], s] : [e, s]
+  end
+  
+  ##
+  # parse seq
+  #
+  #     >>> seq("a b c")
+  #     ((',', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     
+  #     >>> seq("a b? c")
+  #     ((',', [('id', 'a'), ('?', ('id', 'b')), ('id', 'c')]), '')
+  def seq(s)
+  end
+  
+  ##
+  # parse diff
+  # 
+  #     >>> diff("a - b")
+  #     (('-', [('id', 'a'), ('id', 'b')]), '')
+  def diff(s)
+  end
+  
+  ##
+  # parse postfix
+  # 
+  #     >>> postfix("a b c")
+  #     (('id', 'a'), ' b c')
+  #     
+  #     >>> postfix("a? b c")
+  #     (('?', ('id', 'a')), ' b c')
+  def postfix(s)
+  end
+  
+  ##
+  # parse primary
+  # 
+  #     >>> primary("a b c")
+  #     (('id', 'a'), ' b c')
+  def primary(s)
+  end
+  
+  ##
+  # parse one token; return the token and the remaining string
+  # 
+  # A token is represented as a tuple whose 1st item gives the type;
+  # some types have additional info in the tuple.
+  # 
+  #     >>> token("'abc' def")
+  #     (("'", 'abc'), ' def')
+  #     
+  #     >>> token("[0-9]")
+  #     (('[', '0-9'), '')
+  #     >>> token("#x00B7")
+  #     (('#', '#x00B7'), '')
+  #     >>> token ("[#x0300-#x036F]")
+  #     (('[', '#x0300-#x036F'), '')
+  #     >>> token("[^<>'{}|^`]-[#x00-#x20]")
+  #     (('[', "^<>'{}|^`"), '-[#x00-#x20]')
+  def token(s)
+  end
+  
+  
+end
