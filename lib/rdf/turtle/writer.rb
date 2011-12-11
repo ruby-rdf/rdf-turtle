@@ -406,7 +406,7 @@ module RDF::Turtle
     end
 
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
-    def is_valid_list(l)
+    def is_valid_list?(l)
       #debug {"is_valid_list: #{l.inspect}"}
       return RDF::List.new(l, @graph).valid?
     end
@@ -425,7 +425,7 @@ module RDF::Turtle
     end
     
     def p_list(node, position)
-      return false if !is_valid_list(node)
+      return false if !is_valid_list?(node)
       #debug {"p_list: #{node.inspect}, #{position}"}
 
       @output.write(position == :subject ? "(" : " (")
@@ -465,7 +465,7 @@ module RDF::Turtle
       debug do
         "path: #{node.inspect}, " +
         "pos: #{position}, " +
-        "[]: #{is_valid_list(node)}, " +
+        "[]: #{is_valid_list?(node)}, " +
         "p2?: #{p_squared?(node, position)}, " +
         "rc: #{ref_count(node)}"
       end
@@ -515,7 +515,7 @@ module RDF::Turtle
     end
     
     def s_squared?(subject)
-      ref_count(subject) == 0 && subject.is_a?(RDF::Node) && !is_valid_list(subject)
+      ref_count(subject) == 0 && subject.is_a?(RDF::Node) && !is_valid_list?(subject)
     end
     
     def s_squared(subject)
