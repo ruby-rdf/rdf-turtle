@@ -96,7 +96,7 @@ module RDF::Turtle
       next unless phase == :finish
       prefix = current[:prefix]
       iri = current[:resource]
-      callback.call(:trace, "prefixID", "Defined prefix #{prefix.inspect} mapping to #{iri.inspect}")
+      callback.call(:trace, "prefixID", lambda {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"})
       reader.prefix(prefix, iri)
     end
     
@@ -104,7 +104,7 @@ module RDF::Turtle
     production(:base) do |reader, phase, input, current, callback|
       next unless phase == :finish
       iri = current[:resource]
-      callback.call(:trace, "base", "Defined base as #{iri}")
+      callback.call(:trace, "base", lambda {"Defined base as #{iri}"})
       reader.options[:base_uri] = iri
     end
     
@@ -127,7 +127,7 @@ module RDF::Turtle
         # Part of an rdf:List collection
         input[:object_list] << current[:resource]
       else
-        callback.call(:trace, "object", "current: #{current.inspect}")
+        callback.call(:trace, "object", lambda {"current: #{current.inspect}"})
         callback.call(:statement, "object", input[:subject], input[:predicate], current[:resource])
       end
     end
@@ -354,6 +354,7 @@ module RDF::Turtle
     def debug(node, message = "", options = {})
       return unless @options[:debug] || RDF::Turtle.debug?
       depth = options[:depth] || self.depth
+      message = message.call if message.is_a?(Proc)
       message += yield if block_given?
       str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
       @options[:debug] << str if @options[:debug].is_a?(Array)
