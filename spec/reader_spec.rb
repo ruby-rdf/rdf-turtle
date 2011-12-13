@@ -95,7 +95,7 @@ describe "RDF::Turtle::Reader" do
     context "simple triple" do
       before(:each) do
         ttl_string = %(<http://example.org/> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .)
-        @graph = parse(ttl_string)
+        @graph = parse(ttl_string, :validate => true)
         @statement = @graph.statements.first
       end
       
@@ -226,7 +226,7 @@ describe "RDF::Turtle::Reader" do
 
     it "raises error with anonymous predicate" do
       lambda {
-        parse("<http://example.org/resource2> _:anon <http://example.org/object> .")
+        parse("<http://example.org/resource2> _:anon <http://example.org/object> .", :validate => true)
       }.should raise_error RDF::ReaderError
     end
 
@@ -376,7 +376,7 @@ describe "RDF::Turtle::Reader" do
     describe "@prefix" do
       it "no @prefix" do
         ttl = %(<a> a :a .)
-        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
+        lambda {parse(ttl, :validate => true)}.should raise_error(RDF::ReaderError)
       end
       
       it "empty relative-IRI" do
@@ -403,7 +403,7 @@ describe "RDF::Turtle::Reader" do
         _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <p> .
         _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <q> .
         )
-        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
+        lambda {parse(ttl, :validate => true)}.should raise_error(RDF::ReaderError)
         parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
 
@@ -519,7 +519,7 @@ describe "RDF::Turtle::Reader" do
       
       it "raises error for [] as predicate" do
         ttl = %(@prefix a: <http://foo/a#> . a:s [] a:o .)
-        lambda {parse(ttl)}.should raise_error RDF::ReaderError
+        lambda {parse(ttl, :validate => true)}.should raise_error RDF::ReaderError
       end
       
       it "should not create BNode for [] as predicate" do
@@ -675,7 +675,7 @@ describe "RDF::Turtle::Reader" do
           _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "3" .
           _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         )
-        lambda {parse(ttl)}.should raise_error(RDF::ReaderError)
+        lambda {parse(ttl, :validate => true)}.should raise_error(RDF::ReaderError)
         parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
       
@@ -750,6 +750,62 @@ describe "RDF::Turtle::Reader" do
     end
   end
   
+  describe "recovery" do
+    {
+      #"malformed bnode subject" => [
+      #  %q(_:.1 <a> <b> . _:bn <a> <c> .),
+      #  %q(_:bn <a> <c> .)
+      #],
+      #"malformed bnode object(1)" => [
+      #  %q(<a> <b> _:.1 . <a> <c> <d> .),
+      #  %q(<a> <c> <d> .)
+      #],
+      "malformed bnode object(2)" => [
+        %q(<a> <b> _:-a; <c> <d> .),
+        %q(<a> <c> <d> .)
+      ],
+      "malformed bnode object(3)" => [
+        %q(<a> <b> _:-a, <d> .),
+        %q(<a> <b> <d> .)
+      ],
+      #"malformed uri subject" => [
+      #  %q(<with space> <a> <b> . <c> <d> <e> .),
+      #  %q(<c> <d> <e> .)
+      #],
+      #"malformed uri predicate(1)" => [
+      #  %q(<a> <with space> <b> . <c> <d> <e> .),
+      #  %q(<c> <d> <e> .)
+      #],
+      "malformed uri predicate(2)" => [
+        %q(<a> <with space> <b>; <d> <e> .),
+        %q(<d> <d> <e> .)
+      ],
+      #"malformed uri object(1)" => [
+      #  %q(<a> <b> <with space> . <c> <d> <e> .),
+      #  %q(<c> <d> <e> .)
+      #],
+      "malformed uri object(2)" => [
+        %q(<a> <b> <with space>; <d> <e> .),
+        %q(<d> <d> <e> .)
+      ],
+      "malformed uri object(3)" => [
+        %q(<a> <b> <with space>, <e> .),
+        %q(<a> <b> <e> .)
+      ],
+    }.each do |test, (input, expected)|
+      context test do
+        it "raises an error if valiating" do
+          lambda {
+            parse(input, :validate => true)
+          }.should raise_error
+        end
+        
+        it "continues after an error", :pending => true do
+          parse(input, :validate => false).should be_equivalent_graph(expected, :trace => @debug)
+        end
+      end
+    end
+  end
   
   describe "spec examples" do
     {
@@ -856,7 +912,7 @@ The second line
     @debug = []
     options = {
       :debug => @debug,
-      :validate => true,
+      :validate => false,
       :canonicalize => false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new

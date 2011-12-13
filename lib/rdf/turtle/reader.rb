@@ -228,7 +228,10 @@ module RDF::Turtle
     def each_statement(&block)
       @callback = block
 
-      parse(@input, START.to_sym, @options.merge(:branch => BRANCH, :follow => FOLLOW)) do |context, *data|
+      parse(@input, START.to_sym, @options.merge(:branch => BRANCH,
+                                                 :first => FIRST,
+                                                 :follow => FOLLOW)
+      ) do |context, *data|
         case context
         when :statement
           add_triple(*data)
@@ -237,7 +240,8 @@ module RDF::Turtle
         end
       end
     rescue RDF::LL1::Parser::Error => e
-      error("each_statement", e.message, :backtrace => e.backtrace)
+      debug("Parsing completed with errors:\n\t#{e.message}")
+      raise RDF::ReaderError, e.message if validate?
     end
     
     ##
@@ -332,18 +336,6 @@ module RDF::Turtle
       return RDF::Node.new unless value
       @bnode_cache ||= {}
       @bnode_cache[value.to_s] ||= RDF::Node.new(value)
-    end
-
-    # @param [String] str Error string
-    # @param [Hash] options
-    # @option options [URI, #to_s] :production
-    # @option options [Token] :token
-    def error(node, message, options = {})
-      if !validate? && !options[:fatal]
-        debug(node, message, options)
-      else
-        raise RDF::ReaderError, message, options[:backtrace]
-      end
     end
 
     ##

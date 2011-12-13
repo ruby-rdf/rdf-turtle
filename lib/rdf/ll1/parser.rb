@@ -136,6 +136,8 @@ module RDF::LL1
     # @param  [Hash{Symbol => Object}] options
     # @option options [Hash{Symbol,String => Hash{Symbol,String => Array<Symbol,String>}}] :branch
     #   LL1 branch table.
+    # @option options [HHash{Symbol,String => Array<Symbol,String>}] :first ({})
+    #   Lists valid terminals that can precede each production (for error recovery).
     # @option options [HHash{Symbol,String => Array<Symbol,String>}] :follow ({})
     #   Lists valid terminals that can follow each production (for error recovery).
     # @option options [Boolean]  :validate     (false)
@@ -156,11 +158,13 @@ module RDF::LL1
     def parse(input = nil, prod = nil, options = {}, &block)
       @options = options.dup
       @branch  = options[:branch]
+      @first  = options[:first] ||= {}
       @follow  = options[:follow] ||= {}
       @lexer   = input.is_a?(Lexer) ? input : Lexer.new(input, self.class.patterns, @options.merge(:unescape_terms => self.class.unescape_terms))
       @productions = []
       @parse_callback = block
       @recovering = false
+      @error_log = []
       terminals = self.class.patterns.map(&:first)  # Get defined terminals to help with branching
 
       # Unrecoverable errors
@@ -175,57 +179,49 @@ module RDF::LL1
         pushed = false
         if todo_stack.last[:terms].nil?
           todo_stack.last[:terms] = []
-          begin
-            token = @lexer.first
-          rescue RDF::LL1::Lexer::Error => e
-            # Recover from lexer error
-            @lineno = e.lineno
-            error("parse(production)", "With input '#{e.input}': #{e.message}",
-                  :production => @productions.last)
+          cur_prod = todo_stack.last[:prod]
 
-            # Retrieve next valid token
-            token = @lexer.recover
-          end
-          @lineno = token.lineno if token
+          # Get this first valid token appropriate for the stacked productions,
+          # skipping invalid tokens until either a valid token is found (from @first),
+          # or a token appearing in @follow appears.
+          token = skip_until_valid(todo_stack)
+          
+          # At this point, token is either nil, in the first set of the production,
+          # or in the follow set of this production or any previous production
           debug("parse(production)") do
-            "#{token ? token.representation.inspect : 'nil'}, " + 
-            "prod #{todo_stack.last[:prod].inspect}, " + 
+            "token #{token ? token.representation.inspect : 'nil'}, " + 
+            "prod #{cur_prod.inspect}, " + 
             "depth #{depth}"
           end
           
-          # Got an opened production
-          cur_prod = todo_stack.last[:prod]
           # Got an opened production
           onStart(cur_prod)
           break if token.nil?
           
           if prod_branch = @branch[cur_prod]
+            @recovering = false
             sequence = prod_branch[token.representation]
             debug("parse(production)") do
-              "#{token.representation.inspect} " +
+              "token #{token.representation.inspect} " +
               "prod #{cur_prod.inspect}, " + 
               "prod_branch #{prod_branch.keys.inspect}, " +
               "sequence #{sequence.inspect}"
             end
+
             if sequence.nil?
               if prod_branch.has_key?(:"ebnf:empty")
                 debug("parse(production)") {"empty sequence for ebnf:empty"}
               else
-                expected = prod_branch.keys.map {|v| v.inspect}.join(", ")
-                error("parse", "expected one of #{expected}",
-                  :production => cur_prod, :token => token)
-
-                # Skip input until we find something that can follow the current production
-                skip_until_follow(todo_stack)
-                todo_stack.last[:terms] = []
+                # If there is no sequence for this production, we're
+                # in error recovery, and _token_ has been advanced to
+                # the point where it can reasonably follow this production
               end
             end
-            @recovering = false
             todo_stack.last[:terms] += sequence if sequence
           else
-            error("parse", "No branches found for #{cur_prod.inspect}",
+            # Is this a fatal error?
+            error("parse(fatal?)", "No branches found for #{cur_prod.inspect}",
               :production => cur_prod, :token => token)
-            todo_stack.last[:terms] = []
           end
         end
         
@@ -234,16 +230,15 @@ module RDF::LL1
           begin
             # Get the next term in this sequence
             term = todo_stack.last[:terms].shift
+            debug("parse(token)") {"accept #{term.inspect}"}
             if token = accept(term)
-              debug("parse(token)") {"#{token.inspect}, term #{term.inspect}"}
-              @lineno = token.lineno if token
+              @recovering = false
+              debug("parse(token)") {"token #{token.inspect}, term #{term.inspect}"}
               onToken(term, token)
             elsif terminals.include?(term)
-              error("parse", "#{term.inspect} expected",
-                :production => todo_stack.last[:prod], :token => @lexer.first)
-            
-              # Recover until we find something that can follow this term
-              skip_until_follow(todo_stack)
+              # If term is a terminal, then it is an error of token does not
+              # match it
+              skip_until_valid(todo_stack)
             else
               # If it's not a string (a symbol), it is a non-terminal and we push the new state
               todo_stack << {:prod => term, :terms => nil}
@@ -251,11 +246,6 @@ module RDF::LL1
               pushed = true
               break
             end
-          rescue RDF::LL1::Lexer::Error => e
-            # Skip forward for acceptable lexer input
-            error("parse", "#{term.inspect} expected: #{e.message}",
-              :production => todo_stack.last[:prod])
-            @lexer.recover
           end
         end
         
@@ -282,11 +272,11 @@ module RDF::LL1
         todo_stack.pop
         onFinish
       end
-
-    rescue RDF::LL1::Lexer::Error => e
-      @lineno = e.lineno
-      error("parse", "With input '#{e.input}': #{e.message}",
-            :production => @productions.last)
+      
+      # When all is said and done, raise the error log
+      unless @error_log.empty?
+        raise Error, @error_log.join("\n\t") 
+      end
     end
 
     def depth; (@productions || []).length; end
@@ -341,21 +331,55 @@ module RDF::LL1
       end
     end
     
-    # Skip throught the input stream until something is found that follows the last production with a list of follows
-    def skip_until_follow(todo_stack)
+    # Skip through the input stream until something is found that
+    # is either valid based on the content of the production stack,
+    # or can follow a production in the stack.
+    #
+    # @return [Token]
+    def skip_until_valid(todo_stack)
+      cur_prod = todo_stack.last[:prod]
+      token = get_token
+      first = @first[cur_prod] || []
+      
+      # If this token can be used by the top production, return it
+      # Otherwise, if the banch table allows empty, also return the token
+      return token if !@recovering && (
+        (@branch[cur_prod] && @branch[cur_prod].has_key?(:"ebnf:empty")) ||
+        first.any? {|t| token === t})
+      
+      # Otherwise, it's an error condition, and skip either until
+      # we find a valid token for this production, or until we find
+      # something that can follow this production
+      expected = first.map {|v| v.inspect}.join(", ")
+      error("skip_until_valid", "expected one of #{expected}",
+        :production => cur_prod, :token => token)
+
       debug("recovery", "stack follows:")
-      todo_stack.each do |todo|
+      todo_stack.reverse.each do |todo|
         debug("recovery") {"  #{todo[:prod]}: #{@follow[todo[:prod]].inspect}"}
       end
+
+      # Find all follows to the top of the stack
       follows = todo_stack.inject([]) do |follow, todo|
         prod = todo[:prod]
         follow += @follow[prod] || []
       end.uniq
-      progress("recovery") {"first #{@lexer.first.inspect}, follows: #{follows.inspect}"}
-      while (token = @lexer.first) && follows.none? {|t| token === t}
+      debug("recovery") {"follows: #{follows.inspect}"}
+
+      # Skip tokens until one is found in first or follows
+      while (token = get_token) && (first + follows).none? {|t| token === t}
         skipped = @lexer.shift
         progress("recovery") {"skip #{skipped.inspect}"}
       end
+      debug("recovery") {"found #{token.inspect}"}
+      
+      # If the token is a first, just return it. Otherwise, it is a follow
+      # and we need to skip to the end of the production
+      unless first.any? {|t| token == t} || todo_stack.last[:terms].empty?
+        debug("recovery") {"token in follows, skip past #{todo_stack.last[:terms].inspect}"}
+        todo_stack.last[:terms] = [] 
+      end
+      token
     end
 
     # @param [String] str Error string
@@ -363,16 +387,34 @@ module RDF::LL1
     # @option options [URI, #to_s] :production
     # @option options [Token] :token
     def error(node, message, options = {})
-      return if @recovering
-      @recovering = true
       message += ", found #{options[:token].representation.inspect}" if options[:token]
       message += " at line #{@lineno}" if @lineno
-      message += ", production = #{options[:production].inspect}" if options[:production] && options[:debug]
-      if !@options[:validate] && !options[:fatal]
-        debug(node, message, options)
-      else
-        raise Error, message
+      message += ", production = #{options[:production].inspect}" if options[:production] && @options[:debug]
+      @error_log << message unless @recovering
+      @recovering = true
+      debug(node, message, options)
+    end
+
+    ##
+    # Return the next token, entering error recovery if the token is invalid
+    #
+    # @return [Token]
+    def get_token
+      token = begin
+        @lexer.first
+      rescue RDF::LL1::Lexer::Error => e
+        # Recover from lexer error
+        @lineno = e.lineno
+        error("get_token", "With input '#{e.input}': #{e.message}",
+              :production => @productions.last)
+
+        # Retrieve next valid token
+        t = @lexer.recover
+        debug("get_token") {"skipped to #{t.inspect}"}
+        t
       end
+      @lineno = token.lineno if token
+      token
     end
 
     ##
@@ -384,12 +426,15 @@ module RDF::LL1
     #   Recursion depth for indenting output
     # @yieldreturn [String] added to message
     def progress(node, message = "", options = {})
-      return debug(node, message, options) if @options[:debug]
-      return unless @options[:progress]
+      return unless @options[:progress] || @options[:debug]
       depth = options[:depth] || self.depth
-      message += yield if block_given?
-      str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
-      $stderr.puts("[#{@lineno}]#{' ' * depth}#{node}: #{message}")
+      message += yield.to_s if block_given?
+      if @options[:debug]
+        return debug(node, message, options)
+      else
+        str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
+        $stderr.puts("[#{@lineno}]#{' ' * depth}#{node}: #{message}")
+      end
     end
 
     ##
@@ -416,11 +461,14 @@ module RDF::LL1
     end
 
     ##
+    # Accept the first token in the input stream if it matches
+    # _type\_or\_value_. Return nil otherwise.
+    #
     # @param  [Symbol, String] type_or_value
     # @return [Token]
     def accept(type_or_value)
-      if (token = @lexer.first) && token === type_or_value
-        debug("accept") {"#{token.inspect} === #{type_or_value}.inspect"}
+      if (token = get_token) && token === type_or_value
+        debug("accept") {"#{token.inspect} === #{type_or_value.inspect}"}
         @lexer.shift
       end
     end
