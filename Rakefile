@@ -45,6 +45,9 @@ TTL_DIR = File.expand_path(File.dirname(__FILE__))
 
 # Use SWAP tools expected to be in ../swap
 # Download from http://www.w3.org/2000/10/swap/
+desc 'Build first, follow and branch tables'
+task :meta => "lib/rdf/turtle/meta.rb"
+
 file "lib/rdf/turtle/meta.rb" => ["etc/turtle-ll1.n3", "script/gramLL1"] do |t|
   sh %{
     script/gramLL1 \

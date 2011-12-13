@@ -305,8 +305,8 @@ g.outputTable(output, 'TERMINALS', g.terminals, 1)
 if options[:debug]
   g.outputTable(output, 'SEQ', g.seq, 1)
   g.outputTable(output, 'ALT', g.alt, 1)
-  g.outputTable(output, 'FIRST', g.first, 1)
 end
+g.outputTable(output, 'FIRST', g.first, 1)
 g.outputTable(output, 'FOLLOW', g.follow, 1)
 unless output == STDOUT
   output.puts "end"
