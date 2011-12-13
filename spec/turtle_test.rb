@@ -63,8 +63,6 @@ module Fixtures
         case self.compare
         when :none
           # Don't check output, just parse to graph
-        when :array
-          @parser.graph.should be_equivalent_graph(self.output, self)
         else
           #puts "parse #{self.outputDocument} as #{RDF::Reader.for(self.outputDocument)}"
           format = detect_format(self.output)
