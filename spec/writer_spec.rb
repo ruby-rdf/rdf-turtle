@@ -68,22 +68,6 @@ describe RDF::Turtle::Writer do
       )
     end
     
-    it "should not use pname with illegal local part" do
-      input = %(
-        @prefix db: <http://dbpedia.org/resource/> .
-        @prefix dbo: <http://dbpedia.org/ontology/> .
-        db:Michael_Jackson dbo:artistOf <http://dbpedia.org/resource/%28I_Can%27t_Make_It%29_Another_Day> .
-      )
-
-      serialize(input, nil,
-        [%r(^@prefix db: <http://dbpedia.org/resource/> \.$),
-        %r(^db:Michael_Jackson dbo:artistOf <http://dbpedia.org/resource/%28I_Can%27t_Make_It%29_Another_Day> \.$)],
-        :prefixes => {
-          "db" => RDF::URI("http://dbpedia.org/resource/"),
-          "dbo" => RDF::URI("http://dbpedia.org/ontology/")}
-      )
-    end
-
     it "should order properties" do
       input = %(
         @prefix : <http://xmlns.com/foaf/0.1/> .

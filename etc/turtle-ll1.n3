@@ -575,6 +575,21 @@ i.e. rewrite ?, +, * operators using alt and seq
                      a re:Regex;
                      re:matches "[0-9]" ] ] ) .
     
+    :HEX     a re:Regex;
+         rdf:value "162s";
+         rdfs:comment "[162s] HEX ::= [0-9] | [A-F] | [a-f]";
+         rdfs:label "HEX";
+         re:alt  (
+         [
+                 a re:Regex;
+                 re:matches "[0-9]" ]
+         [
+                 a re:Regex;
+                 re:matches "[A-F]" ]
+         [
+                 a re:Regex;
+                 re:matches "[a-f]" ] ) .
+    
     :INTEGER     a re:Regex;
          rdf:value "77s";
          rdfs:comment "[77s] INTEGER ::= [0-9]+";
@@ -670,7 +685,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :IRI_REF     a re:Regex;
          rdf:value "70s";
-         rdfs:comment "[70s] IRI_REF ::= \"<\" ( [^<>\\\"{}|^`\\\\] - [#0000- ] | UCHAR )* \">\"";
+         rdfs:comment "[70s] IRI_REF ::= \"<\" ( [^<>\\\"{}|^`\\\\] - [#x00-#x20] | UCHAR )* \">\"";
          rdfs:label "IRI_REF";
          g:follow "(",
                 ",",
@@ -711,7 +726,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                                      re:matches "[^<>\\\"{}|^`\\\\]" ]
                              [
                                      a re:Regex;
-                                     re:matches "[#0000- ]" ] ) ]
+                                     re:matches "[ - ]" ] ) ]
                     :UCHAR ) ] ]
         ">" ) .
     
@@ -963,6 +978,23 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :STRING_LITERAL_LONG2;
          g:nonTerminal :language .
     
+    :PERCENT     a re:Regex;
+         rdf:value "161s";
+         rdfs:comment "[161s] PERCENT ::= '%' HEX HEX";
+         rdfs:label "PERCENT";
+         re:seq  (
+        "%"
+        :HEX
+        :HEX ) .
+    
+    :PLX     a re:Regex;
+         rdf:value "160s";
+         rdfs:comment "[160s] PLX ::= PERCENT | PN_LOCAL_ESC";
+         rdfs:label "PLX";
+         re:alt  (
+        :PERCENT
+        :PN_LOCAL_ESC ) .
+    
     :PNAME_LN     a re:Regex;
          rdf:value "72s";
          rdfs:comment "[72s] PNAME_LN ::= PNAME_NS PN_LOCAL";
@@ -1108,7 +1140,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PN_LOCAL     a re:Regex;
          rdf:value "100s";
-         rdfs:comment """[100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] ) ( ( PN_CHARS | "." )* PN_CHARS )?""";
+         rdfs:comment "[100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] | PLX ) ( ( PN_CHARS | '.' | PLX )*  ( PN_CHARS | PLX ) ) ?";
          rdfs:label "PN_LOCAL";
          re:seq  (
          [
@@ -1117,7 +1149,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :PN_CHARS_U
                  [
                          a re:Regex;
-                         re:matches "[0-9]" ] ) ]
+                         re:matches "[0-9]" ]
+                :PLX ) ]
          [
                  a re:Regex;
                  re:opt  [
@@ -1129,8 +1162,44 @@ i.e. rewrite ?, +, * operators using alt and seq
                                  a re:Regex;
                                  re:alt  (
                                 :PN_CHARS
-                                "." ) ] ]
-                    :PN_CHARS ) ] ] ) .
+                                "."
+                                :PLX ) ] ]
+                     [
+                             a re:Regex;
+                             re:alt  (
+                            :PN_CHARS
+                            :PLX ) ] ) ] ] ) .
+    
+    :PN_LOCAL_ESC     a re:Regex;
+         rdf:value "163s";
+         rdfs:comment """[163s] PN_LOCAL_ESC ::= '\\\\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | ':' | '/' | '?' | '#' | '@' | '%' )""";
+         rdfs:label "PN_LOCAL_ESC";
+         re:seq  (
+        "\\\\"
+         [
+                 a re:Regex;
+                 re:alt  (
+                "_"
+                "~"
+                "."
+                "-"
+                "!"
+                "$"
+                "&"
+                "'"
+                "("
+                ")"
+                "*"
+                "+"
+                ","
+                ";"
+                "="
+                ":"
+                "/"
+                "?"
+                "#"
+                "@"
+                "%" ) ] ) .
     
     :PN_PREFIX     a re:Regex;
          rdf:value "99s";
@@ -1349,12 +1418,31 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :LANGTAG;
          g:nonTerminal :language .
     
-    :UCHAR     a g:Production;
+    :UCHAR     a re:Regex;
          rdf:value "19";
-         rdfs:comment "[19] UCHAR ::= \"\\\\uffff\"";
+         rdfs:comment """[19] UCHAR ::= ( "\\\\u" HEX HEX HEX HEX ) | ( "\\\\U" HEX HEX HEX HEX HEX HEX HEX HEX )""";
          rdfs:label "UCHAR";
-         g:seq  (
-        "\\\\uffff" ) .
+         re:alt  (
+         [
+                 a re:Regex;
+                 re:seq  (
+                "\\\\u"
+                :HEX
+                :HEX
+                :HEX
+                :HEX ) ]
+         [
+                 a re:Regex;
+                 re:seq  (
+                "\\\\U"
+                :HEX
+                :HEX
+                :HEX
+                :HEX
+                :HEX
+                :HEX
+                :HEX
+                :HEX ) ] ) .
     
     :WS     a re:Regex;
          rdf:value "93s";

@@ -2,7 +2,7 @@ $:.unshift "."
 require 'spec_helper'
 
 describe RDF::Turtle::Reader do
-  # W3C Turtle Test suite from http://www.w3.org/TR/turtle/tests/
+  # W3C Turtle Test suite from http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/tests/
   describe "w3c turtle tests" do
     require 'turtle_test'
 

@@ -53,29 +53,31 @@ module RDF::Turtle
     UCHAR                = RDF::LL1::Lexer::UCHAR
 
     WS                   = / |\t|\r|\n  /                                         # [93s]
+    PERCENT              = /%[0-9A-Fa-f]{2}/                                      # [162s]
+    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/                 # [163s]                                      # [163s]
+    PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/                           # [160s]
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}|#{UCHAR}/                     # [95s]
     PN_CHARS_U           = /_|#{PN_CHARS_BASE}/                                   # [96s]
     PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/                    # [98s]
     PN_CHARS_BODY        = /(?:(?:\.|#{PN_CHARS})*#{PN_CHARS})?/
-    PN_LOCAL             = /(?:[0-9]|#{PN_CHARS_U})#{PN_CHARS_BODY}/              # [100s]
+    PN_LOCAL_BODY        = /(?:(?:\.|#{PN_CHARS}|#{PLX})*(?:#{PN_CHARS}|#{PLX}))?/
+    PN_LOCAL             = /(?:[0-9]|#{PN_CHARS_U}|#{PLX})#{PN_LOCAL_BODY}/       # [100s]
 
     EXPONENT             = /[eE][+-]?[0-9]+/                                      # [86s]
                                                                                   
     ANON                 = /\[#{WS}*\]/                                           # [94s]
     BLANK_NODE_LABEL     = /_:#{PN_LOCAL}/                                        # [73s]
-    DECIMAL              = /(?:[0-9]+\.[0-9]*|\.[0-9]+)/                          # [78s]
-    DECIMAL_NEGATIVE     = /\-(?:[0-9]+\.[0-9]*|\.[0-9]+)/                        # [83s]
-    DECIMAL_POSITIVE     = /\+(?:[0-9]+\.[0-9]*|\.[0-9]+)/                        # [81s]
-    DOUBLE               = /(?:[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)#{EXPONENT}/        # [79s]
-    DOUBLE_NEGATIVE      = /\-(?:[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
-    DOUBLE_POSITIVE      = /\+(?:[0-9]+\.[0-9]*|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
+    DECIMAL              = /(?:[0-9]+\.[0-9]+|\.[0-9]+)/                          # [78s]
+    DECIMAL_NEGATIVE     = /\-(?:[0-9]+\.[0-9]+|\.[0-9]+)/                        # [83s]
+    DECIMAL_POSITIVE     = /\+(?:[0-9]+\.[0-9]+|\.[0-9]+)/                        # [81s]
+    DOUBLE               = /(?:[0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)#{EXPONENT}/        # [79s]
+    DOUBLE_NEGATIVE      = /\-(?:[0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
+    DOUBLE_POSITIVE      = /\+(?:[0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
     ECHAR                = /\\[tbnrf\\"']/                                        # [91s]
     INTEGER              = /[0-9]+/                                               # [77s]
     INTEGER_NEGATIVE     = /\-[0-9]+/                                             # [83s]
     INTEGER_POSITIVE     = /\+[0-9]+/                                             # [80s]
-    # Spec confusion: the EBNF definition of IRI_REF seems malformed, and has no
-    # provision for \^, as discussed elsewhere in the spec.
-    IRI_REF              = /<(?:[^<>"{}|^`\\\x00-\x20]|#{U_CHARS1})*>/            # [70s]
+    IRI_REF              = /<(?:[[^<>"{}|^`\\]&&[^\x00-\x20]]|#{UCHAR})*>/        # [70s]
     LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/                         # [76s]
     PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                     # [99s]
     PNAME_NS             = /#{PN_PREFIX}?:/                                       # [71s]

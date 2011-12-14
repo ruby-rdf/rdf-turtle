@@ -176,6 +176,10 @@ module RDF::Turtle
     ##
     # Initializes a new reader instance.
     #
+    # Note, the spec does not define a default mapping for the empty prefix,
+    # but it is so commonly used in examples that we define it to be the
+    # empty string anyway, except when validating.
+    #
     # @param  [String, #to_s]          input
     # @param  [Hash{Symbol => Object}] options
     # @option options [Hash]     :prefixes     (Hash.new)
@@ -199,6 +203,7 @@ module RDF::Turtle
     def initialize(input = nil, options = {}, &block)
       super do
         @options = {:anon_base => "b0", :validate => false}.merge(options)
+        @options = {:prefixes => {nil => ""}}.merge(@options) unless @options[:validate]
 
         debug("base IRI") {base_uri.inspect}
         

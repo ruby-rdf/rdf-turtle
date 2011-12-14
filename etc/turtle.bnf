@@ -65,8 +65,8 @@
 [17] BASE ::= "@base" 
  
 [18] PREFIX ::= "@prefix" 
- 
-[70s] IRI_REF ::= "<" ( [^<>\"{}|^`\\] - [#0000- ] | UCHAR )* ">" 
+
+[70s] IRI_REF ::= "<" ( [^<>\"{}|^`\\] - [#x00-#x20] | UCHAR )* ">" 
  
 [71s] PNAME_NS ::= (PN_PREFIX)? ":" 
  
@@ -106,11 +106,9 @@
  
 [90s] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^\"\\] | ECHAR | UCHAR ) )* '"""' 
  
-/* [19] UCHAR ::= ( "\\u" [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] ) */
-/* | ( "\\U" [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] */
-/* [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] ) */
-/* Hack to deal with conflicts created by previous */
-[19] UCHAR ::= "\\uffff"
+[19] UCHAR ::= ( "\\u" HEX HEX HEX HEX ) 
+ | ( "\\U" HEX HEX HEX HEX HEX HEX HEX HEX ) 
+
 [91s] ECHAR ::= "\\" [tbnrf\\\"'] 
  
 [92s] NIL ::= "(" (WS)* ")" 
@@ -146,4 +144,15 @@
  | [#203F-#2040] 
 [99s] PN_PREFIX ::= PN_CHARS_BASE ( ( PN_CHARS | "." )* PN_CHARS )? 
  
-[100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] ) ( ( PN_CHARS | "." )* PN_CHARS )? 
+[100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] | PLX ) ( ( PN_CHARS | '.' | PLX )*  ( PN_CHARS | PLX ) ) ?
+
+[160s] PLX ::= PERCENT | PN_LOCAL_ESC
+
+[161s] PERCENT ::= '%' HEX HEX
+
+[162s] HEX ::= [0-9] | [A-F] | [a-f]
+
+[163s] PN_LOCAL_ESC ::= '\\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | ':' | '/' | '?' | '#' | '@' | '%' )
+ 
+@pass ::= [ \t\r\n]+ 
+ | "#" [^\r\n]*

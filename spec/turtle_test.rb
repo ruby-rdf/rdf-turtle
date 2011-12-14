@@ -7,6 +7,7 @@ require 'open-uri'
 
 module Fixtures
   module TurtleTest
+    BASE_URI = "http://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests"
     class MF < RDF::Vocabulary("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#"); end
 
     class Manifest < Spira::Base
@@ -39,7 +40,7 @@ module Fixtures
       end
 
       def base_uri
-        inputDocument.to_s.sub('http://www.w3.org/TR/turtle/tests/', 'http://www.w3.org/2001/sw/DataAccess/df1/tests/')
+        inputDocument.to_s.sub(BASE_URI, 'http://www.w3.org/2001/sw/DataAccess/df1/tests')
       end
       
       def inspect
@@ -98,10 +99,10 @@ module Fixtures
     end
 
     # Note that the texts README says to use a different base URI
-    turtle = RDF::Repository.load("http://www.w3.org/TR/turtle/tests/manifest.ttl")
+    turtle = RDF::Repository.load("#{BASE_URI}/manifest.ttl", :format => :ttl)
     Spira.add_repository! :turtle, turtle
     
-    turtle_bad = RDF::Repository.load("http://www.w3.org/TR/turtle/tests/manifest-bad.ttl")
+    turtle_bad = RDF::Repository.load("#{BASE_URI}/manifest-bad.ttl", :format => :ttl)
     Spira.add_repository! :turtle_bad, turtle_bad
   end
 end

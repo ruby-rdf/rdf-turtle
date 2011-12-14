@@ -27,65 +27,45 @@ describe "RDF::Turtle::Reader" do
   end
 
   context :interface do
-    before(:each) do
-      @sampledoc = <<-EOF;
-        @prefix dc: <http://purl.org/dc/elements/1.1/>.
-        @prefix po: <http://purl.org/ontology/po/>.
-        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-        _:broadcast
-         a po:Broadcast;
-         po:schedule_date """2008-06-24T12:00:00Z""";
-         po:broadcast_of _:version;
-         po:broadcast_on <http://www.bbc.co.uk/programmes/service/6music>;
-        .
-        _:version
-         a po:Version;
-        .
-        <http://www.bbc.co.uk/programmes/b0072l93>
-         dc:title """Nemone""";
-         a po:Brand;
-        .
-        <http://www.bbc.co.uk/programmes/b00c735d>
-         a po:Episode;
-         po:episode <http://www.bbc.co.uk/programmes/b0072l93>;
-         po:version _:version;
-         po:long_synopsis """Actor and comedian Rhys Darby chats to Nemone.""";
-         dc:title """Nemone""";
-         po:synopsis """Actor and comedian Rhys Darby chats to Nemone.""";
-        .
-        <http://www.bbc.co.uk/programmes/service/6music>
-         a po:Service;
-         dc:title """BBC 6 Music""";
-        .
-
-        #_:abcd a po:Episode.
-      EOF
-    end
+    subject {
+      %q(
+        <a> <b> [
+          a <C>, <D>;
+          <has> ("e" <f> _:g)
+        ] .
+      )
+    }
     
     it "should yield reader" do
       inner = mock("inner")
       inner.should_receive(:called).with(RDF::Turtle::Reader)
-      RDF::Turtle::Reader.new(@sampledoc) do |reader|
+      RDF::Turtle::Reader.new(subject) do |reader|
         inner.called(reader.class)
       end
     end
     
     it "should return reader" do
-      RDF::Turtle::Reader.new(@sampledoc).should be_a(RDF::Turtle::Reader)
+      RDF::Turtle::Reader.new(subject).should be_a(RDF::Turtle::Reader)
     end
     
+    it "should not raise errors" do
+      lambda {
+        RDF::Turtle::Reader.new(subject, :validate => true)
+      }.should_not raise_error
+    end
+
     it "should yield statements" do
       inner = mock("inner")
-      inner.should_receive(:called).with(RDF::Statement).exactly(15)
-      RDF::Turtle::Reader.new(@sampledoc).each_statement do |statement|
+      inner.should_receive(:called).with(RDF::Statement).exactly(10)
+      RDF::Turtle::Reader.new(subject).each_statement do |statement|
         inner.called(statement.class)
       end
     end
     
     it "should yield triples" do
       inner = mock("inner")
-      inner.should_receive(:called).exactly(15)
-      RDF::Turtle::Reader.new(@sampledoc).each_triple do |subject, predicate, object|
+      inner.should_receive(:called).exactly(10)
+      RDF::Turtle::Reader.new(subject).each_triple do |subject, predicate, object|
         inner.called(subject.class, predicate.class, object.class)
       end
     end
@@ -320,6 +300,27 @@ describe "RDF::Turtle::Reader" do
         end
       end
 
+      [
+        %(\x00),
+        %(\x01),
+        %(\x0f),
+        %(\x10),
+        %(\x1f),
+        %(\x20),
+        %(<),
+        %(>),
+        %("),
+        %({),
+        %(}),
+        %(|),
+        %(\\),
+        %(^),
+        %(``),
+      ].each do |uri|
+        it "rejects #{uri.inspect}" do
+          lambda {parse(%(<#{uri}> <uri> "#{uri}"), :validate => true)}.should raise_error RDF::ReaderError
+        end
+      end
     end
   end
   
@@ -374,11 +375,17 @@ describe "RDF::Turtle::Reader" do
     end
     
     describe "@prefix" do
-      it "no @prefix" do
+      it "raises an error when validating if not defined" do
         ttl = %(<a> a :a .)
         lambda {parse(ttl, :validate => true)}.should raise_error(RDF::ReaderError)
       end
       
+      it "allows undefined empty prefix if not validating" do
+        ttl = %(:a :b :c .)
+        nt = %(<a> <b> <c> .)
+        parse(":a :b :c").should be_equivalent_graph(nt, :trace => @debug)
+      end
+
       it "empty relative-IRI" do
         ttl = %(@prefix foo: <> . <a> a foo:a.)
         nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <a> .)
@@ -752,14 +759,14 @@ describe "RDF::Turtle::Reader" do
   
   describe "recovery" do
     {
-      #"malformed bnode subject" => [
-      #  %q(_:.1 <a> <b> . _:bn <a> <c> .),
-      #  %q(_:bn <a> <c> .)
-      #],
-      #"malformed bnode object(1)" => [
-      #  %q(<a> <b> _:.1 . <a> <c> <d> .),
-      #  %q(<a> <c> <d> .)
-      #],
+      "malformed bnode subject" => [
+        %q(_:.1 <a> <b> . _:bn <a> <c> .),
+        %q(_:bn <a> <c> .)
+      ],
+      "malformed bnode object(1)" => [
+        %q(<a> <b> _:.1 . <a> <c> <d> .),
+        %q(<a> <c> <d> .)
+      ],
       "malformed bnode object(2)" => [
         %q(<a> <b> _:-a; <c> <d> .),
         %q(<a> <c> <d> .)
@@ -768,28 +775,28 @@ describe "RDF::Turtle::Reader" do
         %q(<a> <b> _:-a, <d> .),
         %q(<a> <b> <d> .)
       ],
-      #"malformed uri subject" => [
-      #  %q(<with space> <a> <b> . <c> <d> <e> .),
-      #  %q(<c> <d> <e> .)
-      #],
-      #"malformed uri predicate(1)" => [
-      #  %q(<a> <with space> <b> . <c> <d> <e> .),
-      #  %q(<c> <d> <e> .)
-      #],
+      "malformed uri subject" => [
+        %q(<"quoted"> <a> <b> . <c> <d> <e> .),
+        %q(<c> <d> <e> .)
+      ],
+      "malformed uri predicate(1)" => [
+        %q(<a> <"quoted"> <b> . <c> <d> <e> .),
+        %q(<c> <d> <e> .)
+      ],
       "malformed uri predicate(2)" => [
-        %q(<a> <with space> <b>; <d> <e> .),
+        %q(<a> <"quoted"> <b>; <d> <e> .),
         %q(<d> <d> <e> .)
       ],
-      #"malformed uri object(1)" => [
-      #  %q(<a> <b> <with space> . <c> <d> <e> .),
-      #  %q(<c> <d> <e> .)
-      #],
+      "malformed uri object(1)" => [
+        %q(<a> <b> <"quoted"> . <c> <d> <e> .),
+        %q(<c> <d> <e> .)
+      ],
       "malformed uri object(2)" => [
-        %q(<a> <b> <with space>; <d> <e> .),
+        %q(<a> <b> <"quoted">; <d> <e> .),
         %q(<d> <d> <e> .)
       ],
       "malformed uri object(3)" => [
-        %q(<a> <b> <with space>, <e> .),
+        %q(<a> <b> "quoted">, <e> .),
         %q(<a> <b> <e> .)
       ],
     }.each do |test, (input, expected)|
@@ -807,6 +814,15 @@ describe "RDF::Turtle::Reader" do
     end
   end
   
+  describe "NTriples" do
+    subject {
+      RDF::Graph.load("http://www.w3.org/2000/10/rdf-tests/rdfcore/ntriples/test.nt", :format => :ttl)
+    }
+    it "parses test file" do
+      subject.count.should == 30
+    end
+  end
+
   describe "spec examples" do
     {
       "example 1" => [
@@ -894,12 +910,64 @@ The second line
                 rdf:rest   rdf:nil .
           _:b3  rdf:rest   rdf:nil .
         )
+      ],
+      "bbc programmes" => [
+        %q(
+          @prefix dc: <http://purl.org/dc/elements/1.1/>.
+          @prefix po: <http://purl.org/ontology/po/>.
+          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+          _:broadcast
+           a po:Broadcast;
+           po:schedule_date """2008-06-24T12:00:00Z""";
+           po:broadcast_of _:version;
+           po:broadcast_on <http://www.bbc.co.uk/programmes/service/6music>;
+          .
+          _:version
+           a po:Version;
+          .
+          <http://www.bbc.co.uk/programmes/b0072l93>
+           dc:title """Nemone""";
+           a po:Brand;
+          .
+          <http://www.bbc.co.uk/programmes/b00c735d>
+           a po:Episode;
+           po:episode <http://www.bbc.co.uk/programmes/b0072l93>;
+           po:version _:version;
+           po:long_synopsis """Actor and comedian Rhys Darby chats to Nemone.""";
+           dc:title """Nemone""";
+           po:synopsis """Actor and comedian Rhys Darby chats to Nemone.""";
+          .
+          <http://www.bbc.co.uk/programmes/service/6music>
+           a po:Service;
+           dc:title """BBC 6 Music""";
+          .
+
+          #_:abcd a po:Episode.
+        ),
+        %q(
+          _:broadcast <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Broadcast> .
+          _:broadcast <http://purl.org/ontology/po/schedule_date> "2008-06-24T12:00:00Z" .
+          _:broadcast <http://purl.org/ontology/po/broadcast_of> _:version .
+          _:broadcast <http://purl.org/ontology/po/broadcast_on> <http://www.bbc.co.uk/programmes/service/6music> .
+          _:version <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Version> .
+          <http://www.bbc.co.uk/programmes/b0072l93> <http://purl.org/dc/elements/1.1/title> "Nemone" .
+          <http://www.bbc.co.uk/programmes/b0072l93> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Brand> .
+          <http://www.bbc.co.uk/programmes/b00c735d> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Episode> .
+          <http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/episode> <http://www.bbc.co.uk/programmes/b0072l93> .
+          <http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/version> _:version .
+          <http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/long_synopsis> "Actor and comedian Rhys Darby chats to Nemone." .
+          <http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/dc/elements/1.1/title> "Nemone" .
+          <http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/synopsis> "Actor and comedian Rhys Darby chats to Nemone." .
+          <http://www.bbc.co.uk/programmes/service/6music> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Service> .
+          <http://www.bbc.co.uk/programmes/service/6music> <http://purl.org/dc/elements/1.1/title> "BBC 6 Music" .
+        )
+        
       ]
-    }.each do |name, (results, expected)|
+    }.each do |name, (input, expected)|
       it "matches Turtle spec #{name}" do
         begin
           g2 = parse(expected)
-          g1 = parse(results)
+          g1 = parse(input)
           g1.should be_equivalent_graph(g2, :trace => @debug)
         rescue RDF::ReaderError
           pending("Spec example fixes") if ["example 4", "example 5"].include?(name)

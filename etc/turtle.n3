@@ -265,14 +265,14 @@
 .
 
 :IRI_REF rdfs:label "IRI_REF"; rdf:value "70s";
- rdfs:comment "[70s] IRI_REF ::= \"<\" ( [^<>\\\"{}|^`\\\\] - [#0000- ] | UCHAR )* \">\"";
+ rdfs:comment "[70s] IRI_REF ::= \"<\" ( [^<>\\\"{}|^`\\\\] - [#x00-#x20] | UCHAR )* \">\"";
   re:seq (
     "<"
     [ re:star 
       [ re:alt (
         [ re:diff (
           [  re:matches "[^<>\\\"{}|^`\\\\]"  ]
-          [  re:matches "[#0000- ]"  ]
+          [  re:matches "[\u0000-\u0020]"  ]
          ) ]
         :UCHAR
        ) ]
@@ -523,8 +523,27 @@
 .
 
 :UCHAR rdfs:label "UCHAR"; rdf:value "19";
- rdfs:comment "[19] UCHAR ::= \"\\\\uffff\"";
-  g:seq (  "\\\\uffff")
+ rdfs:comment "[19] UCHAR ::= ( \"\\\\u\" HEX HEX HEX HEX ) | ( \"\\\\U\" HEX HEX HEX HEX HEX HEX HEX HEX )";
+  re:alt (
+    [ re:seq (
+      "\\\\u"
+      :HEX
+      :HEX
+      :HEX
+      :HEX
+     ) ]
+    [ re:seq (
+      "\\\\U"
+      :HEX
+      :HEX
+      :HEX
+      :HEX
+      :HEX
+      :HEX
+      :HEX
+      :HEX
+     ) ]
+   )
 .
 
 :ECHAR rdfs:label "ECHAR"; rdf:value "91s";
@@ -627,11 +646,12 @@
 .
 
 :PN_LOCAL rdfs:label "PN_LOCAL"; rdf:value "100s";
- rdfs:comment "[100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] ) ( ( PN_CHARS | \".\" )* PN_CHARS )?";
+ rdfs:comment "[100s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] | PLX ) ( ( PN_CHARS | '.' | PLX )*  ( PN_CHARS | PLX ) ) ?";
   re:seq (
     [ re:alt (
       :PN_CHARS_U
       [  re:matches "[0-9]"  ]
+      :PLX
      ) ]
     [ re:opt 
       [ re:seq (
@@ -639,10 +659,70 @@
           [ re:alt (
             :PN_CHARS
             "."
+            :PLX
            ) ]
          ]
-        :PN_CHARS
+        [ re:alt (
+          :PN_CHARS
+          :PLX
+         ) ]
        ) ]
      ]
+   )
+.
+
+:PLX rdfs:label "PLX"; rdf:value "160s";
+ rdfs:comment "[160s] PLX ::= PERCENT | PN_LOCAL_ESC";
+  re:alt (
+    :PERCENT
+    :PN_LOCAL_ESC
+   )
+.
+
+:PERCENT rdfs:label "PERCENT"; rdf:value "161s";
+ rdfs:comment "[161s] PERCENT ::= '%' HEX HEX";
+  re:seq (
+    "%"
+    :HEX
+    :HEX
+   )
+.
+
+:HEX rdfs:label "HEX"; rdf:value "162s";
+ rdfs:comment "[162s] HEX ::= [0-9] | [A-F] | [a-f]";
+  re:alt (
+    [  re:matches "[0-9]"  ]
+    [  re:matches "[A-F]"  ]
+    [  re:matches "[a-f]"  ]
+   )
+.
+
+:PN_LOCAL_ESC rdfs:label "PN_LOCAL_ESC"; rdf:value "163s";
+ rdfs:comment "[163s] PN_LOCAL_ESC ::= '\\\\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | \"'\" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | ':' | '/' | '?' | '#' | '@' | '%' )";
+  re:seq (
+    "\\\\"
+    [ re:alt (
+      "_"
+      "~"
+      "."
+      "-"
+      "!"
+      "$"
+      "&"
+      "'"
+      "("
+      ")"
+      "*"
+      "+"
+      ","
+      ";"
+      "="
+      ":"
+      "/"
+      "?"
+      "#"
+      "@"
+      "%"
+     ) ]
    )
 .
