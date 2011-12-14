@@ -67,8 +67,16 @@ def run(input, options)
   start = Time.new
   num = 0
   if options[:lex_only]
-    RDF::LL1::Lexer.new(input, TERMINALS).each do |token|
-      puts "[#{token.lineno}: #{token}]" unless options[:quiet]
+    lexer = RDF::LL1::Lexer.new(input, TERMINALS)
+    begin
+      while token = lexer.first
+        puts "[#{token.lineno}: #{token.inspect}]" unless options[:quiet]
+        lexer.shift
+      end
+    rescue RDF::LL1::Lexer::Error => e
+      STDERR.puts "Error: #{e.message}" unless options[:quiet]
+      lexer.recover
+      retry
     end
   elsif options[:parse_only]
     P.new.parse(input, RDF::Turtle::Meta::START,
@@ -82,7 +90,7 @@ def run(input, options)
     reader_class.new(input, options[:parser_options]).each do |statement|
       num += 1
       if options[:quiet]
-        #print "."
+        print "."
       else
        options[:output]. puts statement.to_ntriples
       end
@@ -112,7 +120,7 @@ parser_options = {
   :base_uri => "",
   :progress   => false,
   :validate => false,
-  :strict => true,
+  :strict => false,
 }
 
 options = {
