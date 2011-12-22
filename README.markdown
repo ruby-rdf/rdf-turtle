@@ -74,7 +74,7 @@ Using SWAP utilities, this is done as follows:
     python http://www.w3.org/2000/10/swap/grammar/ebnf2turtle.py \
       etc/turtle.bnf \
       ttl language \
-      'http://www.w3.org/2000/10/swap/grammar/turtle#' > |
+      'http://www.w3.org/ns/formats/Turtle#' > |
     sed -e 's/^  ".*"$/  g:seq (&)/'  > etc/turtle.n3
       
     python http://www.w3.org/2000/10/swap/cwm.py etc/turtle.n3 \
@@ -84,7 +84,7 @@ Using SWAP utilities, this is done as follows:
     
     script/gramLL1 \
       --grammar etc/turtle-ll1.n3 \
-      --lang 'http://www.w3.org/2000/10/swap/grammar/turtle#language' \
+      --lang 'http://www.w3.org/ns/formats/Turtle#language' \
       --output lib/rdf/turtle/meta.rb
     
       

@@ -1,7 +1,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix ttl: <http://www.w3.org/2000/10/swap/grammar/turtle#>.
-@prefix : <http://www.w3.org/2000/10/swap/grammar/turtle#>.
+@prefix ttl: <http://www.w3.org/ns/formats/Turtle#>.
+@prefix : <http://www.w3.org/ns/formats/Turtle#>.
 @prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>.
 @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
 

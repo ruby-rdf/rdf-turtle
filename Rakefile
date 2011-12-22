@@ -52,7 +52,7 @@ file "lib/rdf/turtle/meta.rb" => ["etc/turtle-ll1.n3", "script/gramLL1"] do |t|
   sh %{
     script/gramLL1 \
       --grammar etc/turtle-ll1.n3 \
-      --lang 'http://www.w3.org/2000/10/swap/grammar/turtle#language' \
+      --lang 'http://www.w3.org/ns/formats/Turtle#language' \
       --output lib/rdf/turtle/meta.rb
   }
 end
@@ -83,7 +83,7 @@ file "etc/turtle.n3" => "etc/turtle.bnf" do
   sh %{
   ( cd ../swap/grammar;
     PYTHONPATH=../.. python ebnf2turtle.py #{TTL_DIR}/etc/turtle.bnf \
-      ttl language 'http://www.w3.org/2000/10/swap/grammar/turtle#'
+      ttl language 'http://www.w3.org/ns/formats/Turtle#'
   ) | sed -e 's/^  ".*"$/  g:seq (&)/'  > etc/turtle.n3
   }
 end
