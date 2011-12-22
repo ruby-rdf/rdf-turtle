@@ -206,6 +206,9 @@ module RDF::LL1
 
         token
       end
+    rescue ArgumentError => e
+      raise Error.new("#{e.message} on line #{lineno + 1}",
+        :input => scanner.rest[0..100], :token => lexme, :lineno => lineno)
     end
 
     ##
@@ -227,9 +230,9 @@ module RDF::LL1
         begin
           shift
           return first
-        rescue Error
+        rescue Error, ArgumentError
           # Ignore errors until something scans, or EOS.
-          scanner.skip(/./)
+          scanner.pos = scanner.pos + 1
         end
       end
     end
