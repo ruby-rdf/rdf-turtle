@@ -5,7 +5,7 @@ module RDF::Turtle::Meta
 
   BRANCH = {
     :"_:_g0" => {
-      ";" => [:"_:g2159589760"],
+      ";" => [:"_:g2159472320"],
       :"ebnf:empty" => [],
     },
     :"_:_g1" => {
@@ -27,7 +27,7 @@ module RDF::Turtle::Meta
       :PNAME_NS => [:verb, :objectList],
     },
     :"_:_g4" => {
-      "," => [:"_:g2158753940"],
+      "," => [:"_:g2158637740"],
       ";" => [],
       :"ebnf:empty" => [],
     },
@@ -35,29 +35,29 @@ module RDF::Turtle::Meta
       "," => [",", :object],
     },
     :"_:_g6" => {
-      "(" => [:"_:g2158235840"],
-      "[" => [:"_:g2158235840"],
-      "false" => [:"_:g2158235840"],
+      "(" => [:"_:g2158071540"],
+      "[" => [:"_:g2158071540"],
+      "false" => [:"_:g2158071540"],
       :"ebnf:empty" => [],
-      :ANON => [:"_:g2158235840"],
-      :BLANK_NODE_LABEL => [:"_:g2158235840"],
-      :DECIMAL => [:"_:g2158235840"],
-      :DECIMAL_NEGATIVE => [:"_:g2158235840"],
-      :DECIMAL_POSITIVE => [:"_:g2158235840"],
-      :DOUBLE => [:"_:g2158235840"],
-      :DOUBLE_NEGATIVE => [:"_:g2158235840"],
-      :DOUBLE_POSITIVE => [:"_:g2158235840"],
-      :INTEGER => [:"_:g2158235840"],
-      :INTEGER_NEGATIVE => [:"_:g2158235840"],
-      :INTEGER_POSITIVE => [:"_:g2158235840"],
-      :IRI_REF => [:"_:g2158235840"],
-      :PNAME_LN => [:"_:g2158235840"],
-      :PNAME_NS => [:"_:g2158235840"],
-      :STRING_LITERAL1 => [:"_:g2158235840"],
-      :STRING_LITERAL2 => [:"_:g2158235840"],
-      :STRING_LITERAL_LONG1 => [:"_:g2158235840"],
-      :STRING_LITERAL_LONG2 => [:"_:g2158235840"],
-      "true" => [:"_:g2158235840"],
+      :ANON => [:"_:g2158071540"],
+      :BLANK_NODE_LABEL => [:"_:g2158071540"],
+      :DECIMAL => [:"_:g2158071540"],
+      :DECIMAL_NEGATIVE => [:"_:g2158071540"],
+      :DECIMAL_POSITIVE => [:"_:g2158071540"],
+      :DOUBLE => [:"_:g2158071540"],
+      :DOUBLE_NEGATIVE => [:"_:g2158071540"],
+      :DOUBLE_POSITIVE => [:"_:g2158071540"],
+      :INTEGER => [:"_:g2158071540"],
+      :INTEGER_NEGATIVE => [:"_:g2158071540"],
+      :INTEGER_POSITIVE => [:"_:g2158071540"],
+      :IRI_REF => [:"_:g2158071540"],
+      :PNAME_LN => [:"_:g2158071540"],
+      :PNAME_NS => [:"_:g2158071540"],
+      :STRING_LITERAL1 => [:"_:g2158071540"],
+      :STRING_LITERAL2 => [:"_:g2158071540"],
+      :STRING_LITERAL_LONG1 => [:"_:g2158071540"],
+      :STRING_LITERAL_LONG2 => [:"_:g2158071540"],
+      "true" => [:"_:g2158071540"],
     },
     :"_:_g7" => {
       "(" => [],
@@ -91,7 +91,7 @@ module RDF::Turtle::Meta
       "(" => [],
       "," => [],
       "[" => [],
-      "^^" => [:"_:g2165541460"],
+      "^^" => [:"_:g2165123120"],
       "false" => [],
       :ANON => [],
       :BLANK_NODE_LABEL => [],
@@ -114,7 +114,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_LONG2 => [],
       "true" => [],
     },
-    :"_:g2158108680" => {
+    :"_:g2157942200" => {
       "(" => [:triples, "."],
       "@base" => [],
       "@prefix" => [],
@@ -125,7 +125,7 @@ module RDF::Turtle::Meta
       :PNAME_LN => [:triples, "."],
       :PNAME_NS => [:triples, "."],
     },
-    :"_:g2158235840" => {
+    :"_:g2158071540" => {
       "(" => [:object, :"_:_g6"],
       "[" => [:object, :"_:_g6"],
       "false" => [:object, :"_:_g6"],
@@ -149,7 +149,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_LONG2 => [:object, :"_:_g6"],
       "true" => [:object, :"_:_g6"],
     },
-    :"_:g2158398280" => {
+    :"_:g2158253240" => {
       "(" => [],
       "@base" => [:directive, "."],
       "@prefix" => [:directive, "."],
@@ -160,14 +160,14 @@ module RDF::Turtle::Meta
       :PNAME_LN => [],
       :PNAME_NS => [],
     },
-    :"_:g2158753940" => {
+    :"_:g2158637740" => {
       "," => [:"_:_g5", :"_:_g4"],
       ";" => [],
     },
-    :"_:g2159589760" => {
+    :"_:g2159472320" => {
       ";" => [:"_:_g1", :"_:_g0"],
     },
-    :"_:g2165181400" => {
+    :"_:g2164941640" => {
       "(" => [:statement, :turtleDoc],
       "@base" => [:statement, :turtleDoc],
       "@prefix" => [:statement, :turtleDoc],
@@ -179,7 +179,7 @@ module RDF::Turtle::Meta
       :PNAME_LN => [:statement, :turtleDoc],
       :PNAME_NS => [:statement, :turtleDoc],
     },
-    :"_:g2165541460" => {
+    :"_:g2165123120" => {
       "(" => [],
       "," => [],
       "[" => [],
@@ -641,15 +641,15 @@ module RDF::Turtle::Meta
       "@prefix" => [:PREFIX, :PNAME_NS, :IRI_REF],
     },
     :statement => {
-      "(" => [:"_:g2158108680"],
-      "@base" => [:"_:g2158398280"],
-      "@prefix" => [:"_:g2158398280"],
-      "[" => [:"_:g2158108680"],
-      :ANON => [:"_:g2158108680"],
-      :BLANK_NODE_LABEL => [:"_:g2158108680"],
-      :IRI_REF => [:"_:g2158108680"],
-      :PNAME_LN => [:"_:g2158108680"],
-      :PNAME_NS => [:"_:g2158108680"],
+      "(" => [:"_:g2157942200"],
+      "@base" => [:"_:g2158253240"],
+      "@prefix" => [:"_:g2158253240"],
+      "[" => [:"_:g2157942200"],
+      :ANON => [:"_:g2157942200"],
+      :BLANK_NODE_LABEL => [:"_:g2157942200"],
+      :IRI_REF => [:"_:g2157942200"],
+      :PNAME_LN => [:"_:g2157942200"],
+      :PNAME_NS => [:"_:g2157942200"],
     },
     :subject => {
       "(" => [:blank],
@@ -671,17 +671,17 @@ module RDF::Turtle::Meta
       :PNAME_NS => [:subject, :predicateObjectList],
     },
     :turtleDoc => {
-      "(" => [:"_:g2165181400"],
-      "@base" => [:"_:g2165181400"],
-      "@prefix" => [:"_:g2165181400"],
-      "[" => [:"_:g2165181400"],
+      "(" => [:"_:g2164941640"],
+      "@base" => [:"_:g2164941640"],
+      "@prefix" => [:"_:g2164941640"],
+      "[" => [:"_:g2164941640"],
       :"ebnf:empty" => [],
       :"ebnf:eof" => [],
-      :ANON => [:"_:g2165181400"],
-      :BLANK_NODE_LABEL => [:"_:g2165181400"],
-      :IRI_REF => [:"_:g2165181400"],
-      :PNAME_LN => [:"_:g2165181400"],
-      :PNAME_NS => [:"_:g2165181400"],
+      :ANON => [:"_:g2164941640"],
+      :BLANK_NODE_LABEL => [:"_:g2164941640"],
+      :IRI_REF => [:"_:g2164941640"],
+      :PNAME_LN => [:"_:g2164941640"],
+      :PNAME_NS => [:"_:g2164941640"],
     },
     :verb => {
       "(" => [],
@@ -791,12 +791,12 @@ module RDF::Turtle::Meta
     :"_:_g8" => [
       "^^",
       :LANGTAG],
-    :"_:g2157649460" => [
+    :"_:g2157289520" => [
       "a",
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2157813720" => [
+    :"_:g2157633420" => [
       "(",
       "[",
       "false",
@@ -819,7 +819,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2158108680" => [
+    :"_:g2157942200" => [
       "(",
       "[",
       :ANON,
@@ -827,12 +827,12 @@ module RDF::Turtle::Meta
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2158136560" => [
+    :"_:g2157970880" => [
       "a",
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2158235840" => [
+    :"_:g2158071540" => [
       "(",
       "[",
       "false",
@@ -855,7 +855,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2158289460" => [
+    :"_:g2158130200" => [
       "(",
       "[",
       "false",
@@ -878,10 +878,10 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2158398280" => [
+    :"_:g2158253240" => [
       "@base",
       "@prefix"],
-    :"_:g2158577460" => [
+    :"_:g2158444160" => [
       "(",
       "[",
       "false",
@@ -904,14 +904,14 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2158753940" => [
+    :"_:g2158637740" => [
       ","],
-    :"_:g2158783640" => [
+    :"_:g2158660740" => [
       "a",
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2158937340" => [
+    :"_:g2158775400" => [
       "(",
       "[",
       "false",
@@ -934,14 +934,14 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2159337740" => [
+    :"_:g2159042960" => [
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2159412840" => [
+    :"_:g2159252580" => [
       "^^",
       :LANGTAG],
-    :"_:g2159549940" => [
+    :"_:g2159432960" => [
       "(",
       "[",
       "false",
@@ -964,13 +964,13 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2159589760" => [
+    :"_:g2159472320" => [
       ";"],
-    :"_:g2160004560" => [
+    :"_:g2159674800" => [
       ","],
-    :"_:g2164289880" => [
+    :"_:g2159948720" => [
       ";"],
-    :"_:g2164419720" => [
+    :"_:g2160034680" => [
       "(",
       "@base",
       "@prefix",
@@ -980,7 +980,7 @@ module RDF::Turtle::Meta
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2165181400" => [
+    :"_:g2164941640" => [
       "(",
       "@base",
       "@prefix",
@@ -990,7 +990,7 @@ module RDF::Turtle::Meta
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2165541460" => [
+    :"_:g2165123120" => [
       "^^"],
     :BASE => [
       "@base"],
@@ -1239,7 +1239,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL2,
       :STRING_LITERAL_LONG1,
       :STRING_LITERAL_LONG2],
-    :"_:g2158108680" => [
+    :"_:g2157942200" => [
       "(",
       "@base",
       "@prefix",
@@ -1249,7 +1249,7 @@ module RDF::Turtle::Meta
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2158398280" => [
+    :"_:g2158253240" => [
       "(",
       "@base",
       "@prefix",
@@ -1259,11 +1259,11 @@ module RDF::Turtle::Meta
       :IRI_REF,
       :PNAME_LN,
       :PNAME_NS],
-    :"_:g2158753940" => [
+    :"_:g2158637740" => [
       ";"],
-    :"_:g2165181400" => [
+    :"_:g2164941640" => [
       :"ebnf:eof"],
-    :"_:g2165541460" => [
+    :"_:g2165123120" => [
       "(",
       ",",
       "[",
