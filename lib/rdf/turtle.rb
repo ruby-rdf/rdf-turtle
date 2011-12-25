@@ -20,8 +20,6 @@ module RDF
   # @author [Gregg Kellogg](http://kellogg-assoc.com/)
   module Turtle
     require  'rdf/turtle/format'
-    require  'rdf/turtle/patches'
-    autoload :Lexer,      'rdf/turtle/lexer'
     autoload :Reader,     'rdf/turtle/reader'
     autoload :Terminals,  'rdf/turtle/terminals'
     autoload :VERSION,    'rdf/turtle/version'
