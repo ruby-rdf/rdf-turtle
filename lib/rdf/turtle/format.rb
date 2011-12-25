@@ -36,7 +36,7 @@ module RDF::Turtle
     # @return [Boolean]
     def self.detect(sample)
       !!sample.match(%r(
-        (?:@(base|prefix|keywords)) |                                   # N3 keywords
+        (?:@(base|prefix)) |                                            # Turtle keywords
         ["']{3} |                                                       # STRING_LITERAL_LONG1/2
         "[^"]*"^^ | "[^"]*"@ |                                          # Typed/Language literals
         (?:
@@ -44,7 +44,8 @@ module RDF::Turtle
           (?:\s*(?:(?:<[^>]*>) | (?:\w*:\w+) | (?:"[^"]*"))){3}
         )
       )mx) && !(
-        sample.match(%r(@keywords|=>|\{)) ||                             # N3
+        sample.match(%r([{}])) ||                                       # TriG
+        sample.match(%r(@keywords|=>|\{)) ||                            # N3
         sample.match(%r(<(?:\/|html|rdf))i) ||                          # HTML, RDF/XML
         sample.match(%r(^(?:\s*<[^>]*>){4}.*\.\s*$)) ||                 # N-Quads
         sample.match(%r("@(context|subject|iri)"))                      # JSON-LD
