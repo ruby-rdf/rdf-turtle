@@ -105,7 +105,7 @@ module RDF::Turtle
     end
 
     ##
-    # Addes a statement to be serialized
+    # Adds a statement to be serialized
     # @param  [RDF::Statement] statement
     # @return [void]
     def write_statement(statement)
@@ -113,7 +113,7 @@ module RDF::Turtle
     end
 
     ##
-    # Addes a triple to be serialized
+    # Adds a triple to be serialized
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Value]    object
@@ -135,7 +135,7 @@ module RDF::Turtle
 
       self.reset
 
-      debug {"\nserialize: graph: #{@graph.size}"}
+      debug("\nserialize") {"graph: #{@graph.size}"}
 
       preprocess
       start_document
@@ -166,14 +166,16 @@ module RDF::Turtle
       when u = @uri_to_prefix.keys.detect {|u| uri.index(u.to_s) == 0}
         # Use a defined prefix
         prefix = @uri_to_prefix[u]
-        prefix(prefix, u) unless u.to_s.empty? # Define for output
-        debug {"get_pname: add prefix #{prefix.inspect} => #{u}"}
-        uri.sub(u.to_s, "#{prefix}:")
+        unless u.to_s.empty?
+          prefix(prefix, u) unless u.to_s.empty?
+          debug("get_pname") {"add prefix #{prefix.inspect} => #{u}"}
+          uri.sub(u.to_s, "#{prefix}:")
+        end
       when @options[:standard_prefixes] && vocab = RDF::Vocabulary.each.to_a.detect {|v| uri.index(v.to_uri.to_s) == 0}
         prefix = vocab.__name__.to_s.split('::').last.downcase
         @uri_to_prefix[vocab.to_uri.to_s] = prefix
         prefix(prefix, vocab.to_uri) # Define for output
-        debug {"get_pname: add standard prefix #{prefix.inspect} => #{vocab.to_uri}"}
+        debug("get_pname") {"add standard prefix #{prefix.inspect} => #{vocab.to_uri}"}
         uri.sub(vocab.to_uri.to_s, "#{prefix}:")
       else
         nil
@@ -208,7 +210,7 @@ module RDF::Turtle
         prop_list << prop.to_s
       end
       
-      debug {"sort_properties: #{prop_list.join(', ')}"}
+      debug("sort_properties") {prop_list.join(', ')}
       prop_list
     end
 
@@ -246,7 +248,7 @@ module RDF::Turtle
     # @return [String]
     def format_uri(uri, options = {})
       md = relativize(uri)
-      debug {"relativize(#{uri.inspect}) => #{md.inspect}"} if md != uri.to_s
+      debug("relativize") {"#{uri.inspect} => #{md.inspect}"} if md != uri.to_s
       md != uri.to_s ? "<#{md}>" : (get_pname(uri) || "<#{uri}>")
     end
     
@@ -263,11 +265,9 @@ module RDF::Turtle
     protected
     # Output @base and @prefix definitions
     def start_document
-      @started = true
-      
       @output.write("#{indent}@base <#{base_uri}> .\n") unless base_uri.to_s.empty?
       
-      debug {"start_document: #{prefixes.inspect}"}
+      debug("start_document") {prefixes.inspect}
       prefixes.keys.sort_by(&:to_s).each do |prefix|
         @output.write("#{indent}@prefix #{prefix}: <#{prefixes[prefix]}> .\n")
       end
@@ -307,7 +307,7 @@ module RDF::Turtle
       # Add distinguished classes
       top_classes.each do |class_uri|
         graph.query(:predicate => RDF.type, :object => class_uri).map {|st| st.subject}.sort.uniq.each do |subject|
-          debug {"order_subjects: #{subject.inspect}"}
+          debug("order_subjects") {subject.inspect}
           subjects << subject
           seen[subject] = true
         end
@@ -339,7 +339,7 @@ module RDF::Turtle
     # prefixes.
     # @param [Statement] statement
     def preprocess_statement(statement)
-      #debug {"preprocess: #{statement.inspect}"}
+      #debug("preprocess") {statement.inspect}
       references = ref_count(statement.object) + 1
       @references[statement.object] = references
       @subjects[statement.subject] = true
@@ -370,12 +370,9 @@ module RDF::Turtle
     def reset
       @depth = 0
       @lists = {}
-      @namespaces = {}
       @references = {}
       @serialized = {}
       @subjects = {}
-      @shortNames = {}
-      @started = false
     end
 
     ##
@@ -392,28 +389,36 @@ module RDF::Turtle
       end
     end
 
-    private
+    protected
     
     ##
     # Add debug event to debug array, if specified
     # @param [String] message ("")
     # @yieldreturn [String] added to message
-    def debug(message = "", options = {})
+    def debug(*args)
       return unless @options[:debug] || RDF::Turtle.debug?
-      message += yield if block_given?
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      depth = options[:depth] || @depth
+      message = args.pop
+      message = message.call if message.is_a?(Proc)
+      args << message if message
+      args << yield if block_given?
+      message = "#{args.join(': ')}"
       @options[:debug] << message if @options[:debug].is_a?(Array)
       $stderr.puts(message) if RDF::Turtle.debug?
     end
 
+    private
+
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
     def is_valid_list?(l)
-      #debug {"is_valid_list: #{l.inspect}"}
+      #debug("is_valid_list?") {l.inspect}
       return RDF::List.new(l, @graph).valid?
     end
     
     def do_list(l)
       list = RDF::List.new(l, @graph)
-      debug {"do_list: #{list.inspect}"}
+      debug("do_list") {list.inspect}
       position = :subject
       list.each_statement do |st|
         next unless st.predicate == RDF.first
@@ -426,7 +431,7 @@ module RDF::Turtle
     
     def p_list(node, position)
       return false if !is_valid_list?(node)
-      #debug {"p_list: #{node.inspect}, #{position}"}
+      #debug("p_list") {"#{node.inspect}, #{position}"}
 
       @output.write(position == :subject ? "(" : " (")
       @depth += 2
@@ -444,7 +449,7 @@ module RDF::Turtle
     def p_squared(node, position)
       return false unless p_squared?(node, position)
 
-      #debug {"p_squared: #{node.inspect}, #{position}"}
+      #debug("p_squared") {"#{node.inspect}, #{position}"}
       subject_done(node)
       @output.write(position == :subject ? '[' : ' [')
       @depth += 2
@@ -456,14 +461,14 @@ module RDF::Turtle
     end
     
     def p_default(node, position)
-      #debug {"p_default: #{node.inspect}, #{position}"}
+      #debug("p_default") {"#{node.inspect}, #{position}"}
       l = (position == :subject ? "" : " ") + format_value(node)
       @output.write(l)
     end
     
     def path(node, position)
-      debug do
-        "path: #{node.inspect}, " +
+      debug("path") do
+        "#{node.inspect}, " +
         "pos: #{position}, " +
         "[]: #{is_valid_list?(node)}, " +
         "p2?: #{p_squared?(node, position)}, " +
@@ -473,7 +478,7 @@ module RDF::Turtle
     end
     
     def verb(node)
-      debug {"verb: #{node.inspect}"}
+      debug("verb") {node.inspect}
       if node == RDF.type
         @output.write(" a")
       else
@@ -482,7 +487,7 @@ module RDF::Turtle
     end
     
     def object_list(objects)
-      debug {"object_list: #{objects.inspect}"}
+      debug("object_list") {objects.inspect}
       return if objects.empty?
 
       objects.each_with_index do |obj, i|
@@ -499,7 +504,7 @@ module RDF::Turtle
       end
 
       prop_list = sort_properties(properties) - [RDF.first.to_s, RDF.rest.to_s]
-      debug {"predicate_list: #{prop_list.inspect}"}
+      debug("predicate_list") {prop_list.inspect}
       return if prop_list.empty?
 
       prop_list.each_with_index do |prop, i|
@@ -521,7 +526,7 @@ module RDF::Turtle
     def s_squared(subject)
       return false unless s_squared?(subject)
       
-      debug {"s_squared: #{subject.inspect}"}
+      debug("s_squared") {subject.inspect}
       @output.write("\n#{indent} [")
       @depth += 1
       predicate_list(subject)
@@ -539,7 +544,7 @@ module RDF::Turtle
     end
     
     def statement(subject)
-      debug {"statement: #{subject.inspect}, s2?: #{s_squared?(subject)}"}
+      debug("statement") {"#{subject.inspect}, s2?: #{s_squared?(subject)}"}
       subject_done(subject)
       s_squared(subject) || s_default(subject)
       @output.puts

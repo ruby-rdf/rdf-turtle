@@ -110,13 +110,11 @@ module RDF::Turtle
     
     # [9] verb ::= predicate | "a"
     production(:verb) do |reader, phase, input, current, callback|
-      next unless phase == :finish
       input[:predicate] = current[:resource] if phase == :finish
     end
 
     # [10] subject ::= IRIref | blank
     production(:subject) do |reader, phase, input, current, callback|
-      next unless phase == :finish
       input[:subject] = current[:resource] if phase == :finish
     end
 
@@ -237,11 +235,12 @@ module RDF::Turtle
                                                  :first => FIRST,
                                                  :follow => FOLLOW)
       ) do |context, *data|
+        loc = data.shift
         case context
         when :statement
-          add_triple(*data)
+          add_statement(loc, RDF::Statement.from(data))
         when :trace
-          debug(*data)
+          debug(loc, *data)
         end
       end
     rescue RDF::LL1::Parser::Error => e
@@ -271,8 +270,7 @@ module RDF::Turtle
     # @param [URI, Node, Literal] object:: the object of the statement
     # @return [Statement]:: Added statement
     # @raise [RDF::ReaderError]:: Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
-    def add_triple(node, subject, predicate, object)
-      statement = RDF::Statement.new(subject, predicate, object)
+    def add_statement(node, statement)
       if statement.valid?
         debug(node) {"generate statement: #{statement}"}
         @callback.call(statement)
@@ -348,12 +346,16 @@ module RDF::Turtle
     # @param [String] node relative location in input
     # @param [String] message ("")
     # @yieldreturn [String] added to message
-    def debug(node, message = "", options = {})
+    def debug(*args)
       return unless @options[:debug] || RDF::Turtle.debug?
+      options = args.last.is_a?(Hash) ? args.pop : {}
       depth = options[:depth] || self.depth
+      message = args.pop
       message = message.call if message.is_a?(Proc)
-      message += yield if block_given?
-      str = "[#{@lineno}]#{' ' * depth}#{node}: #{message}"
+      args << message if message
+      args << yield if block_given?
+      message = "#{args.join(': ')}"
+      str = "[#{@lineno}]#{' ' * depth}#{message}"
       @options[:debug] << str if @options[:debug].is_a?(Array)
       $stderr.puts(str) if RDF::Turtle.debug?
     end
