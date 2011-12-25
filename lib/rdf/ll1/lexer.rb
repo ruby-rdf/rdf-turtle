@@ -206,9 +206,14 @@ module RDF::LL1
 
         token
       end
-    rescue ArgumentError => e
+    rescue ArgumentError, Encoding::CompatibilityError => e
       raise Error.new("#{e.message} on line #{lineno + 1}",
-        :input => scanner.rest[0..100], :token => lexme, :lineno => lineno)
+        :input => (scanner.rest[0..100] rescue '??'), :token => lexme, :lineno => lineno)
+    rescue Error
+      raise
+    rescue
+      STDERR.puts "Expected ArgumentError, got #{$!.class}"
+      raise
     end
 
     ##
