@@ -13,11 +13,12 @@ module RDF::LL1
       base.extend(ClassMethods)
     end
 
+    # DSL for creating terminals and productions
     module ClassMethods
-      def production_handlers; @production_handlers || {}; end
-      def terminal_handlers; @terminal_handlers || {}; end
-      def patterns; @patterns || []; end
-      def unescape_terms; @unescape_terms || []; end
+      def production_handlers; @@production_handlers || {}; end
+      def terminal_handlers; @@terminal_handlers || {}; end
+      def patterns; @@patterns || []; end
+      def unescape_terms; @@unescape_terms || []; end
 
       ##
       # Defines a production called during different phases of parsing
@@ -42,8 +43,8 @@ module RDF::LL1
       #   Should conform to the yield specs for #initialize
       # Yield to generate a triple
       def production(term, &block)
-        @production_handlers ||= {}
-        @production_handlers[term] = block
+        @@production_handlers ||= {}
+        @@production_handlers[term] = block
       end
 
       ##
@@ -72,12 +73,12 @@ module RDF::LL1
       #   Block passed to initialization for yielding to calling reader.
       #   Should conform to the yield specs for #initialize
       def terminal(term, regexp, options = {}, &block)
-        @patterns ||= []
-        @patterns << [term, regexp]  # Passed in order to define evaulation sequence
-        @terminal_handlers ||= {}
-        @terminal_handlers[term] = block if block_given?
-        @unescape_terms ||= []
-        @unescape_terms << term if options[:unescape]
+        @@patterns ||= []
+        @@patterns << [term, regexp]  # Passed in order to define evaulation sequence
+        @@terminal_handlers ||= {}
+        @@terminal_handlers[term] = block if block_given?
+        @@unescape_terms ||= []
+        @@unescape_terms << term if options[:unescape]
       end
     end
 
@@ -425,8 +426,10 @@ module RDF::LL1
     # @option options [Integer] :depth
     #   Recursion depth for indenting output
     # @yieldreturn [String] added to message
-    def progress(node, message = "", options = {})
+    def progress(node, *args)
       return unless @options[:progress] || @options[:debug]
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      message = args.join(",")
       depth = options[:depth] || self.depth
       message += yield.to_s if block_given?
       if @options[:debug]
