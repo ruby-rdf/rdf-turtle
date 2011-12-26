@@ -1,3 +1,7 @@
+### 0.1.1
+* Improvements to allow reader & writer to be sub-classed for rdf-trig.
+* Improved error recovery when parsing.
+
 ### 0.1.0
 * Updates for RDF.rb 0.3.4.
 * Format detection.
