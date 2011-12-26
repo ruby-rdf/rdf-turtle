@@ -14,6 +14,7 @@ module RDF::Turtle
                            [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
                          EOS
       U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]")
+      IRI_RANGE        = Regexp.compile("[[^<>\"{}|^`\\\\]&&[^\\x00-\\x20]]")   # [^<>\"{}|^`\\] - [#x00-#x20]
     else
       ##
       # UTF-8 regular expressions for Ruby 1.8.x.
@@ -49,6 +50,13 @@ module RDF::Turtle
                            \\xCC[\\x80-\\xBF]|\\xCD[\\x80-\\xAF]|             (?# [\\u0300-\\u036F]|)
                            \\xE2\\x80\\xBF|\\xE2\\x81\\x80                    (?# [\\u203F-\\u2040])
                          EOS
+      IRI_RANGE        = Regexp.compile(<<-EOS.gsub(/\s+/, ''))
+                           \\x21|                                             (?# ")
+                           [\\x23-\\x3b]|\\x3d|                               (?# < & >)
+                           [\\x3f-\\x5b]|\\x5d|\\x5f|                         (?# \ ^ `)
+                           [\\x61-\\x7a]|                                     (?# { } |)
+                           [\\x7e-\\xff]
+                         EOS
     end
     UCHAR                = RDF::LL1::Lexer::UCHAR
 
@@ -77,7 +85,7 @@ module RDF::Turtle
     INTEGER              = /[0-9]+/                                               # [77s]
     INTEGER_NEGATIVE     = /\-[0-9]+/                                             # [83s]
     INTEGER_POSITIVE     = /\+[0-9]+/                                             # [80s]
-    IRI_REF              = /<(?:[[^<>"{}|^`\\]&&[^\x00-\x20]]|#{UCHAR})*>/        # [70s]
+    IRI_REF              = /<(?:#{IRI_RANGE}|#{UCHAR})*>/                         # [70s]
     LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/                         # [76s]
     PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                     # [99s]
     PNAME_NS             = /#{PN_PREFIX}?:/                                       # [71s]

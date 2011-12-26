@@ -4,8 +4,6 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
 require 'rdf'
 require 'rdf/turtle'
 require 'rdf/ntriples'
-require 'rdf/rdfxml' rescue nil
-require 'rdf/rdfa' rescue nil
 require 'rdf/turtle/meta'
 require 'rdf/ll1/parser'
 require 'getoptlong'

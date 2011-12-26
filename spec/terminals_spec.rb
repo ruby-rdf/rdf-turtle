@@ -17,21 +17,25 @@ describe RDF::Turtle::Terminals do
       ["\xEF\xB7\xB0",     "\xEF\xBF\xBD"],     # \uFDF0-\uFFFD
       ["\xF0\x90\x80\x80", "\xF3\xAF\xBF\xBF"], # \u{10000}-\u{EFFFF}]
     ]
-    it "matches the PN_CHARS_BASE production correctly" do
+    context "matches the PN_CHARS_BASE production correctly" do
       strings.each do |range|
-        range.each do |string|
-          string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-          string.should match(RDF::Turtle::Terminals::PN_CHARS_BASE)
+        it "from #{range.join(" to ").inspect}" do
+          range.each do |string|
+            string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+            string.should match(RDF::Turtle::Terminals::PN_CHARS_BASE)
+          end
         end
       end
     end
 
-    it "matches the IRI_REF production correctly" do
+    context "matches the IRI_REF production correctly" do
       strings.each do |range|
-        range.each do |string|
-          string = "<#{string}>"
-          string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
-          string.should match(RDF::Turtle::Terminals::IRI_REF)
+        it "from #{range.join(" to ").inspect}" do
+          range.each do |string|
+            string = "<#{string}>"
+            string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+            string.should match(RDF::Turtle::Terminals::IRI_REF)
+          end
         end
       end
     end

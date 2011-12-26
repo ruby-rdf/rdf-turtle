@@ -200,7 +200,7 @@ module RDF::LL1
 
         if token.nil?
           lexme = (scanner.rest.split(/#{@whitespace}|#{@comment}/).first rescue nil) || scanner.rest
-          raise Error.new("Invalid token #{lexme[0..100].inspect} on line #{lineno + 1}",
+          raise Error.new("Invalid token #{lexme[0..100].inspect}",
             :input => scanner.rest[0..100], :token => lexme, :lineno => lineno)
         end
 
@@ -462,5 +462,12 @@ module RDF::LL1
         super(message.to_s)
       end
     end # class Error
+    
+    unless "".respond_to?(:force_encoding)
+      # Compatibility with 1.9 Encoding
+      module Encoding
+        class CompatibilityError < StandardError; end
+      end
+    end
   end # class Lexer
 end # module RDF::Turtle
