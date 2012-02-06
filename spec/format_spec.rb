@@ -25,13 +25,11 @@ describe RDF::Turtle::Format do
     end
 
     {
-      :ntriples         => "<a> <b> <c> .",
-      :multi_line       => '<a>\n  <b>\n  "literal"\n .',
       :turtle           => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :STRING_LITERAL1  => %(<a> <b> 'literal' .),
-      :STRING_LITERAL2  => %(<a> <b> "literal" .),
-      :STRING_LITERAL_LONG1  => %(<a> <b> '''\nliteral\n''' .),
-      :STRING_LITERAL_LONG2  => %(<a> <b> """\nliteral\n""" .),
+      :STRING_LITERAL1  => %(:a <b> 'literal' .),
+      :STRING_LITERAL2  => %(:a <b> "literal" .),
+      :STRING_LITERAL_LONG1  => %(:a <b> '''\nliteral\n''' .),
+      :STRING_LITERAL_LONG2  => %(:a <b> """\nliteral\n""" .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.for {str}.should == @format_class

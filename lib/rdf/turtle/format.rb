@@ -16,10 +16,13 @@ module RDF::Turtle
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Format < RDF::Format
-    content_type     'text/turtle',         :extension => :ttl
-    content_type     'text/rdf+turtle'
-    content_type     'application/turtle'
-    content_type     'application/x-turtle'
+    content_type     'text/turtle',
+                     :extension => :ttl,
+                     :aliases => %w(
+                      text/rdf+turtle
+                      application/turtle
+                      application/x-turtle
+                     )
     content_encoding 'utf-8'
 
     reader { RDF::Turtle::Reader }
@@ -62,6 +65,15 @@ module RDF::Turtle
   #     RDF::Format.for(:ttl).reader  # RDF::Turtle::Reader
   #     RDF::Format.for(:ttl).writer  # RDF::Turtle::Writer
   class TTL < RDF::Format
+    content_type     'text/turtle',
+                     :extension => :ttl,
+                     :aliases => %w(
+                      text/rdf+turtle
+                      application/turtle
+                      application/x-turtle
+                     )
+    content_encoding 'utf-8'
+
     reader { RDF::Turtle::Reader }
     writer { RDF::Turtle::Writer }
   end
