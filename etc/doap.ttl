@@ -15,6 +15,7 @@
   doap:description   "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
   doap:created       "2011-08-29"^^xsd:date;
   doap:programming-language "Ruby" ;
+  doap:implements    <http://www.w3.org/TR/turtle/> ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
   doap:download-page <http://rubygems.org/gems/rdf-turtle> ;
