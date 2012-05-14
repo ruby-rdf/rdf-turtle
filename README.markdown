@@ -104,7 +104,7 @@ To install the latest official release of the `RDF::Turtle` gem, do:
 * <http://lists.w3.org/Archives/Public/public-rdf-ruby/>
 
 ## Author
-* [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
+* [Gregg Kellogg](http://github.com/gkellogg) - <http://greggkellogg.net/>
 
 ## Contributing
 * Do your best to adhere to the existing coding conventions and idioms.
@@ -132,5 +132,5 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       http://www.w3.org/TR/2011/WD-turtle-20110809/
-[Turtle doc]:   http://rubydoc.info/github/gkellogg/rdf-turtle/master/file/README.markdown
+[Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown
 [Turtle EBNF]:  http://www.w3.org/TR/2011/WD-turtle-20110809/turtle.bnf

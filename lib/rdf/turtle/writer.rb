@@ -46,7 +46,7 @@ module RDF::Turtle
   #     end
   #   end
   #
-  # @author [Gregg Kellogg](http://kellogg-assoc.com/)
+  # @author [Gregg Kellogg](http://greggkellogg.net/)
   class Writer < RDF::Writer
     format RDF::Turtle::Format
 
