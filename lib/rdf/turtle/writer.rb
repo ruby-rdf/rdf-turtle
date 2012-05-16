@@ -243,7 +243,7 @@ module RDF::Turtle
     ##
     # Returns the Turtle representation of a URI reference.
     #
-    # @param  [RDF::URI] literal
+    # @param  [RDF::URI] uri
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_uri(uri, options = {})
@@ -393,8 +393,8 @@ module RDF::Turtle
     
     ##
     # Add debug event to debug array, if specified
-    # @param [String] message ("")
-    # @yieldreturn [String] added to message
+    #   param [String] message ("")
+    #   yieldreturn [String] added to message
     def debug(*args)
       return unless @options[:debug] || RDF::Turtle.debug?
       options = args.last.is_a?(Hash) ? args.pop : {}

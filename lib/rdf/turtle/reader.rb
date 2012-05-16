@@ -264,12 +264,10 @@ module RDF::Turtle
 
     # add a statement, object can be literal or URI or bnode
     #
-    # @param [Nokogiri::XML::Node, any] node:: XML Node or string for showing context
-    # @param [URI, Node] subject:: the subject of the statement
-    # @param [URI] predicate:: the predicate of the statement
-    # @param [URI, Node, Literal] object:: the object of the statement
-    # @return [Statement]:: Added statement
-    # @raise [RDF::ReaderError]:: Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
+    # @param [Nokogiri::XML::Node, any] node XML Node or string for showing context
+    # @param [RDF::Statement] statement the subject of the statement
+    # @return [RDF::Statement] Added statement
+    # @raise [RDF::ReaderError] Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
     def add_statement(node, statement)
       if statement.valid?
         debug(node) {"generate statement: #{statement}"}
@@ -343,9 +341,9 @@ module RDF::Turtle
 
     ##
     # Progress output when debugging
-    # @param [String] node relative location in input
-    # @param [String] message ("")
-    # @yieldreturn [String] added to message
+    #   param [String] node relative location in input
+    #   param [String] message ("")
+    #   yieldreturn [String] added to message
     def debug(*args)
       return unless @options[:debug] || RDF::Turtle.debug?
       options = args.last.is_a?(Hash) ? args.pop : {}

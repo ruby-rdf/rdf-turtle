@@ -383,7 +383,9 @@ module RDF::LL1
       token
     end
 
-    # @param [String] str Error string
+    ##
+    # @param [String] node Relevant location associated with message
+    # @param [String] message Error string
     # @param [Hash] options
     # @option options [URI, #to_s] :production
     # @option options [Token] :token
@@ -420,12 +422,12 @@ module RDF::LL1
 
     ##
     # Progress output when parsing
-    # @param [String] node Relevant location associated with message
-    # @param [String] message ("")
-    # @param [Hash] options
-    # @option options [Integer] :depth
-    #   Recursion depth for indenting output
-    # @yieldreturn [String] added to message
+    #   param [String] node Relevant location associated with message
+    #   param [String] message ("")
+    #   param [Hash] options
+    #   option options [Integer] :depth
+    #     Recursion depth for indenting output
+    #   yieldreturn [String] added to message
     def progress(node, *args)
       return unless @options[:progress] || @options[:debug]
       options = args.last.is_a?(Hash) ? args.pop : {}

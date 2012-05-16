@@ -19,7 +19,7 @@ module RDF::LL1
     ##
     # Create a scanner, from an IO or String
     #
-    # @param [String, IO, #read] file
+    # @param [String, IO, #read] input
     # @param [Hash{Symbol => Object}] options
     # @option options[Integer] :high_water (HIGH_WATER)
     # @option options[Integer] :low_water (LOW_WATER)

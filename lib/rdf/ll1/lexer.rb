@@ -65,7 +65,7 @@ module RDF::LL1
     # `\UXXXXXXXX` Unicode codepoint escape sequences replaced with their
     # unescaped UTF-8 character counterparts.
     #
-    # @param  [String] input
+    # @param  [String] string
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-sparql-query/#codepointEscape
     def self.unescape_codepoints(string)
