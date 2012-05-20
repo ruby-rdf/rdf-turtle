@@ -354,7 +354,7 @@ describe RDF::Turtle::Writer do
   
   # W3C Turtle Test suite from http://www.w3.org/TR/turtle/tests/
   describe "w3c turtle tests" do
-    require 'turtle_test'
+    require 'suite_helper'
 
     Fixtures::TurtleTest::Good.each do |m|
       m.entries.each do |t|

@@ -12,8 +12,6 @@ require 'rdf/isomorphic'
 require 'yaml'    # XXX should be in open-uri/cached
 require 'open-uri/cached'
 
-include Matchers
-
 # Create and maintain a cache of downloaded URIs
 URI_CACHE = File.expand_path(File.join(File.dirname(__FILE__), "uri-cache"))
 Dir.mkdir(URI_CACHE) unless File.directory?(URI_CACHE)
@@ -31,7 +29,6 @@ end
   c.exclusion_filter = {
     :ruby => lambda { |version| !(RUBY_VERSION.to_s =~ /^#{version.to_s}/) },
   }
-  c.include(Matchers)
   c.include(RDF::Spec::Matchers)
 end
 
@@ -46,9 +43,9 @@ def detect_format(stream)
     string = stream.to_s
   end
   case string
-  when /<(\w+:)?RDF/ then :rdfxml
-  when /<html/i   then :rdfa
-  when /@prefix/i then :ttl
-  else                 :ntriples
+  when /<(\w+:)?RDF/ then RDF::RDFXML::Reader
+  when /<html/i   then RDF::RDFa::Reader
+  when /@prefix/i then RDF::Turtle::Reader
+  else                 RDF::NTriples::Reader
   end
 end

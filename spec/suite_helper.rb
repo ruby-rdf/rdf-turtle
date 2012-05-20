@@ -53,25 +53,6 @@ module Fixtures
         ).map {|a| v = self.send(a); "#{a}='#{v}'" if v}.compact.join(", ") +
         "]"
       end
-
-      # Run test case, yields input for parser to create triples
-      def run_test(options = {})
-        # Run
-        graph = yield
-        
-        return unless self.result
-
-        case self.compare
-        when :none
-          # Don't check output, just parse to graph
-        else
-          #puts "parse #{self.outputDocument} as #{RDF::Reader.for(self.outputDocument)}"
-          format = detect_format(self.output)
-          output_graph = RDF::Graph.load(self.result, :format => format, :base_uri => self.inputDocument)
-          puts "result: #{CGI.escapeHTML(graph.to_ntriples)}" if ::RDF::Turtle::debug?
-          graph.should Matchers::be_equivalent_graph(output_graph, self)
-        end
-      end
     end
 
     class Good < Manifest
