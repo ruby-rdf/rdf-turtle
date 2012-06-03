@@ -1,23 +1,23 @@
-/* An EBNF grammar for EBNF*/
+/* An EBNF grammar for EBNF */
 [1] ebnf        ::= (declaration | rule)*
 
-[2] declaration ::= '@terminals'
+[2] declaration ::= '@terminals' | '@pass'
 
 [3] rule        ::= lhs '::=' expression
 
-[4] lhs         ::= '[' [0-9]+ ']' SYMBOL
+[4] lhs         ::= '[' SYMBOL ']' SYMBOL
 
 [5] expression  ::= alt
 
 [6] alt         ::= seq ('|' seq)*
 
-[6] seq         ::= diff+
+[7] seq         ::= diff+
 
-[7] diff        ::= postfix ('-' postfix)*
+[8] diff        ::= postfix ('-' postfix)*
 
-[8] postfix     ::= primary ( [?*+] )?
+[9] postfix     ::= primary ( [?*+] )?
 
-[9] primary     ::= HEX
+[10] primary    ::= HEX
                 |   RANGE
                 |   ENUM 
                 |   O_RANGE
@@ -28,27 +28,27 @@
 
 @terminals
 
-[10] SYMBOL     ::= ([a-z] | [A-Z] | [0-9] | "_")+
+[11] SYMBOL     ::= ([a-z] | [A-Z] | [0-9] | "_")+
 
-[11] HEX        ::= '#x' ([0-9] | [a-f] | [A-F]) ([0-9] | [a-f] | [A-F])
+[12] HEX        ::= '#x' ([0-9] | [a-f] | [A-F]) ([0-9] | [a-f] | [A-F])
 
-[12] RANGE      ::= '[' CHAR '-' CHAR ']'
+[13] RANGE      ::= '[' CHAR '-' CHAR ']'
 
-[13] ENUM       ::= '[' CHAR+ ']'
+[14] ENUM       ::= '[' CHAR+ ']'
 
-[14] O_RANGE    ::= '[^' CHAR '-' CHAR ']'
+[15] O_RANGE    ::= '[^' CHAR '-' CHAR ']'
 
-[15] OENUM      ::= '[^' CHAR+ ']'
+[16] OENUM      ::= '[^' CHAR+ ']'
 
-[16] STRING1    ::= '"' (CHAR - '"')* '"'
+[17] STRING1    ::= '"' (CHAR - '"')* '"'
 
-[17] STRING2    ::= "'" (CHAR - "'")* "'"
+[18] STRING2    ::= "'" (CHAR - "'")* "'"
 
-[18] CHAR       ::= HEX
+[19] CHAR       ::= HEX
                 |   ('\\' [\\trn'"])
                 |   [^\t\r\n'"]
 
 @pass           ::= (
                       [#x20\t\r\n]
-                    | ('/*' ([^*] | '*' [^/])* '*/')
+                    |  
                     )+

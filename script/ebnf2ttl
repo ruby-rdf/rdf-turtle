@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# ebnf2ttl --- Generate reasoned Turtle representation of EBNF input file
+# to be used in extracting parser branch tables (see gramLL1).
+
+require 'rubygems'
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
+require 'getoptlong'
+require 'ebnf'
+require 'sxp'
+
+options = {:format => :sxp}
+
+opts = GetoptLong.new(
+  ["--dbg", GetoptLong::NO_ARGUMENT],
+  ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
+  ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
+  ["--format", "-f", GetoptLong::REQUIRED_ARGUMENT],
+  ["--verbose", GetoptLong::NO_ARGUMENT]
+)
+
+input = File.open(ARGV[0]) if ARGV[0]
+
+opts.each do |opt, arg|
+  case opt
+  when '--dbg'          then options[:debug] = true
+  when '--execute'      then input = arg
+  when '--format'       then options[:format] = arg.to_sym
+  when '--output'       then options[:output] = File.open(arg, "w")
+  when '--verbose'      then $verbose = true
+  end
+end
+
+puts "ARGV: #{ARGV.inspect}"
+ebnf = EBNF.new(input || STDIN, options)
+case options[:format]
+when :ebnf    then puts ebnf.to_ebnf
+when :inspect then puts ebnf.ast.inspect
+when :sxp     then puts ebnf.to_sxp
+when :ttl     then puts ebnf.to_ttl("ttl", "http://www.w3.org/ns/formats/Turtle#}")
+end

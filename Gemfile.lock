@@ -4,13 +4,18 @@ PATH
     rdf-turtle (0.1.2)
       rdf (>= 0.3.4)
 
+PATH
+  remote: ../sxp-ruby
+  specs:
+    sxp (0.1.0)
+      json (>= 1.5.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.8)
     diff-lcs (1.1.3)
     json (1.7.3)
-    json (1.7.3-java)
     open-uri-cached (0.0.5)
     promise (0.3.0)
     rdf (0.3.5.2)
@@ -33,8 +38,6 @@ GEM
       promise (>= 0.3.0)
       rdf (>= 0.2.3)
       rdf-isomorphic (>= 0.3.0)
-    sxp (0.0.14)
-      json (>= 1.5.1)
     wirble (0.1.3)
     yard (0.8.1)
 
@@ -50,6 +53,6 @@ DEPENDENCIES
   rdf-turtle!
   rspec (>= 2.8.0)
   spira (>= 0.0.12)
-  sxp (>= 0.0.14)
+  sxp!
   wirble
   yard (>= 0.6.0)
