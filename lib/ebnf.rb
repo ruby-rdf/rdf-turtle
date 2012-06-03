@@ -157,21 +157,20 @@ class EBNF
         bra = ket = ''
       end
       
-      pred = {:"," => :seq, :"|" => :alt, :"-" => :diff, :"?" => :opt, :"+" => :plus, :"*" => :star}
       case op
-      when :",", :"|", :"-"
-        statements << %{#{indent}#{bra}#{pfx}:#{pred[op]} (}
+      when :seq, :alt, :diff
+        statements << %{#{indent}#{bra}#{pfx}:#{op} (}
         expr.each {|a| statements += ttlExpr(a, pfx, indent + '  ')}
         statements << %{#{indent} )#{ket}}
-      when :"?", :"+", :"*"
-        statements << %{#{indent}#{bra}#{pfx}:#{pred[op]} (}
+      when :opt, :plus, :star
+        statements << %{#{indent}#{bra}#{pfx}:#{op} (}
         statements += ttlExpr(expr, pfx, indent + '  ')
         statements << %{#{indent} )#{ket}} unless ket.empty?
       when :"'"
         statements << %{#{indent}"#{esc(expr)}"}
-      when :"["
+      when :range
         statements << %{#{indent}#{bra} re:matches "[#{cclass(expr.first)}]" #{ket}}
-      when :"#"
+      when :hex
         raise "didn't expect \" in expr" if args.include?(:'"')
         statements << %{#{indent}#{bra} re:matches "[#{cclass(expr.first)}]" #{ket}}
       else
@@ -239,7 +238,7 @@ class EBNF
       when /^@terminals/
         # Switch mode to parsing tokens
         token = true
-      when /^@pass\s+(.*)$/m
+      when /^@pass\s*(.*)$/m
         rule = depth {ruleParts("[0] " + r)}
         rule.kind = :pass
         rule.orig = r
@@ -363,31 +362,31 @@ class EBNF
   #
   # @example
   #     >>> ebnf("a b c")
-  #     ((',', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((seq, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
   #     
   #     >>> ebnf("a? b+ c*")
-  #     ((',', [('?', ('id', 'a')), ('+', ('id', 'b')), ('*', ('id', 'c'))]), '')
+  #     ((seq, [(opt, ('id', 'a')), (plus, ('id', 'b')), ('*', ('id', 'c'))]), '')
   #     
   #     >>> ebnf(" | x xlist")
-  #     (('|', [(',', []), (',', [('id', 'x'), ('id', 'xlist')])]), '')
+  #     ((alt, [(seq, []), (seq, [('id', 'x'), ('id', 'xlist')])]), '')
   #     
   #     >>> ebnf("a | (b - c)")
-  #     (('|', [('id', 'a'), ('-', [('id', 'b'), ('id', 'c')])]), '')
+  #     ((alt, [('id', 'a'), (diff, [('id', 'b'), ('id', 'c')])]), '')
   #     
   #     >>> ebnf("a b | c d")
-  #     (('|', [(',', [('id', 'a'), ('id', 'b')]), (',', [('id', 'c'), ('id', 'd')])]), '')
+  #     ((alt, [(seq, [('id', 'a'), ('id', 'b')]), (seq, [('id', 'c'), ('id', 'd')])]), '')
   #     
   #     >>> ebnf("a | b | c")
-  #     (('|', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((alt, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
   #     
   #     >>> ebnf("a) b c")
   #     (('id', 'a'), ' b c')
   #     
   #     >>> ebnf("BaseDecl? PrefixDecl*")
-  #     ((',', [('?', ('id', 'BaseDecl')), ('*', ('id', 'PrefixDecl'))]), '')
+  #     ((seq, [(opt, ('id', 'BaseDecl')), ('*', ('id', 'PrefixDecl'))]), '')
   #     
-  #     >>> ebnf("NCCHAR1 | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]")
-  #     (('|', [('id', 'NCCHAR1'), ("'", '-'), ('[', '0-9'), ('#', '#x00B7'), ('[', '#x0300-#x036F'), ('[', '#x203F-#x2040')]), '')
+  #     >>> ebnf("NCCHAR1 | diff | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]")
+  #     ((alt, [('id', 'NCCHAR1'), ("'", diff), (range, '0-9'), (hex, '#x00B7'), (range, '#x0300-#x036F'), (range, '#x203F-#x2040')]), '')
   #     
   # @param [String] s
   # @return [Array]
@@ -405,7 +404,7 @@ class EBNF
   ##
   # Parse alt
   #     >>> alt("a | b | c")
-  #     (('|', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((alt, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
   # @param [String] s
   # @return [Array]
   def alt(s)
@@ -416,26 +415,26 @@ class EBNF
       debug {"=> seq returned #{[e, s].inspect}"}
       if e.empty?
         break unless args.empty?
-        e = [:',', []] # empty sequence
+        e = [:seq, []] # empty sequence
       end
       args << e
       unless s.empty?
         t, ss = depth {token(s)}
-        break unless t[0] == :'|'
+        break unless t[0] == :alt
         s = ss
       end
     end
-    args.length > 1 ? [args.unshift(:"|"), s] : [e, s]
+    args.length > 1 ? [args.unshift(:alt), s] : [e, s]
   end
   
   ##
   # parse seq
   #
   #     >>> seq("a b c")
-  #     ((',', [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((seq, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
   #     
   #     >>> seq("a b? c")
-  #     ((',', [('id', 'a'), ('?', ('id', 'b')), ('id', 'c')]), '')
+  #     ((seq, [('id', 'a'), (opt, ('id', 'b')), ('id', 'c')]), '')
   def seq(s)
     debug("seq") {"(#{s.inspect})"}
     args = []
@@ -450,7 +449,7 @@ class EBNF
       end
     end
     if args.length > 1
-      [args.unshift(:","), s]
+      [args.unshift(:seq), s]
     elsif args.length == 1
       args + [s]
     else
@@ -462,7 +461,7 @@ class EBNF
   # parse diff
   # 
   #     >>> diff("a - b")
-  #     (('-', [('id', 'a'), ('id', 'b')]), '')
+  #     ((diff, [('id', 'a'), ('id', 'b')]), '')
   def diff(s)
     debug("diff") {"(#{s.inspect})"}
     e1, s = depth {postfix(s)}
@@ -471,11 +470,11 @@ class EBNF
       unless s.empty?
         t, ss = depth {token(s)}
         debug {"diff #{[t, ss].inspect}"}
-        if t.is_a?(Array) && t.first == :'-'
+        if t.is_a?(Array) && t.first == :diff
           s = ss
           e2, s = primary(s)
           unless e2.empty?
-            return [[:'-', e1, e2], s]
+            return [[:diff, e1, e2], s]
           else
             raise "Syntax Error"
           end
@@ -492,7 +491,7 @@ class EBNF
   #     (('id', 'a'), ' b c')
   #     
   #     >>> postfix("a? b c")
-  #     (('?', ('id', 'a')), ' b c')
+  #     ((opt, ('id', 'a')), ' b c')
   def postfix(s)
     debug("postfix") {"(#{s.inspect})"}
     e, s = depth {primary(s)}
@@ -501,7 +500,7 @@ class EBNF
     if !s.empty?
       t, ss = depth {token(s)}
       debug {"=> #{[t, ss].inspect}"}
-      if t.is_a?(Array) && t.first =~ /[\?\*\+]/
+      if t.is_a?(Array) && [:opt, :star, :"-", :plus].include?(t.first)
         return [[t.first, e], ss]
       end
     end
@@ -519,7 +518,7 @@ class EBNF
     debug {"=> token returned #{[t, s].inspect}"}
     if t.is_a?(Symbol) || t.is_a?(String)
       [t, s]
-    elsif %w(id ' [ #).map(&:to_sym).include?(t.first)
+    elsif %w(id ' range hex).map(&:to_sym).include?(t.first)
       [t, s]
     elsif t.first == :"("
       e, s = depth {ebnf(s)}
@@ -540,13 +539,13 @@ class EBNF
   #     (("'", 'abc'), ' def')
   #     
   #     >>> token("[0-9]")
-  #     (('[', '0-9'), '')
+  #     ((range, '0-9'), '')
   #     >>> token("#x00B7")
-  #     (('#', '#x00B7'), '')
+  #     ((hex, '#x00B7'), '')
   #     >>> token ("[#x0300-#x036F]")
-  #     (('[', '#x0300-#x036F'), '')
+  #     ((range, '#x0300-#x036F'), '')
   #     >>> token("[^<>'{}|^`]-[#x00-#x20]")
-  #     (('[', "^<>'{}|^`"), '-[#x00-#x20]')
+  #     ((range, "^<>'{}|^`"), '-[#x00-#x20]')
   def token(s)
     s = s.strip
     case m = s[0,1]
@@ -555,11 +554,11 @@ class EBNF
       [l, s]
     when '['
       l, s = s[1..-1].split(']', 2)
-      [[:'[', l], s]
+      [[:range, l], s]
     when '#'
       s.match(/(#\w+)(.*)$/)
       l, s = $1, $2
-      [[:"#", l], s]
+      [[:hex, l], s]
     when /[[:alpha:]]/
       s.match(/(\w+)(.*)$/)
       l, s = $1, $2
@@ -568,7 +567,17 @@ class EBNF
       s.match(/@(#\w+)(.*)$/)
       l, s = $1, $2
       [[:"@", l], s]
-    when /[\(\)\?\*\+\|-]/
+    when '-'
+      [[:diff], s[1..-1]]
+    when '?'
+      [[:opt], s[1..-1]]
+    when '|'
+      [[:alt], s[1..-1]]
+    when '+'
+      [[:plus], s[1..-1]]
+    when '*'
+      [[:star], s[1..-1]]
+    when /[\(\)]/
       [[m.to_sym], s[1..-1]]
     else
       raise "unrecognized token: #{s.inspect}"
