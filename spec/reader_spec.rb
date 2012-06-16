@@ -508,6 +508,15 @@ describe "RDF::Turtle::Reader" do
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
+
+      it "Can be used as language without messing up active base" do
+        ttl = %(@base <http://example.org/foo/> . <s> <p> "o"@base . <s> <p> "o" .)
+        nt = %(
+        <http://example.org/foo/s> <http://example.org/foo/p> "o"@base .
+        <http://example.org/foo/s> <http://example.org/foo/p> "o" .
+        )
+        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+      end
     end
     
     describe "BNodes" do
