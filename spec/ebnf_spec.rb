@@ -30,7 +30,7 @@ describe EBNF do
                             | ('/*' ([^*] | '*' [^/])* '*/')
                             )+
         
-      } => %q{((@pass "0" pass (plus (alt (range "#x20#09#0d%0a") (seq "/*" (star (alt (range "^*") (seq "*" (range "^/")))) "*/")))))},
+      } => %q{((@pass "0" pass (plus (alt (range "#x20#09#0d%0a") (seq "/*" (star (alt (range "^*") (seq "*" (r "^/")))) "*/")))))},
     }.each do |input, expected|
       it "parses #{input.inspect}" do
         parse(input).ast.to_sxp.should produce(expected, @debug)
@@ -105,5 +105,55 @@ describe EBNF do
     @debug = []
     options = {:debug => @debug}.merge(options)
     EBNF.new(value, options)
+  end
+end
+
+describe EBNF::Rule do
+  subject {EBNF::Rule.new("rule", "0", [])}
+
+  describe "#to_ttl" do
+  end
+  
+  describe "#ttlExpr" do
+    {
+    }.each do |title, (input, expected)|
+      it title do
+        subject.
+        subject.send(:cclass, input).should == expected
+      end
+    end
+  end
+  
+  describe "#cclass" do
+    {
+      "passes normal stuff" => [
+        %{^<>'{}|^`},
+        %{^<>'{}|^`}
+      ],
+      "turns regular hex range into unicode range" => [
+        %{#x0300-#x036F},
+        %{\\u0300-\\u036F}
+      ],
+      "turns short hex range into unicode range" => [
+        %{#xC0-#xD6},
+        %{\\u00C0-\\u00D6}
+      ],
+      "turns 3 char hex range into unicode range" => [
+        %{#x370-#x37D},
+        %{\\u0370-\\u037D}
+      ],
+      "turns long hex range into unicode range" => [
+        %{#x000300-#x00036F},
+        %{\\U00000300-\\U0000036F}
+      ],
+      "turns 5 char hex range into unicode range" => [
+        %{#x00370-#x0037D},
+        %{\\U00000370-\\U0000037D}
+      ],
+    }.each do |title, (input, expected)|
+      it title do
+        subject.send(:cclass, input).should == expected
+      end
+    end
   end
 end

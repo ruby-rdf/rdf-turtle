@@ -208,9 +208,9 @@ class EBNF
       txt.gsub(/\#x[0-9a-fA-F]+/) do |hx|
         hx = hx[2..-1]
         if hx.length <= 4
-          "\\u#{'0' * 4 - hx.length}#{hx}" 
+          "\\u#{'0' * (4 - hx.length)}#{hx}" 
         elsif hx.length <= 8
-          "\\U#{'0' * 8 - hx.length}#{hx}" 
+          "\\U#{'0' * (8 - hx.length)}#{hx}" 
         end
       end
     end

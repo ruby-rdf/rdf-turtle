@@ -30,7 +30,6 @@ opts.each do |opt, arg|
   end
 end
 
-puts "ARGV: #{ARGV.inspect}"
 ebnf = EBNF.new(input || STDIN, options)
 case options[:format]
 when :ebnf    then puts ebnf.to_ebnf
