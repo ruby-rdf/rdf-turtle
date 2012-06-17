@@ -920,6 +920,17 @@ The second line
           _:b3  rdf:rest   rdf:nil .
         )
       ],
+      "bbc short" => [
+        %q(
+          @prefix po: <http://purl.org/ontology/po/>.
+          _:a a _:b; .
+          _:c a _:d; .
+        ),
+        %q(
+          _:broadcast <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Broadcast> .
+          _:version <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Version> .
+        )
+      ],
       "bbc programmes" => [
         %q(
           @prefix dc: <http://purl.org/dc/elements/1.1/>.
@@ -969,8 +980,7 @@ The second line
           <http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/synopsis> "Actor and comedian Rhys Darby chats to Nemone." .
           <http://www.bbc.co.uk/programmes/service/6music> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Service> .
           <http://www.bbc.co.uk/programmes/service/6music> <http://purl.org/dc/elements/1.1/title> "BBC 6 Music" .
-        )
-        
+        )        
       ]
     }.each do |name, (input, expected)|
       it "matches Turtle spec #{name}" do

@@ -58,41 +58,38 @@ module RDF::Turtle
                            [\\x7e-\\xff]
                          EOS
     end
-    UCHAR                = RDF::LL1::Lexer::UCHAR
-
-    WS                   = / |\t|\r|\n  /                                         # [93s]
-    PERCENT              = /%[0-9A-Fa-f]{2}/                                      # [162s]
-    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/                 # [163s]                                      # [163s]
-    PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/                           # [160s]
-    PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}|#{UCHAR}/                     # [95s]
-    PN_CHARS_U           = /_|#{PN_CHARS_BASE}/                                   # [96s]
-    PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/                    # [98s]
-    PN_CHARS_BODY        = /(?:(?:\.|#{PN_CHARS})*#{PN_CHARS})?/
+    UCHAR                = RDF::LL1::Lexer::UCHAR                                     # [27]
+    PERCENT              = /%[0-9A-Fa-f]{2}/                                          # [170s]
+    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/                     # [172s]
+    PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/                               # [169s]
+    PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}|#{UCHAR}/                         # [163s]
+    PN_CHARS_U           = /_|:|#{PN_CHARS_BASE}/                                     # [164s]
+    PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/                        # [166s]
     PN_LOCAL_BODY        = /(?:(?:\.|#{PN_CHARS}|#{PLX})*(?:#{PN_CHARS}|#{PLX}))?/
-    PN_LOCAL             = /(?:[0-9]|#{PN_CHARS_U}|#{PLX})#{PN_LOCAL_BODY}/       # [100s]
+    PN_CHARS_BODY        = /(?:(?:\.|#{PN_CHARS})*#{PN_CHARS})?/
+    PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                         # [167s]
+    PN_LOCAL             = /(?:[0-9]|#{PN_CHARS_U}|#{PLX})#{PN_LOCAL_BODY}/           # [100s]
+    EXPONENT             = /[eE][+-]?[0-9]+/                                          # [154s]
+    ECHAR                = /\\[tbnrf\\"']/                                            # [159s]
+    
+    IRIREF               = /<(?:#{IRI_RANGE}|#{UCHAR})*>/                             # [19]
+    PNAME_NS             = /#{PN_PREFIX}?:/                                           # [139s]
+    PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/                                   # [140s]
+    BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(#{PN_CHARS}|\.)*/               # [141s]
+    LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/                             # [144s]
+    INTEGER              = /[+-]?[0-9]+/                                              # [20]
+    DECIMAL              = /[+-]?(?:[0-9]*\.[0-9]+)/                                  # [21]
+    DOUBLE               = /[+-]?(?:[0-9]+\.[0-9]*#{EXPONENT}|\.?[0-9]+#{EXPONENT})/  # [22]
+    STRING_LITERAL_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/                # [23]
+    STRING_LITERAL_SINGLE_QUOTE      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/         # [24]
+    STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m    # [25]
+    STRING_LITERAL_LONG_QUOTE = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m   # [26]
 
-    EXPONENT             = /[eE][+-]?[0-9]+/                                      # [86s]
+    WS                   = / |\t|\r|\n  /                                             # [161s]
+    NIL                  = /\(#{WS}*\)/                                               # [160s]
+    ANON                 = /\[#{WS}*\]/                                               # [162s]
+
+
                                                                                   
-    ANON                 = /\[#{WS}*\]/                                           # [94s]
-    BLANK_NODE_LABEL     = /_:#{PN_LOCAL}/                                        # [73s]
-    DECIMAL              = /(?:[0-9]+\.[0-9]+|\.[0-9]+)/                          # [78s]
-    DECIMAL_NEGATIVE     = /\-(?:[0-9]+\.[0-9]+|\.[0-9]+)/                        # [83s]
-    DECIMAL_POSITIVE     = /\+(?:[0-9]+\.[0-9]+|\.[0-9]+)/                        # [81s]
-    DOUBLE               = /(?:[0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)#{EXPONENT}/        # [79s]
-    DOUBLE_NEGATIVE      = /\-(?:[0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
-    DOUBLE_POSITIVE      = /\+(?:[0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)#{EXPONENT}/      # [79s]
-    ECHAR                = /\\[tbnrf\\"']/                                        # [91s]
-    INTEGER              = /[0-9]+/                                               # [77s]
-    INTEGER_NEGATIVE     = /\-[0-9]+/                                             # [83s]
-    INTEGER_POSITIVE     = /\+[0-9]+/                                             # [80s]
-    IRI_REF              = /<(?:#{IRI_RANGE}|#{UCHAR})*>/                         # [70s]
-    LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/                         # [76s]
-    PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                     # [99s]
-    PNAME_NS             = /#{PN_PREFIX}?:/                                       # [71s]
-    PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/                               # [72s]
-    STRING_LITERAL1      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/                 # [87s]
-    STRING_LITERAL2      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/                 # [88s]
-    STRING_LITERAL_LONG1 = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m    # [89s]
-    STRING_LITERAL_LONG2 = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m    # [90s]
   end
 end

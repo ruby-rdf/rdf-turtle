@@ -26,10 +26,10 @@ describe RDF::Turtle::Format do
 
     {
       :turtle           => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :STRING_LITERAL1  => %(:a <b> 'literal' .),
-      :STRING_LITERAL2  => %(:a <b> "literal" .),
-      :STRING_LITERAL_LONG1  => %(:a <b> '''\nliteral\n''' .),
-      :STRING_LITERAL_LONG2  => %(:a <b> """\nliteral\n""" .),
+      :STRING_LITERAL_QUOTE  => %(:a <b> 'literal' .),
+      :STRING_LITERAL_SINGLE_QUOTE  => %(:a <b> "literal" .),
+      :STRING_LITERAL_LONG_SINGLE_QUOTE  => %(:a <b> '''\nliteral\n''' .),
+      :STRING_LITERAL_LONG_QUOTE  => %(:a <b> """\nliteral\n""" .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.for {str}.should == @format_class
@@ -50,10 +50,10 @@ describe RDF::Turtle::Format do
       :ntriples         => "<a> <b> <c> .",
       :multi_line       => '<a>\n  <b>\n  "literal"\n .',
       :turtle           => "@prefix foo: <bar> .\n foo:a foo:b <c> .",
-      :STRING_LITERAL1  => %(<a> <b> 'literal' .),
-      :STRING_LITERAL2  => %(<a> <b> "literal" .),
-      :STRING_LITERAL_LONG1  => %(<a> <b> '''\nliteral\n''' .),
-      :STRING_LITERAL_LONG2  => %(<a> <b> """\nliteral\n""" .),
+      :STRING_LITERAL_QUOTE  => %(<a> <b> 'literal' .),
+      :STRING_LITERAL_SINGLE_QUOTE  => %(<a> <b> "literal" .),
+      :STRING_LITERAL_LONG_SINGLE_QUOTE  => %(<a> <b> '''\nliteral\n''' .),
+      :STRING_LITERAL_LONG_QUOTE  => %(<a> <b> """\nliteral\n""" .),
     }.each do |sym, str|
       it "detects #{sym}" do
         @format_class.detect(str).should be_true

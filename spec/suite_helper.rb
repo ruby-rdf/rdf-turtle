@@ -19,6 +19,7 @@ module Fixtures
     class Entry
       attr_accessor :debug
       attr_accessor :compare
+      attr_accessor :format
       include Spira::Resource
       type MF["Entry"]
 
@@ -42,6 +43,8 @@ module Fixtures
       def base_uri
         inputDocument.to_s.sub(BASE_URI, 'http://www.w3.org/2001/sw/DataAccess/df1/tests')
       end
+      
+      def trace; debug.join("\n") unless debug.to_a.empty?; end
       
       def inspect
         "[#{self.class.to_s} " + %w(

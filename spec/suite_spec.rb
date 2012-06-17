@@ -28,7 +28,12 @@ describe RDF::Turtle::Reader do
                   :validate => true,
                   :debug => t.debug)
 
-              graph = RDF::Graph.new << reader
+              graph = RDF::Graph.new
+              begin
+                graph << reader
+              rescue Exception => e
+                t.debug << "raised error: #{e.message}"
+              end
 
               format = detect_format(t.output)
               output_graph = RDF::Graph.load(t.result, :format => format, :base_uri => t.inputDocument)

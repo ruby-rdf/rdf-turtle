@@ -11,27 +11,21 @@ describe RDF::LL1::Lexer do
       [:ANON,                 RDF::Turtle::Terminals::ANON],
       [nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)],
       [:BLANK_NODE_LABEL,     RDF::Turtle::Terminals::BLANK_NODE_LABEL],
-      [:IRI_REF,              RDF::Turtle::Terminals::IRI_REF],
+      [:IRIREF,              RDF::Turtle::Terminals::IRIREF],
       [:DECIMAL,              RDF::Turtle::Terminals::DECIMAL],
-      [:DECIMAL_NEGATIVE,     RDF::Turtle::Terminals::DECIMAL_NEGATIVE],
-      [:DECIMAL_POSITIVE,     RDF::Turtle::Terminals::DECIMAL_POSITIVE],
       [:DOUBLE,               RDF::Turtle::Terminals::DOUBLE],
-      [:DOUBLE_NEGATIVE,      RDF::Turtle::Terminals::DOUBLE_NEGATIVE],
-      [:DOUBLE_POSITIVE,      RDF::Turtle::Terminals::DOUBLE_POSITIVE],
       [:INTEGER,              RDF::Turtle::Terminals::INTEGER],
-      [:INTEGER_NEGATIVE,     RDF::Turtle::Terminals::INTEGER_NEGATIVE],
-      [:INTEGER_POSITIVE,     RDF::Turtle::Terminals::INTEGER_POSITIVE],
       [:LANGTAG,              RDF::Turtle::Terminals::LANGTAG],
       [:PNAME_LN,             RDF::Turtle::Terminals::PNAME_LN],
       [:PNAME_NS,             RDF::Turtle::Terminals::PNAME_NS],
-      [:STRING_LITERAL_LONG1, RDF::Turtle::Terminals::STRING_LITERAL_LONG1],
-      [:STRING_LITERAL_LONG2, RDF::Turtle::Terminals::STRING_LITERAL_LONG2],
-      [:STRING_LITERAL1,      RDF::Turtle::Terminals::STRING_LITERAL1],
-      [:STRING_LITERAL2,      RDF::Turtle::Terminals::STRING_LITERAL2],
+      [:STRING_LITERAL_LONG_SINGLE_QUOTE, RDF::Turtle::Terminals::STRING_LITERAL_LONG_SINGLE_QUOTE],
+      [:STRING_LITERAL_LONG_QUOTE, RDF::Turtle::Terminals::STRING_LITERAL_LONG_QUOTE],
+      [:STRING_LITERAL_QUOTE,      RDF::Turtle::Terminals::STRING_LITERAL_QUOTE],
+      [:STRING_LITERAL_SINGLE_QUOTE,      RDF::Turtle::Terminals::STRING_LITERAL_SINGLE_QUOTE],
     ]
     
     @unescape_terms = [
-      :IRI_REF, :STRING_LITERAL1, :STRING_LITERAL2, :STRING_LITERAL_LONG1, :STRING_LITERAL_LONG2
+      :IRIREF, :STRING_LITERAL_QUOTE, :STRING_LITERAL_SINGLE_QUOTE, :STRING_LITERAL_LONG_SINGLE_QUOTE, :STRING_LITERAL_LONG_QUOTE
     ]
   end
   
@@ -118,7 +112,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes positive integer literals" do
         tokenize(%q(+42)) do |tokens|
           tokens.should have(1).element
-          tokens.last.type.should  == :INTEGER_POSITIVE
+          tokens.last.type.should  == :INTEGER
           tokens.last.value.should == "+42"
         end
       end
@@ -126,7 +120,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes negative integer literals" do
         tokenize(%q(-42)) do |tokens|
           tokens.should have(1).element
-          tokens.last.type.should  == :INTEGER_NEGATIVE
+          tokens.last.type.should  == :INTEGER
           tokens.last.value.should == "-42"
         end
       end
@@ -142,7 +136,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes positive decimal literals" do
         tokenize(%q(+3.1415)) do |tokens|
           tokens.should have(1).element
-          tokens.last.type.should  == :DECIMAL_POSITIVE
+          tokens.last.type.should  == :DECIMAL
           tokens.last.value.should == "+3.1415"
         end
       end
@@ -150,7 +144,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes negative decimal literals" do
         tokenize(%q(-3.1415)) do |tokens|
           tokens.should have(1).element
-          tokens.last.type.should  == :DECIMAL_NEGATIVE
+          tokens.last.type.should  == :DECIMAL
           tokens.last.value.should == "-3.1415"
         end
       end
@@ -166,7 +160,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes positive double literals" do
         tokenize(%q(+1e6)) do |tokens|
           tokens.should have(1).element
-          tokens.last.type.should  == :DOUBLE_POSITIVE
+          tokens.last.type.should  == :DOUBLE
           tokens.last.value.should == "+1e6"
         end
       end
@@ -174,7 +168,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes negative double literals" do
         tokenize(%q(-1e6)) do |tokens|
           tokens.should have(1).element
-          tokens.last.type.should  == :DOUBLE_NEGATIVE
+          tokens.last.type.should  == :DOUBLE
           tokens.last.value.should == "-1e6"
         end
       end
@@ -184,7 +178,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes single-quoted string literals" do
         tokenize(%q('Hello, world!')) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :STRING_LITERAL1
+          tokens.first.type.should  == :STRING_LITERAL_QUOTE
           tokens.first.value.should == %q('Hello, world!')
         end
       end
@@ -192,7 +186,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes double-quoted string literals" do
         tokenize(%q("Hello, world!")) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :STRING_LITERAL2
+          tokens.first.type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens.first.value.should == %q("Hello, world!")
         end
       end
@@ -200,7 +194,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes long single-quoted string literals" do
         tokenize(%q('''Hello, world!''')) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :STRING_LITERAL_LONG1
+          tokens.first.type.should  == :STRING_LITERAL_LONG_SINGLE_QUOTE
           tokens.first.value.should == %q('''Hello, world!''')
         end
       end
@@ -208,7 +202,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes long double-quoted string literals" do
         tokenize(%q("""Hello, world!""")) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :STRING_LITERAL_LONG2
+          tokens.first.type.should  == :STRING_LITERAL_LONG_QUOTE
           tokens.first.value.should == %q("""Hello, world!""")
         end
       end
@@ -234,11 +228,11 @@ describe RDF::LL1::Lexer do
       end
     end
 
-    describe "IRI_REF" do
+    describe "IRIREF" do
       it "tokenizes absolute IRI references" do
         tokenize(%q(<http://example.org/foobar>)) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :IRI_REF
+          tokens.first.type.should  == :IRIREF
           tokens.first.value.should == '<http://example.org/foobar>'
         end
       end
@@ -246,7 +240,7 @@ describe RDF::LL1::Lexer do
       it "tokenizes relative IRI references" do
         tokenize(%q(<foobar>)) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :IRI_REF
+          tokens.first.type.should  == :IRIREF
           tokens.first.value.should == '<foobar>'
         end
       end
@@ -292,14 +286,14 @@ describe RDF::LL1::Lexer do
       it "tokenizes language-tagged literals" do
         tokenize(%q("Hello, world!"@en)) do |tokens|
           tokens.should have(2).elements
-          tokens[0].type.should  == :STRING_LITERAL2
+          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens[0].value.should == '"Hello, world!"'
           tokens[1].type.should  == :LANGTAG
           tokens[1].value.should == "@en"
         end
         tokenize(%q("Hello, world!"@en-US)) do |tokens|
           tokens.should have(2).elements
-          tokens[0].type.should  == :STRING_LITERAL2
+          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens[0].value.should == '"Hello, world!"'
           tokens[1].type.should  == :LANGTAG
           tokens[1].value.should == '@en-US'
@@ -309,11 +303,11 @@ describe RDF::LL1::Lexer do
       it "tokenizes multiple string literals" do
         tokenize(%q("1", "2")) do |tokens|
           tokens.should have(3).elements
-          tokens[0].type.should  == :STRING_LITERAL2
+          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens[0].value.should == '"1"'
           tokens[1].type.should  == nil
           tokens[1].value.should == ','
-          tokens[2].type.should  == :STRING_LITERAL2
+          tokens[2].type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens[2].value.should == '"2"'
         end
       end
@@ -321,21 +315,21 @@ describe RDF::LL1::Lexer do
       it "datatyped literals" do
         tokenize(%q('3.1415'^^<http://www.w3.org/2001/XMLSchema#double>)) do |tokens|
           tokens.should have(3).elements
-          tokens[0].type.should  == :STRING_LITERAL1
+          tokens[0].type.should  == :STRING_LITERAL_QUOTE
           tokens[0].value.should == "'3.1415'"
           tokens[1].type.should  == nil
           tokens[1].value.should == '^^'
-          tokens[2].type.should  == :IRI_REF
+          tokens[2].type.should  == :IRIREF
           tokens[2].value.should == "<#{RDF::XSD.double}>"
         end
 
         tokenize(%q("3.1415"^^<http://www.w3.org/2001/XMLSchema#double>)) do |tokens|
           tokens.should have(3).elements
-          tokens[0].type.should  == :STRING_LITERAL2
+          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens[0].value.should == '"3.1415"'
           tokens[1].type.should  == nil
           tokens[1].value.should == '^^'
-          tokens[2].type.should  == :IRI_REF
+          tokens[2].type.should  == :IRIREF
           tokens[2].value.should == "<#{RDF::XSD.double}>"
         end
       end

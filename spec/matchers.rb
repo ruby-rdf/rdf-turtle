@@ -14,11 +14,11 @@ def normalize(graph)
   end
 end
 
-Info = Struct.new(:about, :information, :trace, :compare, :inputDocument, :outputDocument, :expectedResults, :format, :title)
+Info = Struct.new(:about, :information, :trace, :compare, :inputDocument, :result, :expectedResults, :format, :title)
 
 RSpec::Matchers.define :be_equivalent_graph do |expected, info|
   match do |actual|
-    @info = if info.respond_to?(:about)
+    @info = if info.respond_to?(:input)
       info
     elsif info.is_a?(Hash)
       identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
@@ -47,7 +47,7 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
     end +
     "\n#{info + "\n" unless info.empty?}" +
     (@info.inputDocument ? "Input file: #{@info.inputDocument}\n" : "") +
-    (@info.outputDocument ? "Output file: #{@info.outputDocument}\n" : "") +
+    (@info.result ? "Result file: #{@info.result}\n" : "") +
     "Unsorted Expected:\n#{@expected.dump(@info.format, :standard_prefixes => true)}" +
     "Unsorted Results:\n#{@actual.dump(@info.format, :standard_prefixes => true)}" +
     (@info.trace ? "\nDebug:\n#{@info.trace}" : "")
