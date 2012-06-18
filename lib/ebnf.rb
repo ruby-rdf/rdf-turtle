@@ -118,8 +118,9 @@ class EBNF
     # @param [Symbol] sym
     # @param [Array] expr
     # @param [String] orig
-    def initialize(id, sym, expr)
-      @id, @sym, @expr = id, sym, expr
+    # @param [EBNF] ebnf
+    def initialize(id, sym, expr, ebnf)
+      @id, @sym, @expr, @ebnf = id, sym, expr, ebnf
     end
     
     def to_sxp
@@ -127,13 +128,17 @@ class EBNF
     end
     
     def to_ttl
-      puts inspect
+      @ebnf.debug("to_ttl") {inspect}
+      comment = orig.strip
+      .gsub(/"""/, '\"\"\"')
+      .sub(/^\"/, '\"')
+      .sub(/\"$/m, '\"')
       statements = [
         %{:#{id} rdfs:label "#{id}"; rdf:value "#{sym}";},
-        %{  rdfs:comment """#{orig.strip}"""},
+        %{  rdfs:comment """#{comment}""";},
       ]
       
-      statements += ttlExpr(expr, kind == :token ? "re" : "g", '  ', false)
+      statements += ttl_expr(expr, kind == :token ? "re" : "g", 1, false)
       "\n" + statements.join("\n")
     end
 
@@ -142,13 +147,10 @@ class EBNF
     end
     
     private
-    def ttlExpr(expr, pfx, indent, is_obj = true)
-      puts "#{indent}ttlExpr: #{expr.inspect}"
-      if expr.is_a?(Array)
-        op = expr.shift
-      else
-        op, expr = expr, []
-      end
+    def ttl_expr(expr, pfx, depth, is_obj = true)
+      indent = '  ' * depth
+      @ebnf.debug("ttl_expr", :depth => depth) {expr.inspect}
+      op = expr.shift if expr.is_a?(Array)
       statements = []
       
       if is_obj
@@ -156,32 +158,33 @@ class EBNF
       else
         bra = ket = ''
       end
-      
+
       case op
       when :seq, :alt, :diff
         statements << %{#{indent}#{bra}#{pfx}:#{op} (}
-        expr.each {|a| statements += ttlExpr(a, pfx, indent + '  ')}
+        expr.each {|a| statements += ttl_expr(a, pfx, depth + 1)}
         statements << %{#{indent} )#{ket}}
       when :opt, :plus, :star
-        statements << %{#{indent}#{bra}#{pfx}:#{op} (}
-        statements += ttlExpr(expr, pfx, indent + '  ')
-        statements << %{#{indent} )#{ket}} unless ket.empty?
+        statements << %{#{indent}#{bra}#{pfx}:#{op} }
+        statements += ttl_expr(expr.first, pfx, depth + 1)
+        statements << %{#{indent} #{ket}} unless ket.empty?
       when :"'"
         statements << %{#{indent}"#{esc(expr)}"}
       when :range
         statements << %{#{indent}#{bra} re:matches "[#{cclass(expr.first)}]" #{ket}}
       when :hex
-        raise "didn't expect \" in expr" if args.include?(:'"')
+        raise "didn't expect \" in expr" if expr.include?(:'"')
         statements << %{#{indent}#{bra} re:matches "[#{cclass(expr.first)}]" #{ket}}
       else
         if is_obj
-          statements << %{#{indent}:#{op}}
+          statements << %{#{indent}#{expr.inspect}}
         else
-          statements << %{#{indent}g:seq ( :#{op} )}
+          statements << %{#{indent}g:seq ( #{expr.inspect} )}
         end
       end
       
-      puts "#{indent}statements: #{statements.inspect}"
+      statements.last << " ." unless is_obj
+      @ebnf.debug("statements", :depth => depth) {statements.join("\n")}
       statements
     end
     
@@ -352,7 +355,7 @@ class EBNF
     num_sym, expr = rule.split('::=', 2).map(&:strip)
     num, sym = num_sym.split(']', 2).map(&:strip)
     num = num[1..-1]
-    r = Rule.new(sym && sym.to_sym, num, ebnf(expr).first)
+    r = Rule.new(sym && sym.to_sym, num, ebnf(expr).first, self)
     debug("ruleParts") { r.inspect }
     r
   end
@@ -396,7 +399,8 @@ class EBNF
     debug {"=> alt returned #{[e, s].inspect}"}
     unless s.empty?
       t, ss = depth {token(s)}
-      return [e, ss] if t[0,1] == ')'
+      debug {"=> token returned #{[t, ss].inspect}"}
+      return [e, ss] if t.is_a?(Array) && t.first == :")"
     end
     [e, s]
   end
@@ -500,7 +504,7 @@ class EBNF
     if !s.empty?
       t, ss = depth {token(s)}
       debug {"=> #{[t, ss].inspect}"}
-      if t.is_a?(Array) && [:opt, :star, :"-", :plus].include?(t.first)
+      if t.is_a?(Array) && [:opt, :star, :plus].include?(t.first)
         return [[t.first, e], ss]
       end
     end
@@ -518,11 +522,12 @@ class EBNF
     debug {"=> token returned #{[t, s].inspect}"}
     if t.is_a?(Symbol) || t.is_a?(String)
       [t, s]
-    elsif %w(id ' range hex).map(&:to_sym).include?(t.first)
+    elsif %w(range hex).map(&:to_sym).include?(t.first)
       [t, s]
     elsif t.first == :"("
       e, s = depth {ebnf(s)}
-      [e, s[1..-1]]
+      debug {"=> ebnf returned #{[e, s].inspect}"}
+      [e, s]
     else
       ["", s]
     end

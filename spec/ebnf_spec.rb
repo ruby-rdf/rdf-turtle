@@ -30,7 +30,7 @@ describe EBNF do
                             | ('/*' ([^*] | '*' [^/])* '*/')
                             )+
         
-      } => %q{((@pass "0" pass (plus (alt (range "#x20#09#0d%0a") (seq "/*" (star (alt (range "^*") (seq "*" (r "^/")))) "*/")))))},
+      } => %q{((@pass "0" pass (plus (alt (range "#x20#09#0d%0a") (seq "/*" (star (alt (range "^*") (seq "*" (range "^/")))) "*/")))))},
     }.each do |input, expected|
       it "parses #{input.inspect}" do
         parse(input).ast.to_sxp.should produce(expected, @debug)
@@ -42,6 +42,10 @@ describe EBNF do
     {
       %{[2]     Prolog    ::=           BaseDecl? PrefixDecl*} =>
         %{(Prolog "2" #n (seq (opt BaseDecl) (star PrefixDecl)))},
+      %{[2] declaration ::= '@terminals' | '@pass'} =>
+        %{(declaration "2" #n (alt "@terminals" "@pass"))},
+      %{[9] postfix     ::= primary ( [?*+] )?} =>
+        %{(postfix "9" #n (seq primary (opt (range "?*+"))))}
     }.each do |input, expected|
       it "given #{input.inspect} produces #{expected}" do
         ebnf(:ruleParts, input).to_sxp.should produce(expected, @debug)
@@ -67,7 +71,7 @@ describe EBNF do
       %(a | (b - c)) => %{((alt a (diff b c)) "")},
       %(a b | c d) => %{((alt (seq a b) (seq c d)) "")},
       %(a | b | c) => %{((alt a b c) "")},
-      %{a) b c} => %{(a ") b c")},
+      %{a) b c} => %{(a " b c")},
       %(BaseDecl? PrefixDecl*) => %{((seq (opt BaseDecl) (star PrefixDecl)) "")},
       %(NCCHAR1 | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]) =>
         %{((alt NCCHAR1 "-" (range "0-9") (hex "#x00B7") (range "#x0300-#x036F") (range "#x203F-#x2040")) "")}
@@ -87,6 +91,7 @@ describe EBNF do
       %{[^<>'{}|^`]-[#x00-#x20]} => %{((diff (range "^<>'{}|^`") (range "#x00-#x20")) "")},
       %{a b c}                   => %{(a " b c")},
       %{a? b c}                  => %{((opt a) " b c")},
+      %{( [?*+] )?}              => %{((opt (range "?*+")) "")},
       %(a - b)                   => %{((diff a b) "")}
     }.each do |input, expected|
       it "given #{input.inspect} produces #{expected}" do
@@ -109,17 +114,42 @@ describe EBNF do
 end
 
 describe EBNF::Rule do
-  subject {EBNF::Rule.new("rule", "0", [])}
+  let(:debug) {[]}
+  let(:ebnf) {EBNF.new("", :debug => debug)}
+  subject {EBNF::Rule.new("rule", "0", [], ebnf)}
 
   describe "#to_ttl" do
   end
   
-  describe "#ttlExpr" do
-    {
-    }.each do |title, (input, expected)|
-      it title do
-        subject.
-        subject.send(:cclass, input).should == expected
+  describe "#ttl_expr" do
+    context "g" do
+      {
+        "ebnf[1]" => [
+          [:star, [:alt, :declaration, :rule]],
+          %{g:star [ g:alt ( :declaration :rule ) ] .}
+        ],
+        "ebnf[2]" => [
+          [:alt, "@terminals", "@pass"],
+          %{g:alt ( "@terminals" "@pass" ) .}
+        ],
+        "ebnf[5]" => [
+          :alt,
+          %{g:seq ( :alt ) .}
+        ],
+        "ebnf[9]" => [
+          [:seq, :primary, [:opt, [:range, "?*+"]]],
+          %{g:seq ( :primary [ g:opt [ re:matches "[?*+]" ] ] ) .}
+        ],
+      }.each do |title, (expr, expected)|
+        it title do
+          res = subject.send(:ttl_expr, expr, "g", 0, false)
+          res.each {|r| r.should be_a(String)}
+          
+          res
+          .join("\n")
+          .gsub(/\s+/, ' ')
+          .should produce(expected, debug)
+        end
       end
     end
   end
@@ -152,7 +182,7 @@ describe EBNF::Rule do
       ],
     }.each do |title, (input, expected)|
       it title do
-        subject.send(:cclass, input).should == expected
+        subject.send(:cclass, input).should produce(expected, debug)
       end
     end
   end

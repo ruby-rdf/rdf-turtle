@@ -1,0 +1,199 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix ebnf: <http://www.w3.org/ns/formats/EBNF#>.
+@prefix : <http://www.w3.org/ns/formats/EBNF#>.
+@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>.
+@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+
+:language rdfs:isDefinedBy <>; g:start :ebnf.
+
+:ebnf rdfs:label "ebnf"; rdf:value "1";
+  rdfs:comment """[1] ebnf        ::= (declaration | rule)*""";
+  g:star 
+    [ g:alt (
+      :declaration
+      :rule
+     ) ] .
+
+:declaration rdfs:label "declaration"; rdf:value "2";
+  rdfs:comment """[2] declaration ::= '@terminals' | '@pass'""";
+  g:alt (
+    "@terminals"
+    "@pass"
+   ) .
+
+:rule rdfs:label "rule"; rdf:value "3";
+  rdfs:comment """[3] rule        ::= lhs '::=' expression""";
+  g:seq (
+    :lhs
+    "::="
+    :expression
+   ) .
+
+:lhs rdfs:label "lhs"; rdf:value "4";
+  rdfs:comment """[4] lhs         ::= '[' SYMBOL ']' SYMBOL""";
+  g:seq (
+    "["
+    :SYMBOL
+    "]"
+    :SYMBOL
+   ) .
+
+:expression rdfs:label "expression"; rdf:value "5";
+  rdfs:comment """[5] expression  ::= alt""";
+  g:seq ( :alt ) .
+
+:alt rdfs:label "alt"; rdf:value "6";
+  rdfs:comment """[6] alt         ::= seq ('|' seq)*""";
+  g:seq (
+    :seq
+    [ g:star 
+      [ g:seq (
+        "|"
+        :seq
+       ) ]
+      ]
+   ) .
+
+:seq rdfs:label "seq"; rdf:value "7";
+  rdfs:comment """[7] seq         ::= diff+""";
+  g:plus 
+    :diff .
+
+:diff rdfs:label "diff"; rdf:value "8";
+  rdfs:comment """[8] diff        ::= postfix ('-' postfix)*""";
+  g:seq (
+    :postfix
+    [ g:star 
+      [ g:seq (
+        "-"
+        :postfix
+       ) ]
+      ]
+   ) .
+
+:postfix rdfs:label "postfix"; rdf:value "9";
+  rdfs:comment """[9] postfix     ::= primary ( [?*+] )?""";
+  g:seq (
+    :primary
+    [ g:opt 
+      [  re:matches "[?*+]"  ]
+      ]
+   ) .
+
+:primary rdfs:label "primary"; rdf:value "10";
+  rdfs:comment """[10] primary    ::= HEX|   RANGE|   ENUM |   O_RANGE|   O_ENUM|   STRING1|   STRING2|   '(' expression ')'""";
+  g:alt (
+    :HEX
+    :RANGE
+    :ENUM
+    :O_RANGE
+    :O_ENUM
+    :STRING1
+    :STRING2
+    [ g:seq (
+      "("
+      :expression
+      ")"
+     ) ]
+   ) .
+
+:SYMBOL rdfs:label "SYMBOL"; rdf:value "11";
+  rdfs:comment """[11] SYMBOL     ::= ([a-z] | [A-Z] | [0-9] | "_")+""";
+  re:plus 
+    [ re:alt (
+      [  re:matches "[a-z]"  ]
+      [  re:matches "[A-Z]"  ]
+      [  re:matches "[0-9]"  ]
+      "_"
+     ) ] .
+
+:HEX rdfs:label "HEX"; rdf:value "12";
+  rdfs:comment """[12] HEX        ::= '#x' ([0-9] | [a-f] | [A-F])+""";
+  re:seq (
+    "#x"
+    [ re:plus 
+      [ re:alt (
+        [  re:matches "[0-9]"  ]
+        [  re:matches "[a-f]"  ]
+        [  re:matches "[A-F]"  ]
+       ) ]
+      ]
+   ) .
+
+:RANGE rdfs:label "RANGE"; rdf:value "13";
+  rdfs:comment """[13] RANGE      ::= '[' CHAR '-' CHAR ']'""";
+  re:seq (
+    "["
+    :CHAR
+    "-"
+    :CHAR
+    "]"
+   ) .
+
+:ENUM rdfs:label "ENUM"; rdf:value "14";
+  rdfs:comment """[14] ENUM       ::= '[' CHAR+ ']'""";
+  re:seq (
+    "["
+    [ re:plus 
+      :CHAR
+      ]
+    "]"
+   ) .
+
+:O_RANGE rdfs:label "O_RANGE"; rdf:value "15";
+  rdfs:comment """[15] O_RANGE    ::= '[^' CHAR '-' CHAR ']'""";
+  re:seq (
+    "[^"
+    :CHAR
+    "-"
+    :CHAR
+    "]"
+   ) .
+
+:OENUM rdfs:label "OENUM"; rdf:value "16";
+  rdfs:comment """[16] OENUM      ::= '[^' CHAR+ ']'""";
+  re:seq (
+    "[^"
+    [ re:plus 
+      :CHAR
+      ]
+    "]"
+   ) .
+
+:STRING1 rdfs:label "STRING1"; rdf:value "17";
+  rdfs:comment """[17] STRING1    ::= '"' (CHAR - '"')* '"'""";
+  re:seq (
+    "\""
+    [ re:star 
+      [ re:diff (
+        :CHAR
+        "\""
+       ) ]
+      ]
+    "\""
+   ) .
+
+:STRING2 rdfs:label "STRING2"; rdf:value "18";
+  rdfs:comment """[18] STRING2    ::= "'" (CHAR - "'")* "'\"""";
+  re:seq (
+    "'"
+    [ re:star 
+      [ re:diff (
+        :CHAR
+        "'"
+       ) ]
+      ]
+    "'"
+   ) .
+
+:CHAR rdfs:label "CHAR"; rdf:value "19";
+  rdfs:comment """[19] CHAR       ::= HEX|   ('\\' [\\trn'"])|   [^\t\r\n'"]""";
+  re:alt (
+    :HEX
+    [ re:seq (
+      "\\\\"
+      [  re:matches "[\\trn'"]"  ]
+     ) ]
+    [  re:matches "[^\t\r\n'"]"  ]
+   ) .
