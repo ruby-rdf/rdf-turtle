@@ -131,6 +131,7 @@ class EBNF
       @ebnf.debug("to_ttl") {inspect}
       comment = orig.strip
       .gsub(/"""/, '\"\"\"')
+      .gsub("\\", "\\\\")
       .sub(/^\"/, '\"')
       .sub(/\"$/m, '\"')
       statements = [
