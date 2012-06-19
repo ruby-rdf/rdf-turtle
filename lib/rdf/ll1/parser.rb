@@ -300,7 +300,7 @@ module RDF::LL1
         handler.call(self, :start, @prod_data.last, data, @parse_callback)
         @prod_data << data
       else
-        progress("#{prod}(:start)", '')
+        progress("#{prod}(:start)") { get_token.inspect}
       end
       #puts @prod_data.inspect
     end

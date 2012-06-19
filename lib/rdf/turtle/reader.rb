@@ -40,7 +40,7 @@ module RDF::Turtle
       
       # Two contexts, one when prefix is being defined, the other when being used
       case prod
-      when :prefixID
+      when :prefixID, :sparqlPrefix
         input[:prefix] = prefix
       else
         input[:resource] = reader.pname(prefix, '')
@@ -60,13 +60,15 @@ module RDF::Turtle
     end
     
     # String terminals
-    terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |reader, prod, token, input|
+    terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|BASE|PREFIX|true|false)) do |reader, prod, token, input|
       case token.value
-      when 'a'             then input[:resource] = RDF.type
-      when 'true', 'false' then input[:resource] = RDF::Literal::Boolean.new(token.value)
-      else                      input[:string] = token.value
+      when 'a'                then input[:resource] = RDF.type
+      when 'true', 'false'    then input[:resource] = RDF::Literal::Boolean.new(token.value)
+      when '@base', '@prefix' then input[:lang] = token.value[1..-1]
+      else                         input[:string] = token.value
       end
     end
+
     terminal(:LANGTAG,              LANGTAG) do |reader, prod, token, input|
       input[:lang] = token.value[1..-1]
     end
@@ -87,6 +89,23 @@ module RDF::Turtle
       next unless phase == :finish
       iri = current[:resource]
       callback.call(:trace, "base", lambda {"Defined base as #{iri}"})
+      reader.options[:base_uri] = iri
+    end
+    
+    # [4s] sparqlPrefix ::= "PREFIX" PNAME_NS IRIREF
+    production(:sparqlPrefix) do |reader, phase, input, current, callback|
+      next unless phase == :finish
+      prefix = current[:prefix]
+      iri = current[:resource]
+      callback.call(:trace, "sparqlPrefix", lambda {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"})
+      reader.prefix(prefix, iri)
+    end
+    
+    # [5s] sparqlBase ::= "BASE" IRIREF
+    production(:sparqlBase) do |reader, phase, input, current, callback|
+      next unless phase == :finish
+      iri = current[:resource]
+      callback.call(:trace, ":sparqlBase", lambda {"Defined base as #{iri}"})
       reader.options[:base_uri] = iri
     end
     
@@ -154,7 +173,7 @@ module RDF::Turtle
       end
     end
     
-    # [60s] RDFLiteral ::= String ( LANGTAG | ( "^^" IRIref ) )? 
+    # [17] RDFLiteral ::= String ( LanguageTag | ( "^^" IRIref ) )? 
     production(:RDFLiteral) do |reader, phase, input, current, callback|
       next unless phase == :finish
       opts = {}

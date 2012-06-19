@@ -14,12 +14,9 @@
 .
 
 :statement rdfs:label "statement"; rdf:value "2";
- rdfs:comment "[2] statement ::= directive \".\" | triples \".\"";
+ rdfs:comment "[2] statement ::= directive | triples \".\"";
   g:alt (
-    [ g:seq (
-      :directive
-      "."
-     ) ]
+    :directive
     [ g:seq (
       :triples
       "."
@@ -28,26 +25,47 @@
 .
 
 :directive rdfs:label "directive"; rdf:value "3";
- rdfs:comment "[3] directive ::= prefixID | base";
+ rdfs:comment "[3] directive ::= prefixID | base | sparqlPrefix | sparqlBase";
   g:alt (
     :prefixID
     :base
+    :sparqlPrefix
+    :sparqlBase
    )
 .
 
 :prefixID rdfs:label "prefixID"; rdf:value "4";
- rdfs:comment "[4] prefixID ::= '@prefix' PNAME_NS IRIREF";
+ rdfs:comment "[4] prefixID ::= PREFIX PNAME_NS IRIREF '.'";
   g:seq (
-    "@prefix"
+    :PREFIX
+    :PNAME_NS
+    :IRIREF
+    "."
+   )
+.
+
+:base rdfs:label "base"; rdf:value "5";
+ rdfs:comment "[5] base ::= BASE IRIREF '.'";
+  g:seq (
+    :BASE
+    :IRIREF
+    "."
+   )
+.
+
+:sparqlPrefix rdfs:label "sparqlPrefix"; rdf:value "4s";
+ rdfs:comment "[4s] sparqlPrefix ::= \"PREFIX\" PNAME_NS IRIREF";
+  g:seq (
+    "PREFIX"
     :PNAME_NS
     :IRIREF
    )
 .
 
-:base rdfs:label "base"; rdf:value "5";
- rdfs:comment "[5] base ::= '@base' IRIREF";
+:sparqlBase rdfs:label "sparqlBase"; rdf:value "5s";
+ rdfs:comment "[5s] sparqlBase ::= \"BASE\" IRIREF";
   g:seq (
-    "@base"
+    "BASE"
     :IRIREF
    )
 .
@@ -69,19 +87,20 @@
 .
 
 :predicateObjectList rdfs:label "predicateObjectList"; rdf:value "7";
- rdfs:comment "[7] predicateObjectList ::= verb objectList ( \";\" verb objectList )* \";\"?";
+ rdfs:comment "[7] predicateObjectList ::= verb objectList ( \";\" ( verb objectList)? )*";
   g:seq (
     :verb
     :objectList
     [ g:star 
       [ g:seq (
         ";"
-        :verb
-        :objectList
+        [ g:opt 
+          [ g:seq (
+            :verb
+            :objectList
+           ) ]
+         ]
        ) ]
-     ]
-    [ g:opt 
-      ";"
      ]
    )
 .
@@ -121,7 +140,7 @@
 .
 
 :object rdfs:label "object"; rdf:value "12";
- rdfs:comment "[12] object ::= iri | blank | blankNodePropertyList | literal";
+ rdfs:comment "[12] object ::= iri | blank | blankNodePropertyList| literal";
   g:alt (
     :iri
     :blank
@@ -167,28 +186,37 @@
    )
 .
 
-:NumericLiteral rdfs:label "NumericLiteral"; rdf:value "17";
- rdfs:comment "[17] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
-  g:alt (
-    :INTEGER
-    :DECIMAL
-    :DOUBLE
-   )
-.
-
-:RDFLiteral rdfs:label "RDFLiteral"; rdf:value "128s";
- rdfs:comment "[128s] RDFLiteral ::= String ( LANGTAG | ( \"^^\" iri ) )?";
+:RDFLiteral rdfs:label "RDFLiteral"; rdf:value "17";
+ rdfs:comment "[17] RDFLiteral ::= String ( LanguageTag | ( \"^^\" iri ) )?";
   g:seq (
     :String
     [ g:opt 
       [ g:alt (
-        :LANGTAG
+        :LanguageTag
         [ g:seq (
           "^^"
           :iri
          ) ]
        ) ]
      ]
+   )
+.
+
+:LanguageTag rdfs:label "LanguageTag"; rdf:value "18";
+ rdfs:comment "[18] LanguageTag           ::= BASE | PREFIX | LANGTAG";
+  g:alt (
+    :BASE
+    :PREFIX
+    :LANGTAG
+   )
+.
+
+:NumericLiteral rdfs:label "NumericLiteral"; rdf:value "19";
+ rdfs:comment "[19] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
+  g:alt (
+    :INTEGER
+    :DECIMAL
+    :DOUBLE
    )
 .
 
@@ -232,6 +260,16 @@
     :BLANK_NODE_LABEL
     :ANON
    )
+.
+
+:BASE rdfs:label "BASE"; rdf:value "20";
+ rdfs:comment "[20]    BASE                  ::= '@base'";
+  g:seq (  "@base")
+.
+
+:PREFIX rdfs:label "PREFIX"; rdf:value "21";
+ rdfs:comment "[21]    PREFIX                ::= '@prefix'";
+  g:seq (  "@prefix")
 .
 
 :IRIREF rdfs:label "IRIREF"; rdf:value "19";
