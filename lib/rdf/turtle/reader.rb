@@ -251,7 +251,7 @@ module RDF::Turtle
         when :statement
           add_statement(loc, RDF::Statement.from(data))
         when :trace
-          debug(loc, *data, :level => 0)
+          debug(loc, *(data.dup << {:level => 0}))
         end
       end
     rescue RDF::LL1::Parser::Error => e
