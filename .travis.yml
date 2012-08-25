@@ -1,6 +1,6 @@
 language: ruby
 bundler_args: --without development
-script: "bundle exec rake spec:ci"
+script: "bundle exec rake spec"
 env:
   - CI=true
 rvm:
