@@ -13,6 +13,7 @@ GEM
     json (1.7.3-java)
     open-uri-cached (0.0.5)
     promise (0.3.0)
+    rake (0.9.2.2)
     rdf (0.3.5.2)
       addressable (>= 2.2.6)
     rdf-isomorphic (0.3.4)
@@ -44,6 +45,7 @@ PLATFORMS
 
 DEPENDENCIES
   open-uri-cached (>= 0.0.4)
+  rake
   rdf-isomorphic (>= 0.3.4)
   rdf-n3 (>= 0.3.5)
   rdf-spec (>= 0.3.4)

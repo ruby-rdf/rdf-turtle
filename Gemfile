@@ -4,4 +4,5 @@ gemspec :name => ""
 
 group :development do
   gem "wirble"
+  gem "rake"
 end
