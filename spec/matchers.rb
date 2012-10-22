@@ -84,3 +84,16 @@ RSpec::Matchers.define :match_re do |expected, info|
     (@info.trace ? "\nDebug:\n#{@info.trace}" : "")
   end  
 end
+
+RSpec::Matchers.define :produce do |expected, info|
+  match do |actual|
+    actual.should == expected
+  end
+  
+  failure_message_for_should do |actual|
+    "Expected: #{expected.to_json(JSON::LD::JSON_STATE)}\n" +
+    "Actual  : #{actual.to_json(JSON::LD::JSON_STATE)}\n" +
+    #(expected.is_a?(Hash) && actual.is_a?(Hash) ? "Diff: #{expected.diff(actual).to_json(JSON_STATE)}\n" : "") +
+    "Processing results:\n#{info.join("\n")}"
+  end
+end

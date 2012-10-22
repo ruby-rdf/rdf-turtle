@@ -1,92 +1,95 @@
 # Spira class for manipulating test-manifest style test suites.
 # Used for Turtle tests
-require 'spira'
 require 'rdf/turtle'
-require 'rdf/n3'    # XXX only needed because the manifest is currently returned as text/n3, not text/ttl
-require 'open-uri'
+require 'json/ld'
 
 module Fixtures
-  module TurtleTest
-    BASE_URI = "http://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests"
-    class MF < RDF::Vocabulary("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#"); end
+  module SuiteTest
+    BASE = "http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/"
+    FRAME = JSON.parse(%q({
+      "@context": {
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "mf": "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#",
+        "mq": "http://www.w3.org/2001/sw/DataAccess/tests/test-query#",
+        "rdft": "http://www.w3.org/ns/rdftest#",
+    
+        "comment": "rdfs:comment",
+        "entries": {"@id": "mf:entries", "@container": "@list"},
+        "name": "mf:name",
+        "action": {"@id": "mf:action", "@type": "@id"},
+        "result": {"@id": "mf:result", "@type": "@id"}
+      },
+      "@type": "mf:Manifest",
+      "entries": {
+        "@type": [
+          "rdft:TestTurtlePositiveSyntax",
+          "rdft:TestTurtleNegativeSyntax",
+          "rdft:TestTurtlePositiveEval"
+        ]
+      }
+    }))
+ 
+    class Manifest < JSON::LD::Resource
+      def self.open(file)
+        #puts "open: #{file}"
+        prefixes = {}
+        g = RDF::Graph.load(file, :format => :turtle)
+        json = nil
+        JSON::LD::API.fromRDF(g) do |expanded|
+          JSON::LD::API.frame(expanded, FRAME) do |framed|
+            yield Manifest.new(framed['@graph'].first)
+          end
+        end
+      end
 
-    class Manifest < Spira::Base
-      type MF.Manifest
-      property :entry_list, :predicate => MF['entries']
-      property :comment,    :predicate => RDFS.comment
+      # @param [Hash] json framed JSON-LD
+      # @return [Array<Manifest>]
+      def self.from_jsonld(json)
+        json['@graph'].map {|e| Manifest.new(e)}
+      end
+
+      def entries
+        # Map entries to resources
+        attributes['entries'].map {|e| Entry.new(e)}
+      end
     end
-
-    class Entry
+ 
+    class Entry < JSON::LD::Resource
       attr_accessor :debug
-      attr_accessor :compare
-      attr_accessor :format
-      include Spira::Resource
-      type MF["Entry"]
 
-      property :name,     :predicate => MF["name"],         :type => XSD.string
-      property :comment,  :predicate => RDF::RDFS.comment,  :type => XSD.string
-      property :result,   :predicate => MF.result
-      has_many :action,   :predicate => MF["action"]
+      def base
+        'http://example.org/base/' + action.split('/').last
+      end
 
+      # Alias data and query
       def input
-        Kernel.open(self.inputDocument)
-      end
-      
-      def output
-        self.result ? Kernel.open(self.result) : ""
+        RDF::Util::File.open_file(action)
       end
 
-      def inputDocument
-        self.class.repository.first_object(:subject => self.action.first)
-      end
-
-      def base_uri
-        inputDocument.to_s.sub(BASE_URI, 'http://www.w3.org/2001/sw/DataAccess/df1/tests')
+      def expected
+        RDF::Util::File.open_file(result)
       end
       
-      def trace; debug.join("\n") unless debug.to_a.empty?; end
+      def evaluate?
+        type == 'rdft:TestTurtlePositiveEval'
+      end
+      
+      def syntax?
+        %w(rdft:TestTurtlePositiveSyntax rdft:TestTurtleNegativeSyntax).include?(attributes['@type'])
+      end
+
+      def positive_test?
+        attributes['@type'] != 'rdft:TestTurtleNegativeSyntax'
+      end
+      
+      def negative_test?
+        !positive_test?
+      end
       
       def inspect
-        "[#{self.class.to_s} " + %w(
-          subject
-          name
-          comment
-          result
-          inputDocument
-        ).map {|a| v = self.send(a); "#{a}='#{v}'" if v}.compact.join(", ") +
-        "]"
+        super.sub('>', "\n  syntax?: #{syntax?.inspect}\n  positive?: #{positive_test?.inspect}>")
       end
     end
-
-    class Good < Manifest
-      default_source :turtle
-
-      def entries
-        RDF::List.new(entry_list, self.class.repository).map { |entry| entry.as(GoodEntry) }
-      end
-    end
-    
-    class Bad < Manifest
-      default_source :turtle_bad
-
-      def entries
-        RDF::List.new(entry_list, self.class.repository).map { |entry| entry.as(BadEntry) }
-      end
-    end
-
-    class GoodEntry < Entry
-      default_source :turtle
-    end
-
-    class BadEntry < Entry
-      default_source :turtle_bad
-    end
-
-    # Note that the texts README says to use a different base URI
-    turtle = RDF::Repository.load("#{BASE_URI}/manifest.ttl", :format => :ttl)
-    Spira.add_repository! :turtle, turtle
-    
-    turtle_bad = RDF::Repository.load("#{BASE_URI}/manifest-bad.ttl", :format => :ttl)
-    Spira.add_repository! :turtle_bad, turtle_bad
   end
 end
