@@ -58,38 +58,66 @@ module RDF::Turtle
                            [\\x7e-\\xff]
                          EOS
     end
-    UCHAR                = RDF::LL1::Lexer::UCHAR                                     # [27]
-    PERCENT              = /%[0-9A-Fa-f]{2}/                                          # [170s]
-    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/                     # [172s]
-    PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/                               # [169s]
-    PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}|#{UCHAR}/                         # [163s]
-    PN_CHARS_U           = /_|:|#{PN_CHARS_BASE}/                                     # [164s]
-    PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/                        # [166s]
-    PN_LOCAL_BODY        = /(?:(?:\.|#{PN_CHARS}|#{PLX})*(?:#{PN_CHARS}|#{PLX}))?/
+
+    # [27]
+    UCHAR                = RDF::LL1::Lexer::UCHAR
+    # [170s]
+    PERCENT              = /%[0-9A-Fa-f]{2}/
+    # [172s]
+    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/
+    # [169s]
+    PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/
+    # [163s]
+    PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}|#{UCHAR}/
+    # [164s]
+    PN_CHARS_U           = /_|#{PN_CHARS_BASE}/
+    # [166s]
+    PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/
+    PN_LOCAL_BODY        = /(?:(?:\.|:|#{PN_CHARS}|#{PLX})*(?:#{PN_CHARS}|:|#{PLX}))?/
     PN_CHARS_BODY        = /(?:(?:\.|#{PN_CHARS})*#{PN_CHARS})?/
-    PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/                         # [167s]
-    PN_LOCAL             = /(?:[0-9]|#{PN_CHARS_U}|#{PLX})#{PN_LOCAL_BODY}/           # [100s]
-    EXPONENT             = /[eE][+-]?[0-9]+/                                          # [154s]
-    ECHAR                = /\\[tbnrf\\"']/                                            # [159s]
-    
-    IRIREF               = /<(?:#{IRI_RANGE}|#{UCHAR})*>/                             # [19]
-    PNAME_NS             = /#{PN_PREFIX}?:/                                           # [139s]
-    PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/                                   # [140s]
-    BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(#{PN_CHARS}|\.)*/               # [141s]
-    LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/                             # [144s]
-    INTEGER              = /[+-]?[0-9]+/                                              # [20]
-    DECIMAL              = /[+-]?(?:[0-9]*\.[0-9]+)/                                  # [21]
-    DOUBLE               = /[+-]?(?:[0-9]+\.[0-9]*#{EXPONENT}|\.?[0-9]+#{EXPONENT})/  # [22]
-    STRING_LITERAL_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/                # [23]
-    STRING_LITERAL_SINGLE_QUOTE      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/         # [24]
-    STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m    # [25]
-    STRING_LITERAL_LONG_QUOTE = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m   # [26]
+    # [167s]
+    PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/
+    # [100s]
+    PN_LOCAL             = /(?:[0-9]|:|#{PN_CHARS_U}|#{PLX})#{PN_LOCAL_BODY}/
+    # [154s]
+    EXPONENT             = /[eE][+-]?[0-9]+/
+    # [159s]
+    ECHAR                = /\\[tbnrf\\"']/
+    # [19]
+    IRIREF               = /<(?:#{IRI_RANGE}|#{UCHAR})*>/
+    # [139s]
+    PNAME_NS             = /#{PN_PREFIX}?:/
+    # [140s]
+    PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/
+    # [141s]
+    BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(#{PN_CHARS}|\.)*/
+    # [144s]
+    LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/
+    # [20]
+    INTEGER              = /[+-]?[0-9]+/
+    # [21]
+    DECIMAL              = /[+-]?(?:[0-9]*\.[0-9]+)/
+    # [22]
+    DOUBLE               = /[+-]?(?:[0-9]+\.[0-9]*#{EXPONENT}|\.?[0-9]+#{EXPONENT})/
+    # [23]
+    STRING_LITERAL_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/
+    # [24]
+    STRING_LITERAL_SINGLE_QUOTE      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/
+    # [25]
+    STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m
+    # [26]
+    STRING_LITERAL_LONG_QUOTE = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m
 
-    WS                   = / |\t|\r|\n  /                                             # [161s]
-    NIL                  = /\(#{WS}*\)/                                               # [160s]
-    ANON                 = /\[#{WS}*\]/                                               # [162s]
-
-
-                                                                                  
+    # [161s]
+    WS                   = / |\t|\r|\n  /
+    # [160s]
+    NIL                  = /\(#{WS}*\)/
+    # [162s]
+    ANON                 = /\[#{WS}*\]/
+    # [28t]
+    SPARQL_PREFIX        = /prefix/i
+    # [29t]
+    SPARQL_BASE          = /base/i
+  
   end
 end

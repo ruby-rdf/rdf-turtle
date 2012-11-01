@@ -8,7 +8,7 @@ module RDF::LL1
     ##
     # @private
     # level above which debug messages are supressed
-    DEBUG_LEVEL = 0
+    DEBUG_LEVEL = 10
 
     ##
     # @attr [Integer] lineno
@@ -325,7 +325,8 @@ module RDF::LL1
       unless @productions.empty?
         parentProd = @productions.last
         handler = self.class.terminal_handlers[prod]
-        handler ||= self.class.terminal_handlers[nil] if prod.is_a?(String) # Allows catch-all for simple string terminals
+        # Allows catch-all for simple string terminals
+        handler ||= self.class.terminal_handlers[nil] if prod.is_a?(String)
         if handler
           handler.call(self, parentProd, token, @prod_data.last)
           progress("#{prod}(:token)", "", :depth => (depth + 1)) {"#{token}: #{@prod_data.last}"}

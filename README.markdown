@@ -132,6 +132,6 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf/master/frames
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
-[Turtle]:       http://www.w3.org/TR/turtle/
+[Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
 [Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown
-[Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/raw-file/efcf7e8a6272/rdf-turtle/turtle.bnf
+[Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf

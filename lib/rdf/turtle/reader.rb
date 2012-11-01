@@ -60,7 +60,7 @@ module RDF::Turtle
     end
     
     # String terminals
-    terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|BASE|PREFIX|true|false)) do |reader, prod, token, input|
+    terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |reader, prod, token, input|
       case token.value
       when 'a'                then input[:resource] = RDF.type
       when 'true', 'false'    then input[:resource] = RDF::Literal::Boolean.new(token.value)
@@ -71,6 +71,13 @@ module RDF::Turtle
 
     terminal(:LANGTAG,              LANGTAG) do |reader, prod, token, input|
       input[:lang] = token.value[1..-1]
+    end
+
+    terminal(:SPARQL_PREFIX,      SPARQL_PREFIX) do |reader, prod, token, input|
+      input[:string_value] = token.value.downcase
+    end
+    terminal(:SPARQL_BASE,      SPARQL_BASE) do |reader, prod, token, input|
+      input[:string_value] = token.value.downcase
     end
 
     # Productions
@@ -92,7 +99,7 @@ module RDF::Turtle
       reader.options[:base_uri] = iri
     end
     
-    # [4s] sparqlPrefix ::= "PREFIX" PNAME_NS IRIREF
+    # [28s] sparqlPrefix ::= [Pp][Rr][Ee][Ff][Ii][Xx] PNAME_NS IRIREF
     production(:sparqlPrefix) do |reader, phase, input, current, callback|
       next unless phase == :finish
       prefix = current[:prefix]
@@ -101,7 +108,7 @@ module RDF::Turtle
       reader.prefix(prefix, iri)
     end
     
-    # [5s] sparqlBase ::= "BASE" IRIREF
+    # [29s] sparqlBase ::= [Bb][Aa][Ss][Ee] IRIREF
     production(:sparqlBase) do |reader, phase, input, current, callback|
       next unless phase == :finish
       iri = current[:resource]

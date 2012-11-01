@@ -35,9 +35,9 @@
 .
 
 :prefixID rdfs:label "prefixID"; rdf:value "4";
- rdfs:comment "[4] prefixID ::= PREFIX PNAME_NS IRIREF '.'";
+ rdfs:comment "[4] prefixID ::= '@prefix' PNAME_NS IRIREF \".\"";
   g:seq (
-    :PREFIX
+    "@prefix"
     :PNAME_NS
     :IRIREF
     "."
@@ -45,27 +45,27 @@
 .
 
 :base rdfs:label "base"; rdf:value "5";
- rdfs:comment "[5] base ::= BASE IRIREF '.'";
+ rdfs:comment "[5] base ::= '@base' IRIREF \".\"";
   g:seq (
-    :BASE
+    "@base"
     :IRIREF
     "."
    )
 .
 
-:sparqlPrefix rdfs:label "sparqlPrefix"; rdf:value "4s";
- rdfs:comment "[4s] sparqlPrefix ::= \"PREFIX\" PNAME_NS IRIREF";
+:sparqlPrefix rdfs:label "sparqlPrefix"; rdf:value "28s";
+ rdfs:comment "[28s] sparqlPrefix ::= SPARQL_PREFIX PNAME_NS IRIREF";
   g:seq (
-    "PREFIX"
+    :SPARQL_PREFIX
     :PNAME_NS
     :IRIREF
    )
 .
 
-:sparqlBase rdfs:label "sparqlBase"; rdf:value "5s";
- rdfs:comment "[5s] sparqlBase ::= \"BASE\" IRIREF";
+:sparqlBase rdfs:label "sparqlBase"; rdf:value "29s";
+ rdfs:comment "[29s] sparqlBase ::= SPARQL_BASE IRIREF";
   g:seq (
-    "BASE"
+    :SPARQL_BASE
     :IRIREF
    )
 .
@@ -186,37 +186,28 @@
    )
 .
 
-:RDFLiteral rdfs:label "RDFLiteral"; rdf:value "17";
- rdfs:comment "[17] RDFLiteral ::= String ( LanguageTag | ( \"^^\" iri ) )?";
+:NumericLiteral rdfs:label "NumericLiteral"; rdf:value "17";
+ rdfs:comment "[17] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
+  g:alt (
+    :INTEGER
+    :DECIMAL
+    :DOUBLE
+   )
+.
+
+:RDFLiteral rdfs:label "RDFLiteral"; rdf:value "128s";
+ rdfs:comment "[128s] RDFLiteral ::= String ( LANGTAG | ( \"^^\" iri ) )?";
   g:seq (
     :String
     [ g:opt 
       [ g:alt (
-        :LanguageTag
+        :LANGTAG
         [ g:seq (
           "^^"
           :iri
          ) ]
        ) ]
      ]
-   )
-.
-
-:LanguageTag rdfs:label "LanguageTag"; rdf:value "18";
- rdfs:comment "[18] LanguageTag           ::= BASE | PREFIX | LANGTAG";
-  g:alt (
-    :BASE
-    :PREFIX
-    :LANGTAG
-   )
-.
-
-:NumericLiteral rdfs:label "NumericLiteral"; rdf:value "19";
- rdfs:comment "[19] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
-  g:alt (
-    :INTEGER
-    :DECIMAL
-    :DOUBLE
    )
 .
 
@@ -262,14 +253,26 @@
    )
 .
 
-:BASE rdfs:label "BASE"; rdf:value "20";
- rdfs:comment "[20]    BASE                  ::= '@base'";
-  g:seq (  "@base")
+:SPARQL_PREFIX rdfs:label "SPARQL_PREFIX"; rdf:value "28t";
+ rdfs:comment "[28t] SPARQL_PREFIX ::= [Pp][Rr][Ee][Ff][Ii][Xx]";
+  re:seq (
+    [  re:matches "[Pp]"  ]
+    [  re:matches "[Rr]"  ]
+    [  re:matches "[Ee]"  ]
+    [  re:matches "[Ff]"  ]
+    [  re:matches "[Ii]"  ]
+    [  re:matches "[Xx]"  ]
+   )
 .
 
-:PREFIX rdfs:label "PREFIX"; rdf:value "21";
- rdfs:comment "[21]    PREFIX                ::= '@prefix'";
-  g:seq (  "@prefix")
+:SPARQL_BASE rdfs:label "SPARQL_BASE"; rdf:value "29t";
+ rdfs:comment "[29t] SPARQL_BASE ::= [Bb][Aa][Ss][Ee]";
+  re:seq (
+    [  re:matches "[Bb]"  ]
+    [  re:matches "[Aa]"  ]
+    [  re:matches "[Ss]"  ]
+    [  re:matches "[Ee]"  ]
+   )
 .
 
 :IRIREF rdfs:label "IRIREF"; rdf:value "19";
@@ -582,11 +585,10 @@
 .
 
 :PN_CHARS_U rdfs:label "PN_CHARS_U"; rdf:value "164s";
- rdfs:comment "[164s] PN_CHARS_U  ::=  PN_CHARS_BASE | '_' | ':'";
+ rdfs:comment "[164s] PN_CHARS_U  ::=  PN_CHARS_BASE | '_'";
   re:alt (
     :PN_CHARS_BASE
     "_"
-    ":"
    )
 .
 
@@ -621,10 +623,11 @@
 .
 
 :PN_LOCAL rdfs:label "PN_LOCAL"; rdf:value "168s";
- rdfs:comment "[168s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] | PLX ) ( ( PN_CHARS | '.' | PLX )*  ( PN_CHARS | PLX ) ) ?";
+ rdfs:comment "[168s] PN_LOCAL ::= ( PN_CHARS_U | ':' | [0-9] | PLX ) ( ( PN_CHARS | '.' | ':' | PLX )*  ( PN_CHARS | ':' | PLX ) ) ?";
   re:seq (
     [ re:alt (
       :PN_CHARS_U
+      ":"
       [  re:matches "[0-9]"  ]
       :PLX
      ) ]
@@ -634,11 +637,13 @@
           [ re:alt (
             :PN_CHARS
             "."
+            ":"
             :PLX
            ) ]
          ]
         [ re:alt (
           :PN_CHARS
+          ":"
           :PLX
          ) ]
        ) ]

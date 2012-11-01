@@ -4,13 +4,13 @@
 
 [3] directive ::= prefixID | base | sparqlPrefix | sparqlBase
 
-[4] prefixID ::= PREFIX PNAME_NS IRIREF '.'
+[4] prefixID ::= '@prefix' PNAME_NS IRIREF "."
  
-[5] base ::= BASE IRIREF '.'
+[5] base ::= '@base' IRIREF "."
  
-[4s] sparqlPrefix ::= "PREFIX" PNAME_NS IRIREF
+[28s] sparqlPrefix ::= SPARQL_PREFIX PNAME_NS IRIREF
  
-[5s] sparqlBase ::= "BASE" IRIREF
+[29s] sparqlBase ::= SPARQL_BASE IRIREF
  
 [6] triples ::= subject predicateObjectList
  | blankNodePropertyList predicateObjectList? 
@@ -29,9 +29,9 @@
 [15] blankNodePropertyList ::= "[" predicateObjectList "]" 
  
 [16] collection ::= "(" object* ")" 
-[17] RDFLiteral ::= String ( LanguageTag | ( "^^" iri ) )? 
-[18] LanguageTag           ::= BASE | PREFIX | LANGTAG
-[19] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE 
+[17] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE 
+
+[128s] RDFLiteral ::= String ( LANGTAG | ( "^^" iri ) )? 
 
 [133s] BooleanLiteral ::= "true" | "false" 
 [18] String ::= STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE | STRING_LITERAL_LONG_QUOTE 
@@ -41,8 +41,9 @@
 
 @terminals
 
-[20]    BASE                  ::= '@base'
-[21]    PREFIX                ::= '@prefix'
+[28t] SPARQL_PREFIX ::= [Pp][Rr][Ee][Ff][Ii][Xx]
+ 
+[29t] SPARQL_BASE ::= [Bb][Aa][Ss][Ee]
 
 [19] IRIREF ::=  '<' ([^#x00-#x20<>\"{}|^`\] | UCHAR)* '>'
  
@@ -94,18 +95,11 @@ EXPONENT )
  | [#F900-#FDCF] 
  | [#FDF0-#FFFD] 
  | [#10000-#EFFFF] 
-[164s] PN_CHARS_U  ::=  PN_CHARS_BASE 
- | '_' 
- | ':'
-[166s] PN_CHARS ::= PN_CHARS_U 
- | "-" 
- | [0-9] 
- | #00B7 
- | [#0300-#036F] 
- | [#203F-#2040] 
+[164s] PN_CHARS_U  ::=  PN_CHARS_BASE | '_' 
+[166s] PN_CHARS ::= PN_CHARS_U | "-" | [0-9] | #00B7 | [#0300-#036F] | [#203F-#2040] 
 [167s] PN_PREFIX ::= PN_CHARS_BASE ( ( PN_CHARS | "." )* PN_CHARS )? 
  
-[168s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] | PLX ) ( ( PN_CHARS | '.' | PLX )*  ( PN_CHARS | PLX ) ) ?
+[168s] PN_LOCAL ::= ( PN_CHARS_U | ':' | [0-9] | PLX ) ( ( PN_CHARS | '.' | ':' | PLX )*  ( PN_CHARS | ':' | PLX ) ) ?
 
 [169s] PLX ::= PERCENT | PN_LOCAL_ESC
 

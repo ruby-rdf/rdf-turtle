@@ -571,7 +571,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
 
-      it "Can be used as language without messing up active base" do
+      it "Can be used as language without messing up active base", :pending => "obsolite" do
         ttl = %(@base <http://example.org/foo/> . <s> <p> "o"@base . <s> <p> "o" .)
         nt = %(
         <http://example.org/foo/s> <http://example.org/foo/p> "o"@base .

@@ -273,7 +273,7 @@ module RDF::LL1
     # @return [Token]
     def match_token
       @terminals.each do |(term, regexp)|
-        #STDERR.puts "match[#{term}] #{scanner.rest[0..100].inspect} against #{regexp.inspect}" if term == :STRING_LITERAL_SINGLE_QUOTE
+        #STDERR.puts "match[#{term}] #{scanner.rest[0..100].inspect} against #{regexp.inspect}" #if term == :STRING_LITERAL_SINGLE_QUOTE
         if matched = scanner.scan(regexp)
           matched = unescape(matched) if @unescape_terms.include?(term)
           #STDERR.puts "  unescape? #{@unescape_terms.include?(term).inspect}"

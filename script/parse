@@ -24,6 +24,8 @@ TERMINALS = [
   [:STRING_LITERAL_LONG_QUOTE, RDF::Turtle::Terminals::STRING_LITERAL_LONG_QUOTE],
   [:STRING_LITERAL_QUOTE,      RDF::Turtle::Terminals::STRING_LITERAL_QUOTE],
   [:STRING_LITERAL_SINGLE_QUOTE,      RDF::Turtle::Terminals::STRING_LITERAL_SINGLE_QUOTE],
+  [:SPARQL_PREFIX,        RDF::Turtle::Terminals::SPARQL_PREFIX],
+  [:SPARQL_BASE ,         RDF::Turtle::Terminals::SPARQL_BASE],
 ]
 
 class P
@@ -42,8 +44,10 @@ class P
   terminal(:STRING_LITERAL_LONG_QUOTE, STRING_LITERAL_LONG_QUOTE, :unescape => true)
   terminal(:STRING_LITERAL_QUOTE,      STRING_LITERAL_QUOTE, :unescape => true)
   terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE, :unescape => true)
-  terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false))
+  terminal(nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false))
   terminal(:LANGTAG,              LANGTAG)
+  terminal(:SPARQL_PREFIX,        SPARQL_PREFIX)
+  terminal(:SPARQL_BASE,          SPARQL_BASE)
 end
 
 def run(input, options)

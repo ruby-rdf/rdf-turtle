@@ -26,7 +26,7 @@ describe RDF::Turtle::Reader do
                     :debug => t.debug)
 
                 graph = RDF::Graph.new
-                
+
                 if t.positive_test?
                   begin
                     graph << reader
@@ -34,7 +34,10 @@ describe RDF::Turtle::Reader do
                     e.message.should produce(nil, t.debug)
                   end
                 else
-                  lambda {graph << reader}.should raise_error(RDF::ReaderError)
+                  lambda {
+                    graph << reader
+                    graph.dump(:ntriples).should produce("", t.debug)
+                  }.should raise_error(RDF::ReaderError)
                 end
 
                 if t.evaluate?

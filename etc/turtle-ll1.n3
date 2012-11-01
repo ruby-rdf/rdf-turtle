@@ -25,14 +25,14 @@
     "."     g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS .
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX .
     
     "a"     g:follow "(",
                 "[",
@@ -169,32 +169,6 @@ i.e. rewrite ?, +, * operators using alt and seq
                  a re:Regex;
                  re:star :WS ]
         "]" ) .
-    
-    :BASE     a g:Production;
-         rdf:value "20";
-         rdfs:comment "[20]    BASE                  ::= '@base'";
-         rdfs:label "BASE";
-         g:first "@base";
-         g:follow "(",
-                ",",
-                "[",
-                "false",
-                "true",
-                :ANON,
-                :BLANK_NODE_LABEL,
-                :DECIMAL,
-                :DOUBLE,
-                :INTEGER,
-                :IRIREF,
-                :PNAME_LN,
-                :PNAME_NS,
-                :STRING_LITERAL_LONG_QUOTE,
-                :STRING_LITERAL_LONG_SINGLE_QUOTE,
-                :STRING_LITERAL_QUOTE,
-                :STRING_LITERAL_SINGLE_QUOTE;
-         g:nonTerminal :language;
-         g:seq  (
-        "@base" ) .
     
     :BLANK_NODE_LABEL     a re:Regex;
          rdf:value "141s";
@@ -490,8 +464,6 @@ i.e. rewrite ?, +, * operators using alt and seq
                 ",",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 "a",
                 "false",
@@ -504,6 +476,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :IRIREF,
                 :PNAME_LN,
                 :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX,
                 :STRING_LITERAL_LONG_QUOTE,
                 :STRING_LITERAL_LONG_SINGLE_QUOTE,
                 :STRING_LITERAL_QUOTE,
@@ -561,36 +535,6 @@ i.e. rewrite ?, +, * operators using alt and seq
                                  a re:Regex;
                                  re:matches "[a-zA-Z0-9]" ] ] ) ] ] ) .
     
-    :LanguageTag     a g:Production;
-         rdf:value "18";
-         rdfs:comment "[18] LanguageTag           ::= BASE | PREFIX | LANGTAG";
-         rdfs:label "LanguageTag";
-         g:alt  (
-        :BASE
-        :PREFIX
-        :LANGTAG );
-         g:first "@base",
-                "@prefix",
-                :LANGTAG;
-         g:follow "(",
-                ",",
-                "[",
-                "false",
-                "true",
-                :ANON,
-                :BLANK_NODE_LABEL,
-                :DECIMAL,
-                :DOUBLE,
-                :INTEGER,
-                :IRIREF,
-                :PNAME_LN,
-                :PNAME_NS,
-                :STRING_LITERAL_LONG_QUOTE,
-                :STRING_LITERAL_LONG_SINGLE_QUOTE,
-                :STRING_LITERAL_QUOTE,
-                :STRING_LITERAL_SINGLE_QUOTE;
-         g:nonTerminal :language .
-    
     :NIL     a re:Regex;
          rdf:value "160s";
          rdfs:comment "[160s] NIL ::= \"(\" WS* \")\"";
@@ -603,8 +547,8 @@ i.e. rewrite ?, +, * operators using alt and seq
         ")" ) .
     
     :NumericLiteral     a g:Production;
-         rdf:value "19";
-         rdfs:comment "[19] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
+         rdf:value "17";
+         rdfs:comment "[17] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
          rdfs:label "NumericLiteral";
          g:alt  (
         :INTEGER
@@ -773,22 +717,22 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PN_CHARS_U     a re:Regex;
          rdf:value "164s";
-         rdfs:comment "[164s] PN_CHARS_U  ::=  PN_CHARS_BASE | '_' | ':'";
+         rdfs:comment "[164s] PN_CHARS_U  ::=  PN_CHARS_BASE | '_'";
          rdfs:label "PN_CHARS_U";
          re:alt  (
         :PN_CHARS_BASE
-        "_"
-        ":" ) .
+        "_" ) .
     
     :PN_LOCAL     a re:Regex;
          rdf:value "168s";
-         rdfs:comment "[168s] PN_LOCAL ::= ( PN_CHARS_U | [0-9] | PLX ) ( ( PN_CHARS | '.' | PLX )*  ( PN_CHARS | PLX ) ) ?";
+         rdfs:comment "[168s] PN_LOCAL ::= ( PN_CHARS_U | ':' | [0-9] | PLX ) ( ( PN_CHARS | '.' | ':' | PLX )*  ( PN_CHARS | ':' | PLX ) ) ?";
          rdfs:label "PN_LOCAL";
          re:seq  (
          [
                  a re:Regex;
                  re:alt  (
                 :PN_CHARS_U
+                ":"
                  [
                          a re:Regex;
                          re:matches "[0-9]" ]
@@ -805,11 +749,13 @@ i.e. rewrite ?, +, * operators using alt and seq
                                  re:alt  (
                                 :PN_CHARS
                                 "."
+                                ":"
                                 :PLX ) ] ]
                      [
                              a re:Regex;
                              re:alt  (
                             :PN_CHARS
+                            ":"
                             :PLX ) ] ) ] ] ) .
     
     :PN_LOCAL_ESC     a re:Regex;
@@ -862,32 +808,6 @@ i.e. rewrite ?, +, * operators using alt and seq
                                 "." ) ] ]
                     :PN_CHARS ) ] ] ) .
     
-    :PREFIX     a g:Production;
-         rdf:value "21";
-         rdfs:comment "[21]    PREFIX                ::= '@prefix'";
-         rdfs:label "PREFIX";
-         g:first "@prefix";
-         g:follow "(",
-                ",",
-                "[",
-                "false",
-                "true",
-                :ANON,
-                :BLANK_NODE_LABEL,
-                :DECIMAL,
-                :DOUBLE,
-                :INTEGER,
-                :IRIREF,
-                :PNAME_LN,
-                :PNAME_NS,
-                :STRING_LITERAL_LONG_QUOTE,
-                :STRING_LITERAL_LONG_SINGLE_QUOTE,
-                :STRING_LITERAL_QUOTE,
-                :STRING_LITERAL_SINGLE_QUOTE;
-         g:nonTerminal :language;
-         g:seq  (
-        "@prefix" ) .
-    
     :PrefixedName     a g:Production;
          rdf:value "136s";
          rdfs:comment "[136s] PrefixedName ::= PNAME_LN | PNAME_NS";
@@ -918,8 +838,8 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language .
     
     :RDFLiteral     a g:Production;
-         rdf:value "17";
-         rdfs:comment """[17] RDFLiteral ::= String ( LanguageTag | ( "^^" iri ) )?""";
+         rdf:value "128s";
+         rdfs:comment """[128s] RDFLiteral ::= String ( LANGTAG | ( "^^" iri ) )?""";
          rdfs:label "RDFLiteral";
          g:first :STRING_LITERAL_LONG_QUOTE,
                 :STRING_LITERAL_LONG_SINGLE_QUOTE,
@@ -947,13 +867,53 @@ i.e. rewrite ?, +, * operators using alt and seq
         :String
         <#_g8> ) .
     
+    :SPARQL_BASE     a re:Regex;
+         rdf:value "29t";
+         rdfs:comment "[29t] SPARQL_BASE ::= [Bb][Aa][Ss][Ee]";
+         rdfs:label "SPARQL_BASE";
+         re:seq  (
+         [
+                 a re:Regex;
+                 re:matches "[Bb]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Aa]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ss]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ee]" ] ) .
+    
+    :SPARQL_PREFIX     a re:Regex;
+         rdf:value "28t";
+         rdfs:comment "[28t] SPARQL_PREFIX ::= [Pp][Rr][Ee][Ff][Ii][Xx]";
+         rdfs:label "SPARQL_PREFIX";
+         re:seq  (
+         [
+                 a re:Regex;
+                 re:matches "[Pp]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Rr]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ee]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ff]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Ii]" ]
+         [
+                 a re:Regex;
+                 re:matches "[Xx]" ] ) .
+    
     :STRING_LITERAL_LONG_QUOTE     a re:Regex;
          rdf:value "26";
          rdfs:comment """[26] STRING_LITERAL_LONG_QUOTE ::= '\"""' ( ( '"' | '""' )? ( [^"\\] | ECHAR | UCHAR ) )* '\"""'""";
          rdfs:label "STRING_LITERAL_LONG_QUOTE";
-         g:follow "@base",
-                "@prefix",
-                "^^",
+         g:follow "^^",
                 :LANGTAG;
          re:seq  (
         "\"\"\""
@@ -983,9 +943,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          rdf:value "25";
          rdfs:comment "[25] STRING_LITERAL_LONG_SINGLE_QUOTE ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\] | ECHAR | UCHAR ) )* \"'''\"";
          rdfs:label "STRING_LITERAL_LONG_SINGLE_QUOTE";
-         g:follow "@base",
-                "@prefix",
-                "^^",
+         g:follow "^^",
                 :LANGTAG;
          re:seq  (
         "'''"
@@ -1015,9 +973,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          rdf:value "23";
          rdfs:comment """[23] STRING_LITERAL_QUOTE ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'""";
          rdfs:label "STRING_LITERAL_QUOTE";
-         g:follow "@base",
-                "@prefix",
-                "^^",
+         g:follow "^^",
                 :LANGTAG;
          re:seq  (
         "\""
@@ -1037,9 +993,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          rdf:value "24";
          rdfs:comment "[24] STRING_LITERAL_SINGLE_QUOTE ::= \"'\" ( [^#x27#x5C#xA#xD] | ECHAR | UCHAR )* \"'\"";
          rdfs:label "STRING_LITERAL_SINGLE_QUOTE";
-         g:follow "@base",
-                "@prefix",
-                "^^",
+         g:follow "^^",
                 :LANGTAG;
          re:seq  (
         "'"
@@ -1068,9 +1022,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :STRING_LITERAL_LONG_SINGLE_QUOTE,
                 :STRING_LITERAL_QUOTE,
                 :STRING_LITERAL_SINGLE_QUOTE;
-         g:follow "@base",
-                "@prefix",
-                "^^",
+         g:follow "^^",
                 :LANGTAG;
          g:nonTerminal :language .
     
@@ -1120,23 +1072,23 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :base     a g:Production;
          rdf:value "5";
-         rdfs:comment "[5] base ::= BASE IRIREF '.'";
+         rdfs:comment "[5] base ::= '@base' IRIREF \".\"";
          rdfs:label "base";
          g:first "@base";
          g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:nonTerminal :language;
          g:seq  (
-        :BASE
+        "@base"
         :IRIREF
         "." ) .
     
@@ -1239,19 +1191,19 @@ i.e. rewrite ?, +, * operators using alt and seq
         :sparqlBase );
          g:first "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX";
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:nonTerminal :language .
     
     :iri     a g:Production;
@@ -1293,8 +1245,6 @@ i.e. rewrite ?, +, * operators using alt and seq
                 ";",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 "]",
                 "^^",
@@ -1310,6 +1260,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                 :LANGTAG,
                 :PNAME_LN,
                 :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX,
                 :STRING_LITERAL_LONG_QUOTE,
                 :STRING_LITERAL_LONG_SINGLE_QUOTE,
                 :STRING_LITERAL_QUOTE,
@@ -1464,67 +1416,67 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :prefixID     a g:Production;
          rdf:value "4";
-         rdfs:comment "[4] prefixID ::= PREFIX PNAME_NS IRIREF '.'";
+         rdfs:comment "[4] prefixID ::= '@prefix' PNAME_NS IRIREF \".\"";
          rdfs:label "prefixID";
          g:first "@prefix";
          g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:nonTerminal :language;
          g:seq  (
-        :PREFIX
+        "@prefix"
         :PNAME_NS
         :IRIREF
         "." ) .
     
     :sparqlBase     a g:Production;
-         rdf:value "5s";
-         rdfs:comment """[5s] sparqlBase ::= "BASE" IRIREF""";
+         rdf:value "29s";
+         rdfs:comment "[29s] sparqlBase ::= SPARQL_BASE IRIREF";
          rdfs:label "sparqlBase";
-         g:first "BASE";
+         g:first :SPARQL_BASE;
          g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:nonTerminal :language;
          g:seq  (
-        "BASE"
+        :SPARQL_BASE
         :IRIREF ) .
     
     :sparqlPrefix     a g:Production;
-         rdf:value "4s";
-         rdfs:comment """[4s] sparqlPrefix ::= "PREFIX" PNAME_NS IRIREF""";
+         rdf:value "28s";
+         rdfs:comment "[28s] sparqlPrefix ::= SPARQL_PREFIX PNAME_NS IRIREF";
          rdfs:label "sparqlPrefix";
-         g:first "PREFIX";
+         g:first :SPARQL_PREFIX;
          g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:nonTerminal :language;
          g:seq  (
-        "PREFIX"
+        :SPARQL_PREFIX
         :PNAME_NS
         :IRIREF ) .
     
@@ -1546,14 +1498,14 @@ i.e. rewrite ?, +, * operators using alt and seq
                  g:follow "(",
                         "@base",
                         "@prefix",
-                        "BASE",
-                        "PREFIX",
                         "[",
                         :ANON,
                         :BLANK_NODE_LABEL,
                         :IRIREF,
                         :PNAME_LN,
-                        :PNAME_NS;
+                        :PNAME_NS,
+                        :SPARQL_BASE,
+                        :SPARQL_PREFIX;
                  g:nonTerminal :language;
                  g:seq  (
                 :triples
@@ -1561,25 +1513,25 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:first "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:follow "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:nonTerminal :language .
     
     :subject     a g:Production;
@@ -1645,14 +1597,14 @@ i.e. rewrite ?, +, * operators using alt and seq
                  g:first "(",
                         "@base",
                         "@prefix",
-                        "BASE",
-                        "PREFIX",
                         "[",
                         :ANON,
                         :BLANK_NODE_LABEL,
                         :IRIREF,
                         :PNAME_LN,
-                        :PNAME_NS;
+                        :PNAME_NS,
+                        :SPARQL_BASE,
+                        :SPARQL_PREFIX;
                  g:follow g:eof;
                  g:nonTerminal :language;
                  g:seq  (
@@ -1661,15 +1613,15 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:first "(",
                 "@base",
                 "@prefix",
-                "BASE",
-                "PREFIX",
                 "[",
                 g:eps,
                 :ANON,
                 :BLANK_NODE_LABEL,
                 :IRIREF,
                 :PNAME_LN,
-                :PNAME_NS;
+                :PNAME_NS,
+                :SPARQL_BASE,
+                :SPARQL_PREFIX;
          g:follow g:eof;
          g:nonTerminal :language;
          g:star :statement .
@@ -1836,9 +1788,7 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:alt  (
         g:empty
         <#_g9> );
-         g:first "@base",
-                "@prefix",
-                "^^",
+         g:first "^^",
                 g:eps,
                 :LANGTAG;
          g:follow "(",
@@ -1863,7 +1813,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     <#_g9>     a g:Production;
          g:alt  (
-        :LanguageTag
+        :LANGTAG
          [
                  a g:Production;
                  g:first "^^";
@@ -1888,9 +1838,7 @@ i.e. rewrite ?, +, * operators using alt and seq
                  g:seq  (
                 "^^"
                 :iri ) ] );
-         g:first "@base",
-                "@prefix",
-                "^^",
+         g:first "^^",
                 :LANGTAG;
          g:follow "(",
                 ",",
@@ -1914,15 +1862,15 @@ i.e. rewrite ?, +, * operators using alt and seq
              g:first "(",
                     "@base",
                     "@prefix",
-                    "BASE",
-                    "PREFIX",
                     "[",
                     g:eps,
                     :ANON,
                     :BLANK_NODE_LABEL,
                     :IRIREF,
                     :PNAME_LN,
-                    :PNAME_NS;
+                    :PNAME_NS,
+                    :SPARQL_BASE,
+                    :SPARQL_PREFIX;
              g:seq  (
             :turtleDoc ) ].
     
@@ -1959,13 +1907,8 @@ i.e. rewrite ?, +, * operators using alt and seq
              g:seq  (
             <#_g7> ) ].
     
-      [      g:first g:eps;
-             g:seq () ].
-    
       [      a g:Production;
-             g:first "@base",
-                    "@prefix",
-                    "^^",
+             g:first "^^",
                     g:eps,
                     :LANGTAG;
              g:seq  (
@@ -2008,6 +1951,9 @@ i.e. rewrite ?, +, * operators using alt and seq
              g:seq  (
             :predicateObjectList
             "]" ) ].
+    
+      [      g:first g:eps;
+             g:seq () ].
     
       [      a g:Production;
              g:first "(",
