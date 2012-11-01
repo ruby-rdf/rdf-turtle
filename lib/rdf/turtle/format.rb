@@ -40,7 +40,7 @@ module RDF::Turtle
     def self.detect(sample)
       !!sample.match(%r(
         (?:@(base|prefix)) |                                            # Turtle keywords
-        ["']{3} |                                                       # STRING_LITERAL_LONG1/2
+        ["']{3} |                                                       # STRING_LITERAL_LONG_SINGLE_QUOTE/2
         "[^"]*"^^ | "[^"]*"@ |                                          # Typed/Language literals
         (?:
           (?:\s*(?:(?:<[^>]*>) | (?:\w*:\w+) | (?:"[^"]*"))\s*[,;]) ||

@@ -17,34 +17,16 @@ module RDF::Turtle
     terminal(:BLANK_NODE_LABEL,     BLANK_NODE_LABEL) do |reader, prod, token, input|
       input[:resource] = reader.bnode(token.value[2..-1])
     end
-    terminal(:IRI_REF,              IRI_REF, :unescape => true) do |reader, prod, token, input|
+    terminal(:IRIREF,               IRIREF, :unescape => true) do |reader, prod, token, input|
       input[:resource] = reader.process_iri(token.value[1..-2])
     end
     terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
     end
-    terminal(:DOUBLE_NEGATIVE,      DOUBLE_NEGATIVE) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
-    end
-    terminal(:DOUBLE_POSITIVE,      DOUBLE_POSITIVE) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
-    end
     terminal(:DECIMAL,              DECIMAL) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
     end
-    terminal(:DECIMAL_NEGATIVE,     DECIMAL_NEGATIVE) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
-    end
-    terminal(:DECIMAL_POSITIVE,     DECIMAL_POSITIVE) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
-    end
     terminal(:INTEGER,              INTEGER) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
-    end
-    terminal(:INTEGER_NEGATIVE,     INTEGER_NEGATIVE) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
-    end
-    terminal(:INTEGER_POSITIVE,     INTEGER_POSITIVE) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
     end
     # Spec confusion: spec says : "Literals , prefixed names and IRIs may also contain escape sequences"
@@ -58,35 +40,44 @@ module RDF::Turtle
       
       # Two contexts, one when prefix is being defined, the other when being used
       case prod
-      when :prefixID
+      when :prefixID, :sparqlPrefix
         input[:prefix] = prefix
       else
         input[:resource] = reader.pname(prefix, '')
       end
     end
-    terminal(:STRING_LITERAL_LONG1, STRING_LITERAL_LONG1, :unescape => true) do |reader, prod, token, input|
+    terminal(:STRING_LITERAL_LONG_SINGLE_QUOTE, STRING_LITERAL_LONG_SINGLE_QUOTE, :unescape => true) do |reader, prod, token, input|
       input[:string_value] = token.value[3..-4]
     end
-    terminal(:STRING_LITERAL_LONG2, STRING_LITERAL_LONG2, :unescape => true) do |reader, prod, token, input|
+    terminal(:STRING_LITERAL_LONG_QUOTE, STRING_LITERAL_LONG_QUOTE, :unescape => true) do |reader, prod, token, input|
       input[:string_value] = token.value[3..-4]
     end
-    terminal(:STRING_LITERAL1,      STRING_LITERAL1, :unescape => true) do |reader, prod, token, input|
+    terminal(:STRING_LITERAL_QUOTE,      STRING_LITERAL_QUOTE, :unescape => true) do |reader, prod, token, input|
       input[:string_value] = token.value[1..-2]
     end
-    terminal(:STRING_LITERAL2,      STRING_LITERAL2, :unescape => true) do |reader, prod, token, input|
+    terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE, :unescape => true) do |reader, prod, token, input|
       input[:string_value] = token.value[1..-2]
     end
     
     # String terminals
     terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |reader, prod, token, input|
       case token.value
-      when 'a'             then input[:resource] = RDF.type
-      when 'true', 'false' then input[:resource] = RDF::Literal::Boolean.new(token.value)
-      else                      input[:string] = token.value
+      when 'a'                then input[:resource] = RDF.type
+      when 'true', 'false'    then input[:resource] = RDF::Literal::Boolean.new(token.value)
+      when '@base', '@prefix' then input[:lang] = token.value[1..-1]
+      else                         input[:string] = token.value
       end
     end
+
     terminal(:LANGTAG,              LANGTAG) do |reader, prod, token, input|
       input[:lang] = token.value[1..-1]
+    end
+
+    terminal(:SPARQL_PREFIX,      SPARQL_PREFIX) do |reader, prod, token, input|
+      input[:string_value] = token.value.downcase
+    end
+    terminal(:SPARQL_BASE,      SPARQL_BASE) do |reader, prod, token, input|
+      input[:string_value] = token.value.downcase
     end
 
     # Productions
@@ -108,6 +99,30 @@ module RDF::Turtle
       reader.options[:base_uri] = iri
     end
     
+    # [28s] sparqlPrefix ::= [Pp][Rr][Ee][Ff][Ii][Xx] PNAME_NS IRIREF
+    production(:sparqlPrefix) do |reader, phase, input, current, callback|
+      next unless phase == :finish
+      prefix = current[:prefix]
+      iri = current[:resource]
+      callback.call(:trace, "sparqlPrefix", lambda {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"})
+      reader.prefix(prefix, iri)
+    end
+    
+    # [29s] sparqlBase ::= [Bb][Aa][Ss][Ee] IRIREF
+    production(:sparqlBase) do |reader, phase, input, current, callback|
+      next unless phase == :finish
+      iri = current[:resource]
+      callback.call(:trace, ":sparqlBase", lambda {"Defined base as #{iri}"})
+      reader.options[:base_uri] = iri
+    end
+    
+    # [6] triples
+    production(:triples) do |reader, phase, input, current, callback|
+      # Note production as triples for blankNodePropertyList
+      # to set :subject instead of :resource
+      current[:triples] = true
+    end
+
     # [9] verb ::= predicate | "a"
     production(:verb) do |reader, phase, input, current, callback|
       input[:predicate] = current[:resource] if phase == :finish
@@ -115,10 +130,11 @@ module RDF::Turtle
 
     # [10] subject ::= IRIref | blank
     production(:subject) do |reader, phase, input, current, callback|
+      current[:triples] = nil if phase == :start
       input[:subject] = current[:resource] if phase == :finish
     end
 
-    # [12] object ::= IRIref | blank | literal
+    # [12] object ::= iri | blank | blankNodePropertyList | literal
     production(:object) do |reader, phase, input, current, callback|
       next unless phase == :finish
       if input[:object_list]
@@ -134,6 +150,8 @@ module RDF::Turtle
     production(:blankNodePropertyList) do |reader, phase, input, current, callback|
       if phase == :start
         current[:subject] = reader.bnode
+      elsif input[:triples]
+        input[:subject] = current[:subject]
       else
         input[:resource] = current[:subject]
       end
@@ -162,7 +180,7 @@ module RDF::Turtle
       end
     end
     
-    # [60s] RDFLiteral ::= String ( LANGTAG | ( "^^" IRIref ) )? 
+    # [17] RDFLiteral ::= String ( LanguageTag | ( "^^" IRIref ) )? 
     production(:RDFLiteral) do |reader, phase, input, current, callback|
       next unless phase == :finish
       opts = {}
@@ -240,11 +258,11 @@ module RDF::Turtle
         when :statement
           add_statement(loc, RDF::Statement.from(data))
         when :trace
-          debug(loc, *data)
+          debug(loc, *(data.dup << {:level => 0}))
         end
       end
     rescue RDF::LL1::Parser::Error => e
-      debug("Parsing completed with errors:\n\t#{e.message}")
+      progress("Parsing completed with errors:\n\t#{e.message}")
       raise RDF::ReaderError, e.message if validate?
     end
     
@@ -270,7 +288,7 @@ module RDF::Turtle
     # @raise [RDF::ReaderError] Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
     def add_statement(node, statement)
       if statement.valid?
-        debug(node) {"generate statement: #{statement}"}
+        progress(node) {"generate statement: #{statement}"}
         @callback.call(statement)
       else
         error(node, "Statement is invalid: #{statement.inspect}")
@@ -347,6 +365,8 @@ module RDF::Turtle
     def debug(*args)
       return unless @options[:debug] || RDF::Turtle.debug?
       options = args.last.is_a?(Hash) ? args.pop : {}
+      debug_level = options.fetch(:level, 1)
+      return unless debug_level <= DEBUG_LEVEL
       depth = options[:depth] || self.depth
       message = args.pop
       message = message.call if message.is_a?(Proc)

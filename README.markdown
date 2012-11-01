@@ -1,4 +1,5 @@
 # RDF::Turtle reader/writer
+[![Build Status](https://secure.travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
 ## Description
@@ -48,7 +49,7 @@ In some cases, the specification is unclear on certain issues:
   cannot if the IRI contains any characters that might need escaping. This implementation currently abides
   by this restriction. Presumably, this would affect both PNAME\_NS and PNAME\_LN terminals.
   (This is being tracked as issues [67](http://www.w3.org/2011/rdf-wg/track/issues/67)).
-* The EBNF definition of IRI_REF seems malformed, and has no provision for \^, as discussed elsewhere in the spec.
+* The EBNF definition of IRIREF seems malformed, and has no provision for \^, as discussed elsewhere in the spec.
   We presume that [#0000- ] is intended to be [#0000-#0020].
 * The list example in section 6 uses a list on it's own, without a predicate or object, which is not allowed
   by the grammar (neither is a blankNodeProperyList). Either the EBNF should be updated to allow for these
@@ -131,6 +132,6 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf/master/frames
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
-[Turtle]:       http://www.w3.org/TR/2011/WD-turtle-20110809/
+[Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
 [Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown
-[Turtle EBNF]:  http://www.w3.org/TR/2011/WD-turtle-20110809/turtle.bnf
+[Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf

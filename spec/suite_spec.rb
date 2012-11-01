@@ -6,61 +6,51 @@ describe RDF::Turtle::Reader do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    describe "positive parser tests" do
-      Fixtures::TurtleTest::Good.each do |m|
-        m.entries.each do |t|
-          #puts t.inspect
-          specify "#{t.name}: #{t.comment}" do
-            # Skip tests for very long files, too long
-            if %w(test-14 test-15 test-16).include?(t.name)
-              pending("Skip long input file")
-            elsif %w(test-29).include?(t.name)
-              pending("Escapes in IRIs")
-            else
-              t.debug = []
-              t.debug << "source:"
-              t.debug << t.input.read
+    %w(TurtleSubm/manifest.ttl TurtleSubm/manifest-bad.ttl Turtle/manifest.ttl ).each do |man|
+      Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
+        describe m.comment do
+          m.entries.each do |t|
+            specify "#{t.name}: #{t.comment}" do
+              if %w(test-14 test-15 test-16).include?(t.name)
+                pending("Skip long input file")
+              elsif %w(test-29).include?(t.name)
+                pending("Escapes in IRIs")
+              else
+                t.debug = [t.inspect, "source:", t.input.read]
 
-              reader = RDF::Turtle::Reader.new(t.input,
-                  :base_uri => t.base_uri,
-                  :strict => true,
-                  :canonicalize => true,
-                  :validate => true,
-                  :debug => t.debug)
+                reader = RDF::Turtle::Reader.new(t.input,
+                    :base_uri => t.base,
+                    :strict => true,
+                    :canonicalize => true,
+                    :validate => true,
+                    :debug => t.debug)
 
-              graph = RDF::Graph.new << reader
+                graph = RDF::Graph.new
 
-              format = detect_format(t.output)
-              output_graph = RDF::Graph.load(t.result, :format => format, :base_uri => t.inputDocument)
-              graph.should be_equivalent_graph(output_graph, t)
+                if t.positive_test?
+                  begin
+                    graph << reader
+                  rescue Exception => e
+                    e.message.should produce(nil, t.debug)
+                  end
+                else
+                  lambda {
+                    graph << reader
+                    graph.dump(:ntriples).should produce("", t.debug)
+                  }.should raise_error(RDF::ReaderError)
+                end
+
+                if t.evaluate?
+                  output_graph = RDF::Graph.load(t.result, :format => :ntriples, :base_uri => t.base)
+                  graph.should be_equivalent_graph(output_graph, t)
+                else
+                  graph.should be_a(RDF::Enumerable)
+                end
+              end
             end
           end
         end
       end
     end
-
-    describe "negative parser tests" do
-      Fixtures::TurtleTest::Bad.each do |m|
-        m.entries.each do |t|
-          specify "#{t.name}: #{t.comment}" do
-            t.debug = []
-            t.debug << "source:"
-            t.debug << t.input.read
-
-            reader = RDF::Turtle::Reader.new(t.input,
-                :base_uri => t.base_uri,
-                :strict => true,
-                :canonicalize => true,
-                :validate => true,
-                :debug => t.debug)
-                
-            lambda do
-              graph = RDF::Graph.new << reader
-            end.should raise_error(RDF::ReaderError)
-          end
-        end
-      end
-    end
   end
-
-end
+end unless ENV['CI']

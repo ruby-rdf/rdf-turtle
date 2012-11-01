@@ -61,12 +61,12 @@ describe RDF::LL1::Scanner do
         scanner.scan(/\w+/).should == "foo"
       end
       
-      it "returns a STRING_LITERAL1" do
+      it "returns a STRING_LITERAL_QUOTE" do
         scanner = RDF::LL1::Scanner.new(StringIO.new("'string' foo"))
         scanner.scan(/'((?:[^\x27\x5C\x0A\x0D])*)'/).should == "'string'"
       end
       
-      it "returns a STRING_LITERAL_LONG1" do
+      it "returns a STRING_LITERAL_LONG_SINGLE_QUOTE" do
         scanner = RDF::LL1::Scanner.new(StringIO.new("'''\nstring\nstring''' foo"))
         scanner.scan(/'''((?:(?:'|'')?(?:[^'\\])+)*)'''/m).should == "'''\nstring\nstring'''"
       end
