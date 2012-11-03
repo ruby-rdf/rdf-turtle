@@ -887,17 +887,23 @@ describe "RDF::Turtle::Reader" do
       %(<a> <b> "xy.z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("xy\.z" is not a valid .*),
       %(<a> <b> "+1.0z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("\+1.0z" is not a valid .*),
       %(<a> <b> .) => RDF::ReaderError,
+      %(<a> <b> <c>) => RDF::ReaderError,
+      %(<a> <b> <c> ;) => RDF::ReaderError,
       %(<a> "literal value" <b> .) => RDF::ReaderError,
-      %(@keywords prefix. :e prefix :f .) => RDF::ReaderError
+      %(@keywords prefix. :e prefix :f .) => RDF::ReaderError,
+      %(@base) => RDF::ReaderError,
+      %(@base <a>) => RDF::ReaderError,
     }.each_pair do |ttl, error|
       it "should raise '#{error}' for '#{ttl}'" do
         lambda {
-          parse("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . #{ttl}", :base_uri => "http://a/b", :validate => true)
+          parse("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . #{ttl}", :base_uri => "http://a/b",
+                :validate => true)
+          "foo".should produce("", @debug)
         }.should raise_error(error)
       end
     end
   end
-  
+
   describe "recovery" do
     {
       "malformed bnode subject" => [

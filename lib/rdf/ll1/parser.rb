@@ -275,6 +275,11 @@ module RDF::LL1
       # Continue popping contexts off of the stack
       while !todo_stack.empty?
         debug("parse(eof)", :level => 2) {"stack #{todo_stack.last.inspect}, depth #{depth}"}
+        if todo_stack.last[:terms].length > 0
+          error("parse(eof)",
+            "End of input before end of production: stack #{todo_stack.last.inspect}, depth #{depth}"
+          )
+        end
         todo_stack.pop
         onFinish
       end
