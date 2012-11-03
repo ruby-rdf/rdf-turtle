@@ -6,7 +6,7 @@ describe RDF::Turtle::Reader do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(TurtleSubm/manifest.ttl Turtle/manifest.ttl ).each do |man|
+    %w(TurtleSubm/manifest.ttl Turtle/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|
@@ -14,7 +14,7 @@ describe RDF::Turtle::Reader do
               if %w(subm-test-14 subm-test-15 subm-test-16).include?(t.name)
                 pending("Skip long input file")
               elsif %w(subm-test-29).include?(t.name)
-                pending("Escapes in IRIs")
+                pending("Contains illegal characters")
               else
                 t.debug = [t.inspect, "source:", t.input.read]
 
@@ -31,12 +31,12 @@ describe RDF::Turtle::Reader do
                   begin
                     graph << reader
                   rescue Exception => e
-                    e.message.should produce(nil, t.debug)
+                    e.message.should produce("Not exception #{e.inspect}", t.debug)
                   end
                 else
                   lambda {
                     graph << reader
-                    graph.dump(:ntriples).should produce("", t.debug)
+                    #graph.dump(:ntriples).should produce("", t.debug)
                   }.should raise_error(RDF::ReaderError)
                 end
 

@@ -80,7 +80,7 @@ module Fixtures
       end
 
       def positive_test?
-        attributes['@type'] != 'rdft:TestTurtleNegativeSyntax'
+        !attributes['@type'].match(/Negative/)
       end
       
       def negative_test?

@@ -14,7 +14,8 @@ module RDF::Turtle
                            [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
                          EOS
       U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]")
-      IRI_RANGE        = Regexp.compile("[[^<>\"{}|^`\\\\]&&[^\\x00-\\x20]]")   # [^<>\"{}|^`\\] - [#x00-#x20]
+      # [^<>\"{}|^`\\] - [#x00-#x20]
+      IRI_RANGE        = Regexp.compile("[[^<>\"{}|^`\\\\]&&[^\\x00-\\x20]]")
     else
       ##
       # UTF-8 regular expressions for Ruby 1.8.x.
@@ -68,7 +69,7 @@ module RDF::Turtle
     # [169s]
     PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/
     # [163s]
-    PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}|#{UCHAR}/
+    PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/
     # [164s]
     PN_CHARS_U           = /_|#{PN_CHARS_BASE}/
     # [166s]

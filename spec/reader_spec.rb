@@ -258,9 +258,15 @@ describe "RDF::Turtle::Reader" do
           %(<http://a/joe> <http://a/b/knows> <http://a/b/jane> .),
         %(<#D%C3%BCrst>  a  "URI percent ^encoded as C3, BC".) =>
           %(<#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
+        #%q(<http://example.org/node> <http://example.org/prop> <scheme:\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F !"#$%&'()*+,-./0123456789:/<=\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F> .) =>
+        #  %(),
+        #%q(<http://example.org/node> <http://example.org/prop> <scheme:!"$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz{|}~?#> .) =>
+        #  %(<http://example.org/node> <http://example.org/prop> <scheme:!"$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz{|}~?#> .),
+        %q(<http://example.org/node> <http://example.org/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .) =>
+          %q(<http://example.org/node> <http://example.org/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
-          parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+          parse(ttl, :validate => true).should be_equivalent_graph(nt, :trace => @debug)
         end
       end
 
