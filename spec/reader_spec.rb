@@ -316,9 +316,12 @@ describe "RDF::Turtle::Reader" do
         %(\\),
         %(^),
         %(``),
+        %(http://example.com/\u0020),
+        %(http://example.com/\u003C),
+        %(http://example.com/\u003E),
       ].each do |uri|
-        it "rejects #{uri.inspect}" do
-          lambda {parse(%(<#{uri}> <uri> "#{uri}"), :validate => true)}.should raise_error RDF::ReaderError
+        it "rejects #{('<' + uri + '>').inspect}" do
+          lambda {parse(%(<s> <p> <#{uri}>), :validate => true)}.should raise_error RDF::ReaderError
         end
       end
     end
@@ -342,21 +345,23 @@ describe "RDF::Turtle::Reader" do
         nt = %(<http://foo/a#b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#resource> .)
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
-      
+
       {
-        %(<a> <b> true)  => %(<a> <b> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
-        %(<a> <b> false)  => %(<a> <b> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
-        %(<a> <b> 1)  => %(<a> <b> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
-        %(<a> <b> -1)  => %(<a> <b> "-1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
-        %(<a> <b> +1)  => %(<a> <b> "+1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
-        %(<a> <b> 1.0)  => %(<a> <b> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .),
-        %(<a> <b> 1.0e1)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(<a> <b> 1.0e-1)  => %(<a> <b> "1.0e-1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(<a> <b> 1.0e+1)  => %(<a> <b> "1.0e+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(<a> <b> 1.0E1)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> true .)  => %(<a> <b> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
+        %(<a> <b> false .)  => %(<a> <b> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
+        %(<a> <b> 1 .)  => %(<a> <b> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
+        %(<a> <b> -1 .)  => %(<a> <b> "-1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
+        %(<a> <b> +1 .)  => %(<a> <b> "+1"^^<http://www.w3.org/2001/XMLSchema#integer> .),
+        %(<a> <b> .1 .)  => %(<a> <b> "0.1"^^<http://www.w3.org/2001/XMLSchema#decimal> .),
+        %(<a> <b> 1.0 .)  => %(<a> <b> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .),
+        %(<a> <b> 1.0e1 .)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0e-1 .)  => %(<a> <b> "1.0e-1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0e+1 .)  => %(<a> <b> "1.0e+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0E1 .)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 123.E+1 .)  => %(<a> <b> "123.E+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       }.each_pair do |ttl, nt|
         it "should create typed literal for '#{ttl}'" do
-          parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+          parse(ttl, :validate => true).should be_equivalent_graph(nt, :trace => @debug)
         end
       end
       
@@ -860,10 +865,12 @@ describe "RDF::Turtle::Reader" do
 
   describe "canonicalization" do
     {
-      %("+1"^^xsd:integer) => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
-      %(+1) => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
-      %(true) => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
-      %("lang"@EN) => %("lang"@en),
+      %("+1"^^xsd:integer)  => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
+      %(+1)                 => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
+      %(.1)                 => %("0.1"^^<http://www.w3.org/2001/XMLSchema#decimal>),
+      %(123.E+1)            => %("123.0E1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+      %(true)               => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
+      %("lang"@EN)          => %("lang"@en),
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
         ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <a> <b> #{input} .)

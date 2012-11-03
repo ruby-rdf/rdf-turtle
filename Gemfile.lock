@@ -5,18 +5,17 @@ GIT
     rdf-spec (0.3.8)
       rspec (>= 2.8.0)
 
-GIT
-  remote: git://github.com/ruby-rdf/rdf.git
-  revision: 0696b96aac0d6969102afcd7af611340b79e8301
-  specs:
-    rdf (0.3.8)
-      addressable (>= 2.2.6)
-
 PATH
   remote: .
   specs:
     rdf-turtle (0.1.2)
       rdf (>= 0.3.4)
+
+PATH
+  remote: ../rdf
+  specs:
+    rdf (0.3.8)
+      addressable (>= 2.2.6)
 
 PATH
   remote: ../sxp-ruby

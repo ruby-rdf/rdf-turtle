@@ -21,10 +21,17 @@ module RDF::Turtle
       input[:resource] = reader.process_iri(token.value[1..-2])
     end
     terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.double)
+      # Note that a Turtle Double may begin with a '.[eE]', so tack on a leading
+      # zero if necessary
+      value = token.value.sub(/\.([eE])/, ".0#{$1}")
+      input[:resource] = reader.literal(value, :datatype => RDF::XSD.double)
     end
     terminal(:DECIMAL,              DECIMAL) do |reader, prod, token, input|
-      input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.decimal)
+      # Note that a Turtle Decimal may begin with a '.', so tack on a leading
+      # zero if necessary
+      value = token.value
+      value = "0#{token.value}" if token.value[0,1] == "."
+      input[:resource] = reader.literal(value, :datatype => RDF::XSD.decimal)
     end
     terminal(:INTEGER,              INTEGER) do |reader, prod, token, input|
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)

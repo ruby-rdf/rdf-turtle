@@ -6,14 +6,14 @@ describe RDF::Turtle::Reader do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(TurtleSubm/manifest.ttl TurtleSubm/manifest-bad.ttl Turtle/manifest.ttl ).each do |man|
+    %w(TurtleSubm/manifest.ttl Turtle/manifest.ttl ).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|
             specify "#{t.name}: #{t.comment}" do
-              if %w(test-14 test-15 test-16).include?(t.name)
+              if %w(subm-test-14 subm-test-15 subm-test-16).include?(t.name)
                 pending("Skip long input file")
-              elsif %w(test-29).include?(t.name)
+              elsif %w(subm-test-29).include?(t.name)
                 pending("Escapes in IRIs")
               else
                 t.debug = [t.inspect, "source:", t.input.read]
@@ -21,7 +21,7 @@ describe RDF::Turtle::Reader do
                 reader = RDF::Turtle::Reader.new(t.input,
                     :base_uri => t.base,
                     :strict => true,
-                    :canonicalize => true,
+                    :canonicalize => false,
                     :validate => true,
                     :debug => t.debug)
 
