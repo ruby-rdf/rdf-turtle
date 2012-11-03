@@ -1,4 +1,12 @@
 require 'rdf/isomorphic'
+require 'json'
+JSON_STATE = JSON::State.new(
+   :indent       => "  ",
+   :space        => " ",
+   :space_before => "",
+   :object_nl    => "\n",
+   :array_nl     => "\n"
+ )
 
 def normalize(graph)
   case graph
@@ -91,8 +99,8 @@ RSpec::Matchers.define :produce do |expected, info|
   end
   
   failure_message_for_should do |actual|
-    "Expected: #{expected.to_json(JSON::LD::JSON_STATE)}\n" +
-    "Actual  : #{actual.to_json(JSON::LD::JSON_STATE)}\n" +
+    "Expected: #{expected.to_json(JSON_STATE)}\n" +
+    "Actual  : #{actual.to_json(JSON_STATE)}\n" +
     #(expected.is_a?(Hash) && actual.is_a?(Hash) ? "Diff: #{expected.diff(actual).to_json(JSON_STATE)}\n" : "") +
     "Processing results:\n#{info.join("\n")}"
   end

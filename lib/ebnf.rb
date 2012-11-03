@@ -136,7 +136,7 @@ class EBNF
       .sub(/\"$/m, '\"')
       statements = [
         %{:#{id} rdfs:label "#{id}"; rdf:value "#{sym}";},
-        %{  rdfs:comment """#{comment}""";},
+        %{  rdfs:comment #{comment.inspect};},
       ]
       
       statements += ttl_expr(expr, kind == :token ? "re" : "g", 1, false)
@@ -172,10 +172,10 @@ class EBNF
       when :"'"
         statements << %{#{indent}"#{esc(expr)}"}
       when :range
-        statements << %{#{indent}#{bra} re:matches "[#{cclass(expr.first)}]" #{ket}}
+        statements << %{#{indent}#{bra} re:matches #{cclass(expr.first).inspect} #{ket}}
       when :hex
         raise "didn't expect \" in expr" if expr.include?(:'"')
-        statements << %{#{indent}#{bra} re:matches "[#{cclass(expr.first)}]" #{ket}}
+        statements << %{#{indent}#{bra} re:matches #{cclass(expr.first).inspect} #{ket}}
       else
         if is_obj
           statements << %{#{indent}#{expr.inspect}}
@@ -194,13 +194,13 @@ class EBNF
     # character class (less the outer quote marks)
     #
     #   >>> cclass("^<>'{}|^`")
-    #   "^<>'{}|^`"
+    #   "[^<>'{}|^`]"
     #   >>> cclass("#x0300-#x036F")
-    #   '\\u0300-\\u036F'
+    #   "[\\u0300-\\u036F]"
     #   >>> cclass("#xC0-#xD6")
-    #   '\\u00C0-\\u00D6'
+    #   "[\\u00C0-\\u00D6]"
     #   >>> cclass("#x370-#x37D")
-    #   '\\u0370-\\u037D'
+    #   "[\\u0370-\\u037D]"
     # 
     #   as in: ECHAR ::= '\' [tbnrf\"']
     #   >>> cclass("tbnrf\\\"'")
@@ -209,6 +209,7 @@ class EBNF
     #   >>> cclass("^#x22#x5C#x0A#x0D")
     #   '^\\u0022\\\\\\u005C\\u000A\\u000D'
     def cclass(txt)
+      '[' +
       txt.gsub(/\#x[0-9a-fA-F]+/) do |hx|
         hx = hx[2..-1]
         if hx.length <= 4
@@ -216,7 +217,8 @@ class EBNF
         elsif hx.length <= 8
           "\\U#{'0' * (8 - hx.length)}#{hx}" 
         end
-      end
+      end +
+      ']'
     end
   end
 

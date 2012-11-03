@@ -2,8 +2,9 @@
 # ebnf2ttl --- Generate reasoned Turtle representation of EBNF input file
 # to be used in extracting parser branch tables (see gramLL1).
 
-require 'rubygems'
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
+require "bundler/setup"
+require 'rubygems'
 require 'getoptlong'
 require 'ebnf'
 require 'sxp'

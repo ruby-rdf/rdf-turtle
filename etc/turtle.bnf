@@ -45,7 +45,7 @@
  
 [29t] SPARQL_BASE ::= [Bb][Aa][Ss][Ee]
 
-[19] IRIREF ::=  '<' ([^#x00-#x20<>\"{}|^`\] | UCHAR)* '>'
+[19] IRIREF ::=  '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
  
 [139s] PNAME_NS ::= PN_PREFIX? ":" 
  

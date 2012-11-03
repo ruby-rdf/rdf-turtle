@@ -81,7 +81,7 @@ describe EBNF do
       end
     end
   end
-  
+
   describe "#diff" do
     {
       %{'abc' def}               => %{("abc" " def")},
@@ -118,38 +118,37 @@ describe EBNF::Rule do
   let(:ebnf) {EBNF.new("", :debug => debug)}
   subject {EBNF::Rule.new("rule", "0", [], ebnf)}
 
-  describe "#to_ttl" do
-  end
-  
   describe "#ttl_expr" do
-    context "g" do
-      {
-        "ebnf[1]" => [
-          [:star, [:alt, :declaration, :rule]],
-          %{g:star [ g:alt ( :declaration :rule ) ] .}
-        ],
-        "ebnf[2]" => [
-          [:alt, "@terminals", "@pass"],
-          %{g:alt ( "@terminals" "@pass" ) .}
-        ],
-        "ebnf[5]" => [
-          :alt,
-          %{g:seq ( :alt ) .}
-        ],
-        "ebnf[9]" => [
-          [:seq, :primary, [:opt, [:range, "?*+"]]],
-          %{g:seq ( :primary [ g:opt [ re:matches "[?*+]" ] ] ) .}
-        ],
-      }.each do |title, (expr, expected)|
-        it title do
-          res = subject.send(:ttl_expr, expr, "g", 0, false)
-          res.each {|r| r.should be_a(String)}
+    {
+      "ebnf[1]" => [
+        [:star, [:alt, :declaration, :rule]],
+        %{g:star [ g:alt ( :declaration :rule ) ] .}
+      ],
+      "ebnf[2]" => [
+        [:alt, "@terminals", "@pass"],
+        %{g:alt ( "@terminals" "@pass" ) .}
+      ],
+      "ebnf[5]" => [
+        :alt,
+        %{g:seq ( :alt ) .}
+      ],
+      "ebnf[9]" => [
+        [:seq, :primary, [:opt, [:range, "?*+"]]],
+        %{g:seq ( :primary [ g:opt [ re:matches "[?*+]" ] ] ) .}
+      ],
+      "IRIREF" => [
+        [:seq, "<", [:star, [:alt, [:range, "^#x00-#x20<>\"{}|^`\\"], :UCHAR]], ">"],
+        %{g:seq ( "<" [ g:star [ g:alt ( [ re:matches "[^\\\\u0000-\\\\u0020<>\\\"{}|^`\\\\]" ] :UCHAR ) ] ] ">" ) .}
+      ]
+    }.each do |title, (expr, expected)|
+      it title do
+        res = subject.send(:ttl_expr, expr, "g", 0, false)
+        res.each {|r| r.should be_a(String)}
           
-          res
-          .join("\n")
-          .gsub(/\s+/, ' ')
-          .should produce(expected, debug)
-        end
+        res
+        .join("\n")
+        .gsub(/\s+/, ' ')
+        .should produce(expected, debug)
       end
     end
   end
@@ -158,27 +157,27 @@ describe EBNF::Rule do
     {
       "passes normal stuff" => [
         %{^<>'{}|^`},
-        %{^<>'{}|^`}
+        %{[^<>'{}|^`]}
       ],
       "turns regular hex range into unicode range" => [
         %{#x0300-#x036F},
-        %{\\u0300-\\u036F}
+        %{[\\u0300-\\u036F]}
       ],
       "turns short hex range into unicode range" => [
         %{#xC0-#xD6},
-        %{\\u00C0-\\u00D6}
+        %{[\\u00C0-\\u00D6]}
       ],
       "turns 3 char hex range into unicode range" => [
         %{#x370-#x37D},
-        %{\\u0370-\\u037D}
+        %{[\\u0370-\\u037D]}
       ],
       "turns long hex range into unicode range" => [
         %{#x000300-#x00036F},
-        %{\\U00000300-\\U0000036F}
+        %{[\\U00000300-\\U0000036F]}
       ],
       "turns 5 char hex range into unicode range" => [
         %{#x00370-#x0037D},
-        %{\\U00000370-\\U0000037D}
+        %{[\\U00000370-\\U0000037D]}
       ],
     }.each do |title, (input, expected)|
       it title do
