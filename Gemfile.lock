@@ -5,14 +5,9 @@ GIT
     rdf-spec (0.3.8)
       rspec (>= 2.8.0)
 
-PATH
-  remote: .
-  specs:
-    rdf-turtle (0.1.2)
-      rdf (>= 0.3.4)
-
-PATH
-  remote: ../rdf
+GIT
+  remote: git://github.com/ruby-rdf/rdf.git
+  revision: 0696b96aac0d6969102afcd7af611340b79e8301
   specs:
     rdf (0.3.8)
       addressable (>= 2.2.6)
@@ -23,11 +18,17 @@ PATH
     sxp (0.1.0)
       json (>= 1.5.1)
 
+PATH
+  remote: .
+  specs:
+    rdf-turtle (0.1.2)
+      rdf (>= 0.3.4)
+
 GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.3.2)
-    backports (2.6.4)
+    backports (2.6.5)
     columnize (0.3.6)
     debugger (1.2.1)
       columnize (>= 0.3.1)
