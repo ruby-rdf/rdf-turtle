@@ -45,7 +45,7 @@ module RDF::LL1
     }
     ESCAPE_CHAR4        = /\\u(?:[0-9A-Fa-f]{4,4})/           # \uXXXX
     ESCAPE_CHAR8        = /\\U(?:[0-9A-Fa-f]{8,8})/           # \UXXXXXXXX
-    ECHAR               = /\\[tbnrf\\"']/                     # [91s]
+    ECHAR               = /\\./                               # More liberal unescaping
     UCHAR               = /#{ESCAPE_CHAR4}|#{ESCAPE_CHAR8}/
     COMMENT             = /#.*/
     WS                  = / |\t|\r|\n/m
@@ -88,7 +88,7 @@ module RDF::LL1
     # @return [String]
     # @see    http://www.w3.org/TR/rdf-sparql-query/#grammarEscapes
     def self.unescape_string(input)
-      input.gsub(ECHAR) { |escaped| ESCAPE_CHARS[escaped] }
+      input.gsub(ECHAR) { |escaped| ESCAPE_CHARS[escaped] || escaped[1..-1]}
     end
 
     ##
