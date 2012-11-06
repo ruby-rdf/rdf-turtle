@@ -35,5 +35,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-spec',        '>= 0.3.4'
   gem.add_development_dependency 'yard' ,           '>= 0.6.0'
   gem.add_development_dependency 'sxp',             '>= 0.0.14'
+  gem.add_development_dependency 'rdf-spec',        '>= 0.3.8'
+  gem.add_development_dependency 'rspec',           '>= 2.11.0'
   gem.post_install_message  = nil
 end
