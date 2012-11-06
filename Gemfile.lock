@@ -7,22 +7,22 @@ GIT
 
 GIT
   remote: git://github.com/ruby-rdf/rdf.git
-  revision: 0696b96aac0d6969102afcd7af611340b79e8301
+  revision: 47b6e48630c375d27bd4739850753d56ba421ea6
   specs:
-    rdf (0.3.8)
+    rdf (0.3.9)
       addressable (>= 2.2.6)
-
-PATH
-  remote: ../sxp-ruby
-  specs:
-    sxp (0.1.0)
-      json (>= 1.5.1)
 
 PATH
   remote: .
   specs:
     rdf-turtle (0.1.2)
       rdf (>= 0.3.4)
+
+PATH
+  remote: ../sxp-ruby
+  specs:
+    sxp (0.1.0)
+      json (>= 1.5.1)
 
 GEM
   remote: http://rubygems.org/

@@ -111,7 +111,6 @@ parser_options = {
   :base_uri => "",
   :progress   => false,
   :validate => false,
-  :strict => false,
 }
 
 options = {
