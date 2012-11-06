@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/gkellogg/sxp-ruby.git
+  revision: af08d70385f637726f56b6f40afc7192918518e0
+  specs:
+    sxp (0.0.14)
+      json (>= 1.5.1)
+
+GIT
   remote: git://github.com/ruby-rdf/rdf-spec.git
   revision: 199007138fdd82dec0dab1274d33dddc92b73ed4
   specs:
@@ -17,12 +24,6 @@ PATH
   specs:
     rdf-turtle (0.1.2)
       rdf (>= 0.3.4)
-
-PATH
-  remote: ../sxp-ruby
-  specs:
-    sxp (0.1.0)
-      json (>= 1.5.1)
 
 GEM
   remote: http://rubygems.org/
