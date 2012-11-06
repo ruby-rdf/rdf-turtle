@@ -18,7 +18,11 @@ module RDF::Turtle
       input[:resource] = reader.bnode(token.value[2..-1])
     end
     terminal(:IRIREF,               IRIREF, :unescape => true) do |reader, prod, token, input|
-      input[:resource] = reader.process_iri(token.value[1..-2])
+      begin
+        input[:resource] = reader.process_iri(token.value[1..-2])
+      rescue ArgumentError => e
+        raise RDF::ReaderError, e.message
+      end
     end
     terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
       # Note that a Turtle Double may begin with a '.[eE]', so tack on a leading
@@ -37,7 +41,7 @@ module RDF::Turtle
       input[:resource] = reader.literal(token.value, :datatype => RDF::XSD.integer)
     end
     # Spec confusion: spec says : "Literals , prefixed names and IRIs may also contain escape sequences"
-    terminal(:PNAME_LN,             PNAME_LN) do |reader, prod, token, input|
+    terminal(:PNAME_LN,             PNAME_LN, :unescape => true) do |reader, prod, token, input|
       prefix, suffix = token.value.split(":", 2)
       input[:resource] = reader.pname(prefix, suffix)
     end
