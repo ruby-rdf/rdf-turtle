@@ -1,0 +1,116 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
+require "bundler/setup"
+require 'rdf/turtle'
+require 'rdf/isomorphic'
+require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'spec_helper'))
+require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'suite_helper'))
+require 'getoptlong'
+
+def run_tc(tc, options)
+  STDOUT.write "run #{tc.name}"
+
+  if options[:verbose]
+    puts "\nTestCase: #{tc.inspect}"
+    puts "\nInput:\n" + tc.input.read 
+    puts "\nExpected:\n" + tc.expected.read
+    tc.input.rewind
+    tc.expected.rewind
+  end
+
+  begin
+    puts "open #{tc.action}" if options[:verbose]
+    options = {:base_uri => tc.base}.merge(options)
+
+    reader = RDF::Turtle::Reader.new(tc.input, :base_uri => tc.base, :validate => true)
+
+    graph = RDF::Graph.new
+    result = nil
+
+    if tc.positive_test?
+      begin
+        graph << reader
+      rescue Exception => e
+        STDERR.puts "Unexpected exception: #{e.inspect}" if options[:verbose]
+        result = "fail"
+      end
+    else
+      begin
+        graph << reader
+        STDERR.puts "Expected exception" if options[:verbose]
+        result = "fail"
+      rescue RDF::ReaderError
+        result = "ok"
+      end
+    end
+
+    if tc.evaluate? && result.nil?
+      output_graph = RDF::Graph.load(tc.result, :format => :ntriples, :base_uri => tc.base)
+      result = graph.isomorphic_with?(output_graph) ? "ok" : "fail"
+    else
+      result ||= "ok"
+    end
+
+  rescue Exception => e
+    puts "#{"exception:" unless options[:quiet]}: #{e}"
+    if options[:quiet]
+      return
+    else
+      raise
+    end
+  end
+  
+  puts("\nOutput:\n" + graph.dump(:ntriples)) unless options[:quiet]
+
+  puts "#{"test result:" unless options[:quiet]} #{result}"
+end
+
+options = {}
+
+opts = GetoptLong.new(
+  ["--help", "-?", GetoptLong::NO_ARGUMENT],
+  ["--dbg", GetoptLong::NO_ARGUMENT],
+  ["--earl", GetoptLong::NO_ARGUMENT],
+  ["--quiet", "-q", GetoptLong::NO_ARGUMENT],
+  ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
+  ["--skip-long", "-s", GetoptLong::NO_ARGUMENT],
+  ["--validate", GetoptLong::NO_ARGUMENT],
+  ["--verbose", "-v", GetoptLong::NO_ARGUMENT]
+)
+
+def help(options)
+  puts "Usage: #{$0} [options] [test-number ...]"
+  puts "Options:"
+  puts "      --debug:              Display detailed debug output"
+  puts "      --earl:               Generate EARL report"
+  puts "      --quiet:              Minimal output"
+  puts "      --output:             Output to specified file"
+  puts "      --skip-long:          Avoid files taking too much time"
+  puts "      --validate:           Validate input"
+  puts "      --verbose:            Verbose processing"
+  puts "      --help,-?:            This message"
+  exit(0)
+end
+
+opts.each do |opt, arg|
+  case opt
+  when '--help'             then help(options)
+  when '--dbg'              then ::RDF::Turtle::debug = true
+  when '--earl'             then options[:earl] = true
+  when '--quiet'            then options[:quiet] = true
+  when '--skip-long'        then options[:skip] = true
+  when '--validate'         then options[:validate] = true
+  when '--verbose'          then options[:verbose] = true
+  end
+end
+
+%w(TurtleSubm/manifest.ttl Turtle/manifest.ttl).each do |man|
+  Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
+    m.entries.each do |tc|
+      next if %w(subm-test-14 subm-test-15 subm-test-16).include?(tc.name)
+      next unless ARGV.empty? || ARGV.any? {|n| tc.name.match(/#{n}/)}
+      run_tc(tc, options)
+    end
+  end
+end

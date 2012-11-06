@@ -59,7 +59,7 @@ module Fixtures
       attr_accessor :debug
 
       def base
-        'http://example.org/base/' + action.split('/').last
+        'http://example/base/' + action.split('/').last
       end
 
       # Alias data and query
@@ -72,7 +72,7 @@ module Fixtures
       end
       
       def evaluate?
-        type == 'rdft:TestTurtlePositiveEval'
+        attributes['@type'] == 'rdft:TestTurtleEval'
       end
       
       def syntax?
@@ -88,7 +88,12 @@ module Fixtures
       end
       
       def inspect
-        super.sub('>', "\n  syntax?: #{syntax?.inspect}\n  positive?: #{positive_test?.inspect}>")
+        super.sub('>', "\n" +
+        "  syntax?: #{syntax?.inspect}\n" +
+        "  positive?: #{positive_test?.inspect}\n" +
+        "  evaluate?: #{evaluate?.inspect}\n" +
+        ">"
+      )
       end
     end
   end
