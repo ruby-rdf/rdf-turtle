@@ -145,10 +145,10 @@ describe EBNF::Rule do
         res = subject.send(:ttl_expr, expr, "g", 0, false)
         res.each {|r| r.should be_a(String)}
           
-        res
-        .join("\n")
-        .gsub(/\s+/, ' ')
-        .should produce(expected, debug)
+        res.
+          join("\n").
+          gsub(/\s+/, ' ').
+          should produce(expected, debug)
       end
     end
   end

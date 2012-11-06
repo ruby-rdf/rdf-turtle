@@ -129,11 +129,11 @@ class EBNF
     
     def to_ttl
       @ebnf.debug("to_ttl") {inspect}
-      comment = orig.strip
-      .gsub(/"""/, '\"\"\"')
-      .gsub("\\", "\\\\")
-      .sub(/^\"/, '\"')
-      .sub(/\"$/m, '\"')
+      comment = orig.strip.
+        gsub(/"""/, '\"\"\"').
+        gsub("\\", "\\\\").
+        sub(/^\"/, '\"').
+        sub(/\"$/m, '\"')
       statements = [
         %{:#{id} rdfs:label "#{id}"; rdf:value "#{sym}";},
         %{  rdfs:comment #{comment.inspect};},
