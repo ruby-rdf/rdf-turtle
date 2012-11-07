@@ -72,11 +72,11 @@ module Fixtures
       end
       
       def evaluate?
-        attributes['@type'] == 'rdft:TestTurtleEval'
+        attributes['@type'].match(/Eval/)
       end
       
       def syntax?
-        %w(rdft:TestTurtlePositiveSyntax rdft:TestTurtleNegativeSyntax).include?(attributes['@type'])
+        attributes['@type'].match(/Syntax/)
       end
 
       def positive_test?

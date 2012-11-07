@@ -12,7 +12,7 @@ ASSERTOR = "http://greggkellogg.net/foaf#me"
 RUN_TIME = Time.now
 
 def earl_preamble(options)
-  options[:output].write File.read(File.expand_path("../../etc/doap.ttl", __FILE__))
+  options[:output].write File.read(File.expand_path("../../etc/doap#{'-ntriples' if options[:ntriples]}.ttl", __FILE__))
   options[:output].puts %(
 <#{ASSERTOR}> a foaf:Person, earl:Assertor;
   foaf:name "Gregg Kellogg";
@@ -36,7 +36,7 @@ def run_tc(tc, options)
     puts "open #{tc.action}" if options[:verbose]
     options = {:base_uri => tc.base}.merge(options)
 
-    reader = RDF::Turtle::Reader.new(tc.input, :base_uri => tc.base, :validate => true)
+    reader = RDF::Reader.for(tc.action).new(tc.input, :base_uri => tc.base, :validate => true)
 
     graph = RDF::Graph.new
     result = nil
@@ -80,7 +80,7 @@ def run_tc(tc, options)
     options[:output].puts %{
 [ a earl:Assertion;
   earl:assertedBy <#{ASSERTOR}>;
-  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:subject <http://rubygems.org/gems/rdf#{'-turtle' unless options[:ntriples]}>;
   earl:test <#{tc.id}>;
   earl:result [
     a earl:TestResult;
@@ -102,6 +102,7 @@ opts = GetoptLong.new(
   ["--dbg", GetoptLong::NO_ARGUMENT],
   ["--earl", GetoptLong::NO_ARGUMENT],
   ["--quiet", "-q", GetoptLong::NO_ARGUMENT],
+  ["--ntriples", GetoptLong::NO_ARGUMENT],
   ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
   ["--skip-long", "-s", GetoptLong::NO_ARGUMENT],
   ["--validate", GetoptLong::NO_ARGUMENT],
@@ -114,6 +115,7 @@ def help(options)
   puts "      --debug:              Display detailed debug output"
   puts "      --earl:               Generate EARL report"
   puts "      --quiet:              Minimal output"
+  puts "      --ntriples:           Run N-Triples tests"
   puts "      --output:             Output to specified file"
   puts "      --skip-long:          Avoid files taking too much time"
   puts "      --validate:           Validate input"
@@ -122,11 +124,13 @@ def help(options)
   exit(0)
 end
 
+
 opts.each do |opt, arg|
   case opt
   when '--help'             then help(options)
   when '--dbg'              then ::RDF::Turtle::debug = true
   when '--earl'             then options[:quiet] = options[:earl] = true
+  when '--ntriples'         then options[:ntriples] = true
   when '--output'           then options[:output] = File.open(arg, "w")
   when '--quiet'            then options[:quiet] = true
   when '--skip-long'        then options[:skip] = true
@@ -135,9 +139,11 @@ opts.each do |opt, arg|
   end
 end
 
+manifests = options[:ntriples] ? %w(N-Triples/manifest.ttl) : %w(TurtleSubm/manifest.ttl Turtle/manifest.ttl)
+
 earl_preamble(options) if options[:earl]
 
-%w(TurtleSubm/manifest.ttl Turtle/manifest.ttl).each do |man|
+manifests.each do |man|
   Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
     m.entries.each do |tc|
       next if options[:skip] && %w(subm-test-14 subm-test-15 subm-test-16).include?(tc.name)

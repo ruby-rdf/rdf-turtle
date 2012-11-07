@@ -1,0 +1,63 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix ex:   <http://example.org/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<http://rubygems.org/gems/rdf> a doap:Project, earl:TestSubject, earl:Software ;
+  doap:name          "RDF.rb" ;
+  doap:homepage      <http://ruby-rdf.github.com/rdf> ;
+  doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
+  doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
+  doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
+  doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data." ;
+  doap:created       "2007-10-23"^^xsd:date;
+  doap:programming-language "Ruby" ;
+  doap:platform      "Ruby" ;
+  doap:implements    <http://www.w3.org/TR/rdf-concepts/>,
+                     <http://sw.deri.org/2008/07/n-quads/>,
+                     <http://www.w3.org/2001/sw/RDFCore/ntriples/> ;
+  doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
+                     <http://dbpedia.org/resource/Ruby_(programming_language)> ;
+  doap:download-page <http://rubygems.org/gems/rdf> ;
+  doap:mailing-list  <http://lists.w3.org/Archives/Public/public-rdf-ruby/> ;
+  doap:bug-database  <http://github.com/ruby-rdf/rdf/issues> ;
+  doap:blog          <http://ar.to/>, <http://blog.datagraph.org/>, <http://greggkellogg.net> ;
+  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:maintainer    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:documenter    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:helper        [ a foaf:Person; foaf:name "CDlin Ardelean"; foaf:mbox-sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"],
+                     [ a foaf:Person; foaf:name "Danny Gagne"; foaf:mbox-sha1sum "6de43e9cf7de53427fea9765706703e4d957c17b"],
+                     [ a foaf:Person; foaf:name "Joey Geiger"; foaf:mbox-sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"],
+                     [ a foaf:Person; foaf:name "Fumihiro Kato"; foaf:mbox-sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"],
+                     [ a foaf:Person; foaf:name "Naoki Kawamukai"; foaf:mbox-sha1sum "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d"],
+                     [ a foaf:Person; foaf:name "Hellekin O. Wolf"; foaf:mbox-sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"],
+                     [ a foaf:Person; foaf:name "John Fieber"; foaf:mbox-sha1sum "f7653fc1ac0e82ebb32f092389bd5fc728eaae12"],
+                     [ a foaf:Person; foaf:name "Keita Urashima"; foaf:mbox-sha1sum "2b4247b6fd5bb4a1383378f325784318680d5ff9"],
+                     [ a foaf:Person; foaf:name "Pius Uzamere"; foaf:mbox-sha1sum "bedbbf2451e5beb38d59687c0460032aff92cd3c"];
+  doap:vendor        <http://datagraph.org/> ;
+  foaf:maker         <http://ar.to/#self> ;
+  dc:title           "RDF.rb" ;
+  dc:description     "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
+  dc:date            "2011-08-29"^^xsd:date;
+  dc:creator         <http://ar.to/#self> .
+
+<http://bhuga.net/#ben> a doap:Person;
+   rdfs:isDefinedBy <http://datagraph.org/bhuga/foaf>;
+   foaf:homepage <http://bhuga.net/>;
+   foaf:mbox <mailto:blavender@gmail.com>;
+   foaf:mbox_sha1sum "dbf45f4ffbd27b67aa84f02a6a31c144727d10af";
+   foaf:name "Ben Lavender" .
+
+<http://ar.to/#self> a doap:Person;
+   rdfs:isDefinedBy <http://datagraph.org/bendiken/foaf>;
+   foaf:homepage <http://ar.to/>;
+   foaf:made <http://rubygems.org/gems/rdf>;
+   foaf:mbox <mailto:arto.bendiken@gmail.com>;
+   foaf:mbox_sha1sum "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
+     "a033f652c84a4d73b8c26d318c2395699dd2bdfb";
+   foaf:name "Arto Bendiken" .
+
