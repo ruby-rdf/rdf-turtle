@@ -133,7 +133,7 @@ describe "RDF::Turtle::Reader" do
         "€" => '<a> <b>  "€" .',
         "resumé" => ':a :resume  "resumé" .',
       }.each_pair do |contents, triple|
-        specify "test #{triple}", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
+        specify "test #{triple}", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
           graph = parse(triple, :prefixes => {nil => ''})
           statement = graph.statements.first
           graph.size.should == 1
@@ -141,7 +141,7 @@ describe "RDF::Turtle::Reader" do
         end
       end
       
-      it "should parse long literal with escape", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
+      it "should parse long literal with escape", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
         ttl = %(@prefix : <http://example.org/foo#> . <a> <b> "\\U00015678another" .)
         if defined?(::Encoding)
           statement = parse(ttl).statements.first
@@ -278,7 +278,7 @@ describe "RDF::Turtle::Reader" do
         %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
         %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
-          it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
+          it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
             begin
               parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
             rescue
@@ -295,7 +295,7 @@ describe "RDF::Turtle::Reader" do
         %(<#Dürst> a  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(<a> :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
-        it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
+        it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
           begin
             parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
           rescue
