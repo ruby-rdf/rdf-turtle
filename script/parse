@@ -83,7 +83,7 @@ def run(input, options)
       if options[:quiet]
         print "."
       else
-       options[:output]. puts statement.to_ntriples
+       options[:output].puts statement.to_ntriples
       end
     end
   elsif options[:output_format] == :inspect

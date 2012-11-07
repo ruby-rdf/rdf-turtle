@@ -8,8 +8,21 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'spec_h
 require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'suite_helper'))
 require 'getoptlong'
 
+ASSERTOR = "http://greggkellogg.net/foaf#me"
+RUN_TIME = Time.now
+
+def earl_preamble(options)
+  options[:output].write File.read(File.expand_path("../../etc/doap.ttl", __FILE__))
+  options[:output].puts %(
+<#{ASSERTOR}> a foaf:Person, earl:Assertor;
+  foaf:name "Gregg Kellogg";
+  foaf:title "Implementor";
+  foaf:homepage <http://greggkellogg.net/> .
+)
+end
+
 def run_tc(tc, options)
-  STDOUT.write "run #{tc.name}"
+  STDERR.write "run #{tc.name}"
 
   if options[:verbose]
     puts "\nTestCase: #{tc.inspect}"
@@ -33,27 +46,27 @@ def run_tc(tc, options)
         graph << reader
       rescue Exception => e
         STDERR.puts "Unexpected exception: #{e.inspect}" if options[:verbose]
-        result = "fail"
+        result = "failed"
       end
     else
       begin
         graph << reader
         STDERR.puts "Expected exception" if options[:verbose]
-        result = "fail"
+        result = "failed"
       rescue RDF::ReaderError
-        result = "ok"
+        result = "passed"
       end
     end
 
     if tc.evaluate? && result.nil?
       output_graph = RDF::Graph.load(tc.result, :format => :ntriples, :base_uri => tc.base)
-      result = graph.isomorphic_with?(output_graph) ? "ok" : "fail"
+      result = graph.isomorphic_with?(output_graph) ? "passed" : "failed"
     else
-      result ||= "ok"
+      result ||= "passed"
     end
 
   rescue Exception => e
-    puts "#{"exception:" unless options[:quiet]}: #{e}"
+    STDERR.puts "#{"exception:" unless options[:quiet]}: #{e}"
     if options[:quiet]
       return
     else
@@ -61,12 +74,28 @@ def run_tc(tc, options)
     end
   end
   
-  puts("\nOutput:\n" + graph.dump(:ntriples)) unless options[:quiet]
+  options[:output].puts("\nOutput:\n" + graph.dump(:ntriples)) unless options[:quiet]
+
+  if options[:earl]
+    options[:output].puts %{
+[ a earl:Assertion;
+  earl:assertedBy <#{ASSERTOR}>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <#{tc.id}>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:#{result};
+    dc:date "#{RUN_TIME.xmlschema}"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+}
+  end
 
   puts "#{"test result:" unless options[:quiet]} #{result}"
 end
 
-options = {}
+options = {
+  :output => STDOUT,
+}
 
 opts = GetoptLong.new(
   ["--help", "-?", GetoptLong::NO_ARGUMENT],
@@ -97,7 +126,8 @@ opts.each do |opt, arg|
   case opt
   when '--help'             then help(options)
   when '--dbg'              then ::RDF::Turtle::debug = true
-  when '--earl'             then options[:earl] = true
+  when '--earl'             then options[:quiet] = options[:earl] = true
+  when '--output'           then options[:output] = File.open(arg, "w")
   when '--quiet'            then options[:quiet] = true
   when '--skip-long'        then options[:skip] = true
   when '--validate'         then options[:validate] = true
@@ -105,10 +135,12 @@ opts.each do |opt, arg|
   end
 end
 
+earl_preamble(options) if options[:earl]
+
 %w(TurtleSubm/manifest.ttl Turtle/manifest.ttl).each do |man|
   Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
     m.entries.each do |tc|
-      next if %w(subm-test-14 subm-test-15 subm-test-16).include?(tc.name)
+      next if options[:skip] && %w(subm-test-14 subm-test-15 subm-test-16).include?(tc.name)
       next unless ARGV.empty? || ARGV.any? {|n| tc.name.match(/#{n}/)}
       run_tc(tc, options)
     end
