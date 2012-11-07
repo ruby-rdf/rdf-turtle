@@ -170,13 +170,13 @@ describe "RDF::Turtle::Reader" do
           ),
         }.each do |test, string|
           it "parses LONG1 #{test}" do
-            graph = parse(%(<a> <b> '''#{string}'''))
+            graph = parse(%(<a> <b> '''#{string}'''.))
             graph.size.should == 1
             graph.statements.first.object.value.should == string
           end
 
           it "parses LONG2 #{test}" do
-            graph = parse(%(<a> <b> """#{string}"""))
+            graph = parse(%(<a> <b> """#{string}""".))
             graph.size.should == 1
             graph.statements.first.object.value.should == string
           end
@@ -184,13 +184,13 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "LONG1 matches trailing escaped single-quote" do
-        graph = parse(%(<a> <b> '''\\''''))
+        graph = parse(%(<a> <b> '''\\''''.))
         graph.size.should == 1
         graph.statements.first.object.value.should == %q(')
       end
       
       it "LONG2 matches trailing escaped double-quote" do
-        graph = parse(%(<a> <b> """\\""""))
+        graph = parse(%(<a> <b> """\\"""".))
         graph.size.should == 1
         graph.statements.first.object.value.should == %q(")
       end
@@ -396,7 +396,7 @@ describe "RDF::Turtle::Reader" do
       it "allows undefined empty prefix if not validating" do
         ttl = %(:a :b :c .)
         nt = %(<a> <b> <c> .)
-        parse(":a :b :c").should be_equivalent_graph(nt, :trace => @debug)
+        parse(":a :b :c", :validate => false).should be_equivalent_graph(nt, :trace => @debug)
       end
 
       it "empty relative-IRI" do
@@ -738,7 +738,7 @@ describe "RDF::Turtle::Reader" do
     
     describe "objectList" do
       it "IRIs" do
-        ttl = %(<a> <b> <c>, <d>)
+        ttl = %(<a> <b> <c>, <d>.)
         nt = %(
           <a> <b> <c> .
           <a> <b> <d> .
@@ -1145,7 +1145,7 @@ The second line
     @debug = []
     options = {
       :debug => @debug,
-      :validate => false,
+      :validate => true,
       :canonicalize => false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new
