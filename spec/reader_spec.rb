@@ -125,13 +125,15 @@ describe "RDF::Turtle::Reader" do
         end
       end
       
+      # Rubinius problem with UTF-8 indexing:
+      # "\"D\xC3\xBCrst\""[1..-2] => "D\xC3\xBCrst\""
       {
         'Dürst' => '<a> <b> "Dürst" .',
         "é" => '<a> <b>  "é" .',
         "€" => '<a> <b>  "€" .',
         "resumé" => ':a :resume  "resumé" .',
       }.each_pair do |contents, triple|
-        specify "test #{triple}" do
+        specify "test #{triple}", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
           graph = parse(triple, :prefixes => {nil => ''})
           statement = graph.statements.first
           graph.size.should == 1
@@ -139,7 +141,7 @@ describe "RDF::Turtle::Reader" do
         end
       end
       
-      it "should parse long literal with escape" do
+      it "should parse long literal with escape", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
         ttl = %(@prefix : <http://example.org/foo#> . <a> <b> "\\U00015678another" .)
         if defined?(::Encoding)
           statement = parse(ttl).statements.first
@@ -276,7 +278,7 @@ describe "RDF::Turtle::Reader" do
         %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
         %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
-          it "for '#{ttl}'" do
+          it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
             begin
               parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
             rescue
@@ -293,7 +295,7 @@ describe "RDF::Turtle::Reader" do
         %(<#Dürst> a  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(<a> :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
-        it "for '#{ttl}'" do
+        it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if RUBY_ENGINE == "rbx") do
           begin
             parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
           rescue
@@ -364,7 +366,7 @@ describe "RDF::Turtle::Reader" do
         %(<a> <b> 1.0e-1 .)  => %(<a> <b> "1.0e-1"^^<http://www.w3.org/2001/XMLSchema#double> .),
         %(<a> <b> 1.0e+1 .)  => %(<a> <b> "1.0e+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
         %(<a> <b> 1.0E1 .)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(<a> <b> 123.E+1 .)  => %(<a> <b> "123.E+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 123.E+1 .)  => %(<a> <b> "123.0E+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       }.each_pair do |ttl, nt|
         it "should create typed literal for '#{ttl}'" do
           parse(ttl, :validate => true).should be_equivalent_graph(nt, :trace => @debug)
