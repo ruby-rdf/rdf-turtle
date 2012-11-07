@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'rdf/isomorphic'
 require 'json'
 JSON_STATE = JSON::State.new(
@@ -31,7 +32,13 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
     elsif info.is_a?(Hash)
       identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
       trace = info[:trace]
-      trace = trace.join("\n") if trace.is_a?(Array)
+      if trace.is_a?(Array)
+        trace = if RUBY_ENGINE == "jruby" && RUBY_VERSION >= "1.9"
+          trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+        else
+          trace.join("\n")
+        end
+      end
       i = Info.new(identifier, info[:information] || "", trace, info[:compare])
       i.format = info[:format]
       i
@@ -69,7 +76,13 @@ RSpec::Matchers.define :match_re do |expected, info|
     elsif info.is_a?(Hash)
       identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
       trace = info[:trace]
-      trace = trace.join("\n") if trace.is_a?(Array)
+      if trace.is_a?(Array)
+        trace = if RUBY_ENGINE == "jruby" && RUBY_VERSION >= "1.9"
+          trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+        else
+          trace.join("\n")
+        end
+      end
       i = Info.new(identifier, info[:information] || "", trace, info[:compare])
       i.format = info[:format]
       i

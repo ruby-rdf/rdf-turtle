@@ -27,7 +27,7 @@ module RDF::Turtle
     terminal(:DOUBLE,               DOUBLE) do |reader, prod, token, input|
       # Note that a Turtle Double may begin with a '.[eE]', so tack on a leading
       # zero if necessary
-      value = token.value.sub(/\.([eE])/, ".0#{$1}")
+      value = token.value.sub(/\.([eE])/, '.0\1')
       input[:resource] = reader.literal(value, :datatype => RDF::XSD.double)
     end
     terminal(:DECIMAL,              DECIMAL) do |reader, prod, token, input|
