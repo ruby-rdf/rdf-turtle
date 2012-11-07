@@ -420,7 +420,7 @@ class EBNF
     while !s.empty?
       e, s = depth {seq(s)}
       debug {"=> seq returned #{[e, s].inspect}"}
-      if e.empty?
+      if e.to_s.empty?
         break unless args.empty?
         e = [:seq, []] # empty sequence
       end
@@ -448,7 +448,7 @@ class EBNF
     while !s.empty?
       e, ss = depth {diff(s)}
       debug {"=> diff returned #{[e, ss].inspect}"}
-      unless e.empty?
+      unless e.to_s.empty?
         args << e
         s = ss
       else
@@ -473,14 +473,14 @@ class EBNF
     debug("diff") {"(#{s.inspect})"}
     e1, s = depth {postfix(s)}
     debug {"=> postfix returned #{[e1, s].inspect}"}
-    unless e1.empty?
+    unless e1.to_s.empty?
       unless s.empty?
         t, ss = depth {token(s)}
         debug {"diff #{[t, ss].inspect}"}
         if t.is_a?(Array) && t.first == :diff
           s = ss
           e2, s = primary(s)
-          unless e2.empty?
+          unless e2.to_s.empty?
             return [[:diff, e1, e2], s]
           else
             raise "Syntax Error"
@@ -503,7 +503,7 @@ class EBNF
     debug("postfix") {"(#{s.inspect})"}
     e, s = depth {primary(s)}
     debug {"=> primary returned #{[e, s].inspect}"}
-    return ["", s] if e.empty?
+    return ["", s] if e.to_s.empty?
     if !s.empty?
       t, ss = depth {token(s)}
       debug {"=> #{[t, ss].inspect}"}
