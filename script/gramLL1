@@ -210,7 +210,7 @@ class GramLL1
     else
       chatty("  Seq: '#{@seq[lhs].map {|p| resource_rep(p)}.join(', ')}'")
       # Entries for each first element referencing the sequence
-      @first[lhs].each do |f|
+      (@first[lhs] || []).each do |f|
         branchDict[f] = @seq[lhs]
       end
       
