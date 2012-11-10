@@ -13,7 +13,7 @@
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
   doap:description   "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
-  doap:created       "2011-08-29"^^xsd:date;
+  doap:created       "2011-08-29"^^xsd:date ;
   doap:programming-language "Ruby" ;
   doap:implements    <http://www.w3.org/TR/turtle/> ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
@@ -28,6 +28,6 @@
   foaf:maker         <http://greggkellogg.net/foaf#me> ;
   dc:title           "RDF::Turtle" ;
   dc:description     "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
-  dc:date            "2011-08-29"^^xsd:date;
-  dc:creator         <http://greggkellogg.net/foaf#me>
+  dc:date            "2011-08-29"^^xsd:date ;
+  dc:creator         <http://greggkellogg.net/foaf#me> ;
   dc:isPartOf        <http://rubygems.org/gems/rdf> .
