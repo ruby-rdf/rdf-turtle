@@ -13,7 +13,7 @@
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
   doap:description   "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
-  doap:created       "2011-08-29"^^xsd:date;
+  doap:created       "2011-08-29"^^xsd:date ;
   doap:programming-language "Ruby" ;
   doap:implements    <http://www.w3.org/TR/turtle/> ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
@@ -28,8 +28,8 @@
   foaf:maker         <http://greggkellogg.net/foaf#me> ;
   dc:title           "RDF::Turtle" ;
   dc:description     "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
-  dc:date            "2011-08-29"^^xsd:date;
-  dc:creator         <http://greggkellogg.net/foaf#me>
+  dc:date            "2011-08-29"^^xsd:date ;
+  dc:creator         <http://greggkellogg.net/foaf#me> ;
   dc:isPartOf        <http://rubygems.org/gems/rdf> .
 
 <http://greggkellogg.net/foaf#me> a foaf:Person, earl:Assertor;
@@ -44,7 +44,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -54,7 +54,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -64,7 +64,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -74,7 +74,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -84,7 +84,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -94,7 +94,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -104,7 +104,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -114,7 +114,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -124,7 +124,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -134,7 +134,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -144,7 +144,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -154,7 +154,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -164,7 +164,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -174,37 +174,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
-  earl:mode earl:automatic ] .
-
-[ a earl:Assertion;
-  earl:assertedBy <http://greggkellogg.net/foaf#me>;
-  earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/TurtleSubm/manifest.ttl#testeval14>;
-  earl:result [
-    a earl:TestResult;
-    earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
-  earl:mode earl:automatic ] .
-
-[ a earl:Assertion;
-  earl:assertedBy <http://greggkellogg.net/foaf#me>;
-  earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/TurtleSubm/manifest.ttl#testeval15>;
-  earl:result [
-    a earl:TestResult;
-    earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
-  earl:mode earl:automatic ] .
-
-[ a earl:Assertion;
-  earl:assertedBy <http://greggkellogg.net/foaf#me>;
-  earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/TurtleSubm/manifest.ttl#testeval16>;
-  earl:result [
-    a earl:TestResult;
-    earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -214,7 +184,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -224,7 +194,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -234,7 +204,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -244,7 +214,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -254,7 +224,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -264,7 +234,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -274,7 +244,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -284,7 +254,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -294,7 +264,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -304,7 +274,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -314,7 +284,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -324,17 +294,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
-  earl:mode earl:automatic ] .
-
-[ a earl:Assertion;
-  earl:assertedBy <http://greggkellogg.net/foaf#me>;
-  earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/TurtleSubm/manifest.ttl#testeval29>;
-  earl:result [
-    a earl:TestResult;
-    earl:outcome earl:failed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -344,7 +304,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -354,7 +314,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -364,7 +324,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -374,7 +334,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -384,7 +344,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -394,7 +354,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -404,7 +364,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -414,7 +374,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -424,7 +384,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -434,7 +394,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -444,7 +404,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -454,7 +414,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -464,7 +424,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -474,7 +434,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -484,7 +444,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -494,7 +454,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -504,7 +464,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -514,7 +474,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -524,1275 +484,1705 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-file-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-file-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-file-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-file-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-file-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-file-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-uri-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-uri-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-uri-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-uri-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-uri-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-uri-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-base-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-uri-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-base-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-base-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-base-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-base-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-base-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-base-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-base-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-06>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-07>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-08>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-prefix-09>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-prefix-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-06>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-07>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-08>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-09>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-10>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-string-11>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-str-esc-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-string-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-str-esc-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-str-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-str-esc-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-str-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-pname-esc-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-str-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-pname-esc-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-pname-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-pname-esc-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-pname-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-pname-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-06>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-07>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-08>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-09>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bnode-10>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bnode-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-06>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-07>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-08>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-09>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-10>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-number-11>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-datatypes-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-number-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-datatypes-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-datatypes-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-kw-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-datatypes-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-kw-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-kw-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-kw-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-kw-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-struct-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-kw-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-struct-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-struct-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-struct-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-struct-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-lists-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-struct-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-lists-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-lists-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-lists-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-lists-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-lists-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-lists-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-lists-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-lists-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-lists-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-uri-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-uri-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-uri-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-uri-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-06>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-uri-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-07>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-prefix-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-08>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-prefix-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-uri-09>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-prefix-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-prefix-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-prefix-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-prefix-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-prefix-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-prefix-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-base-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-prefix-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-base-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-base-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-base-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-base-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-base-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-06>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-kw-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-07>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-kw-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-kw-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-kw-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-kw-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-kw-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-kw-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-kw-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-kw-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-kw-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-08>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-09>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-10>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-11>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-12>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-13>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-14>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-15>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-16>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-struct-17>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-12>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-lang-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-n3-extras-13>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-esc-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-esc-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-esc-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-esc-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-pname-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-12>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-pname-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-13>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-pname-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-14>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-string-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-15>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-string-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-16>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-string-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-struct-17>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-string-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-lang-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-num-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-num-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-num-03>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-num-04>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-esc-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#syn-bad-num-05>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-pname-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#eval-struct-01>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-pname-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <http://greggkellogg.net/foaf#me>;
   earl:subject <http://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#eval-struct-02>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-pname-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2012-11-06T19:23:29-08:00"^^xsd:dateTime];
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-string-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-string-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-string-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-string-04>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-string-05>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-num-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-num-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-num-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-num-04>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-syntax-bad-num-05>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-eval-struct-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-eval-struct-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-04>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-05>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-06>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-07>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-08>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-09>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-10>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-11>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-12>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-13>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-14>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-15>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-16>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-17>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-18>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-19>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-20>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-21>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-22>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-23>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-24>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-25>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-26>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-subm-27>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-eval-bad-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-eval-bad-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-eval-bad-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://svn.apache.org/repos/asf/jena/Experimental/riot-reader/testing/RIOT/Lang/Turtle/manifest.ttl#turtle-eval-bad-04>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2012-11-11T21:50:38-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
