@@ -139,14 +139,13 @@ opts.each do |opt, arg|
   end
 end
 
-manifests = options[:ntriples] ? %w(N-Triples/manifest.ttl) : %w(TurtleSubm/manifest.ttl Turtle/manifest.ttl)
+manifests = options[:ntriples] ? %w(N-Triples/manifest.ttl) : %w(manifest.ttl)
 
 earl_preamble(options) if options[:earl]
 
 manifests.each do |man|
   Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
     m.entries.each do |tc|
-      next if options[:skip] && %w(subm-test-14 subm-test-15 subm-test-16).include?(tc.name)
       next unless ARGV.empty? || ARGV.any? {|n| tc.name.match(/#{n}/)}
       run_tc(tc, options)
     end
