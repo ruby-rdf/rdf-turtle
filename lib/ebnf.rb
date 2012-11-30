@@ -8,7 +8,7 @@ require 'strscan'
 # to allow for coloquial variations (such as in the Turtle syntax).
 #
 # A rule takes the following form:
-#     [1]  symbol ::= expression
+#     \[1\]  symbol ::= expression
 #
 # Comments include the content between '/*' and '*/'
 #
@@ -25,47 +25,46 @@ require 'strscan'
 # grammar in the XML specification has been a long, tedious manual
 # process. Only when the loop is closed between a fully formal grammar
 # and a large test data set can we be confident that we have an accurate
-# specification of a language [#]_.
+# specification of a language (and even then, only the syntax of the language).
 # 
 # 
-# The grammar in the `N3 design note`_ has evolved based on the original
+# The grammar in the [N3 design note][] has evolved based on the original
 # manual transcription into a python recursive-descent parser and
 # subsequent development of test cases. Rather than maintain the grammar
-# and the parser independently, our goal_ is to formalize the language
+# and the parser independently, our [goal] is to formalize the language
 # syntax sufficiently to replace the manual implementation with one
 # derived mechanically from the specification.
 # 
 # 
-# .. [#] and even then, only the syntax of the language.
-# .. _N3 design note: http://www.w3.org/DesignIssues/Notation3
+# [N3 design note]: http://www.w3.org/DesignIssues/Notation3
 # 
 # Related Work
 # ------------
 # 
-# Sean Palmer's `n3p announcement`_ demonstrated the feasibility of the
+# Sean Palmer's [n3p announcement][] demonstrated the feasibility of the
 # approach, though that work did not cover some aspects of N3.
 # 
-# In development of the `SPARQL specification`_, Eric Prud'hommeaux
-# developed Yacker_, which converts EBNF syntax to perl and C and C++
+# In development of the [SPARQL specification][], Eric Prud'hommeaux
+# developed [Yacker][], which converts EBNF syntax to perl and C and C++
 # yacc grammars. It includes an interactive facility for checking
 # strings against the resulting grammars.
-# Yosi Scharf used it in `cwm Release 1.1.0rc1`_, which includes
+# Yosi Scharf used it in [cwm Release 1.1.0rc1][], which includes
 # a SPAQRL parser that is *almost* completely mechanically generated.
 # 
 # The N3/turtle output from yacker is lower level than the EBNF notation
 # from the XML specification; it has the ?, +, and * operators compiled
 # down to pure context-free rules, obscuring the grammar
 # structure. Since that transformation is straightforwardly expressed in
-# semantic web rules (see bnf-rules.n3_), it seems best to keep the RDF
+# semantic web rules (see [bnf-rules.n3][]), it seems best to keep the RDF
 # expression of the grammar in terms of the higher level EBNF
 # constructs.
 # 
-# .. _goal: http://www.w3.org/2002/02/mid/1086902566.21030.1479.camel@dirk;list=public-cwm-bugs
-# .. _n3p announcement: http://lists.w3.org/Archives/Public/public-cwm-talk/2004OctDec/0029.html
-# .. _Yacker: http://www.w3.org/1999/02/26-modules/User/Yacker
-# .. _SPARQL specification: http://www.w3.org/TR/rdf-sparql-query/
-# .. _Cwm Release 1.1.0rc1: http://lists.w3.org/Archives/Public/public-cwm-announce/2005JulSep/0000.html
-# .. _bnf-rules.n3: http://www.w3.org/2000/10/swap/grammar/bnf-rules.n3
+# [goal]: http://www.w3.org/2002/02/mid/1086902566.21030.1479.camel@dirk;list=public-cwm-bugs
+# [n3p announcement]: http://lists.w3.org/Archives/Public/public-cwm-talk/2004OctDec/0029.html
+# [Yacker]: http://www.w3.org/1999/02/26-modules/User/Yacker
+# [SPARQL specification]: http://www.w3.org/TR/rdf-sparql-query/
+# [Cwm Release 1.1.0rc1]: http://lists.w3.org/Archives/Public/public-cwm-announce/2005JulSep/0000.html
+# [bnf-rules.n3]: http://www.w3.org/2000/10/swap/grammar/bnf-rules.n3
 # 
 # Open Issues and Future Work
 # ---------------------------
@@ -76,57 +75,56 @@ require 'strscan'
 # captured formally.
 # 
 # The schema for the EBNF vocabulary used here (``g:seq``, ``g:alt``, ...)
-# is not yet published; it should be aligned with `swap/grammar/bnf`_
-# and the bnf2html.n3_ rules (and/or the style of linked XHTML grammar
+# is not yet published; it should be aligned with [swap/grammar/bnf][]
+# and the [bnf2html.n3][] rules (and/or the style of linked XHTML grammar
 # in the SPARQL and XML specificiations).
 # 
 # It would be interesting to corroborate the claim in the SPARQL spec
 # that the grammar is LL(1) with a mechanical proof based on N3 rules.
 # 
-# .. _swap/grammar/bnf: http://www.w3.org/2000/10/swap/grammar/bnf
-# .. _bnf2html.n3: http://www.w3.org/2000/10/swap/grammar/bnf2html.n3  
-# 
-# 
+# [swap/grammar/bnf]: http://www.w3.org/2000/10/swap/grammar/bnf
+# [bnf2html.n3]: http://www.w3.org/2000/10/swap/grammar/bnf2html.n3  
 # 
 # Background
 # ----------
 # 
-# The `N3 Primer`_ by Tim Berners-Lee introduces RDF and the Semantic
+# The [N3 Primer] by Tim Berners-Lee introduces RDF and the Semantic
 # web using N3, a teaching and scribbling language. Turtle is a subset
 # of N3 that maps directly to (and from) the standard XML syntax for
 # RDF.
-# 
-# 
-# 
-# .. _N3 Primer: _http://www.w3.org/2000/10/swap/Primer.html
+#
+# [N3 Primer]: http://www.w3.org/2000/10/swap/Primer.html
 # 
 # @author Gregg Kellogg
 class EBNF
   class Rule
-    # @attr [Symbol] sym
+    # @attr_reader [Symbol] sym
     attr_reader :sym
-    # @attr [String] id
+    # @attr_reader [String] id
     attr_reader :id
-    # @attr [Symbol] kind one of :rule, :token, or :pass
+    # @attr_reader [Symbol] kind one of :rule, :token, or :pass
     attr_accessor :kind
-    # @attr [Array] expr
+    # @attr_reader [Array] expr
     attr_reader :expr
-    # @attr [String] orig
+    # @attr_reader [String] orig
     attr_accessor :orig
 
     # @param [Integer] id
     # @param [Symbol] sym
     # @param [Array] expr
-    # @param [String] orig
     # @param [EBNF] ebnf
     def initialize(id, sym, expr, ebnf)
       @id, @sym, @expr, @ebnf = id, sym, expr, ebnf
     end
-    
+
+    # Serializes this rule to an S-Expression
+    # @return [String]
     def to_sxp
       [id, sym, kind, expr].to_sxp
     end
     
+    # Serializes this rule to an Turtle
+    # @return [String]
     def to_ttl
       @ebnf.debug("to_ttl") {inspect}
       comment = orig.strip.
@@ -193,21 +191,21 @@ class EBNF
     # turn an XML BNF character class into an N3 literal for that
     # character class (less the outer quote marks)
     #
-    #   >>> cclass("^<>'{}|^`")
-    #   "[^<>'{}|^`]"
-    #   >>> cclass("#x0300-#x036F")
-    #   "[\\u0300-\\u036F]"
-    #   >>> cclass("#xC0-#xD6")
-    #   "[\\u00C0-\\u00D6]"
-    #   >>> cclass("#x370-#x37D")
-    #   "[\\u0370-\\u037D]"
-    # 
-    #   as in: ECHAR ::= '\' [tbnrf\"']
-    #   >>> cclass("tbnrf\\\"'")
-    #   'tbnrf\\\\\\"\''
-    # 
-    #   >>> cclass("^#x22#x5C#x0A#x0D")
-    #   '^\\u0022\\\\\\u005C\\u000A\\u000D'
+    #     >>> cclass("^<>'{}|^`")
+    #     "[^<>'{}|^`]"
+    #     >>> cclass("#x0300-#x036F")
+    #     "[\\u0300-\\u036F]"
+    #     >>> cclass("#xC0-#xD6")
+    #     "[\\u00C0-\\u00D6]"
+    #     >>> cclass("#x370-#x37D")
+    #     "[\\u0370-\\u037D]"
+    #     
+    #     as in: ECHAR ::= '\' [tbnrf\"']
+    #     >>> cclass("tbnrf\\\"'")
+    #     'tbnrf\\\\\\"\''
+    #     
+    #     >>> cclass("^#x22#x5C#x0A#x0D")
+    #     '^\\u0022\\\\\\u005C\\u000A\\u000D'
     def cclass(txt)
       '[' +
       txt.gsub(/\#x[0-9a-fA-F]+/) do |hx|
@@ -229,6 +227,9 @@ class EBNF
   # in S-Expressions (similar to SPARQL SSE)
   #
   # @param [#read, #to_s] input
+  # @param [Hash{Symbol => Object}] options
+  # @option options [Boolean, Array] :debug
+  #   Output debug information to an array or STDOUT.
   def initialize(input, options = {})
     @options = options
     @lineno, @depth = 1, 0
@@ -264,6 +265,7 @@ class EBNF
   
   ##
   # Write out parsed syntax string as an S-Expression
+  # @return [String]
   def to_sxp
     begin
       require 'sxp'
@@ -276,6 +278,7 @@ class EBNF
   ##
   # Write out syntax tree as Turtle
   # @param [String] prefix for language
+  # @param [String] ns URI for language
   # @return [String]
   def to_ttl(prefix, ns)
     token = false
@@ -302,7 +305,7 @@ class EBNF
 
   ##
   # Iterate over rule strings.
-  # a line that starts with '[' or '@' starts a new rule
+  # a line that starts with '\[' or '@' starts a new rule
   #
   # @param [StringScanner] scanner
   # @yield rule_string
@@ -368,31 +371,31 @@ class EBNF
   #
   # @example
   #     >>> ebnf("a b c")
-  #     ((seq, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((seq, \[('id', 'a'), ('id', 'b'), ('id', 'c')\]), '')
   #     
   #     >>> ebnf("a? b+ c*")
-  #     ((seq, [(opt, ('id', 'a')), (plus, ('id', 'b')), ('*', ('id', 'c'))]), '')
+  #     ((seq, \[(opt, ('id', 'a')), (plus, ('id', 'b')), ('*', ('id', 'c'))\]), '')
   #     
   #     >>> ebnf(" | x xlist")
-  #     ((alt, [(seq, []), (seq, [('id', 'x'), ('id', 'xlist')])]), '')
+  #     ((alt, \[(seq, \[\]), (seq, \[('id', 'x'), ('id', 'xlist')\])\]), '')
   #     
   #     >>> ebnf("a | (b - c)")
-  #     ((alt, [('id', 'a'), (diff, [('id', 'b'), ('id', 'c')])]), '')
+  #     ((alt, \[('id', 'a'), (diff, \[('id', 'b'), ('id', 'c')\])\]), '')
   #     
   #     >>> ebnf("a b | c d")
-  #     ((alt, [(seq, [('id', 'a'), ('id', 'b')]), (seq, [('id', 'c'), ('id', 'd')])]), '')
+  #     ((alt, \[(seq, \[('id', 'a'), ('id', 'b')\]), (seq, \[('id', 'c'), ('id', 'd')\])\]), '')
   #     
   #     >>> ebnf("a | b | c")
-  #     ((alt, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((alt, \[('id', 'a'), ('id', 'b'), ('id', 'c')\]), '')
   #     
   #     >>> ebnf("a) b c")
   #     (('id', 'a'), ' b c')
   #     
   #     >>> ebnf("BaseDecl? PrefixDecl*")
-  #     ((seq, [(opt, ('id', 'BaseDecl')), ('*', ('id', 'PrefixDecl'))]), '')
+  #     ((seq, \[(opt, ('id', 'BaseDecl')), ('*', ('id', 'PrefixDecl'))\]), '')
   #     
-  #     >>> ebnf("NCCHAR1 | diff | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]")
-  #     ((alt, [('id', 'NCCHAR1'), ("'", diff), (range, '0-9'), (hex, '#x00B7'), (range, '#x0300-#x036F'), (range, '#x203F-#x2040')]), '')
+  #     >>> ebnf("NCCHAR1 | diff | [0-9] | #x00B7 | [#x0300-#x036F] | \[#x203F-#x2040\]")
+  #     ((alt, \[('id', 'NCCHAR1'), ("'", diff), (range, '0-9'), (hex, '#x00B7'), (range, '#x0300-#x036F'), (range, '#x203F-#x2040')\]), '')
   #     
   # @param [String] s
   # @return [Array]
@@ -411,7 +414,7 @@ class EBNF
   ##
   # Parse alt
   #     >>> alt("a | b | c")
-  #     ((alt, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((alt, \[('id', 'a'), ('id', 'b'), ('id', 'c')\]), '')
   # @param [String] s
   # @return [Array]
   def alt(s)
@@ -438,10 +441,10 @@ class EBNF
   # parse seq
   #
   #     >>> seq("a b c")
-  #     ((seq, [('id', 'a'), ('id', 'b'), ('id', 'c')]), '')
+  #     ((seq, \[('id', 'a'), ('id', 'b'), ('id', 'c')\]), '')
   #     
   #     >>> seq("a b? c")
-  #     ((seq, [('id', 'a'), (opt, ('id', 'b')), ('id', 'c')]), '')
+  #     ((seq, \[('id', 'a'), (opt, ('id', 'b')), ('id', 'c')\]), '')
   def seq(s)
     debug("seq") {"(#{s.inspect})"}
     args = []
@@ -468,7 +471,7 @@ class EBNF
   # parse diff
   # 
   #     >>> diff("a - b")
-  #     ((diff, [('id', 'a'), ('id', 'b')]), '')
+  #     ((diff, \[('id', 'a'), ('id', 'b')\]), '')
   def diff(s)
     debug("diff") {"(#{s.inspect})"}
     e1, s = depth {postfix(s)}
@@ -513,7 +516,7 @@ class EBNF
     end
     [e, s]
   end
-  
+
   ##
   # parse primary
   # 
@@ -550,10 +553,10 @@ class EBNF
   #     ((range, '0-9'), '')
   #     >>> token("#x00B7")
   #     ((hex, '#x00B7'), '')
-  #     >>> token ("[#x0300-#x036F]")
+  #     >>> token ("\[#x0300-#x036F\]")
   #     ((range, '#x0300-#x036F'), '')
-  #     >>> token("[^<>'{}|^`]-[#x00-#x20]")
-  #     ((range, "^<>'{}|^`"), '-[#x00-#x20]')
+  #     >>> token("\[^<>'{}|^`\]-\[#x00-#x20\]")
+  #     ((range, "^<>'{}|^`"), '-\[#x00-#x20\]')
   def token(s)
     s = s.strip
     case m = s[0,1]
@@ -601,9 +604,15 @@ class EBNF
 
   ##
   # Progress output when debugging
-  #   param [String] node relative location in input
-  #   param [String] message ("")
-  #   yieldreturn [String] added to message
+  #
+  # @overload debug(node, message)
+  #   @param [String] node relative location in input
+  #   @param [String] message ("")
+  #
+  # @overload debug(message)
+  #   @param [String] message ("")
+  #
+  # @yieldreturn [String] added to message
   def debug(*args)
     return unless @options[:debug]
     options = args.last.is_a?(Hash) ? args.pop : {}

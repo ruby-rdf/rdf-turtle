@@ -14,7 +14,6 @@ module RDF::Turtle
                            [\\uF900-\\uFDCF]|[\\uFDF0-\\uFFFD]|[\\u{10000}-\\u{EFFFF}]
                          EOS
       U_CHARS2         = Regexp.compile("\\u00B7|[\\u0300-\\u036F]|[\\u203F-\\u2040]")
-      # [^<>\"{}|^`\\] - [#x00-#x20]
       IRI_RANGE        = Regexp.compile("[[^<>\"{}|^`\\\\]&&[^\\x00-\\x20]]")
     else
       ##
@@ -60,64 +59,64 @@ module RDF::Turtle
                          EOS
     end
 
-    # [27]
+    # 27
     UCHAR                = RDF::LL1::Lexer::UCHAR
-    # [170s]
+    # 170s
     PERCENT              = /%[0-9A-Fa-f]{2}/
-    # [172s]
+    # 172s
     PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/
-    # [169s]
+    # 169s
     PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/
-    # [163s]
+    # 163s
     PN_CHARS_BASE        = /[A-Z]|[a-z]|#{U_CHARS1}/
-    # [164s]
+    # 164s
     PN_CHARS_U           = /_|#{PN_CHARS_BASE}/
-    # [166s]
+    # 166s
     PN_CHARS             = /-|[0-9]|#{PN_CHARS_U}|#{U_CHARS2}/
     PN_LOCAL_BODY        = /(?:(?:\.|:|#{PN_CHARS}|#{PLX})*(?:#{PN_CHARS}|:|#{PLX}))?/
     PN_CHARS_BODY        = /(?:(?:\.|#{PN_CHARS})*#{PN_CHARS})?/
-    # [167s]
+    # 167s
     PN_PREFIX            = /#{PN_CHARS_BASE}#{PN_CHARS_BODY}/
-    # [100s]
+    # 100s
     PN_LOCAL             = /(?:[0-9]|:|#{PN_CHARS_U}|#{PLX})#{PN_LOCAL_BODY}/
-    # [154s]
+    # 154s
     EXPONENT             = /[eE][+-]?[0-9]+/
-    # [159s]
+    # 159s
     ECHAR                = /\\[tbnrf\\"']/
-    # [19]
+    # 19
     IRIREF               = /<(?:#{IRI_RANGE}|#{UCHAR})*>/
-    # [139s]
+    # 139s
     PNAME_NS             = /#{PN_PREFIX}?:/
-    # [140s]
+    # 140s
     PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/
-    # [141s]
+    # 141s
     BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(#{PN_CHARS}|\.)*/
-    # [144s]
+    # 144s
     LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/
-    # [20]
+    # 20
     INTEGER              = /[+-]?[0-9]+/
-    # [21]
+    # 21
     DECIMAL              = /[+-]?(?:[0-9]*\.[0-9]+)/
-    # [22]
+    # 22
     DOUBLE               = /[+-]?(?:[0-9]+\.[0-9]*#{EXPONENT}|\.?[0-9]+#{EXPONENT})/
-    # [23]
+    # 23
     STRING_LITERAL_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/
-    # [24]
+    # 24
     STRING_LITERAL_SINGLE_QUOTE      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/
-    # [25]
+    # 25
     STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m
-    # [26]
+    # 26
     STRING_LITERAL_LONG_QUOTE = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m
 
-    # [161s]
+    # 161s
     WS                   = / |\t|\r|\n  /
-    # [160s]
+    # 160s
     NIL                  = /\(#{WS}*\)/
-    # [162s]
+    # 162s
     ANON                 = /\[#{WS}*\]/
-    # [28t]
+    # 28t
     SPARQL_PREFIX        = /prefix/i
-    # [29t]
+    # 29t
     SPARQL_BASE          = /base/i
   
   end

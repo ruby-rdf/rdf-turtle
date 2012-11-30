@@ -4,16 +4,16 @@ module RDF::LL1
   ##
   # Overload StringScanner with file operations
   #
-  # FIXME: Only implements the subset required by the Lexer for now.
-  #
-  # Reloads scanner as required until EOF.
+  # * Reloads scanner as required until EOF.
   # * Loads to a high-water and reloads when remaining size reaches a low-water.
+  #
+  # FIXME: Only implements the subset required by the Lexer for now.
   class Scanner < StringScanner
     HIGH_WATER = 10240
     LOW_WATER  = 2048     # Hopefully large enough to deal with long multi-line comments
 
     ##
-    # @attr [IO, StringIO]
+    # @attr_reader [IO, StringIO]
     attr_reader :input
 
     ##

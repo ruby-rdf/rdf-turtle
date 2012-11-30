@@ -41,23 +41,9 @@ Full documentation available on [Rubydoc.info][Turtle doc]
 ### Variations from the spec
 In some cases, the specification is unclear on certain issues:
 
-* In section 2.1, the [spec][Turtle] indicates that "Literals ,
-  prefixed names and IRIs may also contain escapes to encode surrounding syntax ...",
-  however the description in 5.2 indicates that only IRI\_REF and the various STRING\_LITERAL terms
-  are subject to unescaping. This means that an IRI which might otherwise be representable using a PNAME
-  cannot if the IRI contains any characters that might need escaping. This implementation currently abides
-  by this restriction. Presumably, this would affect both PNAME\_NS and PNAME\_LN terminals.
-  (This is being tracked as issues [67](http://www.w3.org/2011/rdf-wg/track/issues/67)).
-* The EBNF definition of IRIREF seems malformed, and has no provision for \^, as discussed elsewhere in the spec.
-  We presume that [#0000- ] is intended to be [#0000-#0020].
-* The list example in section 6 uses a list on it's own, without a predicate or object, which is not allowed
-  by the grammar (neither is a blankNodeProperyList). Either the EBNF should be updated to allow for these
-  forms, or the examples should be changed such that ( ... ) and [ ... ] are used only in the context of being
-  a subject or object. This implementation will generate triples, however an error will be generated if the
-  parser is run in validation mode.
 * For the time being, plain literals are generated without an xsd:string datatype, but literals with an xsd:string
   datatype are saved as non-datatyped triples in the graph. This will be updated in the future when the rest of the
-  library suite is brought up to date.
+  library suite is brought up to date with RDF 1.1.
 
 ## Implementation Notes
 The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
@@ -69,13 +55,9 @@ through a set of regular expressions used to match each type of terminal, descri
 
 etc/turtle.bnf is used to to generate a Notation3 representation of the grammar, a transformed LL1 representation and ultimately {RDF::Turtle::Meta}.
 
-Using SWAP utilities, this is done as follows:
+Using local and [SWAP][] utilities, this is done as follows:
 
-    python http://www.w3.org/2000/10/swap/grammar/ebnf2turtle.py \
-      etc/turtle.bnf \
-      ttl language \
-      'http://www.w3.org/ns/formats/Turtle#' > |
-    sed -e 's/^  ".*"$/  g:seq (&)/'  > etc/turtle.n3
+    script/ebnf2ttl -f ttl -o etc/turtle.n3 etc/turtle.bnf
       
     python http://www.w3.org/2000/10/swap/cwm.py etc/turtle.n3 \
       http://www.w3.org/2000/10/swap/grammar/ebnf2bnf.n3 \
@@ -86,12 +68,13 @@ Using SWAP utilities, this is done as follows:
       --grammar etc/turtle-ll1.n3 \
       --lang 'http://www.w3.org/ns/formats/Turtle#language' \
       --output lib/rdf/turtle/meta.rb
-    
-      
+
+Future releases will replace the need for cym using Ruby-native graph inference.
+
 ## Dependencies
 
 * [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
-* [RDF.rb](http://rubygems.org/gems/rdf) (>= 0.3.9)
+* [RDF.rb](http://rubygems.org/gems/rdf) (>= 0.3.1)
 
 ## Installation
 
@@ -134,3 +117,4 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
 [Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown
 [Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf
+[Swap]:         http://www.w3.org/2000/10/swap/

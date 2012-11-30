@@ -370,9 +370,14 @@ module RDF::Turtle
 
     ##
     # Progress output when debugging
-    #   param [String] node relative location in input
-    #   param [String] message ("")
-    #   yieldreturn [String] added to message
+    # @overload debug(node, message)
+    #   @param [String] node relative location in input
+    #   @param [String] message ("")
+    #
+    # @overload debug(message)
+    #   @param [String] message ("")
+    #
+    # @yieldreturn [String] added to message
     def debug(*args)
       return unless @options[:debug] || RDF::Turtle.debug?
       options = args.last.is_a?(Hash) ? args.pop : {}
