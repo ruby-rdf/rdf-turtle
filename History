@@ -1,3 +1,10 @@
+### 0.3.1
+* Sync with rdf-spec 0.3.11 changes due to respec updates.
+
+### 0.3.0
+* Use Ruby native EBNF parser. Still requires cwm to create first/follow rules.
+* Updated to latest specification and EBNF rules.
+
 ### 0.1.1
 * Improvements to allow reader & writer to be sub-classed for rdf-trig.
 * Improved error recovery when parsing.
