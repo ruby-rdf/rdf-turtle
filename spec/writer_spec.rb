@@ -7,7 +7,7 @@ describe RDF::Turtle::Writer do
     @writer = RDF::Turtle::Writer.new(StringIO.new)
   end
   
-  it_should_behave_like RDF_Writer
+  include RDF_Writer
 
   # XXX This should work for Ruby 1.8, but don't have time to investigate further right now
   describe ".for" do

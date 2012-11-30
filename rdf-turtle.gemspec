@@ -26,15 +26,14 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 1.8.1'
   gem.requirements          = []
-  gem.add_dependency             'rdf',             '>= 0.3.9'
+  gem.add_dependency             'rdf',             '>= 0.3.11'
   gem.add_development_dependency 'open-uri-cached', '>= 0.0.4'
-  gem.add_development_dependency 'rspec',           '>= 2.8.0'
+  gem.add_development_dependency 'rspec',           '>= 2.12.0'
   gem.add_development_dependency 'rdf-isomorphic',  '>= 0.3.4'
-  gem.add_development_dependency 'json-ld',         '>= 0.3.0'
-  gem.add_development_dependency 'yard' ,           '>= 0.6.0'
+  gem.add_development_dependency 'json-ld',         '>= 0.3.1'
+  gem.add_development_dependency 'yard' ,           '>= 0.8.3'
   gem.add_development_dependency 'sxp',             '>= 0.0.14'
-  gem.add_development_dependency 'rdf-spec',        '>= 0.3.8'
-  gem.add_development_dependency 'rspec',           '>= 2.11.0'
+  gem.add_development_dependency 'rdf-spec',        '>= 0.3.1'
   gem.add_development_dependency 'rake'
   gem.post_install_message  = nil
 end

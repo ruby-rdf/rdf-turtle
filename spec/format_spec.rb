@@ -7,7 +7,7 @@ describe RDF::Turtle::Format do
     @format_class = RDF::Turtle::Format
   end
 
-  it_should_behave_like RDF_Format
+  include RDF_Format
 
   describe ".for" do
     formats = [
