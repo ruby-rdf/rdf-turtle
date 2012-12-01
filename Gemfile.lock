@@ -22,7 +22,7 @@ GIT
 PATH
   remote: .
   specs:
-    rdf-turtle (0.3.0)
+    rdf-turtle (0.3.2)
       rdf (>= 0.3.11)
 
 GEM

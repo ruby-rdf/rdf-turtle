@@ -887,7 +887,43 @@ describe "RDF::Turtle::Reader" do
       end
     end
   end
-  
+
+  describe "malformed datatypes" do
+    {
+      "xsd:boolean" => %w(foo),
+      "xsd:date" => %w(+2010-01-01Z 2010-01-01TFOO 02010-01-01 2010-1-1 0000-01-01 2011-07 2011),
+      "xsd:dateTime" => %w(+2010-01-01T00:00:00Z 2010-01-01T00:00:00FOO 02010-01-01T00:00:00 2010-01-01 2010-1-1T00:00:00 0000-01-01T00:00:00 2011-07 2011),
+      "xsd:decimal" => %w(12.xyz),
+      "xsd:double" => %w(xy.z +1.0z),
+      "xsd:integer" => %w(+1.0z foo),
+      "xsd:time" => %w(+00:00:00Z -00:00:00Z 00:00 00),
+    }.each do |dt, values|
+      context dt do
+        values.each do |value|
+          before(:all) do
+            @input = %(
+              @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+              @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+              <> rdf:value "#{value}"^^#{dt} .
+            )
+            dt_uri = RDF::XSD.send(dt.split(':').last)
+            @expected = RDF::Graph.new << RDF::Statement.new(RDF::URI(""), RDF.value, RDF::Literal.new(value, :datatype => dt_uri))
+          end
+
+          context "with #{value}" do
+            it "creates triple with invalid literal" do
+              parse(@input, :validate => false).should be_equivalent_graph(@expected, :trace => @debug)
+            end
+            
+            it "does not create triple when validating" do
+              lambda {parse(@input, :validate => true)}.should raise_error(RDF::ReaderError)
+            end
+          end
+        end
+      end
+    end
+  end
+
   describe "validation" do
     {
       %(<a> <b> "xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("xyz" is not a valid .*),

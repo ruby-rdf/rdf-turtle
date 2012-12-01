@@ -23,7 +23,7 @@ def normalize(graph)
   end
 end
 
-Info = Struct.new(:about, :coment, :trace, :input, :result)
+Info = Struct.new(:about, :coment, :trace, :input, :result, :action, :expected)
 
 RSpec::Matchers.define :be_equivalent_graph do |expected, info|
   match do |actual|

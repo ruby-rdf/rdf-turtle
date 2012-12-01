@@ -272,7 +272,7 @@ module RDF::Turtle
           debug(loc, *(data.dup << {:level => 0}))
         end
       end
-    rescue RDF::LL1::Parser::Error => e
+    rescue ArgumentError, RDF::LL1::Parser::Error => e
       progress("Parsing completed with errors:\n\t#{e.message}")
       raise RDF::ReaderError, e.message if validate?
     end
@@ -298,12 +298,9 @@ module RDF::Turtle
     # @return [RDF::Statement] Added statement
     # @raise [RDF::ReaderError] Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
     def add_statement(node, statement)
-      if statement.valid?
-        progress(node) {"generate statement: #{statement}"}
-        @callback.call(statement)
-      else
-        error(node, "Statement is invalid: #{statement.inspect}")
-      end
+      error(node, "Statement is invalid: #{statement.inspect}") unless statement.valid?
+      progress(node) {"generate statement: #{statement}"}
+      @callback.call(statement)
     end
 
     def process_iri(iri)
