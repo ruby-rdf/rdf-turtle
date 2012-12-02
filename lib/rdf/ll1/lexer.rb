@@ -53,11 +53,13 @@ module RDF::LL1
     ML_START            = /\'\'\'|\"\"\"/                     # Beginning of terminals that may span lines
 
     ##
-    # @attr [Regexp] defines whitespace, defaults to WS
+    # @!attribute whitespace
+    # @return [Regexp] defines whitespace, defaults to WS
     attr_reader :whitespace
 
     ##
-    # @attr [Regexp] defines single-line comment, defaults to COMMENT
+    # @!attribute comment
+    # @return [Regexp] defines single-line comment, defaults to COMMENT
     attr_reader :comment
 
     ##

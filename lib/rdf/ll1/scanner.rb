@@ -13,7 +13,8 @@ module RDF::LL1
     LOW_WATER  = 2048     # Hopefully large enough to deal with long multi-line comments
 
     ##
-    # @attr_reader [IO, StringIO]
+    # @!attribute [r] input
+    # @return [IO, StringIO]
     attr_reader :input
 
     ##

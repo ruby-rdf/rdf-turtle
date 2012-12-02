@@ -11,7 +11,8 @@ module RDF::LL1
     DEBUG_LEVEL = 10
 
     ##
-    # @attr [Integer] lineno
+    # @!attribute [r] lineno
+    # @return [Integer] line number of current token
     attr_reader :lineno
 
     def self.included(base)

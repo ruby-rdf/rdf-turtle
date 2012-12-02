@@ -98,15 +98,24 @@ require 'strscan'
 # @author Gregg Kellogg
 class EBNF
   class Rule
-    # @attr_reader [Symbol] sym
+    # @!attribute [r] sym for rule
+    # @return [Symbol]
     attr_reader :sym
-    # @attr_reader [String] id
+
+    # @!attribute [r] id of rule
+    # @return [String]
     attr_reader :id
-    # @attr_reader [Symbol] kind one of :rule, :token, or :pass
+
+    # @!attribute [r] kind of rule
+    # @return [:rule, :token, or :pass]
     attr_accessor :kind
-    # @attr_reader [Array] expr
+
+    # @!attribute [r] expr rule expression
+    # @return [Array]
     attr_reader :expr
-    # @attr_reader [String] orig
+
+    # @!attribute [r] orig original rule
+    # @return [String]
     attr_accessor :orig
 
     # @param [Integer] id
