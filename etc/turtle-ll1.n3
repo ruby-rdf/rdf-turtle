@@ -143,7 +143,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :ANON     a re:Regex;
          rdf:value "162s";
-         rdfs:comment "[162s] ANON ::= \"[\" WS* \"]\\\"";
+         rdfs:comment "[162s] ANON                           ::= \"[\" WS* \"]\\\"";
          rdfs:label "ANON";
          g:follow "(",
                 ",",
@@ -172,7 +172,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :BLANK_NODE_LABEL     a re:Regex;
          rdf:value "141s";
-         rdfs:comment "[141s] BLANK_NODE_LABEL ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?";
+         rdfs:comment "[141s] BLANK_NODE_LABEL               ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?";
          rdfs:label "BLANK_NODE_LABEL";
          g:follow "(",
                 ",",
@@ -217,7 +217,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :BlankNode     a g:Production;
          rdf:value "137s";
-         rdfs:comment "[137s] BlankNode ::= BLANK_NODE_LABEL | ANON";
+         rdfs:comment "[137s] BlankNode                      ::= BLANK_NODE_LABEL | ANON";
          rdfs:label "BlankNode";
          g:alt  (
         :BLANK_NODE_LABEL
@@ -246,7 +246,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :BooleanLiteral     a g:Production;
          rdf:value "133s";
-         rdfs:comment "[133s] BooleanLiteral ::= \"true\" | \"false\\\"";
+         rdfs:comment "[133s] BooleanLiteral                 ::= \"true\" | \"false\\\"";
          rdfs:label "BooleanLiteral";
          g:alt  (
         "true"
@@ -273,8 +273,8 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language .
     
     :DECIMAL     a re:Regex;
-         rdf:value "21";
-         rdfs:comment "[21] DECIMAL ::= [+-]?  ( ([0-9])* '.' ([0-9])+  )";
+         rdf:value "20";
+         rdfs:comment "[20] DECIMAL                          ::= [+-]?  ( ([0-9])* '.' ([0-9])+  )";
          rdfs:label "DECIMAL";
          g:follow "(",
                 ",",
@@ -315,8 +315,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                              re:matches "[0-9]" ] ] ) ] ) .
     
     :DOUBLE     a re:Regex;
-         rdf:value "22";
-         rdfs:comment "[22] DOUBLE ::= [+-]? ( [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT )";
+         rdf:value "21";
+         rdfs:comment "[21] DOUBLE                           ::= [+-]? ( [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT )";
          rdfs:label "DOUBLE";
          g:follow "(",
                 ",",
@@ -381,7 +381,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :ECHAR     a re:Regex;
          rdf:value "159s";
-         rdfs:comment """[159s] ECHAR ::= "\\" [tbnrf\\"']""";
+         rdfs:comment """[159s] ECHAR                          ::= "\\" [tbnrf\\"']""";
          rdfs:label "ECHAR";
          re:seq  (
         "\\"
@@ -391,7 +391,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :EXPONENT     a re:Regex;
          rdf:value "154s";
-         rdfs:comment "[154s] EXPONENT ::= [eE] [+-]? [0-9]+";
+         rdfs:comment "[154s] EXPONENT                       ::= [eE] [+-]? [0-9]+";
          rdfs:label "EXPONENT";
          re:seq  (
          [
@@ -410,7 +410,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :HEX     a re:Regex;
          rdf:value "171s";
-         rdfs:comment "[171s] HEX ::= [0-9] | [A-F] | [a-f]";
+         rdfs:comment "[171s] HEX                            ::= [0-9] | [A-F] | [a-f]";
          rdfs:label "HEX";
          re:alt  (
          [
@@ -424,8 +424,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                  re:matches "[a-f]" ] ) .
     
     :INTEGER     a re:Regex;
-         rdf:value "20";
-         rdfs:comment "[20] INTEGER ::= [+-]? [0-9]+";
+         rdf:value "19";
+         rdfs:comment "[19] INTEGER                          ::= [+-]? [0-9]+";
          rdfs:label "INTEGER";
          g:follow "(",
                 ",",
@@ -457,8 +457,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                      re:matches "[0-9]" ] ] ) .
     
     :IRIREF     a re:Regex;
-         rdf:value "19";
-         rdfs:comment """[19] IRIREF ::=  '<' ([^#x00-#x20<>"{}|^`\\] | UCHAR)* '>'""";
+         rdf:value "18";
+         rdfs:comment """[18] IRIREF                           ::=  '<' ([^#x00-#x20<>"{}|^`\\] | UCHAR)* '>'""";
          rdfs:label "IRIREF";
          g:follow "(",
                 ",",
@@ -497,7 +497,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :LANGTAG     a re:Regex;
          rdf:value "144s";
-         rdfs:comment """[144s] LANGTAG ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )*""";
+         rdfs:comment """[144s] LANGTAG                        ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )*""";
          rdfs:label "LANGTAG";
          g:follow "(",
                 ",",
@@ -535,20 +535,9 @@ i.e. rewrite ?, +, * operators using alt and seq
                                  a re:Regex;
                                  re:matches "[a-zA-Z0-9]" ] ] ) ] ] ) .
     
-    :NIL     a re:Regex;
-         rdf:value "160s";
-         rdfs:comment "[160s] NIL ::= \"(\" WS* \")\\\"";
-         rdfs:label "NIL";
-         re:seq  (
-        "("
-         [
-                 a re:Regex;
-                 re:star :WS ]
-        ")" ) .
-    
     :NumericLiteral     a g:Production;
-         rdf:value "17";
-         rdfs:comment "[17] NumericLiteral ::= INTEGER | DECIMAL | DOUBLE";
+         rdf:value "16";
+         rdfs:comment "[16] NumericLiteral                   ::= INTEGER | DECIMAL | DOUBLE";
          rdfs:label "NumericLiteral";
          g:alt  (
         :INTEGER
@@ -578,7 +567,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PERCENT     a re:Regex;
          rdf:value "170s";
-         rdfs:comment "[170s] PERCENT ::= '%' HEX HEX";
+         rdfs:comment "[170s] PERCENT                        ::= '%' HEX HEX";
          rdfs:label "PERCENT";
          re:seq  (
         "%"
@@ -587,7 +576,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PLX     a re:Regex;
          rdf:value "169s";
-         rdfs:comment "[169s] PLX ::= PERCENT | PN_LOCAL_ESC";
+         rdfs:comment "[169s] PLX                            ::= PERCENT | PN_LOCAL_ESC";
          rdfs:label "PLX";
          re:alt  (
         :PERCENT
@@ -595,7 +584,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PNAME_LN     a re:Regex;
          rdf:value "140s";
-         rdfs:comment "[140s] PNAME_LN ::= PNAME_NS PN_LOCAL";
+         rdfs:comment "[140s] PNAME_LN                       ::= PNAME_NS PN_LOCAL";
          rdfs:label "PNAME_LN";
          g:follow "(",
                 ",",
@@ -621,7 +610,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PNAME_NS     a re:Regex;
          rdf:value "139s";
-         rdfs:comment "[139s] PNAME_NS ::= PN_PREFIX? \":\\\"";
+         rdfs:comment "[139s] PNAME_NS                       ::= PN_PREFIX? \":\\\"";
          rdfs:label "PNAME_NS";
          g:follow "(",
                 ",",
@@ -649,7 +638,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PN_CHARS     a re:Regex;
          rdf:value "166s";
-         rdfs:comment """[166s] PN_CHARS ::= PN_CHARS_U | "-" | [0-9] | #00B7 | [#0300-#036F] | [#203F-#2040]""";
+         rdfs:comment """[166s] PN_CHARS                       ::= PN_CHARS_U | "-" | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]""";
          rdfs:label "PN_CHARS";
          re:alt  (
         :PN_CHARS_U
@@ -659,17 +648,17 @@ i.e. rewrite ?, +, * operators using alt and seq
                  re:matches "[0-9]" ]
          [
                  a re:Regex;
-                 re:matches "[#00B7]" ]
+                 re:matches "[\\u00B7]" ]
          [
                  a re:Regex;
-                 re:matches "[#0300-#036F]" ]
+                 re:matches "[\\u0300-\\u036F]" ]
          [
                  a re:Regex;
-                 re:matches "[#203F-#2040]" ] ) .
+                 re:matches "[\\u203F-\\u2040]" ] ) .
     
     :PN_CHARS_BASE     a re:Regex;
          rdf:value "163s";
-         rdfs:comment "[163s] PN_CHARS_BASE ::= [A-Z] | [a-z] | [#00C0-#00D6] | [#00D8-#00F6] | [#00F8-#02FF] | [#0370-#037D] | [#037F-#1FFF] | [#200C-#200D] | [#2070-#218F] | [#2C00-#2FEF] | [#3001-#D7FF] | [#F900-#FDCF] | [#FDF0-#FFFD] | [#10000-#EFFFF]";
+         rdfs:comment "[163s] PN_CHARS_BASE                  ::= [A-Z] | [a-z] | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF] | [#x0370-#x037D] | [#x037F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]";
          rdfs:label "PN_CHARS_BASE";
          re:alt  (
          [
@@ -680,44 +669,44 @@ i.e. rewrite ?, +, * operators using alt and seq
                  re:matches "[a-z]" ]
          [
                  a re:Regex;
-                 re:matches "[#00C0-#00D6]" ]
+                 re:matches "[\\u00C0-\\u00D6]" ]
          [
                  a re:Regex;
-                 re:matches "[#00D8-#00F6]" ]
+                 re:matches "[\\u00D8-\\u00F6]" ]
          [
                  a re:Regex;
-                 re:matches "[#00F8-#02FF]" ]
+                 re:matches "[\\u00F8-\\u02FF]" ]
          [
                  a re:Regex;
-                 re:matches "[#0370-#037D]" ]
+                 re:matches "[\\u0370-\\u037D]" ]
          [
                  a re:Regex;
-                 re:matches "[#037F-#1FFF]" ]
+                 re:matches "[\\u037F-\\u1FFF]" ]
          [
                  a re:Regex;
-                 re:matches "[#200C-#200D]" ]
+                 re:matches "[\\u200C-\\u200D]" ]
          [
                  a re:Regex;
-                 re:matches "[#2070-#218F]" ]
+                 re:matches "[\\u2070-\\u218F]" ]
          [
                  a re:Regex;
-                 re:matches "[#2C00-#2FEF]" ]
+                 re:matches "[\\u2C00-\\u2FEF]" ]
          [
                  a re:Regex;
-                 re:matches "[#3001-#D7FF]" ]
+                 re:matches "[\\u3001-\\uD7FF]" ]
          [
                  a re:Regex;
-                 re:matches "[#F900-#FDCF]" ]
+                 re:matches "[\\uF900-\\uFDCF]" ]
          [
                  a re:Regex;
-                 re:matches "[#FDF0-#FFFD]" ]
+                 re:matches "[\\uFDF0-\\uFFFD]" ]
          [
                  a re:Regex;
-                 re:matches "[#10000-#EFFFF]" ] ) .
+                 re:matches "[\\U00010000-\\U000EFFFF]" ] ) .
     
     :PN_CHARS_U     a re:Regex;
          rdf:value "164s";
-         rdfs:comment "[164s] PN_CHARS_U  ::=  PN_CHARS_BASE | '_'";
+         rdfs:comment "[164s] PN_CHARS_U                     ::= PN_CHARS_BASE | '_'";
          rdfs:label "PN_CHARS_U";
          re:alt  (
         :PN_CHARS_BASE
@@ -725,7 +714,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PN_LOCAL     a re:Regex;
          rdf:value "168s";
-         rdfs:comment "[168s] PN_LOCAL ::= ( PN_CHARS_U | ':' | [0-9] | PLX ) ( ( PN_CHARS | '.' | ':' | PLX )*  ( PN_CHARS | ':' | PLX ) ) ?";
+         rdfs:comment "[168s] PN_LOCAL                       ::= ( PN_CHARS_U | ':' | [0-9] | PLX ) ( ( PN_CHARS | '.' | ':' | PLX )*  ( PN_CHARS | ':' | PLX ) ) ?";
          rdfs:label "PN_LOCAL";
          re:seq  (
          [
@@ -760,7 +749,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PN_LOCAL_ESC     a re:Regex;
          rdf:value "172s";
-         rdfs:comment """[172s] PN_LOCAL_ESC ::= '\\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%' )""";
+         rdfs:comment """[172s] PN_LOCAL_ESC                   ::= '\\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '='| '/' | '?' | '#' | '@' | '%' )""";
          rdfs:label "PN_LOCAL_ESC";
          re:seq  (
         "\\"
@@ -790,7 +779,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PN_PREFIX     a re:Regex;
          rdf:value "167s";
-         rdfs:comment """[167s] PN_PREFIX ::= PN_CHARS_BASE ( ( PN_CHARS | "." )* PN_CHARS )?""";
+         rdfs:comment """[167s] PN_PREFIX                      ::= PN_CHARS_BASE ( ( PN_CHARS | "." )* PN_CHARS )?""";
          rdfs:label "PN_PREFIX";
          re:seq  (
         :PN_CHARS_BASE
@@ -810,7 +799,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :PrefixedName     a g:Production;
          rdf:value "136s";
-         rdfs:comment "[136s] PrefixedName ::= PNAME_LN | PNAME_NS";
+         rdfs:comment "[136s] PrefixedName                   ::= PNAME_LN | PNAME_NS";
          rdfs:label "PrefixedName";
          g:alt  (
         :PNAME_LN
@@ -839,7 +828,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :RDFLiteral     a g:Production;
          rdf:value "128s";
-         rdfs:comment """[128s] RDFLiteral ::= String ( LANGTAG | ( "^^" iri ) )?""";
+         rdfs:comment """[128s] RDFLiteral                     ::= String ( LANGTAG | ( "^^" iri ) )?""";
          rdfs:label "RDFLiteral";
          g:first :STRING_LITERAL_LONG_QUOTE,
                 :STRING_LITERAL_LONG_SINGLE_QUOTE,
@@ -869,7 +858,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :SPARQL_BASE     a re:Regex;
          rdf:value "29t";
-         rdfs:comment "[29t] SPARQL_BASE ::= [Bb][Aa][Ss][Ee]";
+         rdfs:comment "[29t] SPARQL_BASE                     ::= [Bb][Aa][Ss][Ee]";
          rdfs:label "SPARQL_BASE";
          re:seq  (
          [
@@ -887,7 +876,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :SPARQL_PREFIX     a re:Regex;
          rdf:value "28t";
-         rdfs:comment "[28t] SPARQL_PREFIX ::= [Pp][Rr][Ee][Ff][Ii][Xx]";
+         rdfs:comment "[28t] SPARQL_PREFIX                   ::= [Pp][Rr][Ee][Ff][Ii][Xx]";
          rdfs:label "SPARQL_PREFIX";
          re:seq  (
          [
@@ -910,8 +899,8 @@ i.e. rewrite ?, +, * operators using alt and seq
                  re:matches "[Xx]" ] ) .
     
     :STRING_LITERAL_LONG_QUOTE     a re:Regex;
-         rdf:value "26";
-         rdfs:comment """[26] STRING_LITERAL_LONG_QUOTE ::= '\\"\\"\\"' ( ( '"' | '""' )? ( [^"\\] | ECHAR | UCHAR ) )* '\\"\\"\\"'""";
+         rdf:value "25";
+         rdfs:comment """[25] STRING_LITERAL_LONG_QUOTE        ::= '\\"\\"\\"' ( ( '"' | '""' )? ( [^"\\] | ECHAR | UCHAR ) )* '\\"\\"\\"'""";
          rdfs:label "STRING_LITERAL_LONG_QUOTE";
          g:follow "^^",
                 :LANGTAG;
@@ -940,8 +929,8 @@ i.e. rewrite ?, +, * operators using alt and seq
         "\"\"\"" ) .
     
     :STRING_LITERAL_LONG_SINGLE_QUOTE     a re:Regex;
-         rdf:value "25";
-         rdfs:comment "[25] STRING_LITERAL_LONG_SINGLE_QUOTE ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\] | ECHAR | UCHAR ) )* \"'''\\\"";
+         rdf:value "24";
+         rdfs:comment "[24] STRING_LITERAL_LONG_SINGLE_QUOTE ::= \"'''\" ( ( \"'\" | \"''\" )? ( [^'\\] | ECHAR | UCHAR ) )* \"'''\\\"";
          rdfs:label "STRING_LITERAL_LONG_SINGLE_QUOTE";
          g:follow "^^",
                 :LANGTAG;
@@ -970,8 +959,8 @@ i.e. rewrite ?, +, * operators using alt and seq
         "'''" ) .
     
     :STRING_LITERAL_QUOTE     a re:Regex;
-         rdf:value "23";
-         rdfs:comment """[23] STRING_LITERAL_QUOTE ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'""";
+         rdf:value "22";
+         rdfs:comment """[22] STRING_LITERAL_QUOTE             ::= '"' ( [^#x22#x5C#xA#xD] | ECHAR | UCHAR )* '"'""";
          rdfs:label "STRING_LITERAL_QUOTE";
          g:follow "^^",
                 :LANGTAG;
@@ -990,8 +979,8 @@ i.e. rewrite ?, +, * operators using alt and seq
         "\"" ) .
     
     :STRING_LITERAL_SINGLE_QUOTE     a re:Regex;
-         rdf:value "24";
-         rdfs:comment "[24] STRING_LITERAL_SINGLE_QUOTE ::= \"'\" ( [^#x27#x5C#xA#xD] | ECHAR | UCHAR )* \"'\\\"";
+         rdf:value "23";
+         rdfs:comment "[23] STRING_LITERAL_SINGLE_QUOTE      ::= \"'\" ( [^#x27#x5C#xA#xD] | ECHAR | UCHAR )* \"'\\\"";
          rdfs:label "STRING_LITERAL_SINGLE_QUOTE";
          g:follow "^^",
                 :LANGTAG;
@@ -1010,8 +999,8 @@ i.e. rewrite ?, +, * operators using alt and seq
         "'" ) .
     
     :String     a g:Production;
-         rdf:value "18";
-         rdfs:comment "[18] String ::= STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE | STRING_LITERAL_LONG_QUOTE";
+         rdf:value "17";
+         rdfs:comment "[17] String                           ::= STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE |STRING_LITERAL_LONG_QUOTE";
          rdfs:label "String";
          g:alt  (
         :STRING_LITERAL_QUOTE
@@ -1027,8 +1016,8 @@ i.e. rewrite ?, +, * operators using alt and seq
          g:nonTerminal :language .
     
     :UCHAR     a re:Regex;
-         rdf:value "27";
-         rdfs:comment """[27] UCHAR ::= ( "\\u" HEX HEX HEX HEX ) | ( "\\U" HEX HEX HEX HEX HEX HEX HEX HEX )""";
+         rdf:value "26";
+         rdfs:comment """[26] UCHAR                            ::= ( "\\u" HEX HEX HEX HEX ) | ( "\\U" HEX HEX HEX HEX HEX HEX HEX HEX )""";
          rdfs:label "UCHAR";
          re:alt  (
          [
@@ -1054,7 +1043,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :WS     a re:Regex;
          rdf:value "161s";
-         rdfs:comment "[161s] WS ::= #x20 | #x9 | #xD | #xA";
+         rdfs:comment "[161s] WS                             ::= #x20 | #x9 | #xD | #xA";
          rdfs:label "WS";
          re:alt  (
          [
@@ -1072,7 +1061,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :base     a g:Production;
          rdf:value "5";
-         rdfs:comment "[5] base ::= '@base' IRIREF \".\\\"";
+         rdfs:comment "[5] base                              ::= '@base' IRIREF \".\\\"";
          rdfs:label "base";
          g:first "@base";
          g:follow "(",
@@ -1092,39 +1081,9 @@ i.e. rewrite ?, +, * operators using alt and seq
         :IRIREF
         "." ) .
     
-    :blank     a g:Production;
-         rdf:value "14";
-         rdfs:comment "[14] blank ::= BlankNode | collection";
-         rdfs:label "blank";
-         g:alt  (
-        :BlankNode
-        :collection );
-         g:first "(",
-                :ANON,
-                :BLANK_NODE_LABEL;
-         g:follow "(",
-                ",",
-                "[",
-                "a",
-                "false",
-                "true",
-                :ANON,
-                :BLANK_NODE_LABEL,
-                :DECIMAL,
-                :DOUBLE,
-                :INTEGER,
-                :IRIREF,
-                :PNAME_LN,
-                :PNAME_NS,
-                :STRING_LITERAL_LONG_QUOTE,
-                :STRING_LITERAL_LONG_SINGLE_QUOTE,
-                :STRING_LITERAL_QUOTE,
-                :STRING_LITERAL_SINGLE_QUOTE;
-         g:nonTerminal :language .
-    
     :blankNodePropertyList     a g:Production;
-         rdf:value "15";
-         rdfs:comment "[15] blankNodePropertyList ::= \"[\" predicateObjectList \"]\\\"";
+         rdf:value "14";
+         rdfs:comment "[14] blankNodePropertyList            ::= \"[\" predicateObjectList \"]\\\"";
          rdfs:label "blankNodePropertyList";
          g:first "[";
          g:follow "(",
@@ -1152,8 +1111,8 @@ i.e. rewrite ?, +, * operators using alt and seq
         "]" ) .
     
     :collection     a g:Production;
-         rdf:value "16";
-         rdfs:comment "[16] collection ::= \"(\" object* \")\\\"";
+         rdf:value "15";
+         rdfs:comment "[15] collection                       ::= \"(\" object* \")\\\"";
          rdfs:label "collection";
          g:first "(";
          g:follow "(",
@@ -1182,7 +1141,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :directive     a g:Production;
          rdf:value "3";
-         rdfs:comment "[3] directive ::= prefixID | base | sparqlPrefix | sparqlBase";
+         rdfs:comment "[3] directive                         ::= prefixID | base | sparqlPrefix | sparqlBase";
          rdfs:label "directive";
          g:alt  (
         :prefixID
@@ -1208,7 +1167,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :iri     a g:Production;
          rdf:value "135s";
-         rdfs:comment "[135s] iri ::= IRIREF | PrefixedName";
+         rdfs:comment "[135s] iri                            ::= IRIREF | PrefixedName";
          rdfs:label "iri";
          g:alt  (
         :IRIREF
@@ -1269,7 +1228,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :literal     a g:Production;
          rdf:value "13";
-         rdfs:comment "[13] literal ::= RDFLiteral | NumericLiteral | BooleanLiteral";
+         rdfs:comment "[13] literal                          ::= RDFLiteral | NumericLiteral | BooleanLiteral";
          rdfs:label "literal";
          g:alt  (
         :RDFLiteral
@@ -1305,11 +1264,12 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :object     a g:Production;
          rdf:value "12";
-         rdfs:comment "[12] object ::= iri | blank | blankNodePropertyList| literal";
+         rdfs:comment "[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList| literal";
          rdfs:label "object";
          g:alt  (
         :iri
-        :blank
+        :BlankNode
+        :collection
         :blankNodePropertyList
         :literal );
          g:first "(",
@@ -1349,7 +1309,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :objectList     a g:Production;
          rdf:value "8";
-         rdfs:comment """[8] objectList ::= object ( "," object )*""";
+         rdfs:comment """[8] objectList                        ::= object ( "," object )*""";
          rdfs:label "objectList";
          g:first "(",
                 "[",
@@ -1375,7 +1335,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :predicate     a g:Production;
          rdf:value "11";
-         rdfs:comment "[11] predicate ::= iri";
+         rdfs:comment "[11] predicate                        ::= iri";
          rdfs:label "predicate";
          g:first :IRIREF,
                 :PNAME_LN,
@@ -1402,7 +1362,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :predicateObjectList     a g:Production;
          rdf:value "7";
-         rdfs:comment """[7] predicateObjectList ::= verb objectList ( ";" ( verb objectList)? )*""";
+         rdfs:comment """[7] predicateObjectList               ::= verb objectList ( ";" ( verb objectList)? )*""";
          rdfs:label "predicateObjectList";
          g:first "a",
                 :IRIREF,
@@ -1416,7 +1376,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :prefixID     a g:Production;
          rdf:value "4";
-         rdfs:comment "[4] prefixID ::= '@prefix' PNAME_NS IRIREF \".\\\"";
+         rdfs:comment "[4] prefixID                          ::= '@prefix' PNAME_NS IRIREF \".\\\"";
          rdfs:label "prefixID";
          g:first "@prefix";
          g:follow "(",
@@ -1439,7 +1399,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :sparqlBase     a g:Production;
          rdf:value "29s";
-         rdfs:comment "[29s] sparqlBase ::= SPARQL_BASE IRIREF";
+         rdfs:comment "[29s] sparqlBase                      ::= SPARQL_BASE IRIREF";
          rdfs:label "sparqlBase";
          g:first :SPARQL_BASE;
          g:follow "(",
@@ -1460,7 +1420,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :sparqlPrefix     a g:Production;
          rdf:value "28s";
-         rdfs:comment "[28s] sparqlPrefix ::= SPARQL_PREFIX PNAME_NS IRIREF";
+         rdfs:comment "[28s] sparqlPrefix                    ::= SPARQL_PREFIX PNAME_NS IRIREF";
          rdfs:label "sparqlPrefix";
          g:first :SPARQL_PREFIX;
          g:follow "(",
@@ -1482,7 +1442,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :statement     a g:Production;
          rdf:value "2";
-         rdfs:comment "[2] statement ::= directive | triples \".\\\"";
+         rdfs:comment "[2] statement                         ::= directive | triples \".\\\"";
          rdfs:label "statement";
          g:alt  (
         :directive
@@ -1536,11 +1496,12 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :subject     a g:Production;
          rdf:value "10";
-         rdfs:comment "[10] subject ::= iri | blank";
+         rdfs:comment "[10] subject                          ::= iri | BlankNode | collection";
          rdfs:label "subject";
          g:alt  (
         :iri
-        :blank );
+        :BlankNode
+        :collection );
          g:first "(",
                 :ANON,
                 :BLANK_NODE_LABEL,
@@ -1555,7 +1516,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :triples     a g:Production;
          rdf:value "6";
-         rdfs:comment "[6] triples ::= subject predicateObjectList| blankNodePropertyList predicateObjectList?";
+         rdfs:comment "[6] triples                           ::= subject predicateObjectList | blankNodePropertyList predicateObjectList?";
          rdfs:label "triples";
          g:alt  (
          [
@@ -1588,7 +1549,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :turtleDoc     a g:Production;
          rdf:value "1";
-         rdfs:comment "[1] turtleDoc ::= statement*";
+         rdfs:comment "[1] turtleDoc                         ::= statement*";
          rdfs:label "turtleDoc";
          g:alt  (
         g:empty
@@ -1628,7 +1589,7 @@ i.e. rewrite ?, +, * operators using alt and seq
     
     :verb     a g:Production;
          rdf:value "9";
-         rdfs:comment "[9] verb ::= predicate | \"a\\\"";
+         rdfs:comment "[9] verb                              ::= predicate | \"a\\\"";
          rdfs:label "verb";
          g:alt  (
         :predicate

@@ -139,13 +139,13 @@ module RDF::Turtle
       input[:predicate] = current[:resource] if phase == :finish
     end
 
-    # [10] subject ::= IRIref | blank
+    # [10] subject ::= IRIref | BlankNode | collection
     production(:subject) do |reader, phase, input, current, callback|
       current[:triples] = nil if phase == :start
       input[:subject] = current[:resource] if phase == :finish
     end
 
-    # [12] object ::= iri | blank | blankNodePropertyList | literal
+    # [12] object ::= iri | BlankNode | collection | blankNodePropertyList | literal
     production(:object) do |reader, phase, input, current, callback|
       next unless phase == :finish
       if input[:object_list]
@@ -157,7 +157,7 @@ module RDF::Turtle
       end
     end
 
-    # [15] blankNodePropertyList ::= "[" predicateObjectList "]"
+    # [14] blankNodePropertyList ::= "[" predicateObjectList "]"
     production(:blankNodePropertyList) do |reader, phase, input, current, callback|
       if phase == :start
         current[:subject] = reader.bnode
@@ -168,7 +168,7 @@ module RDF::Turtle
       end
     end
     
-    # [16] collection ::= "(" object* ")"
+    # [15] collection ::= "(" object* ")"
     production(:collection) do |reader, phase, input, current, callback|
       if phase == :start
         current[:object_list] = []  # Tells the object production to collect and not generate statements
@@ -191,7 +191,7 @@ module RDF::Turtle
       end
     end
     
-    # [17] RDFLiteral ::= String ( LanguageTag | ( "^^" IRIref ) )? 
+    # [16] RDFLiteral ::= String ( LanguageTag | ( "^^" IRIref ) )? 
     production(:RDFLiteral) do |reader, phase, input, current, callback|
       next unless phase == :finish
       opts = {}

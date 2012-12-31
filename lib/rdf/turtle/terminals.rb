@@ -59,7 +59,7 @@ module RDF::Turtle
                          EOS
     end
 
-    # 27
+    # 26
     UCHAR                = RDF::LL1::Lexer::UCHAR
     # 170s
     PERCENT              = /%[0-9A-Fa-f]{2}/
@@ -83,7 +83,7 @@ module RDF::Turtle
     EXPONENT             = /[eE][+-]?[0-9]+/
     # 159s
     ECHAR                = /\\[tbnrf\\"']/
-    # 19
+    # 18
     IRIREF               = /<(?:#{IRI_RANGE}|#{UCHAR})*>/
     # 139s
     PNAME_NS             = /#{PN_PREFIX}?:/
@@ -93,25 +93,23 @@ module RDF::Turtle
     BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(#{PN_CHARS}|\.)*/
     # 144s
     LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/
-    # 20
+    # 19
     INTEGER              = /[+-]?[0-9]+/
-    # 21
+    # 20
     DECIMAL              = /[+-]?(?:[0-9]*\.[0-9]+)/
-    # 22
+    # 21
     DOUBLE               = /[+-]?(?:[0-9]+\.[0-9]*#{EXPONENT}|\.?[0-9]+#{EXPONENT})/
-    # 23
+    # 22
     STRING_LITERAL_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/
-    # 24
+    # 23
     STRING_LITERAL_SINGLE_QUOTE      = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/
-    # 25
+    # 24
     STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m
-    # 26
+    # 25
     STRING_LITERAL_LONG_QUOTE = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m
 
     # 161s
     WS                   = / |\t|\r|\n  /
-    # 160s
-    NIL                  = /\(#{WS}*\)/
     # 162s
     ANON                 = /\[#{WS}*\]/
     # 28t

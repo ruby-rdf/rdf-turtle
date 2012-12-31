@@ -1,0 +1,15 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix pyrdfa: <http://www.w3.org/2007/08/pyRdfa/vocab#> .
+@prefix rdfa: <http://www.w3.org/ns/rdfa#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a pyrdfa:IncorrectPrefixDefinition,
+        rdfa:Warning;
+    dcterms:date "2012-12-19T06:37:09.202952"^^xsd:dateTime;
+    dcterms:description "[In element 'body'] Invalid prefix declaration '$malformed' (in '$malformed http://example.com')" .
+
+[] a rdfa:UnresolvedCURIEPrefix,
+        rdfa:Warning;
+    dcterms:date "2012-12-19T06:37:09.214713"^^xsd:dateTime;
+    dcterms:description "[In element 'body'] Safe CURIE is used, but the value does not correspond to a defined CURIE: [$malformed:curie]; ignored" .
+
