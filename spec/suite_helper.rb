@@ -5,7 +5,7 @@ require 'json/ld'
 
 module Fixtures
   module SuiteTest
-    BASE = "http://dvcs.w3.org/hg/rdf/raw-file/e80b58a1a711/rdf-turtle/tests-ttl/"
+    BASE = "http://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-ttl/"
     FRAME = JSON.parse(%q({
       "@context": {
         "xsd": "http://www.w3.org/2001/XMLSchema#",
