@@ -3,3 +3,4 @@
 /pkg/
 /.rbx/
 /*.gem
+Gemfile.lock

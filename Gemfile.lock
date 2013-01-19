@@ -1,70 +1,63 @@
 GIT
-  remote: git://github.com/gkellogg/sxp-ruby.git
-  revision: af08d70385f637726f56b6f40afc7192918518e0
-  specs:
-    sxp (0.0.14)
-      json (>= 1.5.1)
-
-GIT
   remote: git://github.com/ruby-rdf/rdf-spec.git
-  revision: 9f3ba5bb046cf2dc9a8ff84ce4305c4456344cce
+  revision: e545525502b3f0e86c03f1d43fc690840b35e40f
   specs:
-    rdf-spec (0.3.11)
-      rspec (>= 2.12.0)
+    rdf-spec (1.0.0)
+      rspec (>= 2.12)
 
 GIT
   remote: git://github.com/ruby-rdf/rdf.git
-  revision: 512c267a996aa77e3ab2184132c0ab9693c7339b
+  revision: 3b88594e019f5897d4458beba769c905f4975978
   specs:
-    rdf (0.3.11)
-      addressable (>= 2.2.6)
+    rdf (1.0.0)
+      addressable (>= 2.2)
 
 PATH
   remote: .
   specs:
-    rdf-turtle (0.3.2)
-      rdf (>= 0.3.11)
+    rdf-turtle (1.0.0)
+      rdf (>= 1.0)
 
 GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.3.2)
-    backports (2.6.5)
+    backports (2.7.0)
     diff-lcs (1.1.3)
-    json (1.7.5)
-    json (1.7.5-java)
-    json-ld (0.3.1)
+    json (1.7.6)
+    json-ld (0.3.2)
       backports
-      json (>= 1.6.5)
-      rdf (>= 0.3.5)
+      json (>= 1.7.5)
+      rdf (>= 0.3.11)
     open-uri-cached (0.0.5)
-    rake (10.0.2)
+    rake (10.0.3)
     rdf-isomorphic (0.3.4)
       rdf (>= 0.2.3)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
-    rspec-core (2.12.0)
-    rspec-expectations (2.12.0)
+    rspec-core (2.12.2)
+    rspec-expectations (2.12.1)
       diff-lcs (~> 1.1.3)
-    rspec-mocks (2.12.0)
+    rspec-mocks (2.12.1)
+    sxp (0.1.0)
+      json (>= 1.4.6)
     wirble (0.1.3)
     yard (0.8.3)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
-  json-ld (>= 0.3.1)
-  open-uri-cached (>= 0.0.4)
+  json-ld
+  open-uri-cached (>= 0.0.5)
   rake
   rdf!
-  rdf-isomorphic (>= 0.3.4)
+  rdf-isomorphic
   rdf-spec!
   rdf-turtle!
   rspec (>= 2.12.0)
-  sxp!
+  sxp
   wirble
   yard (>= 0.8.3)

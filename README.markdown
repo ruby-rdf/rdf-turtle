@@ -11,7 +11,7 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.
+* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.7+.
 
 ## Usage
 Instantiate a reader from a local file:
@@ -74,7 +74,7 @@ Future releases will replace the need for cym using Ruby-native graph inference.
 ## Dependencies
 
 * [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
-* [RDF.rb](http://rubygems.org/gems/rdf) (>= 0.3.1)
+* [RDF.rb](http://rubygems.org/gems/rdf) (>= 1.0)
 
 ## Installation
 
