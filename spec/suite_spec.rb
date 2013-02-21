@@ -2,11 +2,11 @@ $:.unshift "."
 require 'spec_helper'
 
 describe RDF::Turtle::Reader do
-  # W3C Turtle Test suite from http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/tests/
+  # W3C Turtle Test suite from https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/tests-ttl/
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(manifest.ttl).each do |man|
+    %w(tests-ttl/manifest.ttl coverage/tests/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|
