@@ -98,21 +98,26 @@ require 'strscan'
 # @author Gregg Kellogg
 class EBNF
   class Rule
-    # @!attribute [r] sym for rule
+    # Operations which are flattened to seprate rules in to_bnf
+    BNF_OPS = %w{
+      seq alt diff opt star plus
+    }.map(&:to_sym).freeze
+
+    # @!attribute [rw] sym for rule
     # @return [Symbol]
-    attr_reader :sym
+    attr_accessor :sym
 
-    # @!attribute [r] id of rule
+    # @!attribute [rw] id of rule
     # @return [String]
-    attr_reader :id
+    attr_accessor :id
 
-    # @!attribute [r] kind of rule
-    # @return [:rule, :token, or :pass]
+    # @!attribute [rw] kind of rule
+    # @return [:rule, :terminal, or :pass]
     attr_accessor :kind
 
-    # @!attribute [r] expr rule expression
+    # @!attribute [rw] expr rule expression
     # @return [Array]
-    attr_reader :expr
+    attr_accessor :expr
 
     # @!attribute [r] orig original rule
     # @return [String]
@@ -122,14 +127,24 @@ class EBNF
     # @param [Symbol] sym
     # @param [Array] expr
     # @param [EBNF] ebnf
-    def initialize(id, sym, expr, ebnf)
-      @id, @sym, @expr, @ebnf = id, sym, expr, ebnf
+    # @param [Hash{Symbol => Object}] option
+    # @option options [Symbol] :kind
+    # @option options [String] :ebnf
+    def initialize(sym, id, expr, options = {})
+      @sym, @id, @expr = sym, id, expr
+      @ebnf = options[:ebnf]
+      @kind = case
+      when options[:kind] then options[:kind]
+      when sym.to_s == sym.to_s.upcase then :terminal
+      when !BNF_OPS.include?(expr.first) then :terminal
+      else :rule
+      end
     end
 
     # Serializes this rule to an S-Expression
     # @return [String]
     def to_sxp
-      [id, sym, kind, expr].to_sxp
+      [sym, id, kind, expr].to_sxp
     end
     
     # Serializes this rule to an Turtle
@@ -146,14 +161,90 @@ class EBNF
         %{  rdfs:comment #{comment.inspect};},
       ]
       
-      statements += ttl_expr(expr, kind == :token ? "re" : "g", 1, false)
+      statements += ttl_expr(expr, kind == :terminal ? "re" : "g", 1, false)
       "\n" + statements.join("\n")
     end
 
-    def inspect
-      {:sym => sym, :id => id, kind => kind, :expr => expr}.inspect
+    ##
+    # Transform EBNF rule to BNF rules:
+    #
+    #   * Transform (a [n] rule (op1 (op2))) into two rules:
+    #     (a [n] rule (op1 a.2))
+    #     (_a_1 [n.1] rule (op2))
+    #   * Transform (a rule (opt b)) into (a rule (alt g:empty "foo"))
+    #   * Transform (a rule (star b)) into (a rule (alt g:empty (seq b a)))
+    #   * Transform (a rule (plus b)) into (a rule (seq b (star b)
+    #   * Transform (a [n] rule (op "foo")) into two rules:
+    #     (a [n] rule (op _a.term1))
+    #     (a.term1 [n.term1] terminal (seq "foo"))
+    # @return [Array<Rule>]
+    def to_bnf
+      new_rules = []
+      # Look for rules containing recursive definition and rewrite to multiple rules. If `expr` contains elements which are in array form, where the first element of that array is a symbol, create a new rule for it.
+      if kind == :rule && expr.any? {|e| e.is_a?(Array) && BNF_OPS.include?(e.first)}
+        #   * Transform (a [n] rule (op1 (op2))) into two rules:
+        #     (a.1 [n.1] rule (op1 a.2))
+        #     (a.2 [n.2] rule (op2))
+        # duplicate ourselves for rewriting
+        this = dup
+        rule_seq = 1
+        new_rules << this
+
+        expr.each_with_index do |e, i|
+          next unless e.is_a?(Array) && e.first.is_a?(Symbol)
+          new_sym, new_id = "_#{sym}_#{rule_seq}".to_sym, "#{id}.#{rule_seq}"
+          this.expr[i] = new_sym
+          new_rule = Rule.new(new_sym, new_id, e, :ebnf => @ebnf)
+          new_rules << new_rule
+        end
+
+        # Return new rules after recursively applying #to_bnf
+        new_rules = new_rules.map {|r| r.to_bnf}.flatten
+      elsif kind == :rule && expr.first == :opt
+        #   * Transform (a rule (opt b)) into (a rule (alt g:empty "foo"))
+        new_rules = Rule.new(sym, id, [:alt, :"g:empty", expr.last], :ebnf => @ebnf).to_bnf
+      elsif kind == :rule && expr.first == :star
+        #   * Transform (a rule (star b)) into (a rule (alt g:empty (seq b a)))
+        new_rules = [Rule.new(sym, id, [:alt, :"g:empty", "_#{sym}_star".to_sym], :ebnf => @ebnf)] +
+          Rule.new("_#{sym}_star".to_sym, "#{id}*", [:seq, expr.last, sym], :ebnf => @ebnf).to_bnf
+      elsif kind == :rule && expr.first == :plus
+        #   * Transform (a rule (plus b)) into (a rule (seq b (star b)
+        new_rules = Rule.new(sym, id, [:seq, expr.last, [:star, expr.last]], :ebnf => @ebnf).to_bnf
+      elsif kind == :rule && expr.any? {|e| e.is_a?(String)}
+        #   * Transform (a [n] rule (op "foo")) into two rules:
+        #     (a [n] rule (op _a.term1))
+        #     (a.term1 [n.term1] terminal (seq "foo"))
+        # duplicate ourselves for rewriting
+        this = dup
+        rule_seq = 1
+        new_rules << this
+
+        expr.each_with_index do |e, i|
+          next unless e.is_a?(String)
+          new_sym, new_id = "_#{sym}_term#{rule_seq}".to_sym, "#{id}.term#{rule_seq}"
+          rule_seq += 1
+          this.expr[i] = new_sym
+          new_rule = Rule.new(new_sym, new_id, [:seq, e], :ebnf => @ebnf, :kind => :terminal)
+          new_rules << new_rule
+        end
+      else
+        # Otherwise, no further transformation necessary
+        new_rules << self
+      end
+      
+      return new_rules
     end
-    
+
+    def inspect
+      {:sym => sym, :id => id, :kind => kind, :expr => expr}.inspect
+    end
+
+    def ==(other)
+      sym   == other.sym &&
+      kind  == other.kind &&
+      expr  == other.expr
+    end
+
     private
     def ttl_expr(expr, pfx, depth, is_obj = true)
       indent = '  ' * depth
@@ -242,7 +333,7 @@ class EBNF
   def initialize(input, options = {})
     @options = options
     @lineno, @depth = 1, 0
-    token = false
+    terminal = false
     @ast = []
 
     input = input.respond_to?(:read) ? input.read : input.to_s
@@ -252,8 +343,8 @@ class EBNF
       debug("rule string") {r.inspect}
       case r
       when /^@terminals/
-        # Switch mode to parsing tokens
-        token = true
+        # Switch mode to parsing terminals
+        terminal = true
       when /^@pass\s*(.*)$/m
         rule = depth {ruleParts("[0] " + r)}
         rule.kind = :pass
@@ -261,17 +352,60 @@ class EBNF
         @ast << rule
       else
         rule = depth {ruleParts(r)}
-        
-        # all caps symbols are tokens. Once a token is seen
-        # we don't go back
-        token ||= !!(rule.sym.to_s =~ /^[A-Z_]+$/)
-        rule.kind = token ? :token : :rule
+
+        rule.kind = :terminal if terminal # Override after we've parsed @terminals
         rule.orig = r
         @ast << rule
       end
     end
   end
-  
+
+  ##
+  # Transform EBNF to BNF:
+  #
+  #   * Add rule [0] (g:empty rule (seq))
+  #   * Transform (a rule (opt b)) into (a rule (alt g:empty "foo"))
+  #   * Transform (a rule (plus b)) into (a rule (seq b (star b)))
+  #   * Transform (a rule (star b)) into (a rule (alt g:empty (seq b a)))
+  #   * Transform (a [n] rule (op1 (op2))) into two rules:
+  #     (a.1 [n.1] rule (op1 a.2))
+  #     (a.2 [n.2] rule (op2))
+  #   * Transform (a [n] rule (op "foo")) into two rules:
+  #     (a.1 [n.1] rule (op a.2))
+  #     (a.2 [n.2] terminal (seq "foo"))
+  def to_bnf
+    new_ast = []
+    ast.each do |rule|
+      new_rules = rule.to_bnf
+      debug("to_bnf") {"rewrite from: #{rule} to #{new_rules.map(&:to_s).join(', ')}"}
+      new_ast += new_rules
+    end
+    
+    # Consolodate equivalent rules
+    to_rewrite = {}
+    new_ast.each do |src_rule|
+      new_ast.each do |dst_rule|
+        if src_rule.equivalent(dst_rule)
+          debug("to_bnf") {"equivalent rules: #{src_rule} and #{dst_rule}"}
+          (to_rewrite[src_rule] ||= []) << dst_rule
+        end
+      end
+    end
+    
+    # Replace references to equivalent rules with canonical rule
+    to_rewrite.each do |src_rule, dst_rule|
+      new_ast.each do |mod_rule|
+        mod_rule.rewrite(dst_rule, src_rule)
+      end
+    end
+    
+    # AST now has just rewritten rules
+    compacted_ast = new_ast - to_rewrite.values.flatten.compact
+    
+    # Sort AST by number
+    @ast = compacted_ast.sort
+  end
+
   ##
   # Write out parsed syntax string as an S-Expression
   # @return [String]
@@ -290,8 +424,6 @@ class EBNF
   # @param [String] ns URI for language
   # @return [String]
   def to_ttl(prefix, ns)
-    token = false
-    
     unless ast.empty?
       [
         "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.",
@@ -307,7 +439,7 @@ class EBNF
     end.join("\n") +
 
     ast.
-      select {|a| [:rule, :token].include?(a.kind)}.
+      select {|a| [:rule, :terminal].include?(a.kind)}.
       map(&:to_ttl).
       join("\n")
   end
@@ -370,7 +502,7 @@ class EBNF
     num_sym, expr = rule.split('::=', 2).map(&:strip)
     num, sym = num_sym.split(']', 2).map(&:strip)
     num = num[1..-1]
-    r = Rule.new(sym && sym.to_sym, num, ebnf(expr).first, self)
+    r = Rule.new(sym && sym.to_sym, num, ebnf(expr).first, :ebnf => self)
     debug("ruleParts") { r.inspect }
     r
   end
@@ -413,8 +545,8 @@ class EBNF
     e, s = depth {alt(s)}
     debug {"=> alt returned #{[e, s].inspect}"}
     unless s.empty?
-      t, ss = depth {token(s)}
-      debug {"=> token returned #{[t, ss].inspect}"}
+      t, ss = depth {terminal(s)}
+      debug {"=> terminal returned #{[t, ss].inspect}"}
       return [e, ss] if t.is_a?(Array) && t.first == :")"
     end
     [e, s]
@@ -438,7 +570,7 @@ class EBNF
       end
       args << e
       unless s.empty?
-        t, ss = depth {token(s)}
+        t, ss = depth {terminal(s)}
         break unless t[0] == :alt
         s = ss
       end
@@ -487,7 +619,7 @@ class EBNF
     debug {"=> postfix returned #{[e1, s].inspect}"}
     unless e1.to_s.empty?
       unless s.empty?
-        t, ss = depth {token(s)}
+        t, ss = depth {terminal(s)}
         debug {"diff #{[t, ss].inspect}"}
         if t.is_a?(Array) && t.first == :diff
           s = ss
@@ -517,7 +649,7 @@ class EBNF
     debug {"=> primary returned #{[e, s].inspect}"}
     return ["", s] if e.to_s.empty?
     if !s.empty?
-      t, ss = depth {token(s)}
+      t, ss = depth {terminal(s)}
       debug {"=> #{[t, ss].inspect}"}
       if t.is_a?(Array) && [:opt, :star, :plus].include?(t.first)
         return [[t.first, e], ss]
@@ -533,8 +665,8 @@ class EBNF
   #     (('id', 'a'), ' b c')
   def primary(s)
     debug("primary") {"(#{s.inspect})"}
-    t, s = depth {token(s)}
-    debug {"=> token returned #{[t, s].inspect}"}
+    t, s = depth {terminal(s)}
+    debug {"=> terminal returned #{[t, s].inspect}"}
     if t.is_a?(Symbol) || t.is_a?(String)
       [t, s]
     elsif %w(range hex).map(&:to_sym).include?(t.first)
@@ -549,24 +681,24 @@ class EBNF
   end
   
   ##
-  # parse one token; return the token and the remaining string
+  # parse one terminal; return the terminal and the remaining string
   # 
-  # A token is represented as a tuple whose 1st item gives the type;
+  # A terminal is represented as a tuple whose 1st item gives the type;
   # some types have additional info in the tuple.
   # 
   # @example
-  #     >>> token("'abc' def")
+  #     >>> terminal("'abc' def")
   #     (("'", 'abc'), ' def')
   #     
-  #     >>> token("[0-9]")
+  #     >>> terminal("[0-9]")
   #     ((range, '0-9'), '')
-  #     >>> token("#x00B7")
+  #     >>> terminal("#x00B7")
   #     ((hex, '#x00B7'), '')
-  #     >>> token ("\[#x0300-#x036F\]")
+  #     >>> terminal ("\[#x0300-#x036F\]")
   #     ((range, '#x0300-#x036F'), '')
-  #     >>> token("\[^<>'{}|^`\]-\[#x00-#x20\]")
+  #     >>> terminal("\[^<>'{}|^`\]-\[#x00-#x20\]")
   #     ((range, "^<>'{}|^`"), '-\[#x00-#x20\]')
-  def token(s)
+  def terminal(s)
     s = s.strip
     case m = s[0,1]
     when '"', "'"
@@ -600,7 +732,7 @@ class EBNF
     when /[\(\)]/
       [[m.to_sym], s[1..-1]]
     else
-      raise "unrecognized token: #{s.inspect}"
+      raise "unrecognized terminal: #{s.inspect}"
     end
   end
 

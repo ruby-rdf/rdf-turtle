@@ -12,7 +12,7 @@ describe EBNF do
       %{
         @terminals
         [3] terminal ::= [A-Z_]+
-      } => %{((terminal "3" token (plus (range "A-Z_"))))},
+      } => %{((terminal "3" terminal (plus (range "A-Z_"))))},
       %{
         [9] primary     ::= HEX
                         |   RANGE
@@ -41,11 +41,13 @@ describe EBNF do
   describe "#ruleParts" do
     {
       %{[2]     Prolog    ::=           BaseDecl? PrefixDecl*} =>
-        %{(Prolog "2" #n (seq (opt BaseDecl) (star PrefixDecl)))},
+        %{(Prolog "2" rule (seq (opt BaseDecl) (star PrefixDecl)))},
       %{[2] declaration ::= '@terminals' | '@pass'} =>
-        %{(declaration "2" #n (alt "@terminals" "@pass"))},
+        %{(declaration "2" rule (alt "@terminals" "@pass"))},
       %{[9] postfix     ::= primary ( [?*+] )?} =>
-        %{(postfix "9" #n (seq primary (opt (range "?*+"))))}
+        %{(postfix "9" rule (seq primary (opt (range "?*+"))))},
+      %{[18] STRING2    ::= "'" (CHAR - "'")* "'"} =>
+        %{(STRING2 "18" terminal (seq "'" (star (diff CHAR "'")) "'"))},
     }.each do |input, expected|
       it "given #{input.inspect} produces #{expected}" do
         ebnf(:ruleParts, input).to_sxp.should produce(expected, @debug)
@@ -116,7 +118,7 @@ end
 describe EBNF::Rule do
   let(:debug) {[]}
   let(:ebnf) {EBNF.new("", :debug => debug)}
-  subject {EBNF::Rule.new("rule", "0", [], ebnf)}
+  subject {EBNF::Rule.new("rule", "0", [], :ebnf => ebnf)}
 
   describe "#ttl_expr" do
     {
@@ -182,6 +184,65 @@ describe EBNF::Rule do
     }.each do |title, (input, expected)|
       it title do
         subject.send(:cclass, input).should produce(expected, debug)
+      end
+    end
+  end
+
+  describe "#to_bnf" do
+    {
+      "no-rewrite" => [
+        [:seq],
+        [EBNF::Rule.new(:rule, "0", [:seq])]
+      ],
+      "embedded rule" => [
+        [:seq, [:alt]],
+        [EBNF::Rule.new(:rule, "0", [:seq, :_rule_1]),
+         EBNF::Rule.new(:_rule_1, "0.1", [:alt])]
+      ],
+      "opt rule" => [
+        [:opt, :foo],
+        [EBNF::Rule.new(:rule, "0", [:alt, :"g:empty", :foo])]
+      ],
+      "star rule" => [
+        [:star, :foo],
+        [EBNF::Rule.new(:rule, "0", [:alt, :"g:empty", :_rule_star]),
+         EBNF::Rule.new(:_rule_star, "0.1", [:seq, :foo, :rule])]
+      ],
+      "plus rule" => [
+        [:plus, :foo],
+        [EBNF::Rule.new(:rule, "0", [:seq, :foo, :_rule_1]),
+         EBNF::Rule.new(:_rule_1, "0.1", [:alt, :"g:empty", :__rule_1_star]),
+         EBNF::Rule.new(:__rule_1_star, "0.1*", [:seq, :foo, :_rule_1])]
+      ],
+      "string rule" => [
+        [:seq, "foo", "bar"],
+        [EBNF::Rule.new(:rule, "0", [:seq, :_rule_term1, :_rule_term2]),
+         EBNF::Rule.new(:_rule_term1, "0.term1", [:seq, "foo"], :kind => :terminal),
+         EBNF::Rule.new(:_rule_term2, "0.term2", [:seq, "bar"], :kind => :terminal)]
+      ],
+      "ebnf[1]" => [
+        [:star, [:alt, :declaration, :rule]],
+        [EBNF::Rule.new(:rule, "0", [:alt, :"g:empty", :_rule_star]),
+         EBNF::Rule.new(:_rule_star, "0*", [:seq, :_rule_1, :rule]),
+         EBNF::Rule.new(:_rule_1, "0.1", [:alt, :declaration, :rule])]
+      ],
+      "ebnf[9]" => [
+        [:seq, :primary, [:opt, [:range, "?*+"]]],
+        [EBNF::Rule.new(:rule, "0", [:seq, :primary, :_rule_1]),
+         EBNF::Rule.new(:_rule_1, "0.1", [:alt, :"g:empty", [:range, "?*+"]])]
+      ],
+      "IRIREF" => [
+        [:seq, "<", [:star, [:alt, [:range, "^#x00-#x20<>\"{}|^`\\"], :UCHAR]], ">"],
+        [EBNF::Rule.new(:rule, "0", [:seq, :_rule_term1, :_rule_1, :_rule_term2]),
+         EBNF::Rule.new(:_rule_term1, "0.term1", [:seq, "<"], :kind => :terminal),
+         EBNF::Rule.new(:_rule_term2, "0.term2", [:seq, ">"], :kind => :terminal),
+         EBNF::Rule.new(:_rule_1, "0.1", [:alt, :"g:empty", :__rule_1_star]),
+         EBNF::Rule.new(:__rule_1_star, "0.1*", [:seq, :__rule_1_1, :_rule_1]),
+         EBNF::Rule.new(:__rule_1_1, "0.1.1", [:alt, [:range, "^#x00-#x20<>\"{}|^`\\"], :UCHAR])]
+       ]
+    }.each do |title, (expr, expected)|
+      it title do
+        EBNF::Rule.new(:rule, "0", expr).to_bnf.should == expected
       end
     end
   end
