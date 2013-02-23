@@ -405,7 +405,7 @@ class EBNF
   #   * Transform each rule into a set of rules that are just BNF, using {Rule#to_bnf}.
   # @return [ENBF] self
   def make_bnf
-    new_ast = []
+    new_ast = [Rule.new(:"g:empty", "0", [:seq])]
     ast.each do |rule|
       debug("make_bnf") {"expand from: #{rule.inspect}"}
       new_rules = rule.to_bnf
