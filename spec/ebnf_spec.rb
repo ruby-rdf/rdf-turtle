@@ -65,6 +65,34 @@ describe EBNF do
         parse(input).make_bnf.ast.map(&:to_s).should produce(expected, @debug)
       end
     end
+
+    context "EBNF Grammar" do
+      subject {parse(File.read(File.expand_path("../../etc/ebnf.bnf", __FILE__))).make_bnf}
+      it "rule expressions should be flat, terminal or alt/seq" do
+        subject.ast.each do |rule|
+          case
+          when rule.kind == :terminal then true
+          when !rule.expr.is_a?(Array) then true
+          else
+            "#{rule.sym}: #{rule.expr.first}".should match(/#{rule.sym}: (alt|seq)/)
+          end
+        end
+      end
+    end
+
+    context "Turtle Grammar" do
+      subject {parse(File.read(File.expand_path("../../etc/turtle.bnf", __FILE__))).make_bnf}
+      it "rule expressions should be flat, terminal or alt/seq" do
+        subject.ast.each do |rule|
+          case
+          when rule.kind == :terminal then true
+          when !rule.expr.is_a?(Array) then true
+          else
+            "#{rule.sym}: #{rule.expr.first}".should match(/#{rule.sym}: (alt|seq)/)
+          end
+        end
+      end
+    end
   end
 
   describe "#ruleParts" do
