@@ -37,7 +37,36 @@ describe EBNF do
       end
     end
   end
-  
+
+  describe "#make_bnf" do
+    {
+      %{[2]     Prolog    ::=           BaseDecl? PrefixDecl*} =>
+      [%{(Prolog "2" rule (seq _Prolog_1 _Prolog_2))},
+       %{(_Prolog_1 "2.1" rule (alt g:empty BaseDecl))},
+       %{(_Prolog_2 "2.2" rule (alt g:empty __Prolog_2_star))},
+       %{(__Prolog_2_star "2.2*" rule (seq PrefixDecl _Prolog_2))}],
+      %{
+        [9] primary     ::= HEX
+                        |   RANGE
+                        |   ENUM 
+                        |   O_RANGE
+                        |   O_ENUM
+                        |   STRING1
+                        |   STRING2
+                        |   '(' expression ')'
+        
+      } =>
+      [%{(primary "9" rule (alt HEX RANGE ENUM O_RANGE O_ENUM STRING1 STRING2 _primary_1))},
+       %{(_primary_1 "9.1" rule (seq __primary_1_term1 expression __primary_1_term2))},
+       %{(__primary_1_term1 "9.1.term1" terminal "(")},
+       %{(__primary_1_term2 "9.1.term2" terminal ")")}],
+    }.each do |input, expected|
+      it "parses #{input.inspect}" do
+        parse(input).make_bnf.ast.map(&:to_s).should produce(expected, @debug)
+      end
+    end
+  end
+
   describe "#ruleParts" do
     {
       %{[2]     Prolog    ::=           BaseDecl? PrefixDecl*} =>
@@ -203,6 +232,12 @@ describe EBNF::Rule do
         [:opt, :foo],
         [EBNF::Rule.new(:rule, "0", [:alt, :"g:empty", :foo])]
       ],
+      "two opt rule" => [
+        [:alt, [:opt, :foo], [:opt, :bar]],
+        [EBNF::Rule.new(:rule, "0", [:alt, :_rule_1, :_rule_2]),
+         EBNF::Rule.new(:_rule_1, "0.1", [:alt, :"g:empty", :foo]),
+         EBNF::Rule.new(:_rule_2, "0.2", [:alt, :"g:empty", :bar])]
+      ],
       "star rule" => [
         [:star, :foo],
         [EBNF::Rule.new(:rule, "0", [:alt, :"g:empty", :_rule_star]),
@@ -217,8 +252,8 @@ describe EBNF::Rule do
       "string rule" => [
         [:seq, "foo", "bar"],
         [EBNF::Rule.new(:rule, "0", [:seq, :_rule_term1, :_rule_term2]),
-         EBNF::Rule.new(:_rule_term1, "0.term1", [:seq, "foo"], :kind => :terminal),
-         EBNF::Rule.new(:_rule_term2, "0.term2", [:seq, "bar"], :kind => :terminal)]
+         EBNF::Rule.new(:_rule_term1, "0.term1", "foo", :kind => :terminal),
+         EBNF::Rule.new(:_rule_term2, "0.term2", "bar", :kind => :terminal)]
       ],
       "ebnf[1]" => [
         [:star, [:alt, :declaration, :rule]],
@@ -234,8 +269,8 @@ describe EBNF::Rule do
       "IRIREF" => [
         [:seq, "<", [:star, [:alt, [:range, "^#x00-#x20<>\"{}|^`\\"], :UCHAR]], ">"],
         [EBNF::Rule.new(:rule, "0", [:seq, :_rule_term1, :_rule_1, :_rule_term2]),
-         EBNF::Rule.new(:_rule_term1, "0.term1", [:seq, "<"], :kind => :terminal),
-         EBNF::Rule.new(:_rule_term2, "0.term2", [:seq, ">"], :kind => :terminal),
+         EBNF::Rule.new(:_rule_term1, "0.term1", "<", :kind => :terminal),
+         EBNF::Rule.new(:_rule_term2, "0.term2", ">", :kind => :terminal),
          EBNF::Rule.new(:_rule_1, "0.1", [:alt, :"g:empty", :__rule_1_star]),
          EBNF::Rule.new(:__rule_1_star, "0.1*", [:seq, :__rule_1_1, :_rule_1]),
          EBNF::Rule.new(:__rule_1_1, "0.1.1", [:alt, [:range, "^#x00-#x20<>\"{}|^`\\"], :UCHAR])]
@@ -243,6 +278,15 @@ describe EBNF::Rule do
     }.each do |title, (expr, expected)|
       it title do
         EBNF::Rule.new(:rule, "0", expr).to_bnf.should == expected
+      end
+    end
+
+    describe "#rewrite" do
+      it "updates rule references" do
+        subject.expr = [:do, :re, [:me, :fa, :do], :do]
+        rsrc = EBNF::Rule.new(:do, "0", [])
+        rdst = EBNF::Rule.new(:DO, "0", [])
+        subject.rewrite(rsrc, rdst).expr.should == [:DO, :re, [:me, :fa, :do], :DO]
       end
     end
   end

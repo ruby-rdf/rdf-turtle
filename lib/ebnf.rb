@@ -136,7 +136,7 @@ class EBNF
       @kind = case
       when options[:kind] then options[:kind]
       when sym.to_s == sym.to_s.upcase then :terminal
-      when !BNF_OPS.include?(expr.first) then :terminal
+      when expr.is_a?(Array) && !BNF_OPS.include?(expr.first) then :terminal
       else :rule
       end
     end
@@ -146,6 +146,7 @@ class EBNF
     def to_sxp
       [sym, id, kind, expr].to_sxp
     end
+    def to_s; to_sxp; end
     
     # Serializes this rule to an Turtle
     # @return [String]
@@ -176,12 +177,14 @@ class EBNF
     #   * Transform (a rule (plus b)) into (a rule (seq b (star b)
     #   * Transform (a [n] rule (op "foo")) into two rules:
     #     (a [n] rule (op _a.term1))
-    #     (a.term1 [n.term1] terminal (seq "foo"))
+    #     (a.term1 [n.term1] terminal "foo")
     # @return [Array<Rule>]
     def to_bnf
       new_rules = []
+      return [self] unless kind == :rule && expr.is_a?(Array)
+
       # Look for rules containing recursive definition and rewrite to multiple rules. If `expr` contains elements which are in array form, where the first element of that array is a symbol, create a new rule for it.
-      if kind == :rule && expr.any? {|e| e.is_a?(Array) && BNF_OPS.include?(e.first)}
+      if expr.any? {|e| e.is_a?(Array) && BNF_OPS.include?(e.first)}
         #   * Transform (a [n] rule (op1 (op2))) into two rules:
         #     (a.1 [n.1] rule (op1 a.2))
         #     (a.2 [n.2] rule (op2))
@@ -190,30 +193,31 @@ class EBNF
         rule_seq = 1
         new_rules << this
 
-        expr.each_with_index do |e, i|
+        expr.each_with_index do |e, index|
           next unless e.is_a?(Array) && e.first.is_a?(Symbol)
           new_sym, new_id = "_#{sym}_#{rule_seq}".to_sym, "#{id}.#{rule_seq}"
-          this.expr[i] = new_sym
+          rule_seq += 1
+          this.expr[index] = new_sym
           new_rule = Rule.new(new_sym, new_id, e, :ebnf => @ebnf)
           new_rules << new_rule
         end
 
         # Return new rules after recursively applying #to_bnf
         new_rules = new_rules.map {|r| r.to_bnf}.flatten
-      elsif kind == :rule && expr.first == :opt
+      elsif expr.first == :opt
         #   * Transform (a rule (opt b)) into (a rule (alt g:empty "foo"))
         new_rules = Rule.new(sym, id, [:alt, :"g:empty", expr.last], :ebnf => @ebnf).to_bnf
-      elsif kind == :rule && expr.first == :star
+      elsif expr.first == :star
         #   * Transform (a rule (star b)) into (a rule (alt g:empty (seq b a)))
         new_rules = [Rule.new(sym, id, [:alt, :"g:empty", "_#{sym}_star".to_sym], :ebnf => @ebnf)] +
           Rule.new("_#{sym}_star".to_sym, "#{id}*", [:seq, expr.last, sym], :ebnf => @ebnf).to_bnf
-      elsif kind == :rule && expr.first == :plus
+      elsif expr.first == :plus
         #   * Transform (a rule (plus b)) into (a rule (seq b (star b)
         new_rules = Rule.new(sym, id, [:seq, expr.last, [:star, expr.last]], :ebnf => @ebnf).to_bnf
-      elsif kind == :rule && expr.any? {|e| e.is_a?(String)}
+      elsif expr.any? {|e| e.is_a?(String)}
         #   * Transform (a [n] rule (op "foo")) into two rules:
         #     (a [n] rule (op _a.term1))
-        #     (a.term1 [n.term1] terminal (seq "foo"))
+        #     (a.term1 [n.term1] terminal "foo")
         # duplicate ourselves for rewriting
         this = dup
         rule_seq = 1
@@ -224,7 +228,7 @@ class EBNF
           new_sym, new_id = "_#{sym}_term#{rule_seq}".to_sym, "#{id}.term#{rule_seq}"
           rule_seq += 1
           this.expr[i] = new_sym
-          new_rule = Rule.new(new_sym, new_id, [:seq, e], :ebnf => @ebnf, :kind => :terminal)
+          new_rule = Rule.new(new_sym, new_id, e, :ebnf => @ebnf, :kind => :terminal)
           new_rules << new_rule
         end
       else
@@ -239,10 +243,44 @@ class EBNF
       {:sym => sym, :id => id, :kind => kind, :expr => expr}.inspect
     end
 
+    # Two rules are equal if they have the same {#sym}, {#kind} and {#expr}
+    # @param [Rule] other
+    # @return [Boolean]
     def ==(other)
       sym   == other.sym &&
       kind  == other.kind &&
       expr  == other.expr
+    end
+
+    # Two rules are equivalent if they have the same {#expr}
+    # @param [Rule] other
+    # @return [Boolean]
+    def equivalent?(other)
+      expr  == other.expr
+    end
+
+    # Rewrite the rule substituting src_rule for dst_rule wherever
+    # it is used in the production (first level only).
+    # @param [Rule] src_rule
+    # @param [Rule] dst_rule
+    # @return [Rule]
+    def rewrite(src_rule, dst_rule)
+      case @expr
+      when Array
+        @expr = @expr.map {|e| e == src_rule.sym ? dst_rule.sym : e}
+      else
+        @expr = dst_rule.sym if @expr == src_rule.sym
+      end
+      self
+    end
+
+    # Rules compare using their ids
+    def <=>(other)
+      if id.to_i == other.id.to_i
+        id <=> other.id
+      else
+        id.to_i <=> other.id.to_i
+      end
     end
 
     private
@@ -361,49 +399,48 @@ class EBNF
   end
 
   ##
-  # Transform EBNF to BNF:
+  # Transform EBNF Rule set to BNF:
   #
   #   * Add rule [0] (g:empty rule (seq))
-  #   * Transform (a rule (opt b)) into (a rule (alt g:empty "foo"))
-  #   * Transform (a rule (plus b)) into (a rule (seq b (star b)))
-  #   * Transform (a rule (star b)) into (a rule (alt g:empty (seq b a)))
-  #   * Transform (a [n] rule (op1 (op2))) into two rules:
-  #     (a.1 [n.1] rule (op1 a.2))
-  #     (a.2 [n.2] rule (op2))
-  #   * Transform (a [n] rule (op "foo")) into two rules:
-  #     (a.1 [n.1] rule (op a.2))
-  #     (a.2 [n.2] terminal (seq "foo"))
-  def to_bnf
+  #   * Transform each rule into a set of rules that are just BNF, using {Rule#to_bnf}.
+  # @return [ENBF] self
+  def make_bnf
     new_ast = []
     ast.each do |rule|
+      debug("make_bnf") {"expand from: #{rule.inspect}"}
       new_rules = rule.to_bnf
-      debug("to_bnf") {"rewrite from: #{rule} to #{new_rules.map(&:to_s).join(', ')}"}
+      debug(" => ") {new_rules.map(&:sym).join(', ')}
       new_ast += new_rules
     end
-    
-    # Consolodate equivalent rules
+
+    # Consolodate equivalent terminal rules
     to_rewrite = {}
-    new_ast.each do |src_rule|
-      new_ast.each do |dst_rule|
-        if src_rule.equivalent(dst_rule)
-          debug("to_bnf") {"equivalent rules: #{src_rule} and #{dst_rule}"}
+    new_ast.select {|r| r.kind == :terminal}.each do |src_rule|
+      new_ast.select {|r| r.kind == :terminal}.each do |dst_rule|
+        if src_rule.equivalent?(dst_rule) && src_rule != dst_rule
+          debug("make_bnf") {"equivalent rules: #{src_rule.inspect} and #{dst_rule.inspect}"}
           (to_rewrite[src_rule] ||= []) << dst_rule
         end
       end
     end
-    
+
     # Replace references to equivalent rules with canonical rule
-    to_rewrite.each do |src_rule, dst_rule|
-      new_ast.each do |mod_rule|
-        mod_rule.rewrite(dst_rule, src_rule)
+    to_rewrite.each do |src_rule, dst_rules|
+      dst_rules.each do |dst_rule|
+        new_ast.each do |mod_rule|
+          debug("make_bnf") {"rewrite #{mod_rule.inspect} from #{dst_rule.sym} to #{src_rule.sym}"}
+          mod_rule.rewrite(dst_rule, src_rule)
+        end
       end
     end
-    
+
     # AST now has just rewritten rules
     compacted_ast = new_ast - to_rewrite.values.flatten.compact
-    
+
     # Sort AST by number
     @ast = compacted_ast.sort
+    
+    self
   end
 
   ##
@@ -416,6 +453,13 @@ class EBNF
     rescue LoadError
       ast.to_sxp
     end
+  end
+  def to_s; to_sxp; end
+
+  def dup
+    new_obj = super
+    new_obj.instance_variable_set(:@ast, @ast.dup)
+    new_obj
   end
 
   ##

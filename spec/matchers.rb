@@ -107,8 +107,8 @@ RSpec::Matchers.define :produce do |expected, info|
   end
   
   failure_message_for_should do |actual|
-    "Expected: #{expected.to_json(JSON_STATE)}\n" +
-    "Actual  : #{actual.to_json(JSON_STATE)}\n" +
+    "Expected: #{[Array, Hash].include?(expected.class) ? expected.to_json(JSON_STATE) : expected.inspect}\n" +
+    "Actual  : #{[Array, Hash].include?(actual.class) ? actual.to_json(JSON_STATE) : actual.inspect}\n" +
     #(expected.is_a?(Hash) && actual.is_a?(Hash) ? "Diff: #{expected.diff(actual).to_json(JSON_STATE)}\n" : "") +
     "Processing results:\n#{info.join("\n")}"
   end
