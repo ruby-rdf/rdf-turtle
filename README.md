@@ -11,7 +11,7 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.7+.
+* Compatible with Ruby 1.8.7+, Ruby >= 1.9, and JRuby 1.7+.
 
 ## Usage
 Instantiate a reader from a local file:
@@ -115,6 +115,6 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
-[Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown
+[Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf
 [Swap]:         http://www.w3.org/2000/10/swap/
