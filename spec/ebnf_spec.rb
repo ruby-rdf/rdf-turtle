@@ -41,7 +41,8 @@ describe EBNF do
   describe "#make_bnf" do
     {
       %{[2]     Prolog    ::=           BaseDecl? PrefixDecl*} =>
-      [%{(Prolog "2" rule (seq _Prolog_1 _Prolog_2))},
+      [%{(g:empty "0" rule (seq))},
+       %{(Prolog "2" rule (seq _Prolog_1 _Prolog_2))},
        %{(_Prolog_1 "2.1" rule (alt g:empty BaseDecl))},
        %{(_Prolog_2 "2.2" rule (alt g:empty __Prolog_2_star))},
        %{(__Prolog_2_star "2.2*" rule (seq PrefixDecl _Prolog_2))}],
@@ -56,7 +57,8 @@ describe EBNF do
                         |   '(' expression ')'
         
       } =>
-      [%{(primary "9" rule (alt HEX RANGE ENUM O_RANGE O_ENUM STRING1 STRING2 _primary_1))},
+      [%{(g:empty "0" rule (seq))},
+       %{(primary "9" rule (alt HEX RANGE ENUM O_RANGE O_ENUM STRING1 STRING2 _primary_1))},
        %{(_primary_1 "9.1" rule (seq __primary_1_term1 expression __primary_1_term2))},
        %{(__primary_1_term1 "9.1.term1" terminal "(")},
        %{(__primary_1_term2 "9.1.term2" terminal ")")}],
