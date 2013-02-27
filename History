@@ -1,3 +1,10 @@
+### 1.0.1
+* Moved EBNF stuff to related ebnf gem, and use it to generate parser tables.
+* Parser and lexer moved to generic EBNF modules.
+
+### 1.0.0
+* 1.0 release
+
 ### 0.3.1
 * Sync with rdf-spec 0.3.11 changes due to respec updates.
 

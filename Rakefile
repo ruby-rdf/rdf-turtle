@@ -48,34 +48,11 @@ TTL_DIR = File.expand_path(File.dirname(__FILE__))
 desc 'Build first, follow and branch tables'
 task :meta => "lib/rdf/turtle/meta.rb"
 
-file "lib/rdf/turtle/meta.rb" => ["etc/turtle-ll1.n3", "script/gramLL1"] do |t|
+file "lib/rdf/turtle/meta.rb" => "etc/turtle.bnf" do |t|
   sh %{
-    script/gramLL1 \
-      --grammar etc/turtle-ll1.n3 \
-      --lang 'http://www.w3.org/ns/formats/Turtle#language' \
-      --output lib/rdf/turtle/meta.rb
-  }
-end
-
-file "etc/turtle-ll1.n3" => "etc/turtle.n3" do
-  sh %{
-  ( cd ../swap/grammar;
-    PYTHONPATH=../.. python ../cwm.py #{TTL_DIR}/etc/turtle.n3 \
-      ebnf2bnf.n3 \
-      first_follow.n3 \
-      --think --data
-  )  > etc/turtle-ll1.n3
-  }
-end
-
-file "etc/turtle.n3" => "etc/turtle.bnf" do
-  sh %{
-    script/ebnf2ttl -f ttl -o etc/turtle.n3 etc/turtle.bnf
-  }
-end
-
-file "etc/ebnf.n3" => "etc/ebnf.bnf" do
-  sh %{
-    script/ebnf2ttl -f ttl -p ebnf -n "http://www.w3.org/ns/formats/EBNF#" -o etc/ebnf.n3 etc/ebnf.bnf
+    ebnf --ll1 turtleDoc --format rb\
+      --mod-name RDF::Turtle::Meta \
+      --output lib/rdf/turtle/meta.rb \
+      etc/turtle.bnf \
   }
 end

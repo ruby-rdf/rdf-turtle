@@ -1,4 +1,4 @@
-require 'rdf/ll1/lexer'
+require 'ebnf/ll1/lexer'
 
 module RDF::Turtle
   module Terminals
@@ -60,7 +60,7 @@ module RDF::Turtle
     end
 
     # 26
-    UCHAR                = RDF::LL1::Lexer::UCHAR
+    UCHAR                = EBNF::LL1::Lexer::UCHAR
     # 170s
     PERCENT              = /%[0-9A-Fa-f]{2}/
     # 172s

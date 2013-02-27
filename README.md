@@ -46,35 +46,19 @@ In some cases, the specification is unclear on certain issues:
   library suite is brought up to date with RDF 1.1.
 
 ## Implementation Notes
-The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
-tables generated from the original [Turtle EBNF Grammar][Turtle EBNF] described in the [specification][Turtle]. Branch and Follow tables are specified in {RDF::Turtle::Meta}, which is in turn
-generated using etc/gramLL1.
+The reader uses the [EBNF][] gem to generate first, follow and branch tables, and uses
+the `Parser` and `Lexer` modules to implement the Turtle parser.
 
-The branch rules indicate productions to be taken based on a current production. Terminals are denoted
-through a set of regular expressions used to match each type of terminal, described in {RDF::Turtle::Terminals}.
-
-etc/turtle.bnf is used to to generate a Notation3 representation of the grammar, a transformed LL1 representation and ultimately {RDF::Turtle::Meta}.
-
-Using local and [SWAP][] utilities, this is done as follows:
-
-    script/ebnf2ttl -f ttl -o etc/turtle.n3 etc/turtle.bnf
-      
-    python http://www.w3.org/2000/10/swap/cwm.py etc/turtle.n3 \
-      http://www.w3.org/2000/10/swap/grammar/ebnf2bnf.n3 \
-      http://www.w3.org/2000/10/swap/grammar/first_follow.n3 \
-      --think --data > etc/turtle-bnf.n3
-    
-    script/gramLL1 \
-      --grammar etc/turtle-ll1.n3 \
-      --lang 'http://www.w3.org/ns/formats/Turtle#language' \
-      --output lib/rdf/turtle/meta.rb
-
-Future releases will replace the need for cym using Ruby-native graph inference.
+The parser takes branch and follow tables generated from the original [Turtle
+EBNF Grammar][Turtle EBNF] described in the [specification][Turtle]. Branch and
+Follow tables are specified in {RDF::Turtle::Meta}, which is in turn generated
+using the [EBNF][] gem.
 
 ## Dependencies
 
 * [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
 * [RDF.rb](http://rubygems.org/gems/rdf) (>= 1.0)
+* [EBNF][] (>= 0.1.0)
 
 ## Installation
 
@@ -112,9 +96,10 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [YARD-GS]:      http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:          http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
 [RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf/master/frames
+[EBNF]:         http://rubygems.org/gems/ebnf
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
 [Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
-[Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf
+[Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Swap]:         http://www.w3.org/2000/10/swap/

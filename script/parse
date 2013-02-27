@@ -30,7 +30,7 @@ TERMINALS = [
 ]
 
 class P
-  include RDF::LL1::Parser
+  include EBNF::LL1::Parser
   include RDF::Turtle::Terminals
 
   terminal(:ANON,                 ANON)
@@ -58,13 +58,13 @@ def run(input, options)
   start = Time.new
   num = 0
   if options[:lex_only]
-    lexer = RDF::LL1::Lexer.new(input, TERMINALS)
+    lexer = EBNF::LL1::Lexer.new(input, TERMINALS)
     begin
       while token = lexer.first
         puts "[#{token.lineno}: #{token.inspect}]" unless options[:quiet]
         lexer.shift
       end
-    rescue RDF::LL1::Lexer::Error => e
+    rescue EBNF::LL1::Lexer::Error => e
       STDERR.puts "Error: #{e.message}" unless options[:quiet]
       lexer.recover
       retry

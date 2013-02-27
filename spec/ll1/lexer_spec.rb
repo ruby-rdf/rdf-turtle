@@ -1,9 +1,9 @@
 # coding: utf-8
 $:.unshift ".."
 require 'spec_helper'
-require 'rdf/ll1/lexer'
+require 'ebnf/ll1/lexer'
 
-describe RDF::LL1::Lexer do
+describe EBNF::LL1::Lexer do
   before(:all) do
     require 'rdf/turtle/terminals'
 
@@ -41,7 +41,7 @@ describe RDF::LL1::Lexer do
       }
       inputs.each do |input, output|
         output.force_encoding(Encoding::UTF_8) if output.respond_to?(:force_encoding) # Ruby 1.9+
-        RDF::LL1::Lexer.unescape_codepoints(input).should == output
+        EBNF::LL1::Lexer.unescape_codepoints(input).should == output
       end
     end
 
@@ -53,11 +53,10 @@ describe RDF::LL1::Lexer do
       }
       inputs.each do |input, output|
         output.force_encoding(Encoding::UTF_8) if output.respond_to?(:force_encoding) # Ruby 1.9+
-        RDF::LL1::Lexer.unescape_codepoints(input).should == output
+        EBNF::LL1::Lexer.unescape_codepoints(input).should == output
       end
     end
 
-    
     context "escaped strings" do
       {
         'Dürst' => 'D\\u00FCrst',
@@ -66,7 +65,7 @@ describe RDF::LL1::Lexer do
         "resumé" => 'resum\\u00E9',
       }.each_pair do |unescaped, escaped|
         it "unescapes #{unescaped.inspect}" do
-          RDF::LL1::Lexer.unescape_codepoints(escaped).should == unescaped
+          EBNF::LL1::Lexer.unescape_codepoints(escaped).should == unescaped
         end
       end
     end
@@ -76,9 +75,9 @@ describe RDF::LL1::Lexer do
     # @see http://www.w3.org/TR/rdf-sparql-query/#grammarEscapes
 
     context "escape sequences" do
-      RDF::LL1::Lexer::ESCAPE_CHARS.each do |escaped, unescaped|
+      EBNF::LL1::Lexer::ESCAPE_CHARS.each do |escaped, unescaped|
         it "unescapes #{unescaped.inspect}" do
-          RDF::LL1::Lexer.unescape_string(escaped).should == unescaped
+          EBNF::LL1::Lexer.unescape_string(escaped).should == unescaped
         end
       end
     end
@@ -93,7 +92,7 @@ describe RDF::LL1::Lexer do
         "tab:\t" => 'tab:\\t',
       }.each_pair do |unescaped, escaped|
         it "unescapes #{unescaped.inspect}" do
-          RDF::LL1::Lexer.unescape_string(escaped).should == unescaped
+          EBNF::LL1::Lexer.unescape_string(escaped).should == unescaped
         end
       end
     end
@@ -378,7 +377,7 @@ describe RDF::LL1::Lexer do
           "\r\n" => 2,
         }
         inputs.each do |input, lineno|
-          lexer = RDF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
+          lexer = EBNF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
           lexer.to_a # consumes the input
           lexer.lineno.should == lineno
         end
@@ -388,7 +387,7 @@ describe RDF::LL1::Lexer do
     describe "yielding tokens" do
       it "annotates tokens with the current line number" do
         results = %w(1 2 3 4)
-        RDF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals, :unescape_terms => @unescape_terms).each_token do |token|
+        EBNF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals, :unescape_terms => @unescape_terms).each_token do |token|
           token.type.should == :INTEGER
           token.value.should == results.shift
         end
@@ -397,18 +396,18 @@ describe RDF::LL1::Lexer do
 
     describe "invalid input" do
       it "raises a lexer error" do
-        lambda { tokenize("SELECT foo WHERE {}") }.should raise_error(RDF::LL1::Lexer::Error)
+        lambda { tokenize("SELECT foo WHERE {}") }.should raise_error(EBNF::LL1::Lexer::Error)
       end
 
       it "reports the invalid token which triggered the error" do
         begin
           tokenize("@prefix foo <>")
-        rescue RDF::LL1::Lexer::Error => error
+        rescue EBNF::LL1::Lexer::Error => error
           error.token.should  == 'foo'
         end
         begin
           tokenize("@prefix foo: <>\n@prefix") {}
-        rescue RDF::LL1::Lexer::Error => error
+        rescue EBNF::LL1::Lexer::Error => error
           error.token.should  == '@base'
         end
       end
@@ -416,12 +415,12 @@ describe RDF::LL1::Lexer do
       it "reports the line number where the error occurred" do
         begin
           tokenize("@prefix foo <>")
-        rescue RDF::LL1::Lexer::Error => error
+        rescue EBNF::LL1::Lexer::Error => error
           error.lineno.should == 1
         end
         begin
           tokenize("@prefix\nfoo <>")
-        rescue RDF::LL1::Lexer::Error => error
+        rescue EBNF::LL1::Lexer::Error => error
           error.lineno.should == 2
         end
       end
@@ -498,8 +497,8 @@ describe RDF::LL1::Lexer do
   def tokenize(*inputs, &block)
     options = inputs.last.is_a?(Hash) ? inputs.pop : {}
     inputs.each do |input|
-      tokens = RDF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
-      tokens.should be_a(RDF::LL1::Lexer)
+      tokens = EBNF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
+      tokens.should be_a(EBNF::LL1::Lexer)
       block.call(tokens.to_a)
     end
   end

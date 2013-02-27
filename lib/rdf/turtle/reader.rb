@@ -1,5 +1,5 @@
 require 'rdf/turtle/meta'
-require 'rdf/ll1/parser'
+require 'ebnf/ll1/parser'
 
 module RDF::Turtle
   ##
@@ -7,7 +7,7 @@ module RDF::Turtle
   class Reader < RDF::Reader
     format Format
     include RDF::Turtle::Meta
-    include RDF::LL1::Parser
+    include EBNF::LL1::Parser
     include RDF::Turtle::Terminals
 
     # Terminals passed to lexer. Order matters!
@@ -272,7 +272,7 @@ module RDF::Turtle
           debug(loc, *(data.dup << {:level => 0}))
         end
       end
-    rescue ArgumentError, RDF::LL1::Parser::Error => e
+    rescue ArgumentError, EBNF::LL1::Parser::Error => e
       progress("Parsing completed with errors:\n\t#{e.message}")
       raise RDF::ReaderError, e.message if validate?
     end
