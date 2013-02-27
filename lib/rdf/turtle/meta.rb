@@ -6,14 +6,14 @@ module RDF::Turtle::Meta
   BRANCH = {
     :"_:_g0" => {
       "a" => [:predicateObjectList],
-      :"ebnf:empty" => [],
+      :_empty => [],
       :IRIREF => [:predicateObjectList],
       :PNAME_LN => [:predicateObjectList],
       :PNAME_NS => [:predicateObjectList],
     },
     :"_:_g1" => {
       ";" => [:"_:g70106313082060"],
-      :"ebnf:empty" => [],
+      :_empty => [],
     },
     :"_:_g2" => {
       ";" => [";", :"_:_g3"],
@@ -21,7 +21,7 @@ module RDF::Turtle::Meta
     :"_:_g3" => {
       ";" => [],
       "a" => [:"_:_g4"],
-      :"ebnf:empty" => [],
+      :_empty => [],
       :IRIREF => [:"_:_g4"],
       :PNAME_LN => [:"_:_g4"],
       :PNAME_NS => [:"_:_g4"],
@@ -36,7 +36,7 @@ module RDF::Turtle::Meta
     :"_:_g5" => {
       "," => [:"_:g70106311924700"],
       ";" => [],
-      :"ebnf:empty" => [],
+      :_empty => [],
     },
     :"_:_g6" => {
       "," => [",", :object],
@@ -45,7 +45,7 @@ module RDF::Turtle::Meta
       "(" => [:"_:g70106311405120"],
       "[" => [:"_:g70106311405120"],
       "false" => [:"_:g70106311405120"],
-      :"ebnf:empty" => [],
+      :_empty => [],
       :ANON => [:"_:g70106311405120"],
       :BLANK_NODE_LABEL => [:"_:g70106311405120"],
       :DECIMAL => [:"_:g70106311405120"],
@@ -66,7 +66,7 @@ module RDF::Turtle::Meta
       "[" => [],
       "^^" => [:"_:_g9"],
       "false" => [],
-      :"ebnf:empty" => [],
+      :_empty => [],
       :ANON => [],
       :BLANK_NODE_LABEL => [],
       :DECIMAL => [],
@@ -163,7 +163,7 @@ module RDF::Turtle::Meta
       "@base" => [:statement, :turtleDoc],
       "@prefix" => [:statement, :turtleDoc],
       "[" => [:statement, :turtleDoc],
-      :"ebnf:eof" => [],
+      :_eof => [],
       :ANON => [:statement, :turtleDoc],
       :BLANK_NODE_LABEL => [:statement, :turtleDoc],
       :IRIREF => [:statement, :turtleDoc],
@@ -533,8 +533,8 @@ module RDF::Turtle::Meta
       "@base" => [:"_:g70106312474340"],
       "@prefix" => [:"_:g70106312474340"],
       "[" => [:"_:g70106312474340"],
-      :"ebnf:empty" => [],
-      :"ebnf:eof" => [],
+      :_empty => [],
+      :_eof => [],
       :ANON => [:"_:g70106312474340"],
       :BLANK_NODE_LABEL => [:"_:g70106312474340"],
       :IRIREF => [:"_:g70106312474340"],
@@ -1054,7 +1054,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_QUOTE,
       :STRING_LITERAL_SINGLE_QUOTE],
     :"_:g70106312474340" => [
-      :"ebnf:eof"],
+      :_eof],
     "a" => [
       "(",
       "[",
@@ -1090,14 +1090,14 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_QUOTE,
       :STRING_LITERAL_SINGLE_QUOTE],
-    :"ebnf:empty" => [
+    :_empty => [
       "(",
       ",",
       ";",
       "[",
       "false",
       "true",
-      :"ebnf:eof",
+      :_eof,
       :ANON,
       :BLANK_NODE_LABEL,
       :DECIMAL,
@@ -1578,7 +1578,7 @@ module RDF::Turtle::Meta
       :PNAME_LN,
       :PNAME_NS],
     :turtleDoc => [
-      :"ebnf:eof"],
+      :_eof],
     :verb => [
       "(",
       "[",
