@@ -6,7 +6,7 @@ require 'rdf'
 require 'rdf/turtle'
 require 'rdf/ntriples'
 require 'rdf/turtle/meta'
-require 'rdf/ll1/parser'
+require 'ebnf/ll1/parser'
 require 'getoptlong'
 require 'open-uri'
 
