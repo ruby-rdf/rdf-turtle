@@ -384,8 +384,8 @@ describe RDF::Turtle::Writer do
 
   # Serialize ntstr to a string and compare against regexps
   def serialize(ntstr, base = nil, regexps = [], options = {})
-    prefixes = options[:prefixes] || {}
-    g = parse(ntstr, :base_uri => base, :prefixes => prefixes)
+    prefixes = options[:prefixes] || {nil => ""}
+    g = parse(ntstr, :base_uri => base, :prefixes => prefixes, :validate => false, :debug => true)
     @debug = []
     result = RDF::Turtle::Writer.buffer(options.merge(:debug => @debug, :base_uri => base, :prefixes => prefixes)) do |writer|
       writer << g

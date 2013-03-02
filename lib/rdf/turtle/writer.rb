@@ -163,7 +163,7 @@ module RDF::Turtle
       pname = case
       when @uri_to_pname.has_key?(uri)
         return @uri_to_pname[uri]
-      when u = @uri_to_prefix.keys.detect {|u| uri.index(u.to_s) == 0}
+      when u = @uri_to_prefix.keys.sort_by {|u| u.length}.reverse.detect {|u| uri.index(u.to_s) == 0}
         # Use a defined prefix
         prefix = @uri_to_prefix[u]
         unless u.to_s.empty?
@@ -343,7 +343,7 @@ module RDF::Turtle
       references = ref_count(statement.object) + 1
       @references[statement.object] = references
       @subjects[statement.subject] = true
-      
+
       # Pre-fetch pnames, to fill prefixes
       get_pname(statement.subject)
       get_pname(statement.predicate)
