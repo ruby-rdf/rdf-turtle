@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.8.1'
   gem.requirements          = []
   gem.add_runtime_dependency     'rdf',             '>= 1.0'
-  gem.add_runtime_dependency     'ebnf',            '>= 0.1.0'
+  gem.add_runtime_dependency     'ebnf',            '>= 0.2.0'
   gem.add_development_dependency 'open-uri-cached', '>= 0.0.5'
   gem.add_development_dependency 'rspec',           '>= 2.12.0'
   gem.add_development_dependency 'rdf-isomorphic'
