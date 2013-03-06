@@ -33,7 +33,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-isomorphic'
   gem.add_development_dependency 'json-ld'
   gem.add_development_dependency 'yard' ,           '>= 0.8.3'
-  gem.add_development_dependency 'sxp'
   gem.add_development_dependency 'rdf-spec',        '>= 1.0'
   gem.add_development_dependency 'rake'
   gem.post_install_message  = nil

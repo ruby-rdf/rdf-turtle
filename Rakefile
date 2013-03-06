@@ -40,9 +40,6 @@ namespace :doc do
   YARD::Rake::YardocTask.new
 end
 
-
-TTL_DIR = File.expand_path(File.dirname(__FILE__))
-
 desc 'Build first, follow and branch tables'
 task :meta => "lib/rdf/turtle/meta.rb"
 
