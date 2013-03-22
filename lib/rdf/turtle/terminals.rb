@@ -90,7 +90,7 @@ module RDF::Turtle
     # 140s
     PNAME_LN             = /#{PNAME_NS}#{PN_LOCAL}/
     # 141s
-    BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(#{PN_CHARS}|\.)*/
+    BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})((#{PN_CHARS}|\.)*#{PN_CHARS})?/
     # 144s
     LANGTAG              = /@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*/
     # 19
