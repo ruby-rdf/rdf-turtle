@@ -8,5 +8,5 @@ gem 'ebnf', :git => "git://github.com/gkellogg/ebnf.git"
 
 group :debug do
   gem "wirble"
-  gem "debugger" if RUBY_VERSION == "1.9.3"
+  gem "debugger", :platforms => :ruby_19
 end

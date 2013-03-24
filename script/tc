@@ -139,7 +139,7 @@ opts.each do |opt, arg|
   end
 end
 
-manifests = options[:ntriples] ? %w(N-Triples/manifest.ttl) : %w(tests-ttl/manifest.ttl coverage/tests/manifest.ttl)
+manifests = options[:ntriples] ? %w(tests-nt/manifest.ttl) : %w(tests-ttl/manifest.ttl)
 
 earl_preamble(options) if options[:earl]
 
