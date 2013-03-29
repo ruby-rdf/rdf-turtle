@@ -92,19 +92,18 @@ module RDF::Turtle
     end
 
     # Productions
-    
     # [4] prefixID defines a prefix mapping
     production(:prefixID) do |input, current, callback|
       prefix = current[:prefix]
       iri = current[:resource]
-      callback.call(:trace, "prefixID", lambda {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"})
+      debug("prefixID") {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"}
       prefix(prefix, iri)
     end
     
     # [5] base set base_uri
     production(:base) do |input, current, callback|
       iri = current[:resource]
-      callback.call(:trace, "base", lambda {"Defined base as #{iri}"})
+      debug("base") {"Defined base as #{iri}"}
       options[:base_uri] = iri
     end
     
@@ -112,14 +111,14 @@ module RDF::Turtle
     production(:sparqlPrefix) do |input, current, callback|
       prefix = current[:prefix]
       iri = current[:resource]
-      callback.call(:trace, "sparqlPrefix", lambda {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"})
+      debug("sparqlPrefix") {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"}
       prefix(prefix, iri)
     end
     
     # [29s] sparqlBase ::= [Bb][Aa][Ss][Ee] IRIREF
     production(:sparqlBase) do |input, current, callback|
       iri = current[:resource]
-      callback.call(:trace, ":sparqlBase", lambda {"Defined base as #{iri}"})
+      debug("base") {"Defined base as #{iri}"}
       options[:base_uri] = iri
     end
     
@@ -155,7 +154,7 @@ module RDF::Turtle
         # Part of an rdf:List collection
         input[:object_list] << current[:resource]
       else
-        callback.call(:trace, "object", lambda {"current: #{current.inspect}"})
+        debug("object") {"current: #{current.inspect}"}
         callback.call(:statement, "object", input[:subject], input[:predicate], current[:resource])
       end
     end
@@ -271,14 +270,13 @@ module RDF::Turtle
 
       parse(@input, START.to_sym, @options.merge(:branch => BRANCH,
                                                  :first => FIRST,
-                                                 :follow => FOLLOW)
+                                                 :follow => FOLLOW,
+                                                 :reset_on_start => true)
       ) do |context, *data|
         loc = data.shift
         case context
         when :statement
           add_statement(loc, RDF::Statement.from(data))
-        when :trace
-          debug(loc, *(data.dup << {:level => 0}))
         end
       end
     rescue ArgumentError, EBNF::LL1::Parser::Error => e
@@ -372,36 +370,6 @@ module RDF::Turtle
       return RDF::Node.new unless value
       @bnode_cache ||= {}
       @bnode_cache[value.to_s] ||= RDF::Node.new(value)
-    end
-
-    ##
-    # Progress output when debugging
-    # @overload debug(node, message)
-    #   @param [String] node relative location in input
-    #   @param [String] message ("")
-    #
-    # @overload debug(message)
-    #   @param [String] message ("")
-    #
-    # @yieldreturn [String] added to message
-    def debug(*args)
-      return unless @options[:debug]
-      options = args.last.is_a?(Hash) ? args.pop : {}
-      debug_level = options.fetch(:level, 1)
-      return unless debug_level <= DEBUG_LEVEL
-      depth = options[:depth] || self.depth
-      message = args.pop
-      message = message.call if message.is_a?(Proc)
-      args << message if message
-      args << yield if block_given?
-      message = "#{args.join(': ')}"
-      str = "[#{@lineno}]#{' ' * depth}#{message}"
-      case @options[:debug]
-      when Array
-        @options[:debug] << str
-      when TrueClass
-        $stderr.puts str
-      end
     end
   end # class Reader
 end # module RDF::Turtle
