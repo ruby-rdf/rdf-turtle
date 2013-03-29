@@ -10,78 +10,17 @@ require 'ebnf/ll1/parser'
 require 'getoptlong'
 require 'open-uri'
 
-TERMINALS = [
-  [:ANON,                 RDF::Turtle::Terminals::ANON],
-  [nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)],
-  [:BLANK_NODE_LABEL,     RDF::Turtle::Terminals::BLANK_NODE_LABEL],
-  [:IRIREF,               RDF::Turtle::Terminals::IRIREF],
-  [:DECIMAL,              RDF::Turtle::Terminals::DECIMAL],
-  [:DOUBLE,               RDF::Turtle::Terminals::DOUBLE],
-  [:INTEGER,              RDF::Turtle::Terminals::INTEGER],
-  [:LANGTAG,              RDF::Turtle::Terminals::LANGTAG],
-  [:PNAME_LN,             RDF::Turtle::Terminals::PNAME_LN],
-  [:PNAME_NS,             RDF::Turtle::Terminals::PNAME_NS],
-  [:STRING_LITERAL_LONG_SINGLE_QUOTE, RDF::Turtle::Terminals::STRING_LITERAL_LONG_SINGLE_QUOTE],
-  [:STRING_LITERAL_LONG_QUOTE, RDF::Turtle::Terminals::STRING_LITERAL_LONG_QUOTE],
-  [:STRING_LITERAL_QUOTE,      RDF::Turtle::Terminals::STRING_LITERAL_QUOTE],
-  [:STRING_LITERAL_SINGLE_QUOTE,      RDF::Turtle::Terminals::STRING_LITERAL_SINGLE_QUOTE],
-  [:SPARQL_PREFIX,        RDF::Turtle::Terminals::SPARQL_PREFIX],
-  [:SPARQL_BASE ,         RDF::Turtle::Terminals::SPARQL_BASE],
-]
-
-class P
-  include EBNF::LL1::Parser
-  include RDF::Turtle::Terminals
-
-  terminal(:ANON,                 ANON)
-  terminal(:BLANK_NODE_LABEL,     BLANK_NODE_LABEL)
-  terminal(:IRIREF,              IRIREF, :unescape => true)
-  terminal(:DOUBLE,               DOUBLE)
-  terminal(:DECIMAL,              DECIMAL)
-  terminal(:INTEGER,              INTEGER)
-  terminal(:PNAME_LN,             PNAME_LN)
-  terminal(:PNAME_NS,             PNAME_NS)
-  terminal(:STRING_LITERAL_LONG_SINGLE_QUOTE, STRING_LITERAL_LONG_SINGLE_QUOTE, :unescape => true)
-  terminal(:STRING_LITERAL_LONG_QUOTE, STRING_LITERAL_LONG_QUOTE, :unescape => true)
-  terminal(:STRING_LITERAL_QUOTE,      STRING_LITERAL_QUOTE, :unescape => true)
-  terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE, :unescape => true)
-  terminal(nil,                   %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false))
-  terminal(:LANGTAG,              LANGTAG)
-  terminal(:SPARQL_PREFIX,        SPARQL_PREFIX)
-  terminal(:SPARQL_BASE,          SPARQL_BASE)
-end
-
 def run(input, options)
   reader_class = RDF::Reader.for(options[:input_format].to_sym)
   raise "Reader not found for #{options[:input_format]}" unless reader_class
 
   start = Time.new
   num = 0
-  if options[:lex_only]
-    lexer = EBNF::LL1::Lexer.new(input, TERMINALS)
-    begin
-      while token = lexer.first
-        puts "[#{token.lineno}: #{token.inspect}]" unless options[:quiet]
-        lexer.shift
-      end
-    rescue EBNF::LL1::Lexer::Error => e
-      STDERR.puts "Error: #{e.message}" unless options[:quiet]
-      lexer.recover
-      retry
-    end
-  elsif options[:parse_only]
-    P.new.parse(input, RDF::Turtle::Meta::START,
-      options[:parser_options].merge(
-        :branch => RDF::Turtle::Meta::BRANCH,
-        :follow => RDF::Turtle::Meta::FOLLOW)
-    ) do |context, *data|
-      puts('.')
-    end
-  elsif options[:output_format] == :ntriples || options[:quiet]
+  if options[:output_format] == :ntriples || options[:quiet]
     reader_class.new(input, options[:parser_options]).each do |statement|
       num += 1
       if options[:quiet]
-        print "."
+        print "." if options[:quiet] == 1
       else
        options[:output].puts statement.to_ntriples
       end
@@ -128,8 +67,6 @@ opts = GetoptLong.new(
   ["--format", GetoptLong::REQUIRED_ARGUMENT],
   ["--input-format", GetoptLong::REQUIRED_ARGUMENT],
   ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
-  ["--lex-only", GetoptLong::NO_ARGUMENT],
-  ["--parse-only", GetoptLong::NO_ARGUMENT],
   ["--progress", GetoptLong::NO_ARGUMENT],
   ["--quiet", GetoptLong::NO_ARGUMENT],
   ["--uri", GetoptLong::REQUIRED_ARGUMENT],
@@ -144,10 +81,8 @@ opts.each do |opt, arg|
   when '--format'       then options[:output_format] = arg.to_sym
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
-  when '--lex-only'     then options[:lex_only] = true
-  when '--parse-only'   then options[:parse_only] = true
   when '--progress'     then parser_options[:progress] = true
-  when '--quiet'        then options[:quiet] = true
+  when '--quiet'        then options[:quiet] = options[:quiet].to_i + 1
   when '--uri'          then parser_options[:base_uri] = arg
   when '--validate'     then parser_options[:validate] = true
   when '--verbose'      then $verbose = true
