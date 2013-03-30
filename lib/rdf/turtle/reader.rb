@@ -224,17 +224,25 @@ module RDF::Turtle
     #   the parser will attempt to recover from errors.
     # @option options [Boolean] :progress
     #   Show progress of parser productions
-    # @option options [Boolean] :debug
-    #   Detailed debug output
+    # @option options [Boolean, Integer, Array] :debug
+    #   Detailed debug output. If set to an Integer, output is restricted
+    #   to messages of that priority: `0` for errors, `1` for warnings,
+    #   `2` for processor tracing, and anything else for various levels
+    #   of debug. If set to an Array, information is collected in the array
+    #   instead of being output to `$stderr`.
     # @return [RDF::Turtle::Reader]
     def initialize(input = nil, options = {}, &block)
       super do
         @options = {
           :anon_base => "b0",
           :validate => false,
-          :debug => RDF::Turtle.debug?,
         }.merge(options)
         @options = {:prefixes => {nil => ""}}.merge(@options) unless @options[:validate]
+        @options[:debug] ||= case
+        when RDF::Turtle.debug? then true
+        when @options[:progress] then 2
+        when @options[:validate] then 1
+        end
 
         @options[:base_uri] = RDF::URI(base_uri) 
         debug("base IRI") {base_uri.inspect}
@@ -270,13 +278,27 @@ module RDF::Turtle
                                                  :follow => FOLLOW,
                                                  :reset_on_start => true)
       ) do |context, *data|
-        loc = data.shift
         case context
         when :statement
-          add_statement(loc, RDF::Statement.from(data))
+          loc = data.shift
+          s = RDF::Statement.from(data)
+          add_statement(loc, s) unless !s.valid? && validate?
+        when :trace
+          level, lineno, depth, *args = data
+          message = "#{args.join(': ')}"
+          d_str = depth > 20 ? ' ' * 20 + '+' : ' ' * depth
+          str = "[#{lineno}](#{level})#{d_str}#{message}"
+          case @options[:debug]
+          when Array
+            @options[:debug] << str
+          when TrueClass
+            $stderr.puts str
+          when Integer
+            $stderr.puts(str) if level <= @options[:debug]
+          end
         end
       end
-    rescue ArgumentError, EBNF::LL1::Parser::Error => e
+    rescue EBNF::LL1::Parser::Error => e
       progress("Parsing completed with errors:\n\t#{e.message}")
       raise RDF::ReaderError, e.message if validate?
     end
@@ -314,8 +336,6 @@ module RDF::Turtle
       value.canonicalize! if canonicalize?
       value = RDF::URI.intern(value) if intern?
       value
-    rescue TypeError, ArgumentError, Addressable::URI::InvalidURIError => e
-      raise ArgumentError, e.message
     end
     
     # Create a literal
