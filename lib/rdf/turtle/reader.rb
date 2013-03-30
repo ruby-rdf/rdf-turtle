@@ -18,11 +18,7 @@ module RDF::Turtle
       input[:resource] = self.bnode(token.value[2..-1])
     end
     terminal(:IRIREF,               IRIREF, :unescape => true) do |prod, token, input|
-      begin
-        input[:resource] = process_iri(token.value[1..-2])
-      rescue ArgumentError => e
-        raise RDF::ReaderError, e.message
-      end
+      input[:resource] = process_iri(token.value[1..-2])
     end
     terminal(:DOUBLE,               DOUBLE) do |prod, token, input|
       # Note that a Turtle Double may begin with a '.[eE]', so tack on a leading
@@ -240,6 +236,7 @@ module RDF::Turtle
         }.merge(options)
         @options = {:prefixes => {nil => ""}}.merge(@options) unless @options[:validate]
 
+        @options[:base_uri] = RDF::URI(base_uri) 
         debug("base IRI") {base_uri.inspect}
         
         debug("validate") {validate?.inspect}
@@ -310,20 +307,17 @@ module RDF::Turtle
       @callback.call(statement)
     end
 
+    # Process a URI against base
     def process_iri(iri)
-      iri(base_uri, iri)
-    end
-    
-    # Create IRIs
-    def iri(value, append = nil)
-      value = RDF::URI.new(value)
-      value = value.join(append) if append
-      value.validate! if validate? && value.respond_to?(:validate)
+      value = base_uri.join(iri)
+      value.validate! if validate?
       value.canonicalize! if canonicalize?
       value = RDF::URI.intern(value) if intern?
       value
+    rescue TypeError, ArgumentError, Addressable::URI::InvalidURIError => e
+      raise ArgumentError, e.message
     end
-
+    
     # Create a literal
     def literal(value, options = {})
       options = options.dup
