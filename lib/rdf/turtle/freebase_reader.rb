@@ -45,7 +45,7 @@ module RDF::Turtle
       if prefix_str = match(/^@prefix\s+(\w+:\s+#{IRIREF})\s*.$/)
         prefix, iri = prefix_str.split(/:\s+/)
         return nil unless iri
-        prefix(prefix, RDF::URI(iri[1..-2]))
+        (@prefixes ||= {})[prefix] = iri[1..-2]
       end
     end
 
@@ -53,10 +53,14 @@ module RDF::Turtle
     # Read a PNAME of the form `prefix:suffix`.
     # @return [RDF::URI]
     def read_pname(options = {})
-      if pname_str = match(/^(#{PNAME_LN})/)
+      if pname_str = match(/^(\w+:\S+)/)
         ns, suffix = pname_str.split(':', 2)
-        raise RDF::ReaderError, "prefix #{ns.inspect} is not defined" unless prefix(ns)
-        prefix(ns) + suffix
+        if suffix[-1] == "."
+          suffix.chop!  # Remove end of statement
+          @line.insert(0, ".")
+        end
+        raise RDF::ReaderError, "prefix #{ns.inspect} is not defined" unless @prefixes.has_key?(ns)
+        RDF::URI(@prefixes[ns] + suffix)
       end
     end
 
