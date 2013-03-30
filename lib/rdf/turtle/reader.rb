@@ -201,6 +201,21 @@ module RDF::Turtle
     end
 
     ##
+    # Redirect for Freebase Reader
+    #
+    # @private
+    def self.new(input = nil, options = {}, &block)
+      klass = if options[:freebase]
+        FreebaseReader
+      else
+        self
+      end
+      reader = klass.allocate
+      reader.send(:initialize, input, options, &block)
+      reader
+    end
+
+    ##
     # Initializes a new reader instance.
     #
     # Note, the spec does not define a default mapping for the empty prefix,
@@ -230,6 +245,8 @@ module RDF::Turtle
     #   `2` for processor tracing, and anything else for various levels
     #   of debug. If set to an Array, information is collected in the array
     #   instead of being output to `$stderr`.
+    # @option options [Boolean] :freebase (false)
+    #   Use optimized Freebase reader
     # @return [RDF::Turtle::Reader]
     def initialize(input = nil, options = {}, &block)
       super do

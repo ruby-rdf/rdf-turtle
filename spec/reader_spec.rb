@@ -48,6 +48,13 @@ describe "RDF::Turtle::Reader" do
       RDF::Turtle::Reader.new(subject).should be_a(RDF::Turtle::Reader)
     end
     
+    context "with :freebase option" do
+      it "returns a FreebaseReader instance" do
+        r = RDF::Turtle::Reader.new(StringIO.new(""), :freebase => true)
+        r.should be_a(RDF::Turtle::FreebaseReader)
+      end
+    end
+
     it "should not raise errors" do
       lambda {
         RDF::Turtle::Reader.new(subject, :validate => true)
@@ -937,12 +944,12 @@ describe "RDF::Turtle::Reader" do
       %(@keywords prefix. :e prefix :f .) => RDF::ReaderError,
       %(@base) => RDF::ReaderError,
       %(@base <a>) => RDF::ReaderError,
+      %(@base <>. <http://http:urbis.com> <b> <c>) => RDF::ReaderError,
     }.each_pair do |ttl, error|
       it "should raise '#{error}' for '#{ttl}'" do
         lambda {
           parse("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . #{ttl}", :base_uri => "http://a/b",
-                :validate => true)
-          "foo".should produce("", @debug)
+                :validate => true).should produce("", @debug)
         }.should raise_error(error)
       end
     end
@@ -964,7 +971,8 @@ describe "RDF::Turtle::Reader" do
       ],
       "malformed bnode object(3)" => [
         %q(<a> <b> _:-a, <d> .),
-        %q(<a> <b> <d> .)
+        %q(<a> <b> <d> .),
+        true
       ],
       "malformed uri subject" => [
         %q(<"quoted"> <a> <b> . <c> <d> <e> .),
@@ -976,7 +984,7 @@ describe "RDF::Turtle::Reader" do
       ],
       "malformed uri predicate(2)" => [
         %q(<a> <"quoted"> <b>; <d> <e> .),
-        %q(<d> <d> <e> .)
+        %q(<a> <d> <e> .)
       ],
       "malformed uri object(1)" => [
         %q(<a> <b> <"quoted"> . <c> <d> <e> .),
@@ -984,13 +992,20 @@ describe "RDF::Turtle::Reader" do
       ],
       "malformed uri object(2)" => [
         %q(<a> <b> <"quoted">; <d> <e> .),
-        %q(<d> <d> <e> .)
+        %q(<a> <d> <e> .)
       ],
       "malformed uri object(3)" => [
         %q(<a> <b> "quoted">, <e> .),
+        %q(
+          <a> <b> "quoted" .
+          <a> <b> <e> .
+        )
+      ],
+      "malformed uri object(frebase)" => [
+        %q(<a> <b> <http://http:urbis.com>, <e> .),
         %q(<a> <b> <e> .)
       ],
-    }.each do |test, (input, expected)|
+    }.each do |test, (input, expected, pending)|
       context test do
         it "raises an error if valiating" do
           lambda {

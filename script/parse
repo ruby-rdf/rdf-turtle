@@ -64,6 +64,7 @@ opts = GetoptLong.new(
   ["--dbg", GetoptLong::NO_ARGUMENT],
   ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
   ["--canonicalize", GetoptLong::NO_ARGUMENT],
+  ["--freebase", GetoptLong::NO_ARGUMENT],
   ["--format", GetoptLong::REQUIRED_ARGUMENT],
   ["--input-format", GetoptLong::REQUIRED_ARGUMENT],
   ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
@@ -79,6 +80,7 @@ opts.each do |opt, arg|
   when '--canonicalize' then parser_options[:canonicalize] = true
   when '--execute'      then input = arg
   when '--format'       then options[:output_format] = arg.to_sym
+  when '--freebase'     then parser_options[:freebase] = true
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
   when '--progress'     then parser_options[:debug] ||= 2
