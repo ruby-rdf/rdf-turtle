@@ -29,6 +29,7 @@ describe "RDF::Turtle::Reader" do
   context :interface do
     subject {
       %q(
+        @base <http://example/> .
         <a> <b> [
           a <C>, <D>;
           <has> ("e" <f> _:g)
@@ -81,7 +82,7 @@ describe "RDF::Turtle::Reader" do
   describe "with simple ntriples" do
     context "simple triple" do
       before(:each) do
-        ttl_string = %(<http://example.org/> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .)
+        ttl_string = %(<http://example/> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .)
         @graph = parse(ttl_string, :validate => true)
         @statement = @graph.statements.to_a.first
       end
@@ -91,7 +92,7 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "should have subject" do
-        @statement.subject.to_s.should == "http://example.org/"
+        @statement.subject.to_s.should == "http://example/"
       end
       it "should have predicate" do
         @statement.predicate.to_s.should == "http://xmlns.com/foaf/0.1/name"
@@ -149,7 +150,7 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "should parse long literal with escape", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
-        ttl = %(@prefix : <http://example.org/foo#> . <a> <b> "\\U00015678another" .)
+        ttl = %(@prefix : <http://example/foo#> . <a> <b> "\\U00015678another" .)
         if defined?(::Encoding)
           statement = parse(ttl).statements.to_a.first
           statement.object.value.should == "\u{15678}another"
@@ -204,32 +205,32 @@ describe "RDF::Turtle::Reader" do
     end
 
     it "should create named subject bnode" do
-      graph = parse("_:anon <http://example.org/property> <http://example.org/resource2> .")
+      graph = parse("_:anon <http://example/property> <http://example/resource2> .")
       graph.size.should == 1
       statement = graph.statements.to_a.first
       statement.subject.should be_a(RDF::Node)
       statement.subject.id.should =~ /anon/
-      statement.predicate.to_s.should == "http://example.org/property"
-      statement.object.to_s.should == "http://example.org/resource2"
+      statement.predicate.to_s.should == "http://example/property"
+      statement.object.to_s.should == "http://example/resource2"
     end
 
     it "raises error with anonymous predicate" do
       lambda {
-        parse("<http://example.org/resource2> _:anon <http://example.org/object> .", :validate => true)
+        parse("<http://example/resource2> _:anon <http://example/object> .", :validate => true)
       }.should raise_error RDF::ReaderError
     end
 
     it "ignores anonymous predicate" do
-      g = parse("<http://example.org/resource2> _:anon <http://example.org/object> .", :validate => false)
+      g = parse("<http://example/resource2> _:anon <http://example/object> .", :validate => false)
       g.should be_empty
     end
 
     it "should create named object bnode" do
-      graph = parse("<http://example.org/resource2> <http://example.org/property> _:anon .")
+      graph = parse("<http://example/resource2> <http://example/property> _:anon .")
       graph.size.should == 1
       statement = graph.statements.to_a.first
-      statement.subject.to_s.should == "http://example.org/resource2"
-      statement.predicate.to_s.should == "http://example.org/property"
+      statement.subject.to_s.should == "http://example/resource2"
+      statement.predicate.to_s.should == "http://example/property"
       statement.object.should be_a(RDF::Node)
       statement.object.id.should =~ /anon/
     end
@@ -241,7 +242,7 @@ describe "RDF::Turtle::Reader" do
     end
 
     it "should create typed literals" do
-      ttl = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\" ."
+      ttl = "<http://example/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\" ."
       statement = parse(ttl).statements.to_a.first
       statement.object.class.should == RDF::Literal
     end
@@ -255,8 +256,8 @@ describe "RDF::Turtle::Reader" do
 
     describe "IRIs" do
       {
-        %(<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .) =>
-          %(<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .),
+        %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .) =>
+          %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .),
         %(@base <http://a/b> . <joe> <knows> <#jane> .) =>
           %(<http://a/joe> <http://a/knows> <http://a/b#jane> .),
         %(@base <http://a/b#> . <joe> <knows> <#jane> .) =>
@@ -265,14 +266,10 @@ describe "RDF::Turtle::Reader" do
           %(<http://a/b/joe> <http://a/b/knows> <http://a/b/#jane> .),
         %(@base <http://a/b/> . </joe> <knows> <jane> .) =>
           %(<http://a/joe> <http://a/b/knows> <http://a/b/jane> .),
-        %(<#D%C3%BCrst>  a  "URI percent ^encoded as C3, BC".) =>
-          %(<#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
-        #%q(<http://example.org/node> <http://example.org/prop> <scheme:\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F !"#$%&'()*+,-./0123456789:/<=\u003E?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F> .) =>
-        #  %(),
-        #%q(<http://example.org/node> <http://example.org/prop> <scheme:!"$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz{|}~?#> .) =>
-        #  %(<http://example.org/node> <http://example.org/prop> <scheme:!"$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz{|}~?#> .),
-        %q(<http://example.org/node> <http://example.org/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .) =>
-          %q(<http://example.org/node> <http://example.org/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
+        %(<http://example/#D%C3%BCrst>  a  "URI percent ^encoded as C3, BC".) =>
+          %(<http://example/#D%C3%BCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI percent ^encoded as C3, BC" .),
+        %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .) =>
+          %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
           parse(ttl, :validate => true).should be_equivalent_graph(nt, :trace => @debug)
@@ -349,7 +346,7 @@ describe "RDF::Turtle::Reader" do
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
           @prefix foaf: <http://xmlns.com/foaf/0.1/> .
           @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-          <http://example.org/joe> foaf:name \"Joe\"^^xsd:string .
+          <http://example/joe> foaf:name \"Joe\"^^xsd:string .
         )
         statement = parse(ttl).statements.to_a.first
         statement.object.class.should == RDF::Literal
@@ -376,7 +373,7 @@ describe "RDF::Turtle::Reader" do
         %(<a> <b> 123.E+1 .)  => %(<a> <b> "123.0E+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       }.each_pair do |ttl, nt|
         it "should create typed literal for '#{ttl}'" do
-          parse(ttl, :validate => true).should be_equivalent_graph(nt, :trace => @debug)
+          parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
         end
       end
       
@@ -559,7 +556,7 @@ describe "RDF::Turtle::Reader" do
       
       it "sets a relative base" do
         ttl = %(
-        @base <http://example.org/products/>.
+        @base <http://example/products/>.
         <> <a> <b>, <#c>.
         @base <prod123/>.
         <> <a> <b>, <#c>.
@@ -567,12 +564,12 @@ describe "RDF::Turtle::Reader" do
         <> <a> <d>, <#e>.
         )
         nt = %(
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/b> .
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/#c> .
-        <http://example.org/products/prod123/> <http://example.org/products/prod123/a> <http://example.org/products/prod123/b> .
-        <http://example.org/products/prod123/> <http://example.org/products/prod123/a> <http://example.org/products/prod123/#c> .
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/d> .
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/#e> .
+        <http://example/products/> <http://example/products/a> <http://example/products/b> .
+        <http://example/products/> <http://example/products/a> <http://example/products/#c> .
+        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/b> .
+        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/#c> .
+        <http://example/products/> <http://example/products/a> <http://example/products/d> .
+        <http://example/products/> <http://example/products/a> <http://example/products/#e> .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -592,10 +589,10 @@ describe "RDF::Turtle::Reader" do
       end
 
       it "Can be used as language without messing up active base", :pending => "obsolite" do
-        ttl = %(@base <http://example.org/foo/> . <s> <p> "o"@base . <s> <p> "o" .)
+        ttl = %(@base <http://example/foo/> . <s> <p> "o"@base . <s> <p> "o" .)
         nt = %(
-        <http://example.org/foo/s> <http://example.org/foo/p> "o"@base .
-        <http://example.org/foo/s> <http://example.org/foo/p> "o" .
+        <http://example/foo/s> <http://example/foo/p> "o"@base .
+        <http://example/foo/s> <http://example/foo/p> "o" .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -631,7 +628,7 @@ describe "RDF::Turtle::Reader" do
       
       it "sets a relative base" do
         ttl = %(
-        BASE <http://example.org/products/>
+        BASE <http://example/products/>
         <> <a> <b>, <#c>.
         BASE <prod123/>
         <> <a> <b>, <#c>.
@@ -639,12 +636,12 @@ describe "RDF::Turtle::Reader" do
         <> <a> <d>, <#e>.
         )
         nt = %(
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/b> .
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/#c> .
-        <http://example.org/products/prod123/> <http://example.org/products/prod123/a> <http://example.org/products/prod123/b> .
-        <http://example.org/products/prod123/> <http://example.org/products/prod123/a> <http://example.org/products/prod123/#c> .
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/d> .
-        <http://example.org/products/> <http://example.org/products/a> <http://example.org/products/#e> .
+        <http://example/products/> <http://example/products/a> <http://example/products/b> .
+        <http://example/products/> <http://example/products/a> <http://example/products/#c> .
+        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/b> .
+        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/#c> .
+        <http://example/products/> <http://example/products/a> <http://example/products/d> .
+        <http://example/products/> <http://example/products/a> <http://example/products/#e> .
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
@@ -958,52 +955,52 @@ describe "RDF::Turtle::Reader" do
   describe "recovery" do
     {
       "malformed bnode subject" => [
-        %q(_:.1 <a> <b> . _:bn <a> <c> .),
-        %q(_:bn <a> <c> .)
+        %q(_:.1 <http://example/a> <http://example/b> . _:bn <http://example/a> <http://example/c> .),
+        %q(_:bn <http://example/a> <http://example/c> .)
       ],
       "malformed bnode object(1)" => [
-        %q(<a> <b> _:.1 . <a> <c> <d> .),
-        %q(<a> <c> <d> .)
+        %q(<http://example/a> <http://example/b> _:.1 . <http://example/a> <http://example/c> <http://example/d> .),
+        %q(<http://example/a> <http://example/c> <http://example/d> .)
       ],
       "malformed bnode object(2)" => [
-        %q(<a> <b> _:-a; <c> <d> .),
-        %q(<a> <c> <d> .)
+        %q(<http://example/a> <http://example/b> _:-a; <http://example/c> <http://example/d> .),
+        %q(<http://example/a> <http://example/c> <http://example/d> .)
       ],
       "malformed bnode object(3)" => [
-        %q(<a> <b> _:-a, <d> .),
-        %q(<a> <b> <d> .),
+        %q(<http://example/a> <http://example/b> _:-a, <http://example/d> .),
+        %q(<http://example/a> <http://example/b> <http://example/d> .),
         true
       ],
       "malformed uri subject" => [
-        %q(<"quoted"> <a> <b> . <c> <d> <e> .),
-        %q(<c> <d> <e> .)
+        %q(<"quoted"> <http://example/a> <http://example/b> . <http://example/c> <http://example/d> <http://example/e> .),
+        %q(<http://example/c> <http://example/d> <http://example/e> .)
       ],
       "malformed uri predicate(1)" => [
-        %q(<a> <"quoted"> <b> . <c> <d> <e> .),
-        %q(<c> <d> <e> .)
+        %q(<http://example/a> <"quoted"> <http://example/b> . <http://example/c> <http://example/d> <http://example/e> .),
+        %q(<http://example/c> <http://example/d> <http://example/e> .)
       ],
       "malformed uri predicate(2)" => [
-        %q(<a> <"quoted"> <b>; <d> <e> .),
-        %q(<a> <d> <e> .)
+        %q(<http://example/a> <"quoted"> <http://example/b>; <http://example/d> <http://example/e> .),
+        %q(<http://example/a> <http://example/d> <http://example/e> .)
       ],
       "malformed uri object(1)" => [
-        %q(<a> <b> <"quoted"> . <c> <d> <e> .),
-        %q(<c> <d> <e> .)
+        %q(<http://example/a> <http://example/b> <"quoted"> . <http://example/c> <http://example/d> <http://example/e> .),
+        %q(<http://example/c> <http://example/d> <http://example/e> .)
       ],
       "malformed uri object(2)" => [
-        %q(<a> <b> <"quoted">; <d> <e> .),
-        %q(<a> <d> <e> .)
+        %q(<http://example/a> <http://example/b> <"quoted">; <http://example/d> <http://example/e> .),
+        %q(<http://example/a> <http://example/d> <http://example/e> .)
       ],
       "malformed uri object(3)" => [
-        %q(<a> <b> "quoted">, <e> .),
+        %q(<http://example/a> <http://example/b> "quoted">, <http://example/e> .),
         %q(
-          <a> <b> "quoted" .
-          <a> <b> <e> .
+          <http://example/a> <http://example/b> "quoted" .
+          <http://example/a> <http://example/b> <http://example/e> .
         )
       ],
       "malformed uri object(frebase)" => [
-        %q(<a> <b> <http://http:urbis.com>, <e> .),
-        %q(<a> <b> <e> .)
+        %q(<http://example/a> <http://example/b> <http://http:urbis.com>, <http://example/e> .),
+        %q(<http://example/a> <http://example/b> <http://example/e> .)
       ],
     }.each do |test, (input, expected, pending)|
       context test do
@@ -1035,7 +1032,7 @@ describe "RDF::Turtle::Reader" do
         %q(
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
           @prefix dc: <http://purl.org/dc/elements/1.1/> .
-          @prefix ex: <http://example.org/stuff/1.0/> .
+          @prefix ex: <http://example/stuff/1.0/> .
 
           <http://www.w3.org/TR/rdf-syntax-grammar>
             dc:title "RDF/XML Syntax Specification (Revised)" ;
@@ -1047,7 +1044,7 @@ describe "RDF::Turtle::Reader" do
         %q(
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
           @prefix dc: <http://purl.org/dc/elements/1.1/> .
-          @prefix ex: <http://example.org/stuff/1.0/> .
+          @prefix ex: <http://example/stuff/1.0/> .
 
           <http://www.w3.org/TR/rdf-syntax-grammar>
             dc:title "RDF/XML Syntax Specification (Revised)";
@@ -1058,11 +1055,11 @@ describe "RDF::Turtle::Reader" do
       ],
       "example 2" => [
         %q(
-          @prefix : <http://example.org/stuff/1.0/> .
+          @prefix : <http://example/stuff/1.0/> .
           <a> :b ( "apple" "banana" ) .
         ),
         %q(
-          @prefix : <http://example.org/stuff/1.0/> .
+          @prefix : <http://example/stuff/1.0/> .
           @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
           <a> :b
             [ rdf:first "apple";
@@ -1073,7 +1070,7 @@ describe "RDF::Turtle::Reader" do
       ],
       "example 3" => [
         %q(
-          @prefix : <http://example.org/stuff/1.0/> .
+          @prefix : <http://example/stuff/1.0/> .
 
           :a :b "The first line\nThe second line\n  more" .
 
@@ -1082,7 +1079,7 @@ The second line
   more""" .
         ),
         %q(
-        <http://example.org/stuff/1.0/a> <http://example.org/stuff/1.0/b>
+        <http://example/stuff/1.0/a> <http://example/stuff/1.0/b>
         "The first line\nThe second line\n  more" .
         )
       ],
@@ -1196,7 +1193,7 @@ The second line
     @debug = []
     options = {
       :debug => @debug,
-      :validate => true,
+      :validate => false,
       :canonicalize => false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new
