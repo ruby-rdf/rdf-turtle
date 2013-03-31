@@ -298,7 +298,7 @@ module RDF::Turtle
         case context
         when :statement
           loc = data.shift
-          s = RDF::Statement.from(data)
+          s = RDF::Statement.from(data, :lineno => lineno)
           add_statement(loc, s) unless !s.valid? && validate?
         when :trace
           level, lineno, depth, *args = data
