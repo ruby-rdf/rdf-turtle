@@ -19,19 +19,14 @@ module RDF::Turtle
       loop do
         readline.strip!
         line = @line
-        begin
-          unless blank? || read_prefix
-            subject   = read_pname(:intern => true) || fail_subject
-            predicate = read_pname(:intern => true) || fail_predicate
-            object    = read_pname || read_uriref || read_boolean || read_literal || fail_object
-            if validate? && !read_eos
-              raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
-            end
-            return [subject, predicate, object]
+        unless blank? || read_prefix
+          subject   = read_pname(:intern => true) || fail_subject
+          predicate = read_pname(:intern => true) || fail_predicate
+          object    = read_pname || read_uriref || read_boolean || read_literal || fail_object
+          if validate? && !read_eos
+            raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
           end
-        rescue RDF::ReaderError, ArgumentError, ::Addressable::URI::InvalidURIError => e
-          @line = line  # this allows #read_value to work
-          raise e  if validate?
+          return [subject, predicate, object]
         end
       end
     end
@@ -55,15 +50,16 @@ module RDF::Turtle
     def read_pname(options = {})
       if pname_str = match(/^(\w+:\S+)/)
         ns, suffix = pname_str.split(':', 2)
-        if suffix[-1] == "."
+        if suffix[-1,1] == "."
           suffix.chop!  # Remove end of statement
           @line.insert(0, ".")
         end
         raise RDF::ReaderError, "prefix #{ns.inspect} is not defined" unless @prefixes.has_key?(ns)
-        RDF::URI(@prefixes[ns] + suffix)
+        uri = RDF::URI(@prefixes[ns] + suffix)
+        uri.validate!     if validate?
+        uri
       end
     end
-
 
     ##
     # Read a boolean value
