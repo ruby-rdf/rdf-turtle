@@ -22,7 +22,7 @@ module RDF::Turtle
         unless blank? || read_prefix
           subject   = read_pname(:intern => true) || fail_subject
           predicate = read_pname(:intern => true) || fail_predicate
-          object    = read_pname || read_uriref || read_boolean || read_literal || fail_object
+          object    = read_pname || read_uriref || read_boolean || read_numeric || read_literal || fail_object
           if validate? && !read_eos
             raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
           end
@@ -62,11 +62,27 @@ module RDF::Turtle
     end
 
     ##
+    # Read a numeric value
+    # @return [RDF::Literal::Integer, RDF::Literal::Float, RDF::Literal::Double]
+    def read_numeric
+      case
+      when double_str = match(/^(#{DOUBLE})/)
+        double_str = double_str.sub(/\.([eE])/, '.0\1')
+        RDF::Literal::Double.new(double_str, :canonicalize => canonicalize?)
+      when decimal_str = match(/^(#{DECIMAL})/)
+        decimal_str = "0#{decimal_str}" if decimal_str[0,1] == "."
+        RDF::Literal::Decimal.new(decimal_str, :canonicalize => canonicalize?)
+      when integer_str = match(/^(#{INTEGER})/)
+        RDF::Literal::Integer.new(integer_str, :canonicalize => canonicalize?)
+      end
+    end
+
+    ##
     # Read a boolean value
     # @return [RDF::Literal::Boolean]
     def read_boolean
       if bool_str = match(/^(true|false)/)
-        RDF::Literal::Boolean.new(bool_str)
+        RDF::Literal::Boolean.new(bool_str, :canonicalize => canonicalize?)
       end
     end
   end # class Reader

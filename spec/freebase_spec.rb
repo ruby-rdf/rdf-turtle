@@ -70,6 +70,7 @@ describe "RDF::Turtle::FreebaseReader" do
       :string     => %q(ns:m.012rkqx    key:authority.musicbrainz   "258c45bd-4437-4580-8988-b3f3be975f9c".),
       :boolean    => %q(ns:american_football.football_historical_roster_position.number ns:type.property.unique true .),
       :iri        => %q(ns:g.1hhc3t8lm ns:common.licensed_object.attribution_uri <http://data.worldbank.org/indicator/IS.VEH.NVEH.P3> .),
+      :numeric    => %q(ns:g.11_plx64m ns:measurement_unit.dated_percentage.rate 9.2 .),
     }.each do |name, input|
       it name do
         ttl = prefixes + "\n" + input
@@ -78,7 +79,30 @@ describe "RDF::Turtle::FreebaseReader" do
       end
     end
   end
-    
+
+  describe "literal forms" do
+    [
+      %(ns:a ns:b true .),
+      %(ns:a ns:b false .)  ,
+      %(ns:a ns:b 1 .),
+      %(ns:a ns:b -1 .),
+      %(ns:a ns:b +1 .),
+      %(ns:a ns:b .1 .),
+      %(ns:a ns:b 1.0 .),
+      %(ns:a ns:b 1.0e1 .),
+      %(ns:a ns:b 1.0e-1 .),
+      %(ns:a ns:b 1.0e+1 .),
+      %(ns:a ns:b 1.0E1 .),
+      %(ns:a ns:b 123.E+1 .),
+    ].each do |input|
+      it "should create typed literal for '#{input}'" do
+        ttl = prefixes + "\n" + input
+        
+        parse(ttl).should be_equivalent_graph(ttl)
+      end
+    end
+  end
+
   describe "validation" do
     {
       %("lit" <b> <c> .) => %r(expected subject),
