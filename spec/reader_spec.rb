@@ -417,7 +417,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "ignores _ as prefix identifier" do
+      it "ignores _ as @prefix identifier" do
         ttl = %(
         _:a a :p.
         @prefix _: <http://underscore/> .
@@ -479,7 +479,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
       
-      it "ignores _ as prefix identifier" do
+      it "ignores _ as PREFIX identifier" do
         ttl = %(
         _:a a :p.
         PREFIX _: <http://underscore/>
@@ -487,7 +487,6 @@ describe "RDF::Turtle::Reader" do
         )
         nt = %(
         _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <p> .
-        _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <q> .
         )
         lambda {parse(ttl, :validate => true)}.should raise_error(RDF::ReaderError)
         parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
@@ -588,7 +587,7 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
 
-      it "Can be used as language without messing up active base", :pending => "obsolite" do
+      it "Can be used as language without messing up active base", :pending => "obsolete" do
         ttl = %(@base <http://example/foo/> . <s> <p> "o"@base . <s> <p> "o" .)
         nt = %(
         <http://example/foo/s> <http://example/foo/p> "o"@base .
@@ -963,13 +962,15 @@ describe "RDF::Turtle::Reader" do
         %q(<http://example/a> <http://example/c> <http://example/d> .)
       ],
       "malformed bnode object(2)" => [
-        %q(<http://example/a> <http://example/b> _:-a; <http://example/c> <http://example/d> .),
-        %q(<http://example/a> <http://example/c> <http://example/d> .)
+        %q(
+          <http://example/a> <http://example/b> _:-a;
+                             <http://example/c> <http://example/d> .
+          <http://example/e> <http://example/f>  <http://example/g> .),
+        %q(<http://example/e> <http://example/f>  <http://example/g> .)
       ],
       "malformed bnode object(3)" => [
         %q(<http://example/a> <http://example/b> _:-a, <http://example/d> .),
-        %q(<http://example/a> <http://example/b> <http://example/d> .),
-        true
+        %q(),
       ],
       "malformed uri subject" => [
         %q(<"quoted"> <http://example/a> <http://example/b> . <http://example/c> <http://example/d> <http://example/e> .),
@@ -981,7 +982,7 @@ describe "RDF::Turtle::Reader" do
       ],
       "malformed uri predicate(2)" => [
         %q(<http://example/a> <"quoted"> <http://example/b>; <http://example/d> <http://example/e> .),
-        %q(<http://example/a> <http://example/d> <http://example/e> .)
+        %q()
       ],
       "malformed uri object(1)" => [
         %q(<http://example/a> <http://example/b> <"quoted"> . <http://example/c> <http://example/d> <http://example/e> .),
@@ -989,17 +990,13 @@ describe "RDF::Turtle::Reader" do
       ],
       "malformed uri object(2)" => [
         %q(<http://example/a> <http://example/b> <"quoted">; <http://example/d> <http://example/e> .),
-        %q(<http://example/a> <http://example/d> <http://example/e> .)
-      ],
-      "malformed uri object(3)" => [
-        %q(<http://example/a> <http://example/b> "quoted">, <http://example/e> .),
-        %q(
-          <http://example/a> <http://example/b> "quoted" .
-          <http://example/a> <http://example/b> <http://example/e> .
-        )
+        %q()
       ],
       "malformed uri object(frebase)" => [
-        %q(<http://example/a> <http://example/b> <http://http:urbis.com>, <http://example/e> .),
+        %q(
+          <http://example/a> <http://example/b> <http://http:urbis.com> .
+          <http://example/a> <http://example/b> <http://example/e> .
+        ),
         %q(<http://example/a> <http://example/b> <http://example/e> .)
       ],
     }.each do |test, (input, expected, pending)|
@@ -1010,7 +1007,7 @@ describe "RDF::Turtle::Reader" do
           }.should raise_error
         end
         
-        it "continues after an error", :pending => true do
+        it "continues after an error", :pending => pending do
           parse(input, :validate => false).should be_equivalent_graph(expected, :trace => @debug)
         end
       end
