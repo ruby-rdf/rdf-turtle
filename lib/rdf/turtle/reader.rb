@@ -341,9 +341,12 @@ module RDF::Turtle
     # @return [RDF::Statement] Added statement
     # @raise [RDF::ReaderError] Checks parameter types and raises if they are incorrect if parsing mode is _validate_.
     def add_statement(node, statement)
-      error(node, "Statement is invalid: #{statement.inspect.inspect}") unless statement.valid?
+      error(node, "Statement is invalid: #{statement.inspect.inspect}") if validate? && statement.invalid?
       progress(node) {"generate statement: #{statement.to_ntriples}"}
-      @callback.call(statement)
+      @callback.call(statement) if statement.subject &&
+                                   statement.predicate &&
+                                   statement.object &&
+                                   (validate? ? statement.valid? : true)
     end
 
     # Process a URI against base
