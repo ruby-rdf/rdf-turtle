@@ -22,9 +22,12 @@ def run(input, options)
   num = 0
   Profiler__::start_profile if options[:profile]
   if options[:output_format] == :ntriples || options[:quiet]
-    reader_class.new(input, options[:parser_options]).each do |statement|
+    r = reader_class.new(input, options[:parser_options])
+    r.each do |statement|
       num += 1
-      if options[:quiet]
+      if options[:errors] && statement.invalid?
+        $stderr.puts "Invalid statement at #{r.lineno}: #{statement.inspect}"
+      elsif options[:quiet]
         print "." if options[:quiet] == 1
       else
        options[:output].puts statement.to_ntriples
@@ -71,6 +74,7 @@ input = nil
 
 opts = GetoptLong.new(
   ["--dbg", GetoptLong::NO_ARGUMENT],
+  ["--errors", GetoptLong::NO_ARGUMENT],
   ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
   ["--canonicalize", GetoptLong::NO_ARGUMENT],
   ["--freebase", GetoptLong::NO_ARGUMENT],
@@ -88,6 +92,7 @@ opts.each do |opt, arg|
   case opt
   when '--dbg'          then parser_options[:debug] = ::RDF::Turtle::debug = true
   when '--canonicalize' then parser_options[:canonicalize] = true
+  when '--errors'       then options[:errors] = true
   when '--execute'      then input = arg
   when '--format'       then options[:output_format] = arg.to_sym
   when '--freebase'     then parser_options[:freebase] = true
