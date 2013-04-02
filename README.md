@@ -45,6 +45,15 @@ In some cases, the specification is unclear on certain issues:
   datatype are saved as non-datatyped triples in the graph. This will be updated in the future when the rest of the
   library suite is brought up to date with RDF 1.1.
 
+### Freebase-specific Reader
+There is a special reader useful for processing [Freebase Dumps][]. To invoke this, add
+the `:freebase => true` option to the {RDF::Turtle::Reader.new}, or use
+{RDF::Turtle::FreebaseReader} directly.
+
+The [Freebase Dumps][] have a very normalized form, similar to N-Triples but with prefixes.
+They also have a large amount of garbage. This Reader is optimized for this format
+and will perform faster error recovery.
+
 ## Implementation Notes
 The reader uses the [EBNF][] gem to generate first, follow and branch tables, and uses
 the `Parser` and `Lexer` modules to implement the Turtle parser.
@@ -102,4 +111,4 @@ see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 [Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
 [Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
-[Swap]:         http://www.w3.org/2000/10/swap/
+[Freebase Dumps]: https://developers.google.com/freebase/data
