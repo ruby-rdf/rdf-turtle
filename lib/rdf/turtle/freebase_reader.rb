@@ -17,16 +17,21 @@ module RDF::Turtle
     # pnames and prefixes
     def read_triple
       loop do
-        readline.strip!
-        line = @line
-        unless blank? || read_prefix
-          subject   = read_pname(:intern => true) || fail_subject
-          predicate = read_pname(:intern => true) || fail_predicate
-          object    = read_pname || read_uriref || read_boolean || read_numeric || read_literal || fail_object
-          if validate? && !read_eos
-            raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+        begin
+          readline.strip!
+          line = @line
+          unless blank? || read_prefix
+            subject   = read_pname(:intern => true) || fail_subject
+            predicate = read_pname(:intern => true) || fail_predicate
+            object    = read_pname || read_uriref || read_boolean || read_numeric || read_literal || fail_object
+            if validate? && !read_eos
+              raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+            end
+            return [subject, predicate, object]
           end
-          return [subject, predicate, object]
+        rescue RDF::ReaderError => e
+          raise e if validate?
+          $stderr.puts e.message
         end
       end
     end
