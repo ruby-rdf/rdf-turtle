@@ -303,7 +303,7 @@ module RDF::Turtle
         when :trace
           level, lineno, depth, *args = data
           message = "#{args.join(': ')}"
-          d_str = depth > 20 ? ' ' * 20 + '+' : ' ' * depth
+          d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
           str = "[#{lineno}](#{level})#{d_str}#{message}"
           case @options[:debug]
           when Array
