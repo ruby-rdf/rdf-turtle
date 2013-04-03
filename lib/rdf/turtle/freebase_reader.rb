@@ -64,6 +64,8 @@ module RDF::Turtle
         uri.validate!     if validate?
         uri
       end
+    rescue ArgumentError => e
+      raise RDF::ReaderError, "invalid PName"
     end
 
     ##
