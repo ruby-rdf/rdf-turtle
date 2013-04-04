@@ -73,7 +73,7 @@ An example of reading Freebase dumps:
       :freebase => true,
       :prefixes => fb_prefixes) do |r|
 
-      r.each_statement {|stmt| puts stmt.to_ntriple}
+      r.each_statement {|stmt| puts stmt.to_ntriples}
     end
 ## Implementation Notes
 The reader uses the [EBNF][] gem to generate first, follow and branch tables, and uses
