@@ -63,6 +63,28 @@ describe "RDF::Turtle::FreebaseReader" do
     end
   end
 
+  describe "#prefix" do
+    let!(:input) {
+      %q(
+        foo:a foo:b "baz" .
+        foo:c foo:d <foobar> .
+      )
+    }
+    subject {RDF::Turtle::FreebaseReader.new(input, :prefixes => {:foo => "http://example/bar#"})}
+    it "should have prefix :foo" do
+      subject.prefix(:foo).should == "http://example/bar#"
+    end
+    it "should have prefix 'foo'" do
+      subject.prefix('foo').should == "http://example/bar#"
+    end
+    its(:prefixes) {should have_key(:foo)}
+
+    it "should parse equivalent to Turtle:Reader" do
+      g = RDF::Graph.new << subject
+      g.should be_equivalent_graph("@prefix foo: <http://example/bar#> ." + input)
+    end
+  end
+
   describe "with simple sample data" do
     {
       :qname      => %q(ns:m.012rkqx    ns:type.object.type ns:common.topic.),
