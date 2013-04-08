@@ -34,18 +34,18 @@ describe RDF::Turtle::Reader do
                   rescue Exception => e
                     e.message.should produce("Not exception #{e.inspect}", t.debug)
                   end
+
+                  if t.evaluate?
+                    output_graph = RDF::Graph.load(t.result, :format => :ntriples, :base_uri => t.base)
+                    graph.should be_equivalent_graph(output_graph, t)
+                  else
+                    graph.should be_a(RDF::Enumerable)
+                  end
                 else
                   lambda {
                     graph << reader
                     #graph.dump(:ntriples).should produce("", t.debug)
                   }.should raise_error(RDF::ReaderError)
-                end
-
-                if t.evaluate?
-                  output_graph = RDF::Graph.load(t.result, :format => :ntriples, :base_uri => t.base)
-                  graph.should be_equivalent_graph(output_graph, t)
-                else
-                  graph.should be_a(RDF::Enumerable)
                 end
               end
             end
