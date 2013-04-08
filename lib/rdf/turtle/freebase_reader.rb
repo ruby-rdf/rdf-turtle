@@ -1,6 +1,5 @@
 require 'rdf'
 require 'rdf/ntriples'
-require 'addressable/uri'
 
 module RDF::Turtle
   ##

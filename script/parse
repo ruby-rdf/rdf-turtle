@@ -59,7 +59,7 @@ rescue Exception => e
 end
 
 parser_options = {
-  :base_uri => "",
+  :base_uri => nil,
   :progress   => false,
   :validate => false,
 }
