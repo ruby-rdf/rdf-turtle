@@ -992,12 +992,16 @@ describe "RDF::Turtle::Reader" do
         %q(<http://example/a> <http://example/b> <"quoted">; <http://example/d> <http://example/e> .),
         %q()
       ],
-      "malformed uri object(frebase)" => [
+      "malformed uri object(freebase)" => [
         %q(
           <http://example/a> <http://example/b> <http://http:urbis.com> .
           <http://example/a> <http://example/b> <http://example/e> .
         ),
-        %q(<http://example/a> <http://example/b> <http://example/e> .)
+        %q(
+          <http://example/a> <http://example/b> <http://http:urbis.com> .
+          <http://example/a> <http://example/b> <http://example/e> .
+        ),
+        (RDF::VERSION.to_s < "1.1")
       ],
     }.each do |test, (input, expected, pending)|
       context test do

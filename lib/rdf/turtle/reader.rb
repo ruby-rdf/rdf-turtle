@@ -261,7 +261,7 @@ module RDF::Turtle
         when @options[:validate] then 1
         end
 
-        @options[:base_uri] = RDF::URI(base_uri) 
+        @options[:base_uri] = RDF::URI(base_uri || "")
         debug("base IRI") {base_uri.inspect}
         
         debug("validate") {validate?.inspect}
