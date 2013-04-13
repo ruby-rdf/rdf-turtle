@@ -63,7 +63,7 @@ module RDF::Turtle
     # @param  [Hash{Symbol => Object}] options
     #   any additional options
     # @option options [Encoding] :encoding     (Encoding::UTF_8)
-    #   the encoding to use on the output stream (Ruby 1.9+)
+    #   the encoding to use on the output stream
     # @option options [Boolean]  :canonicalize (false)
     #   whether to canonicalize literals when serializing
     # @option options [Hash]     :prefixes     (Hash.new)

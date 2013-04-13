@@ -151,12 +151,8 @@ describe "RDF::Turtle::Reader" do
       
       it "should parse long literal with escape", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
         ttl = %(@prefix : <http://example/foo#> . <a> <b> "\\U00015678another" .)
-        if defined?(::Encoding)
-          statement = parse(ttl).statements.to_a.first
-          statement.object.value.should == "\u{15678}another"
-        else
-          pending("Not supported in Ruby 1.8")
-        end
+        statement = parse(ttl).statements.to_a.first
+        statement.object.value.should == "\u{15678}another"
       end
       
       context "STRING_LITERAL_LONG" do
@@ -283,15 +279,7 @@ describe "RDF::Turtle::Reader" do
         %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
           it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
-            begin
-              parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-            rescue
-              if defined?(::Encoding)
-                raise
-              else
-                pending("Unicode URIs not supported in Ruby 1.8") {  raise } 
-              end
-            end
+            parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
           end
         end
 
@@ -300,15 +288,7 @@ describe "RDF::Turtle::Reader" do
         %(<a> :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'", :pending => ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
-          begin
-            parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
-          rescue
-            if defined?(::Encoding)
-              raise
-            else
-              pending("Unicode URIs not supported in Ruby 1.8") {  raise } 
-            end
-          end
+          parse(ttl, :prefixes => {nil => ''}).should be_equivalent_graph(nt, :trace => @debug)
         end
       end
 

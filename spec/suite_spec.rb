@@ -15,8 +15,6 @@ describe RDF::Turtle::Reader do
                 pending("Skip long input file")
               elsif %w(subm-test-29).include?(t.name)
                 pending("Contains illegal characters")
-              elsif t.name =~ /localName_with/ && RUBY_VERSION < "1.9"
-                pending("Not possible with ruby #{RUBY_VERSION}")
               else
                 t.debug = [t.inspect, "source:", t.input.read]
 
