@@ -1,5 +1,9 @@
-# RDF::Turtle reader/writer [![Build Status](https://secure.travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
+# RDF::Turtle reader/writer
+
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
+
+[![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)][gem]
+[![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
 
 ## Description
 This is a [Ruby][] implementation of a [Turtle][] parser for [RDF.rb][].
