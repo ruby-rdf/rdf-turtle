@@ -2,7 +2,7 @@
 
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
-[![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)][gem]
+[![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](http://badge.fury.io/rb/rdf-turtle)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
 
 ## Description
