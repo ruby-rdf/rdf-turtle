@@ -360,9 +360,6 @@ module RDF::Turtle
     
     # Create a literal
     def literal(value, options = {})
-      options = options.dup
-      # Internal representation is to not use xsd:string, although it could arguably go the other way.
-      options.delete(:datatype) if options[:datatype] == RDF::XSD.string
       debug("literal") do
         "value: #{value.inspect}, " +
         "options: #{options.inspect}, " +
