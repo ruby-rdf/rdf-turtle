@@ -93,6 +93,7 @@ describe "RDF::Turtle::FreebaseReader" do
       :boolean    => %q(ns:american_football.football_historical_roster_position.number ns:type.property.unique true .),
       :iri        => %q(ns:g.1hhc3t8lm ns:common.licensed_object.attribution_uri <http://data.worldbank.org/indicator/IS.VEH.NVEH.P3> .),
       :numeric    => %q(ns:g.11_plx64m ns:measurement_unit.dated_percentage.rate 9.2 .),
+      :date       => %q(ns:m.012rkqx    ns:film.film.initial_release_date    "2012-08-31"^^xsd:datetime .),
     }.each do |name, input|
       it name do
         ttl = prefixes + "\n" + input
