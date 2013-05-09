@@ -69,6 +69,26 @@ module RDF::Turtle
     end
 
     ##
+    # @return [RDF::Literal]
+    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
+    def read_literal
+      if literal_str = match(LITERAL_PLAIN)
+        literal_str = self.class.unescape(literal_str)
+        literal = case
+          when language = match(RDF::NTriples::Reader::LANGTAG)
+            RDF::Literal.new(literal_str, :language => language)
+          when datatype = match(/^(\^\^)/)
+            RDF::Literal.new(literal_str, :datatype => read_pname(:intern => true) || read_uriref || fail_object)
+          else
+            RDF::Literal.new(literal_str) # plain string literal
+        end
+        literal.validate!     if validate?
+        literal.canonicalize! if canonicalize?
+        literal
+      end
+    end
+
+    ##
     # Read a numeric value
     # @return [RDF::Literal::Integer, RDF::Literal::Float, RDF::Literal::Double]
     def read_numeric
