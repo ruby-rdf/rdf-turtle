@@ -54,7 +54,7 @@ There is a special reader useful for processing [Freebase Dumps][]. To invoke
 this, add the `:freebase => true` option to the {RDF::Turtle::Reader.new}, or
 use {RDF::Turtle::FreebaseReader} directly. As with {RDF::Turtle::Reader},
 prefix definitions may be passed in using the `:prefixes` option to
-{RDF::Turtle::FreebaseReader#initialize} using the standard mechanism defined
+RDF::Turtle::FreebaseReader} using the standard mechanism defined
 for `RDF::Reader`.
 
 The [Freebase Dumps][] have a very normalized form, similar to N-Triples but
