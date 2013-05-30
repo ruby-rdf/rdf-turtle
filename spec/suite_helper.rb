@@ -25,7 +25,8 @@ module Fixtures
         "@type": [
           "rdft:TestTurtlePositiveSyntax",
           "rdft:TestTurtleNegativeSyntax",
-          "rdft:TestTurtlePositiveEval"
+          "rdft:TestTurtleEval",
+          "rdft:TestTurtleNegativeEval"
         ]
       }
     }))
@@ -34,8 +35,7 @@ module Fixtures
       def self.open(file)
         #puts "open: #{file}"
         prefixes = {}
-        g = RDF::Graph.load(file, :format => :turtle)
-        json = nil
+        g = RDF::Repository.load(file, :format => :turtle)
         JSON::LD::API.fromRDF(g) do |expanded|
           JSON::LD::API.frame(expanded, FRAME) do |framed|
             yield Manifest.new(framed['@graph'].first)

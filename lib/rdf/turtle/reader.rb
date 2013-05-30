@@ -67,24 +67,24 @@ module RDF::Turtle
     end
     
     # String terminals
-    terminal(nil,                  %r([\(\),.;\[\]a]|\^\^|@base|@prefix|true|false)) do |prod, token, input|
+    terminal(nil,                  %r([\(\),.;\[\]Aa]|\^\^|true|false)) do |prod, token, input|
       case token.value
-      when 'a'                then input[:resource] = RDF.type
+      when 'A', 'a'           then input[:resource] = RDF.type
       when 'true', 'false'    then input[:resource] = RDF::Literal::Boolean.new(token.value)
       when '@base', '@prefix' then input[:lang] = token.value[1..-1]
       else                         input[:string] = token.value
       end
     end
 
-    terminal(:LANGTAG,              LANGTAG) do |prod, token, input|
-      input[:lang] = token.value[1..-1]
+    terminal(:PREFIX,      PREFIX) do |prod, token, input|
+      input[:string_value] = token.value.downcase
+    end
+    terminal(:BASE,      BASE) do |prod, token, input|
+      input[:string_value] = token.value.downcase
     end
 
-    terminal(:SPARQL_PREFIX,      SPARQL_PREFIX) do |prod, token, input|
-      input[:string_value] = token.value.downcase
-    end
-    terminal(:SPARQL_BASE,      SPARQL_BASE) do |prod, token, input|
-      input[:string_value] = token.value.downcase
+    terminal(:LANGTAG,              LANGTAG) do |prod, token, input|
+      input[:lang] = token.value[1..-1]
     end
 
     # Productions
@@ -98,21 +98,6 @@ module RDF::Turtle
     
     # [5] base set base_uri
     production(:base) do |input, current, callback|
-      iri = current[:resource]
-      debug("base") {"Defined base as #{iri}"}
-      options[:base_uri] = iri
-    end
-    
-    # [28s] sparqlPrefix ::= [Pp][Rr][Ee][Ff][Ii][Xx] PNAME_NS IRIREF
-    production(:sparqlPrefix) do |input, current, callback|
-      prefix = current[:prefix]
-      iri = current[:resource]
-      debug("sparqlPrefix") {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"}
-      prefix(prefix, iri)
-    end
-    
-    # [29s] sparqlBase ::= [Bb][Aa][Ss][Ee] IRIREF
-    production(:sparqlBase) do |input, current, callback|
       iri = current[:resource]
       debug("base") {"Defined base as #{iri}"}
       options[:base_uri] = iri

@@ -338,6 +338,12 @@ describe "RDF::Turtle::Reader" do
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
 
+      it "rdf:type for 'A'" do
+        ttl = %(@prefix a: <http://foo/a#> . a:b A <http://www.w3.org/2000/01/rdf-schema#resource> .)
+        nt = %(<http://foo/a#b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#resource> .)
+        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+      end
+
       {
         %(<a> <b> true .)  => %(<a> <b> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
         %(<a> <b> false .)  => %(<a> <b> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .),
@@ -442,66 +448,24 @@ describe "RDF::Turtle::Reader" do
           :rdfs => "http://www.w3.org/2000/01/rdf-schema#",
           nil => "http://test/"}
       end
-    end
 
-    describe "PREFIX" do
-      it "empty relative-IRI" do
-        ttl = %(PREFIX foo: <> <a> a foo:a.)
-        nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <a> .)
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-
-      it "<#> as a prefix and as a triple node" do
-        ttl = %(PREFIX : <#> <#> a :a.)
-        nt = %(
-        <#> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <#a> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "ignores _ as PREFIX identifier" do
-        ttl = %(
-        _:a a :p.
-        PREFIX _: <http://underscore/>
-        _:a a :q.
-        )
-        nt = %(
-        _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <p> .
-        )
-        lambda {parse(ttl, :validate => true)}.should raise_error(RDF::ReaderError)
-        parse(ttl, :validate => false).should be_equivalent_graph(nt, :trace => @debug)
-      end
-
-      it "redefine" do
-        ttl = %(
-        PREFIX a: <http://host/A#>
-        a:b a:p a:v .
-
-        PREFIX a: <http://host/Z#>
-        a:b a:p a:v .
-        )
-        nt = %(
-        <http://host/A#b> <http://host/A#p> <http://host/A#v> .
-        <http://host/Z#b> <http://host/Z#p> <http://host/Z#v> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-
-      it "returns defined prefixes" do
-        ttl = %(
-        PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX : <http://test/>
-        :foo a rdfs:Class.
-        :bar :d :c.
-        :a :d :c.
-        )
-        reader = RDF::Turtle::Reader.new(ttl)
-        reader.each {|statement|}
-        reader.prefixes.should == {
-          :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-          :rdfs => "http://www.w3.org/2000/01/rdf-schema#",
-          nil => "http://test/"}
+      [
+        "@prefix foo: <http://foo/bar#> .",
+        "@PrEfIx foo: <http://foo/bar#> .",
+        "prefix foo: <http://foo/bar#> .",
+        "PrEfIx foo: <http://foo/bar#> .",
+        "@prefix foo: <http://foo/bar#>",
+        "@PrEfIx foo: <http://foo/bar#>",
+        "prefix foo: <http://foo/bar#>",
+        "PrEfIx foo: <http://foo/bar#>",
+      ].each do |prefix|
+        context prefix do
+          it "sets prefix" do
+            ttl = %(#{prefix} <a> a foo:a.)
+            nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://foo/bar#a> .)
+            parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+          end
+        end
       end
     end
 
@@ -575,68 +539,27 @@ describe "RDF::Turtle::Reader" do
         )
         parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
       end
-    end
-    
-    describe "BASE" do
-      it "sets absolute base" do
-        ttl = %(BASE <http://foo/bar> <> <a> <b> . <#c> <d> </e>.)
-        nt = %(
-        <http://foo/bar> <http://foo/a> <http://foo/b> .
-        <http://foo/bar#c> <http://foo/d> <http://foo/e> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "sets absolute base (trailing /)" do
-        ttl = %(BASE <http://foo/bar/> <> <a> <b> . <#c> <d> </e>.)
-        nt = %(
-        <http://foo/bar/> <http://foo/bar/a> <http://foo/bar/b> .
-        <http://foo/bar/#c> <http://foo/bar/d> <http://foo/e> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "should set absolute base (trailing #)" do
-        ttl = %(BASE <http://foo/bar#> <> <a> <b> . <#c> <d> </e>.)
-        nt = %(
-        <http://foo/bar#> <http://foo/a> <http://foo/b> .
-        <http://foo/bar#c> <http://foo/d> <http://foo/e> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "sets a relative base" do
-        ttl = %(
-        BASE <http://example/products/>
-        <> <a> <b>, <#c>.
-        BASE <prod123/>
-        <> <a> <b>, <#c>.
-        BASE <../>
-        <> <a> <d>, <#e>.
-        )
-        nt = %(
-        <http://example/products/> <http://example/products/a> <http://example/products/b> .
-        <http://example/products/> <http://example/products/a> <http://example/products/#c> .
-        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/b> .
-        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/#c> .
-        <http://example/products/> <http://example/products/a> <http://example/products/d> .
-        <http://example/products/> <http://example/products/a> <http://example/products/#e> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
-      end
-      
-      it "redefine" do
-        ttl = %(
-        BASE <http://example.com/ontolgies> <a> <b> <foo/bar#baz>.
-        BASE <path/DIFFERENT/> <a2> <b2> <foo/bar#baz2>.
-        PREFIX : <#> <d3> :b3 <e3>.
-        )
-        nt = %(
-        <http://example.com/a> <http://example.com/b> <http://example.com/foo/bar#baz> .
-        <http://example.com/path/DIFFERENT/a2> <http://example.com/path/DIFFERENT/b2> <http://example.com/path/DIFFERENT/foo/bar#baz2> .
-        <http://example.com/path/DIFFERENT/d3> <http://example.com/path/DIFFERENT/#b3> <http://example.com/path/DIFFERENT/e3> .
-        )
-        parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+
+      [
+        "@base <http://foo/bar> .",
+        "@BaSe <http://foo/bar> .",
+        "base <http://foo/bar> .",
+        "BaSe <http://foo/bar> .",
+        "@base <http://foo/bar>",
+        "@BaSe <http://foo/bar>",
+        "base <http://foo/bar>",
+        "BaSe <http://foo/bar>",
+      ].each do |base|
+        context base do
+          it "sets base" do
+            ttl = %(#{base} <> <a> <b> . <#c> <d> </e>.)
+            nt = %(
+            <http://foo/bar> <http://foo/a> <http://foo/b> .
+            <http://foo/bar#c> <http://foo/d> <http://foo/e> .
+            )
+            parse(ttl).should be_equivalent_graph(nt, :trace => @debug)
+          end
+        end
       end
     end
     
@@ -919,8 +842,6 @@ describe "RDF::Turtle::Reader" do
       %(<a> "literal value" <b> .) => RDF::ReaderError,
       %(@keywords prefix. :e prefix :f .) => RDF::ReaderError,
       %(@base) => RDF::ReaderError,
-      %(@base <a>) => RDF::ReaderError,
-      %(@base <>. <http://http:urbis.com> <b> <c>) => RDF::ReaderError,
     }.each_pair do |ttl, error|
       it "should raise '#{error}' for '#{ttl}'" do
         lambda {
