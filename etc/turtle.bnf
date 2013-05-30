@@ -1,6 +1,6 @@
 [1] turtleDoc                         ::= statement* 
 [2] statement                         ::= directive | triples "." 
-[3] directive                         ::= prefixID | base | sparqlPrefix | sparqlBase
+[3] directive                         ::= prefixID | base
 [4] prefixID                          ::= PREFIX PNAME_NS IRIREF "."?
 [5] base                              ::= BASE IRIREF "."?
 [6] triples                           ::= subject predicateObjectList | blankNodePropertyList predicateObjectList? 

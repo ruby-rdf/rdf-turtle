@@ -4,7 +4,7 @@
  (rule _turtleDoc_1 "1.1" (seq statement turtleDoc))
  (rule statement "2" (alt directive _statement_1))
  (rule _statement_1 "2.1" (seq triples "."))
- (rule directive "3" (alt prefixID base sparqlPrefix sparqlBase))
+ (rule directive "3" (alt prefixID base))
  (rule prefixID "4" (seq PREFIX PNAME_NS IRIREF _prefixID_1))
  (rule _prefixID_1 "4.1" (alt _empty "."))
  (rule base "5" (seq BASE IRIREF _base_1))

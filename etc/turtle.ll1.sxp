@@ -28,7 +28,7 @@
  (rule directive "3"
   (first BASE PREFIX)
   (follow "(" ANON BASE BLANK_NODE_LABEL IRIREF PNAME_LN PNAME_NS PREFIX "[" _eof)
-  (alt prefixID base sparqlPrefix sparqlBase))
+  (alt prefixID base))
  (rule prefixID "4"
   (first PREFIX)
   (follow "(" ANON BASE BLANK_NODE_LABEL IRIREF PNAME_LN PNAME_NS PREFIX "[" _eof)
