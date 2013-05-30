@@ -126,8 +126,6 @@ module RDF::Turtle::Meta
     :directive => {
       :BASE => [:base],
       :PREFIX => [:prefixID],
-      :sparqlBase => [:sparqlBase],
-      :sparqlPrefix => [:sparqlPrefix],
     },
     :iri => {
       :IRIREF => [:IRIREF],
