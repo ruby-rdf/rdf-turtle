@@ -176,20 +176,15 @@ module RDF::Turtle
     
     production(:collection) do |input, current, callback|
       # Create an RDF list
-      bnode = self.bnode
       objects = current[:object_list]
-      list = RDF::List.new(bnode, nil, objects)
+      list = RDF::List[*objects]
       list.each_statement do |statement|
-        # Spec Confusion, referenced section "Collection" is missing from the spec.
-        # Anicdodal evidence indicates that some expect each node to be of type rdf:list,
-        # but existing Notation3 and Turtle tests (http://www.w3.org/2001/sw/DataAccess/df1/tests/manifest.ttl) do not.
         next if statement.predicate == RDF.type && statement.object == RDF.List
         callback.call(:statement, "collection", statement.subject, statement.predicate, statement.object)
       end
-      bnode = RDF.nil if list.empty?
 
       # Return bnode as resource
-      input[:resource] = bnode
+      input[:resource] = list.subject
     end
     
     # [16] RDFLiteral ::= String ( LanguageTag | ( "^^" IRIref ) )? 
