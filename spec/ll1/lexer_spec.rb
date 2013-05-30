@@ -177,7 +177,7 @@ describe EBNF::LL1::Lexer do
       it "tokenizes single-quoted string literals" do
         tokenize(%q('Hello, world!')) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :STRING_LITERAL_QUOTE
+          tokens.first.type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens.first.value.should == %q('Hello, world!')
         end
       end
@@ -185,7 +185,7 @@ describe EBNF::LL1::Lexer do
       it "tokenizes double-quoted string literals" do
         tokenize(%q("Hello, world!")) do |tokens|
           tokens.should have(1).element
-          tokens.first.type.should  == :STRING_LITERAL_SINGLE_QUOTE
+          tokens.first.type.should  == :STRING_LITERAL_QUOTE
           tokens.first.value.should == %q("Hello, world!")
         end
       end
@@ -285,14 +285,14 @@ describe EBNF::LL1::Lexer do
       it "tokenizes language-tagged literals" do
         tokenize(%q("Hello, world!"@en)) do |tokens|
           tokens.should have(2).elements
-          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
+          tokens[0].type.should  == :STRING_LITERAL_QUOTE
           tokens[0].value.should == '"Hello, world!"'
           tokens[1].type.should  == :LANGTAG
           tokens[1].value.should == "@en"
         end
         tokenize(%q("Hello, world!"@en-US)) do |tokens|
           tokens.should have(2).elements
-          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
+          tokens[0].type.should  == :STRING_LITERAL_QUOTE
           tokens[0].value.should == '"Hello, world!"'
           tokens[1].type.should  == :LANGTAG
           tokens[1].value.should == '@en-US'
@@ -302,11 +302,11 @@ describe EBNF::LL1::Lexer do
       it "tokenizes multiple string literals" do
         tokenize(%q("1", "2")) do |tokens|
           tokens.should have(3).elements
-          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
+          tokens[0].type.should  == :STRING_LITERAL_QUOTE
           tokens[0].value.should == '"1"'
           tokens[1].type.should  == nil
           tokens[1].value.should == ','
-          tokens[2].type.should  == :STRING_LITERAL_SINGLE_QUOTE
+          tokens[2].type.should  == :STRING_LITERAL_QUOTE
           tokens[2].value.should == '"2"'
         end
       end
@@ -314,7 +314,7 @@ describe EBNF::LL1::Lexer do
       it "datatyped literals" do
         tokenize(%q('3.1415'^^<http://www.w3.org/2001/XMLSchema#double>)) do |tokens|
           tokens.should have(3).elements
-          tokens[0].type.should  == :STRING_LITERAL_QUOTE
+          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
           tokens[0].value.should == "'3.1415'"
           tokens[1].type.should  == nil
           tokens[1].value.should == '^^'
@@ -324,7 +324,7 @@ describe EBNF::LL1::Lexer do
 
         tokenize(%q("3.1415"^^<http://www.w3.org/2001/XMLSchema#double>)) do |tokens|
           tokens.should have(3).elements
-          tokens[0].type.should  == :STRING_LITERAL_SINGLE_QUOTE
+          tokens[0].type.should  == :STRING_LITERAL_QUOTE
           tokens[0].value.should == '"3.1415"'
           tokens[1].type.should  == nil
           tokens[1].value.should == '^^'

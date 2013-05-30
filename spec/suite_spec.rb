@@ -11,10 +11,10 @@ describe RDF::Turtle::Reader do
         describe m.comment do
           m.entries.each do |t|
             specify "#{t.name}: #{t.comment}" do
-              if %w(subm-test-14 subm-test-15 subm-test-16).include?(t.name)
-                pending("Skip long input file")
-              elsif %w(subm-test-29).include?(t.name)
-                pending("Contains illegal characters")
+              if %w(turtle-syntax-bad-base-02 turtle-syntax-bad-base-03).include?(t.name)
+                pending("More permissive on BASE")
+              elsif %w(turtle-syntax-bad-kw-01).include?(t.name)
+                pending("More permissive on 'a'")
               elsif t.name =~ /localName_with/ && RUBY_VERSION < "1.9"
                 pending("Not possible with ruby #{RUBY_VERSION}")
               else
@@ -44,7 +44,7 @@ describe RDF::Turtle::Reader do
                 else
                   lambda {
                     graph << reader
-                    #graph.dump(:ntriples).should produce("", t.debug)
+                    graph.dump(:ntriples).should produce("not this", t.debug)
                   }.should raise_error(RDF::ReaderError)
                 end
               end

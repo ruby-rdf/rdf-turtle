@@ -45,9 +45,11 @@ Full documentation available on [Rubydoc.info][Turtle doc]
 ### Variations from the spec
 In some cases, the specification is unclear on certain issues:
 
-* For the time being, plain literals are generated without an xsd:string datatype, but literals with an xsd:string
-  datatype are saved as non-datatyped triples in the graph. This will be updated in the future when the rest of the
-  library suite is brought up to date with RDF 1.1.
+* The LC version of the [Turtle][] specification separates rules for `@base` and `@prefix` with
+  closing '.' from the
+  SPARQL-like `BASE` and `PREFIX` without closing '.'. This version implements a more flexible
+  syntax where the `@` and closing `.` are optional and `base/prefix` are matched case independently.
+* Additionally, both `a` and `A` match `rdf:type`.
 
 ### Freebase-specific Reader
 There is a special reader useful for processing [Freebase Dumps][]. To invoke

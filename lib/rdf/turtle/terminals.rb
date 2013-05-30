@@ -113,9 +113,9 @@ module RDF::Turtle
     # 162s
     ANON                 = /\[#{WS}*\]/m.freeze
     # 28t
-    SPARQL_PREFIX        = /prefix/i.freeze
+    PREFIX               = /@?prefix/i.freeze
     # 29t
-    SPARQL_BASE          = /base/i.freeze
+    BASE                 = /@?base/i.freeze
   
   end
 end
