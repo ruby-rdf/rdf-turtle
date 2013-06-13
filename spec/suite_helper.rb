@@ -5,7 +5,8 @@ require 'json/ld'
 
 module Fixtures
   module SuiteTest
-    BASE = "https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/"
+    BASE = "http://www.w3.org/2013/TurtleTests/"
+    NTBASE = "https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/"
     FRAME = JSON.parse(%q({
       "@context": {
         "xsd": "http://www.w3.org/2001/XMLSchema#",
@@ -59,7 +60,7 @@ module Fixtures
       attr_accessor :debug
 
       def base
-        'http://example/base/' + action.split('/').last
+        BASE + action.split('/').last
       end
 
       # Alias data and query
