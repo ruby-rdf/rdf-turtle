@@ -6,7 +6,7 @@ describe RDF::Turtle::Reader do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(tests-ttl/manifest.ttl).each do |man|
+    %w(manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|

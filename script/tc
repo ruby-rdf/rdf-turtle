@@ -139,15 +139,13 @@ opts.each do |opt, arg|
   end
 end
 
-manifests = options[:ntriples] ? %w(tests-nt/manifest.ttl) : %w(tests-ttl/manifest.ttl)
+manifest = (options[:ntriples] ? Fixtures::SuiteTest::NTBASE : Fixtures::SuiteTest::BASE) + "manifest.ttl"
 
 earl_preamble(options) if options[:earl]
 
-manifests.each do |man|
-  Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
-    m.entries.each do |tc|
-      next unless ARGV.empty? || ARGV.any? {|n| tc.name.match(/#{n}/)}
-      run_tc(tc, options)
-    end
+Fixtures::SuiteTest::Manifest.open(manifest) do |m|
+  m.entries.each do |tc|
+    next unless ARGV.empty? || ARGV.any? {|n| tc.name.match(/#{n}/)}
+    run_tc(tc, options)
   end
 end
