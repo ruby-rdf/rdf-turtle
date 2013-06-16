@@ -26,7 +26,7 @@ describe RDF::Turtle::Reader do
                     :validate => true,
                     :debug => t.debug)
 
-                graph = RDF::Graph.new
+                graph = RDF::Repository.new
 
                 if t.positive_test?
                   begin
@@ -36,7 +36,7 @@ describe RDF::Turtle::Reader do
                   end
 
                   if t.evaluate?
-                    output_graph = RDF::Graph.load(t.result, :format => :ntriples, :base_uri => t.base)
+                    output_graph = RDF::Repository.load(t.result, :format => :ntriples, :base_uri => t.base)
                     graph.should be_equivalent_graph(output_graph, t)
                   else
                     graph.should be_a(RDF::Enumerable)
