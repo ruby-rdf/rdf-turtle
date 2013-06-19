@@ -38,7 +38,7 @@ def run_tc(tc, options)
 
     reader = RDF::Reader.for(tc.action).new(tc.input, :base_uri => tc.base, :validate => true)
 
-    graph = RDF::Graph.new
+    graph = RDF::Repository.new
     result = nil
 
     if tc.positive_test?
@@ -59,7 +59,7 @@ def run_tc(tc, options)
     end
 
     if tc.evaluate? && result.nil?
-      output_graph = RDF::Graph.load(tc.result, :format => :ntriples, :base_uri => tc.base)
+      output_graph = RDF::Repository.load(tc.result, :format => :ntriples, :base_uri => tc.base)
       result = graph.isomorphic_with?(output_graph) ? "passed" : "failed"
     else
       result ||= "passed"

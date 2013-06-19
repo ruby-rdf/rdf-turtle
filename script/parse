@@ -102,7 +102,7 @@ opts.each do |opt, arg|
   when '--progress'     then parser_options[:debug] ||= 2
   when '--quiet'        then options[:quiet] = options[:quiet].to_i + 1
   when '--uri'          then parser_options[:base_uri] = arg
-  when '--validate'     then parser_options[:debug] ||= 1
+  when '--validate'     then parser_options[:validate] = true
   when '--verbose'      then $verbose = true
   end
 end

@@ -11,11 +11,7 @@ describe RDF::Turtle::Reader do
         describe m.comment do
           m.entries.each do |t|
             specify "#{t.name}: #{t.comment}" do
-              if %w(turtle-syntax-bad-base-02 turtle-syntax-bad-base-03).include?(t.name)
-                pending("More permissive on BASE")
-              elsif %w(turtle-syntax-bad-kw-01).include?(t.name)
-                pending("More permissive on 'a'")
-              elsif t.name =~ /localName_with/ && RUBY_VERSION < "1.9"
+              if t.name =~ /localName_with/ && RUBY_VERSION < "1.9"
                 pending("Not possible with ruby #{RUBY_VERSION}")
               else
                 t.debug = [t.inspect, "source:", t.input.read]

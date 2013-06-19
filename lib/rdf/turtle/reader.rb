@@ -72,15 +72,16 @@ module RDF::Turtle
       when 'A', 'a'           then input[:resource] = RDF.type
       when 'true', 'false'    then input[:resource] = RDF::Literal::Boolean.new(token.value)
       when '@base', '@prefix' then input[:lang] = token.value[1..-1]
+      when '.'                then input[:terminated] = true
       else                         input[:string] = token.value
       end
     end
 
     terminal(:PREFIX,      PREFIX) do |prod, token, input|
-      input[:string_value] = token.value.downcase
+      input[:string_value] = token.value
     end
     terminal(:BASE,      BASE) do |prod, token, input|
-      input[:string_value] = token.value.downcase
+      input[:string_value] = token.value
     end
 
     terminal(:LANGTAG,              LANGTAG) do |prod, token, input|
@@ -92,14 +93,32 @@ module RDF::Turtle
     production(:prefixID) do |input, current, callback|
       prefix = current[:prefix]
       iri = current[:resource]
+      lexical = current[:string_value]
+      terminated = current[:terminated]
       debug("prefixID") {"Defined prefix #{prefix.inspect} mapping to #{iri.inspect}"}
+      if lexical.start_with?('@') && lexical != '@prefix'
+        error(:prefixID, "should be downcased")
+      elsif lexical == '@prefix'
+        error(:prefixID, "directive not terminated") unless terminated
+      else
+        error(:prefixID, "directive should not be terminated") if terminated
+      end
       prefix(prefix, iri)
     end
     
     # [5] base set base_uri
     production(:base) do |input, current, callback|
       iri = current[:resource]
+      lexical = current[:string_value]
+      terminated = current[:terminated]
       debug("base") {"Defined base as #{iri}"}
+      if lexical.start_with?('@') && lexical != '@base'
+        error(:base, "should be downcased")
+      elsif lexical == '@base'
+        error(:base, "directive not terminated") unless terminated
+      else
+        error(:base, "directive should not be terminated") if terminated
+      end
       options[:base_uri] = iri
     end
     
