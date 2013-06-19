@@ -24,7 +24,7 @@
  (rule _objectList_1 "8.1" (alt _empty _objectList_3))
  (rule _objectList_2 "8.2" (seq "," object))
  (rule _objectList_3 "8.3" (seq _objectList_2 _objectList_1))
- (rule verb "9" (alt predicate "A" "a"))
+ (rule verb "9" (alt predicate "a"))
  (rule subject "10" (alt iri BlankNode collection))
  (rule predicate "11" (seq iri))
  (rule object "12" (alt iri BlankNode collection blankNodePropertyList literal))

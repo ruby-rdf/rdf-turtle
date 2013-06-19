@@ -75,19 +75,19 @@
   (seq subject predicateObjectList))
  (rule _triples_2 "6.2" (first "[") (follow ".") (seq blankNodePropertyList _triples_3))
  (rule _triples_3 "6.3"
-  (first "A" IRIREF PNAME_LN PNAME_NS _eps "a")
+  (first IRIREF PNAME_LN PNAME_NS _eps "a")
   (follow ".")
   (alt _empty predicateObjectList))
  (rule _triples_4 "6.4"
-  (first "A" IRIREF PNAME_LN PNAME_NS "a")
+  (first IRIREF PNAME_LN PNAME_NS "a")
   (follow ".")
   (seq predicateObjectList))
  (rule _triples_5 "6.5"
-  (first "A" IRIREF PNAME_LN PNAME_NS _eps "a")
+  (first IRIREF PNAME_LN PNAME_NS _eps "a")
   (follow ".")
   (seq _triples_3))
  (rule predicateObjectList "7"
-  (first "A" IRIREF PNAME_LN PNAME_NS "a")
+  (first IRIREF PNAME_LN PNAME_NS "a")
   (follow "." "]")
   (seq verb objectList _predicateObjectList_1))
  (rule _predicateObjectList_1 "7.1"
@@ -103,11 +103,11 @@
   (follow "." "]")
   (seq _predicateObjectList_2 _predicateObjectList_1))
  (rule _predicateObjectList_4 "7.4"
-  (first "A" IRIREF PNAME_LN PNAME_NS _eps "a")
+  (first IRIREF PNAME_LN PNAME_NS _eps "a")
   (follow "." ";" "]")
   (alt _empty _predicateObjectList_5))
  (rule _predicateObjectList_5 "7.5"
-  (first "A" IRIREF PNAME_LN PNAME_NS "a")
+  (first IRIREF PNAME_LN PNAME_NS "a")
   (follow "." ";" "]")
   (seq verb objectList))
  (rule _predicateObjectList_6 "7.6"
@@ -121,7 +121,7 @@
   (follow "." "]")
   (seq _predicateObjectList_1))
  (rule _predicateObjectList_8 "7.8"
-  (first "A" IRIREF PNAME_LN PNAME_NS _eps "a")
+  (first IRIREF PNAME_LN PNAME_NS _eps "a")
   (follow "." ";" "]")
   (seq _predicateObjectList_4))
  (rule _predicateObjectList_9 "7.9"
@@ -154,14 +154,14 @@
   (follow "," "." ";" "]")
   (seq object))
  (rule verb "9"
-  (first "A" IRIREF PNAME_LN PNAME_NS "a")
+  (first IRIREF PNAME_LN PNAME_NS "a")
   (follow "(" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER IRIREF PNAME_LN
    PNAME_NS STRING_LITERAL_LONG_QUOTE STRING_LITERAL_LONG_SINGLE_QUOTE
    STRING_LITERAL_QUOTE STRING_LITERAL_SINGLE_QUOTE "[" "false" "true" )
-  (alt predicate "A" "a"))
+  (alt predicate "a"))
  (rule subject "10"
   (first "(" ANON BLANK_NODE_LABEL IRIREF PNAME_LN PNAME_NS)
-  (follow "A" IRIREF PNAME_LN PNAME_NS "a")
+  (follow IRIREF PNAME_LN PNAME_NS "a")
   (alt iri BlankNode collection))
  (rule predicate "11"
   (first IRIREF PNAME_LN PNAME_NS)
@@ -190,28 +190,28 @@
   (alt RDFLiteral NumericLiteral BooleanLiteral))
  (rule blankNodePropertyList "14"
   (first "[")
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
   (seq "[" predicateObjectList "]"))
  (rule _blankNodePropertyList_1 "14.1"
-  (first "A" IRIREF PNAME_LN PNAME_NS "a")
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (first IRIREF PNAME_LN PNAME_NS "a")
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
   (seq predicateObjectList "]"))
  (rule _blankNodePropertyList_2 "14.2"
   (first "]")
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
   (seq "]"))
  (rule collection "15"
   (first "(")
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
@@ -232,7 +232,7 @@
   (first "(" ")" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER IRIREF PNAME_LN
    PNAME_NS STRING_LITERAL_LONG_QUOTE STRING_LITERAL_LONG_SINGLE_QUOTE
    STRING_LITERAL_QUOTE STRING_LITERAL_SINGLE_QUOTE "[" "false" "true" )
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
@@ -245,7 +245,7 @@
   (seq _collection_1))
  (rule _collection_5 "15.5"
   (first ")")
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
@@ -335,21 +335,21 @@
   (alt "true" "false"))
  (rule iri "135s"
   (first IRIREF PNAME_LN PNAME_NS)
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
   (alt IRIREF PrefixedName))
  (rule PrefixedName "136s"
   (first PNAME_LN PNAME_NS)
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
   (alt PNAME_LN PNAME_NS))
  (rule BlankNode "137s"
   (first ANON BLANK_NODE_LABEL)
-  (follow "(" ")" "," "." ";" "A" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
+  (follow "(" ")" "," "." ";" ANON BLANK_NODE_LABEL DECIMAL DOUBLE INTEGER
    IRIREF PNAME_LN PNAME_NS STRING_LITERAL_LONG_QUOTE
    STRING_LITERAL_LONG_SINGLE_QUOTE STRING_LITERAL_QUOTE
    STRING_LITERAL_SINGLE_QUOTE "[" "]" "a" "false" "true" )
