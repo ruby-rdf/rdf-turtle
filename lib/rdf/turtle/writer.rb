@@ -1,4 +1,5 @@
 require 'rdf/turtle/terminals'
+require 'rdf/turtle/streaming_writer'
 
 module RDF::Turtle
   ##
@@ -48,12 +49,11 @@ module RDF::Turtle
   #
   # @author [Gregg Kellogg](http://greggkellogg.net/)
   class Writer < RDF::Writer
+    include StreamingWriter
     format RDF::Turtle::Format
 
     # @return [Graph] Graph of statements serialized
     attr_accessor :graph
-    # @return [URI] Base URI used for relativizing URIs
-    attr_accessor :base_uri
     
     ##
     # Initializes the Turtle writer instance.
@@ -82,10 +82,11 @@ module RDF::Turtle
     # @yield  [writer]
     # @yieldparam [RDF::Writer] writer
     def initialize(output = $stdout, options = {}, &block)
+      reset
+      @graph = RDF::Graph.new
+      @uri_to_pname = {}
+      @uri_to_prefix = {}
       super do
-        @graph = RDF::Graph.new
-        @uri_to_pname = {}
-        @uri_to_prefix = {}
         if block_given?
           case block.arity
             when 0 then instance_eval(&block)
@@ -96,20 +97,17 @@ module RDF::Turtle
     end
 
     ##
-    # Write whole graph
-    #
-    # @param  [Graph] graph
-    # @return [void]
-    def write_graph(graph)
-      @graph = graph
-    end
-
-    ##
     # Adds a statement to be serialized
     # @param  [RDF::Statement] statement
     # @return [void]
     def write_statement(statement)
-      @graph.insert(statement)
+      case
+      when @options[:stream]
+        stream_statement(statement)
+      else
+        # Add to local graph and output in epilogue
+        @graph.insert(statement)
+      end
     end
 
     ##
@@ -118,10 +116,19 @@ module RDF::Turtle
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Value]    object
     # @return [void]
-    # @raise  [NotImplementedError] unless implemented in subclass
-    # @abstract
     def write_triple(subject, predicate, object)
-      @graph.insert(Statement.new(subject, predicate, object))
+      write_statement(Statement.new(subject, predicate, object))
+    end
+
+    ##
+    # Write out declarations
+    # @return [void] `self`
+    def write_prologue
+      case
+      when @options[:stream]
+        stream_prologue
+      else
+      end
     end
 
     ##
@@ -130,19 +137,23 @@ module RDF::Turtle
     # @return [void]
     # @see    #write_triple
     def write_epilogue
-      @max_depth = @options[:max_depth] || 3
-      @base_uri = RDF::URI(@options[:base_uri])
+      case
+      when @options[:stream]
+        stream_epilogue
+      else
+        @max_depth = @options[:max_depth] || 3
 
-      self.reset
+        self.reset
 
-      debug("\nserialize") {"graph: #{@graph.size}"}
+        debug("\nserialize") {"graph: #{@graph.size}"}
 
-      preprocess
-      start_document
+        preprocess
+        start_document
 
-      order_subjects.each do |subject|
-        unless is_done?(subject)
-          statement(subject)
+        order_subjects.each do |subject|
+          unless is_done?(subject)
+            statement(subject)
+          end
         end
       end
     end
@@ -300,8 +311,8 @@ module RDF::Turtle
       
       # Start with base_uri
       if base_uri && @subjects.keys.include?(base_uri)
-        subjects << base_uri
-        seen[base_uri] = true
+        subjects << RDF::URI(base_uri)
+        seen[RDF::URI(base_uri)] = true
       end
       
       # Add distinguished classes
@@ -328,11 +339,16 @@ module RDF::Turtle
       (@options[:prefixes] || {}).each_pair do |k, v|
         @uri_to_prefix[v.to_s] = k
       end
-      @options[:prefixes] = {}  # Will define actual used when matched
 
       prefix(nil, @options[:default_namespace]) if @options[:default_namespace]
 
-      @graph.each {|statement| preprocess_statement(statement)}
+      case
+      when @options[:stream]
+      else
+        @options[:prefixes] = {}  # Will define actual used when matched
+
+        @graph.each {|statement| preprocess_statement(statement)}
+      end
     end
     
     # Perform any statement preprocessing required. This is used to perform reference counts and determine required

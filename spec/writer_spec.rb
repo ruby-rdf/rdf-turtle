@@ -352,27 +352,33 @@ describe RDF::Turtle::Writer do
   end
   
   # W3C Turtle Test suite from http://www.w3.org/TR/turtle/tests/
-  # FIXME
-  #describe "w3c turtle tests" do
-  #  require 'suite_helper'
-  #
-  #  Fixtures::SuiteTest::Good.each do |m|
-  #    m.entries.each do |t|
-  #      specify "#{t.name}: #{t.comment}" do
-  #        # Skip tests for very long files, too long
-  #        if %w(test-14 test-15 test-16).include?(t.name)
-  #          pending("Skip long input file")
-  #        else
-  #          @graph = parse(t.output, :base_uri => t.result, :format => :ntriples)
-  #          ttl = serialize(t.output, t.result, [], :format => :ttl)
-  #          g2 = parse(ttl, :base_uri => t.result)
-  #          g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
-  #        end
-  #      end
-  #    end
-  #  end
-  #end
-  
+  describe "w3c turtle tests" do
+    require 'suite_helper'
+
+    %w(manifest.ttl).each do |man|
+      Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
+        describe m.comment do
+          m.entries.each do |t|
+            next unless t.positive_test? && t.evaluate?
+            specify "#{t.name}: #{t.comment}" do
+              @graph = parse(t.output, :format => :ntriples)
+              ttl = serialize(t.output, t.base, [], :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
+              g2 = parse(ttl, :base_uri => t.base)
+              g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
+            end
+
+            specify "#{t.name}: #{t.comment} (stream)" do
+              @graph = parse(t.output, :format => :ntriples)
+              ttl = serialize(t.output, t.base, [], :stream => true, :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
+              g2 = parse(ttl, :base_uri => t.base)
+              g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
+            end
+          end
+        end
+      end
+    end
+  end
+
   def parse(input, options = {})
     graph = RDF::Graph.new
     RDF::Turtle::Reader.new(input, options).each do |statement|

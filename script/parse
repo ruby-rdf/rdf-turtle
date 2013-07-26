@@ -42,7 +42,7 @@ def run(input, options)
     r = reader_class.new(input, options[:parser_options])
     g = RDF::Graph.new << r
     num = g.count
-    options[:output].puts g.dump(options[:output_format], :base_uri => options[:parser_options][:base_uri], :prefixes => r.prefixes, :standard_prefixes => true)
+    options[:output].puts g.dump(options[:output_format], {:prefixes => r.prefixes}.merge(options[:writer_options]))
   end
   if options[:profile]
     Profiler__::stop_profile
@@ -64,8 +64,14 @@ parser_options = {
   :validate => false,
 }
 
+writer_options = {
+  :base_uri => nil,
+  :standard_prefixes => true
+}
+
 options = {
   :parser_options => parser_options,
+  :writer_options => writer_options,
   :output => STDOUT,
   :output_format => :ntriples,
   :input_format => :ttl,
@@ -74,6 +80,7 @@ input = nil
 
 opts = GetoptLong.new(
   ["--dbg", GetoptLong::NO_ARGUMENT],
+  ["--base", GetoptLong::REQUIRED_ARGUMENT],
   ["--errors", GetoptLong::NO_ARGUMENT],
   ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
   ["--canonicalize", GetoptLong::NO_ARGUMENT],
@@ -84,13 +91,14 @@ opts = GetoptLong.new(
   ["--profile", GetoptLong::NO_ARGUMENT],
   ["--progress", GetoptLong::NO_ARGUMENT],
   ["--quiet", GetoptLong::NO_ARGUMENT],
-  ["--uri", GetoptLong::REQUIRED_ARGUMENT],
+  ["--stream", GetoptLong::NO_ARGUMENT],
   ["--validate", GetoptLong::NO_ARGUMENT],
   ["--verbose", GetoptLong::NO_ARGUMENT]
 )
 opts.each do |opt, arg|
   case opt
   when '--dbg'          then parser_options[:debug] = ::RDF::Turtle::debug = true
+  when '--base'         then parser_options[:base_uri] = writer_options[:base_uri] = arg
   when '--canonicalize' then parser_options[:canonicalize] = true
   when '--errors'       then options[:errors] = true
   when '--execute'      then input = arg
@@ -101,7 +109,7 @@ opts.each do |opt, arg|
   when '--profile'      then options[:profile] = true
   when '--progress'     then parser_options[:debug] ||= 2
   when '--quiet'        then options[:quiet] = options[:quiet].to_i + 1
-  when '--uri'          then parser_options[:base_uri] = arg
+  when '--stream'       then writer_options[:stream] = true
   when '--validate'     then parser_options[:validate] = true
   when '--verbose'      then $verbose = true
   end
