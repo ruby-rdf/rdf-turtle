@@ -35,6 +35,13 @@ module RDF::Turtle
   #     end
   #   end
   #
+  # @example Serializing RDF statements to a string in streaming mode
+  #   RDF::Turtle::Writer.buffer(:stream => true) do |writer|
+  #     graph.each_statement do |statement|
+  #       writer << statement
+  #     end
+  #   end
+  #
   # The writer will add prefix definitions, and use them for creating @prefix definitions, and minting QNames
   #
   # @example Creating @base and @prefix definitions in output
@@ -74,6 +81,8 @@ module RDF::Turtle
     #   Maximum depth for recursively defining resources, defaults to 3
     # @option options [Boolean]  :standard_prefixes   (false)
     #   Add standard prefixes to @prefixes, if necessary.
+    # @option options [Boolean] :stream (false)
+    #   Do not attempt to optimize graph presentation, suitable for streaming large graphs.
     # @option options [String]   :default_namespace (nil)
     #   URI to use as default namespace, same as `prefixes[nil]`
     # @yield  [writer] `self`
