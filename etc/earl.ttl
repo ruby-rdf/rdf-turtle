@@ -32,6 +32,10 @@
   dc:creator         <http://greggkellogg.net/foaf#me> ;
   dc:isPartOf        <http://rubygems.org/gems/rdf> .
 
+<> foaf:primaryTopic <http://rubygems.org/gems/rdf-turtle> ;
+  dct:issued "2013-06-18T17:30:22-07:00"^^xsd:dateTime ;
+  foaf:maker <http://greggkellogg.net/foaf#me> .
+
 <http://greggkellogg.net/foaf#me> a foaf:Person, earl:Assertor;
   foaf:name "Gregg Kellogg";
   foaf:title "Implementor";
