@@ -3,8 +3,12 @@ require 'rubygems'
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
 require "bundler/setup"
 require 'rdf'
-require 'rdf/turtle'
-require 'rdf/ntriples'
+%w(linkeddata rdf/turtle rdf/ntriples json/ld).each do
+  begin
+    require 'linkeddata'
+  rescue LoadError => e
+  end
+end
 require 'rdf/turtle/meta'
 require 'ebnf/ll1/parser'
 require 'getoptlong'
