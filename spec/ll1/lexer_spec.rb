@@ -40,7 +40,7 @@ describe EBNF::LL1::Lexer do
         %q(a\\u003Ab)     => %Q(a\x3Ab),
       }
       inputs.each do |input, output|
-        output.force_encoding(Encoding::UTF_8) if output.respond_to?(:force_encoding) # Ruby 1.9+
+        output.force_encoding(Encoding::UTF_8)
         EBNF::LL1::Lexer.unescape_codepoints(input).should == output
       end
     end
@@ -52,7 +52,7 @@ describe EBNF::LL1::Lexer do
         %q(\\U000EFFFF)   => %Q(\xF3\xAF\xBF\xBF),
       }
       inputs.each do |input, output|
-        output.force_encoding(Encoding::UTF_8) if output.respond_to?(:force_encoding) # Ruby 1.9+
+        output.force_encoding(Encoding::UTF_8)
         EBNF::LL1::Lexer.unescape_codepoints(input).should == output
       end
     end

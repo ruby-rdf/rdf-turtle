@@ -73,15 +73,15 @@ module Fixtures
       end
       
       def evaluate?
-        attributes['@type'].match(/Eval/)
+        Array(attributes['@type']).join(" ").match(/Eval/)
       end
       
       def syntax?
-        attributes['@type'].match(/Syntax/)
+        Array(attributes['@type']).join(" ").match(/Syntax/)
       end
 
       def positive_test?
-        !attributes['@type'].match(/Negative/)
+        !Array(attributes['@type']).join(" ").match(/Negative/)
       end
       
       def negative_test?

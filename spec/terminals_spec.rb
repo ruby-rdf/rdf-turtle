@@ -21,7 +21,7 @@ describe RDF::Turtle::Terminals do
       strings.each do |range|
         it "from #{range.join(" to ").inspect}" do
           range.each do |string|
-            string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+            string.force_encoding(Encoding::UTF_8)
             string.should match(RDF::Turtle::Terminals::PN_CHARS_BASE)
           end
         end
@@ -33,7 +33,7 @@ describe RDF::Turtle::Terminals do
         it "from #{range.join(" to ").inspect}" do
           range.each do |string|
             string = "<#{string}>"
-            string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+            string.force_encoding(Encoding::UTF_8)
             string.should match(RDF::Turtle::Terminals::IRIREF)
           end
         end
@@ -53,7 +53,7 @@ describe RDF::Turtle::Terminals do
       it "matches <scheme:#{string.inspect}>" do
         begin
           string = "<scheme:#{string}>"
-          string.force_encoding(Encoding::UTF_8) if string.respond_to?(:force_encoding) # Ruby 1.9+
+          string.force_encoding(Encoding::UTF_8)
           string.should match(RDF::Turtle::Terminals::IRIREF)
         rescue RSpec::Expectations::ExpectationNotMetError
           pending "Escapes in IRIs"
