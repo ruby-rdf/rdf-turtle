@@ -127,6 +127,8 @@ To install the latest official release of the `RDF::Turtle` gem, do:
 This is free and unencumbered public domain software. For more information,
 see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
+A copy of the [Turtle EBNF][] and derived parser files are included in the repository, which are not covered under the UNLICENSE. These files are covered via the [W3C Document License](http://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231).
+
 [Ruby]:         http://ruby-lang.org/
 [RDF]:          http://www.w3.org/RDF/
 [YARD]:         http://yardoc.org/
