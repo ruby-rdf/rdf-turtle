@@ -20,7 +20,7 @@ module RDF::Turtle
     # 170s
     PERCENT              = /%[0-9A-Fa-f]{2}/.freeze
     # 172s
-    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=:\/\?\#@%]/.freeze
+    PN_LOCAL_ESC         = /\\[_~\.\-\!$\&'\(\)\*\+,;=\/\?\#@%]/.freeze
     # 169s
     PLX                  = /#{PERCENT}|#{PN_LOCAL_ESC}/.freeze.freeze
     # 163s
@@ -58,7 +58,7 @@ module RDF::Turtle
     # 22
     STRING_LITERAL_SINGLE_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/.freeze
     # 23
-    STRING_LITERAL_QUOTE             = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/.freeze.freeze
+    STRING_LITERAL_QUOTE             = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/.freeze
     # 24
     STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/m.freeze
     # 25
