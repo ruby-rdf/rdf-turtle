@@ -31,10 +31,10 @@ module RDF::Util
             response = ::File.open(local_filename)
             #puts "use #{filename_or_url} locally"
             case filename_or_url.to_s
-            when /\.trig$/
-              def response.content_type; 'application/trig'; end
-            when /\.nq$/
-              def response.content_type; 'application/n-quads'; end
+            when /\.ttl$/
+              def response.content_type; 'application/turtle'; end
+            when /\.nt$/
+              def response.content_type; 'application/n-triples'; end
             end
 
             if block_given?
@@ -53,6 +53,8 @@ module RDF::Util
           # Not there, don't run tests
           StringIO.new("")
         end
+      else
+        Kernel.open(filename_or_url.to_s, &block)
       end
     end
   end
@@ -81,6 +83,8 @@ module Fixtures
         "@type": [
           "rdft:TestTurtlePositiveSyntax",
           "rdft:TestTurtleNegativeSyntax",
+          "rdft:TestNTriplesPositiveSyntax",
+          "rdft:TestNTriplesNegativeSyntax",
           "rdft:TestTurtleEval",
           "rdft:TestTurtleNegativeEval"
         ]
@@ -91,7 +95,7 @@ module Fixtures
       def self.open(file)
         #puts "open: #{file}"
         prefixes = {}
-        g = RDF::Repository.load(file, :format => :turtle)
+        g = RDF::Repository.load(file, :format => :ttl)
         JSON::LD::API.fromRDF(g) do |expanded|
           JSON::LD::API.frame(expanded, FRAME) do |framed|
             yield Manifest.new(framed['@graph'].first)
