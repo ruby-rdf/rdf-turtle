@@ -16,11 +16,11 @@ module RDF::Turtle
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Format < RDF::Format
-    content_type     'text/turtle',
+    content_type     'application/turtle',
                      :extension => :ttl,
                      :aliases => %w(
                       text/rdf+turtle
-                      application/turtle
+                      text/turtle
                       application/x-turtle
                      )
     content_encoding 'utf-8'
