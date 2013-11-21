@@ -66,6 +66,7 @@ module RDF::Turtle
   #     RDF::Format.for(:ttl).writer  # RDF::Turtle::Writer
   class TTL < Format
     content_encoding 'utf-8'
+    content_type     'application/turtle'
 
     reader { RDF::Turtle::Reader }
     writer { RDF::Turtle::Writer }
