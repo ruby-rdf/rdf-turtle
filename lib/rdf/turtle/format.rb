@@ -64,14 +64,7 @@ module RDF::Turtle
   #     RDF::Format.for(:ttl)         # RDF::Turtle::TTL
   #     RDF::Format.for(:ttl).reader  # RDF::Turtle::Reader
   #     RDF::Format.for(:ttl).writer  # RDF::Turtle::Writer
-  class TTL < RDF::Format
-    content_type     'text/turtle',
-                     :extension => :ttl,
-                     :aliases => %w(
-                      text/rdf+turtle
-                      application/turtle
-                      application/x-turtle
-                     )
+  class TTL < Format
     content_encoding 'utf-8'
 
     reader { RDF::Turtle::Reader }
