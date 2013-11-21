@@ -37,6 +37,7 @@ Gem::Specification.new do |gem|
 
   # Rubinius has it's own dependencies
   if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
+    gem.add_development_dependency "rubysl-open-uri"
     gem.add_development_dependency "rubysl-prettyprint"
   end
 
