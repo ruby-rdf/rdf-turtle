@@ -7,60 +7,82 @@
 @prefix ex:   <http://example.org/> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-<http://rubygems.org/gems/rdf> a doap:Project, earl:TestSubject, earl:Software ;
+<http://rubygems.org/gems/rdf> a doap:Project ;
   doap:name          "RDF.rb" ;
-  doap:homepage      <http://ruby-rdf.github.com/rdf> ;
+  doap:homepage      <http://rubygems.org/gems/rdf> ;
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
-  doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
+  doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
-  doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data." ;
-  doap:created       "2007-10-23"^^xsd:date;
-  doap:programming-language "Ruby" ;
+  doap:created       "2007-10-23" ;
   doap:platform      "Ruby" ;
-  doap:implements    <http://www.w3.org/TR/rdf-concepts/>,
-                     <http://sw.deri.org/2008/07/n-quads/>,
-                     <http://www.w3.org/2001/sw/RDFCore/ntriples/> ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
-  doap:download-page <http://rubygems.org/gems/rdf> ;
-  doap:mailing-list  <http://lists.w3.org/Archives/Public/public-rdf-ruby/> ;
+  doap:implements    <http://www.w3.org/TR/rdf11-concepts/>,
+                     <http://www.w3.org/TR/n-quads/>,
+                     <http://www.w3.org/TR/n-triples/> ;
+  doap:download-page <http://rubyforge.org/projects/rdf/> ;
   doap:bug-database  <http://github.com/ruby-rdf/rdf/issues> ;
-  doap:blog          <http://ar.to/>, <http://blog.datagraph.org/>, <http://greggkellogg.net> ;
-  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
-  doap:maintainer    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
-  doap:documenter    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
-  doap:helper        [ a foaf:Person; foaf:name "CDlin Ardelean"; foaf:mbox-sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"],
-                     [ a foaf:Person; foaf:name "Danny Gagne"; foaf:mbox-sha1sum "6de43e9cf7de53427fea9765706703e4d957c17b"],
-                     [ a foaf:Person; foaf:name "Joey Geiger"; foaf:mbox-sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"],
-                     [ a foaf:Person; foaf:name "Fumihiro Kato"; foaf:mbox-sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"],
-                     [ a foaf:Person; foaf:name "Naoki Kawamukai"; foaf:mbox-sha1sum "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d"],
-                     [ a foaf:Person; foaf:name "Hellekin O. Wolf"; foaf:mbox-sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"],
-                     [ a foaf:Person; foaf:name "John Fieber"; foaf:mbox-sha1sum "f7653fc1ac0e82ebb32f092389bd5fc728eaae12"],
-                     [ a foaf:Person; foaf:name "Keita Urashima"; foaf:mbox-sha1sum "2b4247b6fd5bb4a1383378f325784318680d5ff9"],
-                     [ a foaf:Person; foaf:name "Pius Uzamere"; foaf:mbox-sha1sum "bedbbf2451e5beb38d59687c0460032aff92cd3c"];
+  doap:blog          <http://ar.to/>, <http://blog.datagraph.org/> ;
   doap:vendor        <http://datagraph.org/> ;
+  doap:developer     <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:maintainer    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:documenter    <http://ar.to/#self>, <http://bhuga.net/#ben>, <http://greggkellogg.net/foaf#me> ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Călin Ardelean" ;
+                      foaf:mbox_sha1sum "274bd18402fc773ffc0606996aa1fb90b603aa29"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Danny Gagne" ;
+                      foaf:mbox_sha1sum "6de43e9cf7de53427fea9765706703e4d957c17b"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Joey Geiger" ;
+                      foaf:mbox_sha1sum "f412d743150d7b27b8468d56e69ca147917ea6fc"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Fumihiro Kato" ;
+                      foaf:mbox_sha1sum "d31fdd6af7a279a89bf09fdc9f7c44d9d08bb930"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Naoki Kawamukai" ;
+                      foaf:mbox_sha1sum "5bdcd8e2af4f5952aaeeffbdd371c41525ec761d"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Hellekin O. Wolf" ;
+                      foaf:mbox_sha1sum "c69f3255ff0639543cc5edfd8116eac8df16fab8"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "John Fieber" ;
+                      foaf:mbox_sha1sum "f7653fc1ac0e82ebb32f092389bd5fc728eaae12"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Keita Urashima" ;
+                      foaf:mbox_sha1sum "2b4247b6fd5bb4a1383378f325784318680d5ff9"] ;
+  doap:helper        [a foaf:Person ;
+                      foaf:name "Pius Uzamere" ;
+                      foaf:mbox_sha1sum "bedbbf2451e5beb38d59687c0460032aff92cd3c"] ;
   foaf:maker         <http://ar.to/#self> ;
-  dc:title           "RDF.rb" ;
-  dc:description     "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
-  dc:date            "2011-08-29"^^xsd:date;
   dc:creator         <http://ar.to/#self> .
 
-<http://bhuga.net/#ben> a doap:Person;
-   rdfs:isDefinedBy <http://datagraph.org/bhuga/foaf>;
-   foaf:homepage <http://bhuga.net/>;
-   foaf:mbox <mailto:blavender@gmail.com>;
-   foaf:mbox_sha1sum "dbf45f4ffbd27b67aa84f02a6a31c144727d10af";
-   foaf:name "Ben Lavender" .
+<http://ar.to/#self> a foaf:Person ;
+  foaf:name          "Arto Bendiken" ;
+  foaf:mbox          <mailto:arto@bendiken.net> ;
+  foaf:mbox_sha1sum  "a033f652c84a4d73b8c26d318c2395699dd2bdfb",
+                     "d0737cceb55eb7d740578d2db1bc0727e3ed49ce" ;
+  foaf:homepage      <http://ar.to/> ;
+  foaf:made          <> ;
+  rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
 
-<http://ar.to/#self> a doap:Person;
-   rdfs:isDefinedBy <http://datagraph.org/bendiken/foaf>;
-   foaf:homepage <http://ar.to/>;
-   foaf:made <http://rubygems.org/gems/rdf>;
-   foaf:mbox <mailto:arto.bendiken@gmail.com>;
-   foaf:mbox_sha1sum "d0737cceb55eb7d740578d2db1bc0727e3ed49ce",
-     "a033f652c84a4d73b8c26d318c2395699dd2bdfb";
-   foaf:name "Arto Bendiken" .
+<http://bhuga.net/#ben> a foaf:Person ;
+  foaf:name          "Ben Lavender" ;
+  foaf:mbox          <mailto:blavender@gmail.com> ;
+  foaf:mbox_sha1sum  "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" ;
+  foaf:homepage      <http://bhuga.net/> ;
+  rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
 
+<http://greggkellogg.net/foaf#me> a foaf:Person ;
+  foaf:name          "Gregg Kellogg" ;
+  foaf:mbox          <mailto:gregg@greggkellogg.net> ;
+  foaf:mbox_sha1sum  "35bc44e6d0070e5ad50ccbe0d24403c96af2b9bd" ;
+  foaf:homepage      <http://greggkellogg.net/>;
+  rdfs:isDefinedBy   <http://greggkellogg.net/foaf> .
+
+<> foaf:primaryTopic <http://rubygems.org/gems/rdf> ;
+  dct:issued "2013-11-24T12:46:09-08:00"^^xsd:dateTime ;
+  foaf:maker <http://greggkellogg.net/foaf#me> .
 
 <http://greggkellogg.net/foaf#me> a foaf:Person, earl:Assertor;
   foaf:name "Gregg Kellogg";
@@ -74,7 +96,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -84,7 +106,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -94,7 +116,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -104,7 +126,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -114,7 +136,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -124,7 +146,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -134,7 +156,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -144,7 +166,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -154,7 +176,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -164,7 +186,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -174,7 +196,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -184,7 +206,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -194,7 +216,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -204,7 +226,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -214,7 +236,17 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#nt-syntax-bnode-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -224,7 +256,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -234,7 +266,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -244,7 +276,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -254,7 +286,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -264,7 +296,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -274,7 +306,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -284,7 +316,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -294,7 +326,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -304,7 +336,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -314,7 +346,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -324,7 +356,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -334,7 +366,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -344,7 +376,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -354,7 +386,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -364,7 +396,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -374,7 +406,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -384,7 +416,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -394,7 +426,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -404,7 +436,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -414,7 +446,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -424,7 +456,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -434,7 +466,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -444,7 +476,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -454,7 +486,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -464,7 +496,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -474,7 +506,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -484,7 +516,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -494,7 +526,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -504,7 +536,7 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
@@ -514,5 +546,225 @@
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2013-03-24T12:36:37-07:00"^^xsd:dateTime];
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#comment_following_triple>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_all_controls>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_all_punctuation>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_ascii_boundaries>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_2_dquotes>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_2_squotes>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_BACKSPACE>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_CARRIAGE_RETURN>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_CHARACTER_TABULATION>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_dquote>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_FORM_FEED>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_LINE_FEED>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_numeric_escape4>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_numeric_escape8>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_REVERSE_SOLIDUS>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_REVERSE_SOLIDUS2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_squote>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#literal_with_UTF8_boundaries>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#langtagged_string>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#lantag_with_subtag>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <http://greggkellogg.net/foaf#me>;
+  earl:subject <http://rubygems.org/gems/rdf>;
+  earl:test <https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/tests-nt/manifest.ttl#minimal_whitespace>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2013-11-24T12:46:09-08:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
