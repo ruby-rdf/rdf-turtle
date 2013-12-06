@@ -3,6 +3,63 @@
 require 'rdf/turtle'
 require 'json/ld'
 
+# For now, override RDF::Utils::File.open_file to look for the file locally before attempting to retrieve it
+module RDF::Util
+  module File
+    REMOTE_PATH = "https://dvcs.w3.org/hg/rdf/raw-file/default/"
+    LOCAL_PATH = ::File.expand_path("../w3c-rdf", __FILE__) + '/'
+
+    ##
+    # Override to use Patron for http and https, Kernel.open otherwise.
+    #
+    # @param [String] filename_or_url to open
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [Array, String] :headers
+    #   HTTP Request headers.
+    # @return [IO] File stream
+    # @yield [IO] File stream
+    def self.open_file(filename_or_url, options = {}, &block)
+      case filename_or_url.to_s
+      when /^file:/
+        path = filename_or_url[5..-1]
+        Kernel.open(path.to_s, &block)
+      when /^#{REMOTE_PATH}/
+        begin
+          #puts "attempt to open #{filename_or_url} locally"
+          local_filename = filename_or_url.to_s.sub(REMOTE_PATH, LOCAL_PATH)
+          if ::File.exist?(local_filename)
+            response = ::File.open(local_filename)
+            #puts "use #{filename_or_url} locally"
+            case filename_or_url.to_s
+            when /\.ttl$/
+              def response.content_type; 'application/turtle'; end
+            when /\.nt$/
+              def response.content_type; 'application/n-triples'; end
+            end
+
+            if block_given?
+              begin
+                yield response
+              ensure
+                response.close
+              end
+            else
+              response
+            end
+          else
+            Kernel.open(filename_or_url.to_s, &block)
+          end
+        rescue Errno::ENOENT #, OpenURI::HTTPError
+          # Not there, don't run tests
+          StringIO.new("")
+        end
+      else
+        Kernel.open(filename_or_url.to_s, &block)
+      end
+    end
+  end
+end
+
 module Fixtures
   module SuiteTest
     BASE = "http://www.w3.org/2013/TurtleTests/"
@@ -26,6 +83,8 @@ module Fixtures
         "@type": [
           "rdft:TestTurtlePositiveSyntax",
           "rdft:TestTurtleNegativeSyntax",
+          "rdft:TestNTriplesPositiveSyntax",
+          "rdft:TestNTriplesNegativeSyntax",
           "rdft:TestTurtleEval",
           "rdft:TestTurtleNegativeEval"
         ]
@@ -36,7 +95,7 @@ module Fixtures
       def self.open(file)
         #puts "open: #{file}"
         prefixes = {}
-        g = RDF::Repository.load(file, :format => :turtle)
+        g = RDF::Repository.load(file, :format => :ttl)
         JSON::LD::API.fromRDF(g) do |expanded|
           JSON::LD::API.frame(expanded, FRAME) do |framed|
             yield Manifest.new(framed['@graph'].first)
@@ -73,15 +132,15 @@ module Fixtures
       end
       
       def evaluate?
-        attributes['@type'].match(/Eval/)
+        Array(attributes['@type']).join(" ").match(/Eval/)
       end
-      
+
       def syntax?
-        attributes['@type'].match(/Syntax/)
+        Array(attributes['@type']).join(" ").match(/Syntax/)
       end
 
       def positive_test?
-        !attributes['@type'].match(/Negative/)
+        !Array(attributes['@type']).join(" ").match(/Negative/)
       end
       
       def negative_test?

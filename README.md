@@ -15,7 +15,7 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby 1.8.7+, Ruby >= 1.9, and JRuby 1.7+.
+* Compatible with Ruby >= 1.9.2.
 * Optional streaming writer, to serialize large graphs
 
 ## Usage
@@ -93,9 +93,9 @@ using the [EBNF][] gem.
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
-* [RDF.rb](http://rubygems.org/gems/rdf) (>= 1.0)
-* [EBNF][] (>= 0.1.0)
+* [Ruby](http://ruby-lang.org/) (>= 1.9.2)
+* [RDF.rb](http://rubygems.org/gems/rdf) (>= 1.1)
+* [EBNF][] (>= 0.3.0)
 
 ## Installation
 
@@ -111,6 +111,8 @@ To install the latest official release of the `RDF::Turtle` gem, do:
 * [Gregg Kellogg](http://github.com/gkellogg) - <http://greggkellogg.net/>
 
 ## Contributing
+This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange development and release activity. All submissions _must_ be on a feature branch based on the _develop_ branch to ease staging and integration.
+
 * Do your best to adhere to the existing coding conventions and idioms.
 * Don't use hard tabs, and don't leave trailing whitespace on any line.
 * Do document every method you add using [YARD][] annotations. Read the

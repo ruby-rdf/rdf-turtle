@@ -9,7 +9,6 @@ describe RDF::Turtle::Writer do
   
   include RDF_Writer
 
-  # XXX This should work for Ruby 1.8, but don't have time to investigate further right now
   describe ".for" do
     formats = [
       :turtle,
