@@ -252,6 +252,7 @@ module RDF::Turtle
         @options = {
           :anon_base => "b0",
           :validate => false,
+          :whitespace => WS,
         }.merge(options)
         @options = {:prefixes => {nil => ""}}.merge(@options) unless @options[:validate]
         @options[:debug] ||= case

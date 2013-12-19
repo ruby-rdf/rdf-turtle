@@ -10,5 +10,6 @@ gem 'ebnf', :git => "git://github.com/gkellogg/ebnf.git"
 
 group :debug do
   gem "wirble"
-  gem "debugger", :platforms => [:mri_19, :mri_20]
+  gem "debugger", :platforms => :mri_19
+  gem "byebug", :platforms => :mri_20
 end

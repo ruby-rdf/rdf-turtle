@@ -65,7 +65,7 @@ module RDF::Turtle
     STRING_LITERAL_LONG_QUOTE        = /"""(?:(?:"|"")?(?:[^"\\]|#{ECHAR}|#{UCHAR}))*"""/m.freeze
 
     # 161s
-    WS                   = / |\t|\r|\n  /.freeze
+    WS                   = /(?:\s|(?:#[^\n\r]*))+/m.freeze
     # 162s
     ANON                 = /\[#{WS}*\]/m.freeze
     # 28t

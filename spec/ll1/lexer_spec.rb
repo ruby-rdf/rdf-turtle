@@ -377,7 +377,9 @@ describe EBNF::LL1::Lexer do
           "\r\n" => 2,
         }
         inputs.each do |input, lineno|
-          lexer = EBNF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
+          lexer = EBNF::LL1::Lexer.tokenize(input, @terminals,
+                                            :unescape_terms => @unescape_terms,
+                                            :whitespace => RDF::Turtle::Terminals::WS)
           lexer.to_a # consumes the input
           lexer.lineno.should == lineno
         end
@@ -387,7 +389,10 @@ describe EBNF::LL1::Lexer do
     describe "yielding tokens" do
       it "annotates tokens with the current line number" do
         results = %w(1 2 3 4)
-        EBNF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals, :unescape_terms => @unescape_terms).each_token do |token|
+        EBNF::LL1::Lexer.tokenize("1\n2\n3\n4", @terminals,
+                                                :unescape_terms => @unescape_terms,
+                                                :whitespace => RDF::Turtle::Terminals::WS
+                                  ).each_token do |token|
           token.type.should == :INTEGER
           token.value.should == results.shift
         end
@@ -497,7 +502,9 @@ describe EBNF::LL1::Lexer do
   def tokenize(*inputs, &block)
     options = inputs.last.is_a?(Hash) ? inputs.pop : {}
     inputs.each do |input|
-      tokens = EBNF::LL1::Lexer.tokenize(input, @terminals, :unescape_terms => @unescape_terms)
+      tokens = EBNF::LL1::Lexer.tokenize(input, @terminals,
+                                         :unescape_terms => @unescape_terms,
+                                         :whitespace => RDF::Turtle::Terminals::WS)
       tokens.should be_a(EBNF::LL1::Lexer)
       block.call(tokens.to_a)
     end
