@@ -3,6 +3,8 @@ require 'spec_helper'
 require 'rdf/spec/writer'
 
 describe RDF::Turtle::Writer do
+  before(:each) {$stderr, @old_stderr = StringIO.new, $stderr}
+  after(:each) {$stderr = @old_stderr}
   before(:each) do
     @writer = RDF::Turtle::Writer.new(StringIO.new)
   end

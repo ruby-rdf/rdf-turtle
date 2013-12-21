@@ -316,8 +316,11 @@ module RDF::Turtle
         end
       end
     rescue EBNF::LL1::Parser::Error => e
-      progress("Parsing completed with errors:\n\t#{e.message}")
-      raise RDF::ReaderError, e.message if validate?
+      if validate?
+        raise RDF::ReaderError, e.message
+      else
+        $stderr.puts e.message
+      end
     end
     
     ##
