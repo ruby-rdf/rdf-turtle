@@ -315,7 +315,7 @@ module RDF::Turtle
           end
         end
       end
-    rescue EBNF::LL1::Parser::Error => e
+    rescue EBNF::LL1::Parser::Error, EBNF::LL1::Lexer::Error => e
       if validate?
         raise RDF::ReaderError.new(e.message, lineno: e.lineno, token: e.token)
       else
