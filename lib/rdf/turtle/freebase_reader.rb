@@ -24,7 +24,7 @@ module RDF::Turtle
             predicate = read_pname(:intern => true) || fail_predicate
             object    = read_pname || read_uriref || read_boolean || read_numeric || read_literal || fail_object
             if validate? && !read_eos
-              raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+              raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})", lineno: lineno)
             end
             return [subject, predicate, object]
           end
@@ -59,13 +59,13 @@ module RDF::Turtle
           @line.insert(0, ".")
         end
         pfx_iri = prefix(ns)
-        raise RDF::ReaderError, "prefix #{ns.inspect} is not defined" unless pfx_iri
+        raise RDF::ReaderError.new("ERROR [line #{lineno}] prefix #{ns.inspect} is not defined", lineno: lineno) unless pfx_iri
         uri = RDF::URI(pfx_iri + suffix)
         uri.validate!     if validate?
         uri
       end
     rescue ArgumentError => e
-      raise RDF::ReaderError, "invalid PName"
+      raise RDF::ReaderError.new("ERROR [line #{lineno}] invalid PName", lineno: lineno)
     end
 
     ##
