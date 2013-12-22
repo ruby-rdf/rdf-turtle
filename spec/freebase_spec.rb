@@ -128,8 +128,8 @@ describe "RDF::Turtle::FreebaseReader" do
 
   describe "validation" do
     {
-      %("lit" <b> <c> .) => %r(expected subject),
-      %(ns:a "lit" <c> .) => %r(expected predicate),
+      %("lit" <b> <c> .) => %r(Expected subject),
+      %(ns:a "lit" <c> .) => %r(Expected predicate),
       %(undef:a ns:b "c") => %r(prefix "undef" is not defined),
     }.each_pair do |ttl, error|
       it "should raise '#{error}' for '#{ttl}'" do
