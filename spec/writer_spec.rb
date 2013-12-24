@@ -363,15 +363,16 @@ describe RDF::Turtle::Writer do
           m.entries.each do |t|
             next unless t.positive_test? && t.evaluate?
             specify "#{t.name}: #{t.comment}" do
-              @graph = parse(t.output, :format => :ntriples)
-              ttl = serialize(t.output, t.base, [], :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
+              @graph = parse(t.expected, :format => :ntriples)
+              ttl = serialize(t.expected, t.base, [], :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
+              @debug << [t.inspect, "source:", t.expected.read, "result:", ttl]
               g2 = parse(ttl, :base_uri => t.base)
               g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
-              @graph = parse(t.output, :format => :ntriples)
-              ttl = serialize(t.output, t.base, [], :stream => true, :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
+              @graph = parse(t.expected, :format => :ntriples)
+              ttl = serialize(t.expected, t.base, [], :stream => true, :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
               g2 = parse(ttl, :base_uri => t.base)
               g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
             end
@@ -379,7 +380,7 @@ describe RDF::Turtle::Writer do
         end
       end
     end
-  end
+  end unless ENV['CI'] # Not for continuous integration
 
   def parse(input, options = {})
     graph = RDF::Graph.new
