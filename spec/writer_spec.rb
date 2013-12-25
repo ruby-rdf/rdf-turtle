@@ -365,7 +365,7 @@ describe RDF::Turtle::Writer do
             specify "#{t.name}: #{t.comment}" do
               @graph = parse(t.expected, :format => :ntriples)
               ttl = serialize(t.expected, t.base, [], :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
-              @debug << [t.inspect, "source:", t.expected.read, "result:", ttl]
+              @debug << [t.inspect, "source:", t.expected.read]
               g2 = parse(ttl, :base_uri => t.base)
               g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
             end
@@ -373,6 +373,7 @@ describe RDF::Turtle::Writer do
             specify "#{t.name}: #{t.comment} (stream)" do
               @graph = parse(t.expected, :format => :ntriples)
               ttl = serialize(t.expected, t.base, [], :stream => true, :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
+              @debug << [t.inspect, "source:", t.expected.read]
               g2 = parse(ttl, :base_uri => t.base)
               g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
             end
@@ -394,7 +395,7 @@ describe RDF::Turtle::Writer do
   def serialize(ntstr, base = nil, regexps = [], options = {})
     prefixes = options[:prefixes] || {nil => ""}
     g = parse(ntstr, :base_uri => base, :prefixes => prefixes, :validate => false)
-    @debug = []
+    @debug = ["serialized:", ntstr]
     result = RDF::Turtle::Writer.buffer(options.merge(:debug => @debug, :base_uri => base, :prefixes => prefixes)) do |writer|
       writer << g
     end
