@@ -403,8 +403,6 @@ module RDF::Turtle
       end
     end
 
-    protected
-    
     ##
     # Add debug event to debug array, if specified
     #
