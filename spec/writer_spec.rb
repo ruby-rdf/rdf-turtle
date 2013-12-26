@@ -363,23 +363,31 @@ describe RDF::Turtle::Writer do
           m.entries.each do |t|
             next unless t.positive_test? && t.evaluate?
             specify "#{t.name}: #{t.comment}" do
-              @graph = parse(t.output, :format => :ntriples)
-              ttl = serialize(t.output, t.base, [], :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
-              g2 = parse(ttl, :base_uri => t.base)
-              g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
+              graph = parse(t.expected, format: :ntriples)
+              ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
+              @debug += [t.inspect, "source:", t.expected.read]
+              g2 = parse(ttl, base_uri: t.base)
+              g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
-              @graph = parse(t.output, :format => :ntriples)
-              ttl = serialize(t.output, t.base, [], :stream => true, :format => :ttl, :base_uri => t.base, :standard_prefixes => true)
-              g2 = parse(ttl, :base_uri => t.base)
-              g2.should be_equivalent_graph(@graph, :trace => @debug.join("\n"))
+              graph = parse(t.expected, format: :ntriples)
+              ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
+              @debug += [t.inspect, "source:", t.expected.read]
+              g2 = parse(ttl, base_uri: t.base)
+              g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
             end
           end
+          #specify "reserialize manifest" do
+          #  graph = RDF::Graph.load(m.id)
+          #  ttl = serialize(graph, m.id, [], format: :ttl, standard_prefixes: true)
+          #  g2 = parse(ttl, base_uri: m.id, validate: true)
+          #  g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
+          #end
         end
       end
     end
-  end
+  end unless ENV['CI'] # Not for continuous integration
 
   def parse(input, options = {})
     graph = RDF::Graph.new
@@ -392,8 +400,8 @@ describe RDF::Turtle::Writer do
   # Serialize ntstr to a string and compare against regexps
   def serialize(ntstr, base = nil, regexps = [], options = {})
     prefixes = options[:prefixes] || {nil => ""}
-    g = parse(ntstr, :base_uri => base, :prefixes => prefixes, :validate => false)
-    @debug = []
+    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, :base_uri => base, :prefixes => prefixes, :validate => false)
+    @debug = ["serialized:", ntstr]
     result = RDF::Turtle::Writer.buffer(options.merge(:debug => @debug, :base_uri => base, :prefixes => prefixes)) do |writer|
       writer << g
     end

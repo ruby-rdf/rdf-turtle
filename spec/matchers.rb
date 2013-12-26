@@ -33,11 +33,7 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
       identifier = info[:identifier] || expected.is_a?(RDF::Enumerable) ? expected.context : info[:about]
       trace = info[:trace]
       if trace.is_a?(Array)
-        trace = if defined?(RUBY_ENGINE) && RUBY_ENGINE == "jruby" && RUBY_VERSION >= "1.9"
-          trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
-        else
-          trace.join("\n")
-        end
+        trace = trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
       end
       Info.new(identifier, info[:comment] || "", trace)
     else
@@ -74,11 +70,7 @@ RSpec::Matchers.define :match_re do |expected, info|
       identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
       trace = info[:trace]
       if trace.is_a?(Array)
-        trace = if defined?(RUBY_ENGINE) && RUBY_ENGINE == "jruby" && RUBY_VERSION >= "1.9"
-          trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
-        else
-          trace.join("\n")
-        end
+        trace = trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
       end
       Info.new(identifier, info[:comment] || "", trace)
     else

@@ -22,7 +22,7 @@ module RDF::Util
       case filename_or_url.to_s
       when /^file:/
         path = filename_or_url[5..-1]
-        Kernel.open(path.to_s, &block)
+        Kernel.open(path.to_s, options, &block)
       when /^#{REMOTE_PATH}/
         begin
           #puts "attempt to open #{filename_or_url} locally"
@@ -47,14 +47,14 @@ module RDF::Util
               response
             end
           else
-            Kernel.open(filename_or_url.to_s, &block)
+            Kernel.open(filename_or_url.to_s, options, &block)
           end
         rescue Errno::ENOENT #, OpenURI::HTTPError
           # Not there, don't run tests
           StringIO.new("")
         end
       else
-        Kernel.open(filename_or_url.to_s, &block)
+        Kernel.open(filename_or_url.to_s, options, &block)
       end
     end
   end

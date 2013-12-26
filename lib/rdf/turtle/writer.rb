@@ -208,8 +208,6 @@ module RDF::Turtle
       end
 
       @uri_to_pname[uri] = pname
-    rescue Addressable::URI::InvalidURIError => e
-      raise RDF::WriterError, "Invalid URI #{resource.inspect}: #{e.message}"
     end
     
     # Take a hash from predicate uris to lists of values.
@@ -365,8 +363,7 @@ module RDF::Turtle
     # @param [Statement] statement
     def preprocess_statement(statement)
       #debug("preprocess") {statement.inspect}
-      references = ref_count(statement.object) + 1
-      @references[statement.object] = references
+      bump_reference(statement.object)
       @subjects[statement.subject] = true
 
       # Pre-fetch pnames, to fill prefixes
@@ -374,14 +371,6 @@ module RDF::Turtle
       get_pname(statement.predicate)
       get_pname(statement.object)
       get_pname(statement.object.datatype) if statement.object.literal? && statement.object.datatype
-
-      @references[statement.predicate] = ref_count(statement.predicate) + 1
-    end
-    
-    # Return the number of times this node has been referenced in the object position
-    # @return [Integer]
-    def ref_count(node)
-      @references.fetch(node, 0)
     end
 
     # Returns indent string multiplied by the depth
@@ -414,8 +403,6 @@ module RDF::Turtle
       end
     end
 
-    protected
-    
     ##
     # Add debug event to debug array, if specified
     #
@@ -455,10 +442,10 @@ module RDF::Turtle
         position = :object
       end
     end
-    
-    def p_list(node, position)
+
+    def collection(node, position)
       return false if !is_valid_list?(node)
-      #debug("p_list") {"#{node.inspect}, #{position}"}
+      #debug("collection") {"#{node.inspect}, #{position}"}
 
       @output.write(position == :subject ? "(" : " (")
       @depth += 2
@@ -466,55 +453,61 @@ module RDF::Turtle
       @depth -= 2
       @output.write(')')
     end
-    
-    def p_squared?(node, position)
-      node.is_a?(RDF::Node) &&
-        !@serialized.has_key?(node) &&
-        ref_count(node) <= 1
-    end
-    
-    def p_squared(node, position)
-      return false unless p_squared?(node, position)
 
-      #debug("p_squared") {"#{node.inspect}, #{position}"}
-      subject_done(node)
+    # Can object be represented using a predicateObjectList?
+    def p_squared?(resource, position)
+      resource.is_a?(RDF::Node) &&
+        !@serialized.has_key?(resource) &&
+        ref_count(resource) <= 1
+    end
+
+    # Represent an object as a predicateObjectList
+    def p_squared(resource, position)
+      return false unless p_squared?(resource, position)
+
+      #debug("p_squared") {"#{resource.inspect}, #{position}"}
+      subject_done(resource)
       @output.write(position == :subject ? '[' : ' [')
       @depth += 2
-      predicate_list(node)
+      predicateObjectList(resource)
       @depth -= 2
       @output.write(']')
       
       true
     end
-    
-    def p_default(node, position)
-      #debug("p_default") {"#{node.inspect}, #{position}"}
-      l = (position == :subject ? "" : " ") + format_value(node)
+
+    # Default singular resource representation.
+    def p_default(resource, position)
+      #debug("p_default") {"#{resource.inspect}, #{position}"}
+      l = (position == :subject ? "" : " ") + format_value(resource)
       @output.write(l)
     end
-    
-    def path(node, position)
+
+    # Represent a resource in subject, predicate or object position.
+    # Use either collection, blankNodePropertyList or singular resource notation.
+    def path(resource, position)
       debug("path") do
-        "#{node.inspect}, " +
+        "#{resource.inspect}, " +
         "pos: #{position}, " +
-        "[]: #{is_valid_list?(node)}, " +
-        "p2?: #{p_squared?(node, position)}, " +
-        "rc: #{ref_count(node)}"
+        "[]: #{is_valid_list?(resource)}, " +
+        "p2?: #{p_squared?(resource, position)}, " +
+        "rc: #{ref_count(resource)}"
       end
-      raise RDF::WriterError, "Cannot serialize node '#{node}'" unless p_list(node, position) || p_squared(node, position) || p_default(node, position)
+      raise RDF::WriterError, "Cannot serialize resource '#{resource}'" unless collection(resource, position) || p_squared(resource, position) || p_default(resource, position)
     end
     
-    def verb(node)
-      debug("verb") {node.inspect}
-      if node == RDF.type
+    def predicate(resource)
+      debug("predicate") {resource.inspect}
+      if resource == RDF.type
         @output.write(" a")
       else
-        path(node, :predicate)
+        path(resource, :predicate)
       end
     end
-    
-    def object_list(objects)
-      debug("object_list") {objects.inspect}
+
+    # Render an objectList having a common subject and predicate
+    def objectList(objects)
+      debug("objectList") {objects.inspect}
       return if objects.empty?
 
       objects.each_with_index do |obj, i|
@@ -522,8 +515,9 @@ module RDF::Turtle
         path(obj, :object)
       end
     end
-    
-    def predicate_list(subject)
+
+    # Render a predicateObjectList having a common subject.
+    def predicateObjectList(subject)
       properties = {}
       @graph.query(:subject => subject) do |st|
         properties[st.predicate.to_s] ||= []
@@ -531,54 +525,68 @@ module RDF::Turtle
       end
 
       prop_list = sort_properties(properties) - [RDF.first.to_s, RDF.rest.to_s]
-      debug("predicate_list") {prop_list.inspect}
+      debug("predicateObjectList") {prop_list.inspect}
       return if prop_list.empty?
 
       prop_list.each_with_index do |prop, i|
         begin
           @output.write(";\n#{indent(2)}") if i > 0
           prop[0, 2] == "_:"
-          verb(prop[0, 2] == "_:" ? RDF::Node.new(prop.split(':').last) : RDF::URI.intern(prop))
-          object_list(properties[prop])
-        rescue Addressable::URI::InvalidURIError => e
-          debug {"Predicate #{prop.inspect} is an invalid URI: #{e.message}"}
+          predicate(prop[0, 2] == "_:" ? RDF::Node.new(prop.split(':').last) : RDF::URI.intern(prop))
+          objectList(properties[prop])
         end
       end
     end
-    
-    def s_squared?(subject)
+
+    # Can subject be represented as a blankNodePropertyList?
+    def blankNodePropertyList?(subject)
       ref_count(subject) == 0 && subject.is_a?(RDF::Node) && !is_valid_list?(subject)
     end
-    
-    def s_squared(subject)
-      return false unless s_squared?(subject)
+
+    # Represent subject as a blankNodePropertyList?
+    def blankNodePropertyList(subject)
+      return false unless blankNodePropertyList?(subject)
       
-      debug("s_squared") {subject.inspect}
+      debug("blankNodePropertyList") {subject.inspect}
       @output.write("\n#{indent} [")
       @depth += 1
-      predicate_list(subject)
+      predicateObjectList(subject)
       @depth -= 1
       @output.write("] .")
       true
     end
-    
-    def s_default(subject)
+
+    # Render triples having the same subject using an explicit subject
+    def triples(subject)
       @output.write("\n#{indent}")
       path(subject, :subject)
-      predicate_list(subject)
+      predicateObjectList(subject)
       @output.write(" .")
       true
     end
     
     def statement(subject)
-      debug("statement") {"#{subject.inspect}, s2?: #{s_squared?(subject)}"}
+      debug("statement") {"#{subject.inspect}, bnodePL?: #{blankNodePropertyList?(subject)}"}
       subject_done(subject)
-      s_squared(subject) || s_default(subject)
+      blankNodePropertyList(subject) || triples(subject)
       @output.puts
     end
     
     def is_done?(subject)
       @serialized.include?(subject)
+    end
+    
+    # Return the number of times this node has been referenced in the object position
+    # @return [Integer]
+    def ref_count(resource)
+      @references.fetch(resource, 0)
+    end
+
+    # Increase the reference count of this resource
+    # @param [RDF::Resource] resource
+    # @return [Integer] resulting reference count
+    def bump_reference(resource)
+      @references[resource] = ref_count(resource) + 1
     end
     
     # Mark a subject as done.
