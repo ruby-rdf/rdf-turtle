@@ -15,7 +15,7 @@ def earl_preamble(options)
   options[:output].write File.read(File.expand_path("../../etc/doap#{'-ntriples' if options[:ntriples]}.ttl", __FILE__))
   options[:output].puts %(
 <> foaf:primaryTopic <http://rubygems.org/gems/rdf#{'-turtle' unless options[:ntriples]}> ;
-  dct:issued "#{RUN_TIME.xmlschema}"^^xsd:dateTime ;
+  dc:issued "#{RUN_TIME.xmlschema}"^^xsd:dateTime ;
   foaf:maker <#{ASSERTOR}> .
 
 <#{ASSERTOR}> a foaf:Person, earl:Assertor;
