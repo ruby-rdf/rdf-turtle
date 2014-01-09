@@ -35,12 +35,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'yard' ,           '>= 0.8.3'
   gem.add_development_dependency 'rdf-spec',        '>= 1.1'
 
-  # Rubinius has it's own dependencies
-  if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
-    gem.add_development_dependency "rubysl-open-uri"
-    gem.add_development_dependency "rubysl-prettyprint"
-  end
-
   gem.add_development_dependency 'rake'
   gem.post_install_message  = nil
 end
