@@ -10,7 +10,7 @@ describe RDF::Turtle::Reader do
       describe m.comment do
         m.entries.each do |t|
           specify "#{t.name}: #{t.comment}" do
-            t.debug = [t.inspect, "source:", t.input.read]
+            t.debug = [t.inspect, "source:", t.input]
 
             reader = RDF::Turtle::Reader.new(t.input,
                 :base_uri => t.base,

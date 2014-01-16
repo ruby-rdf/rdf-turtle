@@ -124,11 +124,11 @@ module Fixtures
 
       # Alias data and query
       def input
-        RDF::Util::File.open_file(action)
+        @input ||= RDF::Util::File.open_file(action) {|f| f.read}
       end
 
       def expected
-        RDF::Util::File.open_file(result)
+        @expected ||= RDF::Util::File.open_file(result) {|f| f.read}
       end
       
       def evaluate?
