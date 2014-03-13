@@ -123,8 +123,8 @@ describe RDF::Turtle::Writer do
     it "should generate anon as subject" do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . [:a :b] :c :d .)
       serialize(input, nil,
-        [%r(^\s*\[ :a :b;$),
-        %r(^\s+:c :d\] \.$)],
+        [%r(^\s*\[\s*:a :b;$)m,
+        %r(^\s+:c :d\s*\] \.$)m],
         :prefixes => { "" => RDF::FOAF}
       )
     end
@@ -217,7 +217,7 @@ describe RDF::Turtle::Writer do
       #$verbose = true
       serialize(input, nil,
         [
-          %r(:a rdfs:domain \[\s*a owl:Class;\s+owl:unionOf\s+\(:b\s+:c\)\]\s*\.$)m,
+          %r(:a rdfs:domain \[\s+a owl:Class;\s+owl:unionOf\s+\(:b\s+:c\)\s*\]\s*\.$)m,
           %r(@prefix : <http://xmlns.com/foaf/0.1/> \.),
           %r(@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \.),
         ],
@@ -231,7 +231,7 @@ describe RDF::Turtle::Writer do
     describe "plain" do
       it "encodes embedded \"\"\"" do
         ttl = %(:a :b """testing string parsing in Turtle.
-  """ .)
+                """ .)
         serialize(ttl, nil, [/testing string parsing in Turtle.\n/])
       end
 

@@ -266,7 +266,7 @@ module RDF::Turtle
     # @return [String]
     def format_uri(uri, options = {})
       md = relativize(uri)
-      debug("relativize") {"#{uri.inspect} => #{md.inspect}"} if md != uri.to_s
+      debug("relativize") {"#{uri.to_ntriples} => #{md.inspect}"} if md != uri.to_s
       md != uri.to_s ? "<#{md}>" : (get_pname(uri) || "<#{uri}>")
     end
     
@@ -325,7 +325,7 @@ module RDF::Turtle
       # Add distinguished classes
       top_classes.each do |class_uri|
         graph.query(:predicate => RDF.type, :object => class_uri).map {|st| st.subject}.sort.uniq.each do |subject|
-          debug("order_subjects") {subject.inspect}
+          debug("order_subjects") {subject.to_ntriples}
           subjects << subject
           seen[subject] = true
         end
@@ -362,7 +362,7 @@ module RDF::Turtle
     # prefixes.
     # @param [Statement] statement
     def preprocess_statement(statement)
-      #debug("preprocess") {statement.inspect}
+      #debug("preprocess") {statement.to_ntriples}
       bump_reference(statement.object)
       @subjects[statement.subject] = true
 
@@ -413,11 +413,12 @@ module RDF::Turtle
       return unless @options[:debug] || RDF::Turtle.debug?
       options = args.last.is_a?(Hash) ? args.pop : {}
       depth = options[:depth] || @depth
+      d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
       message = args.pop
       message = message.call if message.is_a?(Proc)
       args << message if message
       args << yield if block_given?
-      message = "#{args.join(': ')}"
+      message = "#{d_str}#{args.join(': ')}"
       @options[:debug] << message if @options[:debug].is_a?(Array)
       $stderr.puts(message) if RDF::Turtle.debug?
     end
@@ -445,7 +446,7 @@ module RDF::Turtle
 
     def collection(node, position)
       return false if !is_valid_list?(node)
-      #debug("collection") {"#{node.inspect}, #{position}"}
+      #debug("collection") {"#{node.to_ntriples}, #{position}"}
 
       @output.write(position == :subject ? "(" : " (")
       @depth += 2
@@ -454,31 +455,31 @@ module RDF::Turtle
       @output.write(')')
     end
 
-    # Can object be represented using a predicateObjectList?
+    # Can object be represented using a blankNodePropertyList?
     def p_squared?(resource, position)
       resource.is_a?(RDF::Node) &&
         !@serialized.has_key?(resource) &&
         ref_count(resource) <= 1
     end
 
-    # Represent an object as a predicateObjectList
+    # Represent an object as a blankNodePropertyList
     def p_squared(resource, position)
       return false unless p_squared?(resource, position)
 
-      #debug("p_squared") {"#{resource.inspect}, #{position}"}
+      #debug("p_squared") {"#{resource.to_ntriples}, #{position}"}
       subject_done(resource)
       @output.write(position == :subject ? '[' : ' [')
       @depth += 2
-      predicateObjectList(resource)
+      num_props = predicateObjectList(resource, true)
+      @output.write(num_props > 1 ? "\n#{indent} ]" : "]")
       @depth -= 2
-      @output.write(']')
       
       true
     end
 
     # Default singular resource representation.
     def p_default(resource, position)
-      #debug("p_default") {"#{resource.inspect}, #{position}"}
+      #debug("p_default") {"#{resource.to_ntriples}, #{position}"}
       l = (position == :subject ? "" : " ") + format_value(resource)
       @output.write(l)
     end
@@ -487,17 +488,17 @@ module RDF::Turtle
     # Use either collection, blankNodePropertyList or singular resource notation.
     def path(resource, position)
       debug("path") do
-        "#{resource.inspect}, " +
+        "#{resource.to_ntriples}, " +
         "pos: #{position}, " +
-        "[]: #{is_valid_list?(resource)}, " +
-        "p2?: #{p_squared?(resource, position)}, " +
+        "()?: #{is_valid_list?(resource)}, " +
+        "[]?: #{p_squared?(resource, position)}, " +
         "rc: #{ref_count(resource)}"
       end
       raise RDF::WriterError, "Cannot serialize resource '#{resource}'" unless collection(resource, position) || p_squared(resource, position) || p_default(resource, position)
     end
     
     def predicate(resource)
-      debug("predicate") {resource.inspect}
+      debug("predicate") {resource.to_ntriples}
       if resource == RDF.type
         @output.write(" a")
       else
@@ -511,23 +512,28 @@ module RDF::Turtle
       return if objects.empty?
 
       objects.each_with_index do |obj, i|
-        @output.write(",\n#{indent(4)}") if i > 0
+        if i > 0 && p_squared?(obj, :object)
+          @output.write ", "
+        elsif i > 0
+          @output.write ",\n#{indent(4)}"
+        end
         path(obj, :object)
       end
     end
 
     # Render a predicateObjectList having a common subject.
-    def predicateObjectList(subject)
+    # @return [Integer] the number of properties serialized
+    def predicateObjectList(subject, from_bpl = false)
       properties = {}
       @graph.query(:subject => subject) do |st|
-        properties[st.predicate.to_s] ||= []
-        properties[st.predicate.to_s] << st.object
+        (properties[st.predicate.to_s] ||= []) << st.object
       end
 
       prop_list = sort_properties(properties) - [RDF.first.to_s, RDF.rest.to_s]
       debug("predicateObjectList") {prop_list.inspect}
-      return if prop_list.empty?
+      return 0 if prop_list.empty?
 
+      @output.write("\n#{indent(2)}") if properties.keys.length > 1 && from_bpl
       prop_list.each_with_index do |prop, i|
         begin
           @output.write(";\n#{indent(2)}") if i > 0
@@ -536,6 +542,7 @@ module RDF::Turtle
           objectList(properties[prop])
         end
       end
+      properties.keys.length
     end
 
     # Can subject be represented as a blankNodePropertyList?
@@ -547,12 +554,12 @@ module RDF::Turtle
     def blankNodePropertyList(subject)
       return false unless blankNodePropertyList?(subject)
       
-      debug("blankNodePropertyList") {subject.inspect}
+      debug("blankNodePropertyList") {subject.to_ntriples}
       @output.write("\n#{indent} [")
       @depth += 1
-      predicateObjectList(subject)
+      num_props = predicateObjectList(subject, true)
       @depth -= 1
-      @output.write("] .")
+      @output.write(num_props > 1 ? "\n#{indent} ] ." : "] .")
       true
     end
 
@@ -566,7 +573,7 @@ module RDF::Turtle
     end
     
     def statement(subject)
-      debug("statement") {"#{subject.inspect}, bnodePL?: #{blankNodePropertyList?(subject)}"}
+      debug("statement") {"#{subject.to_ntriples}, bnodePL?: #{blankNodePropertyList?(subject)}"}
       subject_done(subject)
       blankNodePropertyList(subject) || triples(subject)
       @output.puts
