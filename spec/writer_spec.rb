@@ -365,7 +365,7 @@ describe RDF::Turtle::Writer do
             specify "#{t.name}: #{t.comment}" do
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
-              @debug += [t.inspect, "source:", t.expected.read]
+              @debug += [t.inspect, "source:", t.expected]
               g2 = parse(ttl, base_uri: t.base)
               g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
             end
@@ -373,7 +373,7 @@ describe RDF::Turtle::Writer do
             specify "#{t.name}: #{t.comment} (stream)" do
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
-              @debug += [t.inspect, "source:", t.expected.read]
+              @debug += [t.inspect, "source:", t.expected]
               g2 = parse(ttl, base_uri: t.base)
               g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
             end
