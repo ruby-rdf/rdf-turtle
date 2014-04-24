@@ -3,7 +3,7 @@ require 'ebnf'
 
 module RDF
   ##
-  # **`RDF::Turtle`** is an Turtle plugin for RDF.rb.
+  # **`RDF::Turtle`** is an Turtle extension for RDF.rb.
   #
   # @example Requiring the `RDF::Turtle` module
   #   require 'rdf/turtle'

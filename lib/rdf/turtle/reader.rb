@@ -288,33 +288,36 @@ module RDF::Turtle
     # @yieldparam [RDF::Statement] statement
     # @return [void]
     def each_statement(&block)
-      @callback = block
+      if block_given?
+        @callback = block
 
-      parse(@input, START.to_sym, @options.merge(:branch => BRANCH,
-                                                 :first => FIRST,
-                                                 :follow => FOLLOW,
-                                                 :reset_on_start => true)
-      ) do |context, *data|
-        case context
-        when :statement
-          loc = data.shift
-          s = RDF::Statement.from(data, :lineno => lineno)
-          add_statement(loc, s) unless !s.valid? && validate?
-        when :trace
-          level, lineno, depth, *args = data
-          message = "#{args.join(': ')}"
-          d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
-          str = "[#{lineno}](#{level})#{d_str}#{message}"
-          case @options[:debug]
-          when Array
-            @options[:debug] << str
-          when TrueClass
-            $stderr.puts str
-          when Integer
-            $stderr.puts(str) if level <= @options[:debug]
+        parse(@input, START.to_sym, @options.merge(:branch => BRANCH,
+                                                   :first => FIRST,
+                                                   :follow => FOLLOW,
+                                                   :reset_on_start => true)
+        ) do |context, *data|
+          case context
+          when :statement
+            loc = data.shift
+            s = RDF::Statement.from(data, :lineno => lineno)
+            add_statement(loc, s) unless !s.valid? && validate?
+          when :trace
+            level, lineno, depth, *args = data
+            message = "#{args.join(': ')}"
+            d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
+            str = "[#{lineno}](#{level})#{d_str}#{message}"
+            case @options[:debug]
+            when Array
+              @options[:debug] << str
+            when TrueClass
+              $stderr.puts str
+            when Integer
+              $stderr.puts(str) if level <= @options[:debug]
+            end
           end
         end
       end
+      enum_for(:each_statement)
     rescue EBNF::LL1::Parser::Error, EBNF::LL1::Lexer::Error => e
       if validate?
         raise RDF::ReaderError.new(e.message, lineno: e.lineno, token: e.token)
@@ -332,9 +335,12 @@ module RDF::Turtle
     # @yieldparam [RDF::Value]    object
     # @return [void]
     def each_triple(&block)
-      each_statement do |statement|
-        block.call(*statement.to_triple)
+      if block_given?
+        each_statement do |statement|
+          block.call(*statement.to_triple)
+        end
       end
+      enum_for(:each_triple)
     end
 
     # add a statement, object can be literal or URI or bnode

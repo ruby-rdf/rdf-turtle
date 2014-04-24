@@ -1,0 +1,54 @@
+#<http://dbpedia.org/resource/Free_State_of_Lippe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/AdministrativeArea> .
+#<http://dbpedia.org/resource/Free_State_of_Lippe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Region> .
+#<http://dbpedia.org/resource/Free_State_of_Lippe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/PopulatedPlace> .
+#<http://dbpedia.org/resource/Free_State_of_Lippe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Place> .
+#<http://dbpedia.org/resource/Free_State_of_Lippe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Place> .
+#<http://dbpedia.org/resource/Free_State_of_Lippe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/RugbyPlayer> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Athlete> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Person> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Person> .
+#<http://dbpedia.org/resource/Scott_Morgan_(rugby_player)> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Agent> .
+#<http://dbpedia.org/resource/SRT_Viper> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Automobile> .
+#<http://dbpedia.org/resource/SRT_Viper> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/MeanOfTransportation> .
+#<http://dbpedia.org/resource/SRT_Viper> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+#<http://dbpedia.org/resource/SRT_Viper> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Product> .
+#<http://dbpedia.org/resource/SRT_Viper__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+<http://dbpedia.org/resource/SRT_Viper__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+<http://dbpedia.org/resource/SRT_Viper__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Automobile> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/MeanOfTransportation> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Product> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1__2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1__2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__First_generation\nViper_RT/10__1__2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Automobile> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/MeanOfTransportation> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Product> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1__3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1__3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 72: http://en.dbpedia.org/resource/SRT_Viper__Second_generation,_Phase_II_SR\nViper_RT/10,_GTS__1__3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Automobile> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/MeanOfTransportation> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Product> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/AutomobileEngine> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Device> .
+# <BAD URI: Illegal character in path at index 58: http://en.dbpedia.org/resource/SRT_Viper__Third_generation\nViper_SRT-10__1__4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+<http://dbpedia.org/resource/SRT_Viper__Fourth_generation,_Phase_II_Viper_SRT-10__1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Automobile> .
