@@ -47,14 +47,14 @@ module RDF::Util
               response
             end
           else
-            Kernel.open(filename_or_url.to_s, options, &block)
+            Kernel.open(filename_or_url.to_s, options.fetch(:headers, {}), &block)
           end
         rescue Errno::ENOENT #, OpenURI::HTTPError
           # Not there, don't run tests
           StringIO.new("")
         end
       else
-        Kernel.open(filename_or_url.to_s, options, &block)
+        Kernel.open(filename_or_url.to_s, options.fetch(:headers, {}), &block)
       end
     end
   end
