@@ -12,7 +12,7 @@ describe RDF::Turtle::Writer do
   include RDF_Writer
 
   describe ".for" do
-    formats = [
+    [
       :turtle,
       'etc/doap.ttl',
       {:file_name      => 'etc/doap.ttl'},
@@ -46,7 +46,7 @@ describe RDF::Turtle::Writer do
       serialize(input, nil,
         [%r(^@prefix foaf: <http://xmlns.com/foaf/0.1/> \.$),
         %r(^foaf:b foaf:c foaf:d \.$)],
-        :prefixes => { :foaf => RDF::FOAF}
+        prefixes: { foaf: RDF::FOAF}
       )
     end
 
@@ -55,7 +55,7 @@ describe RDF::Turtle::Writer do
       serialize(input, nil,
         [%r(^@prefix : <http://xmlns.com/foaf/0.1/> \.$),
         %r(^:b :c :d \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -65,7 +65,7 @@ describe RDF::Turtle::Writer do
       serialize(input, nil,
         [%r(^@prefix foaf: <http://xmlns.com/foaf/0.1/> \.$),
         %r(^foaf: foaf: foaf: \.$)],
-        :prefixes => { "foaf" => RDF::FOAF}
+        prefixes: { "foaf" => RDF::FOAF}
       )
     end
     
@@ -86,7 +86,7 @@ describe RDF::Turtle::Writer do
           %r("label";\s+dc:title "title")m,
           %r("title";\s+:c :d \.$)m
         ],
-        :prefixes => { "" => RDF::FOAF, :dc => "http://purl.org/dc/elements/1.1/", :rdfs => RDF::RDFS}
+        prefixes: { "" => RDF::FOAF, :dc => "http://purl.org/dc/elements/1.1/", :rdfs => RDF::RDFS}
       )
     end
     
@@ -96,7 +96,7 @@ describe RDF::Turtle::Writer do
         [%r(^@prefix : <http://xmlns.com/foaf/0.1/> \.$),
         %r(^:b :c :d,$),
         %r(^\s+:e \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -106,7 +106,7 @@ describe RDF::Turtle::Writer do
         [%r(^@prefix : <http://xmlns.com/foaf/0.1/> \.$),
         %r(^:b :c :d;$),
         %r(^\s+:e :f \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
   end
@@ -116,7 +116,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . [:a :b] .)
       serialize(input, nil,
         [%r(^\s*\[ :a :b\] \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -125,7 +125,7 @@ describe RDF::Turtle::Writer do
       serialize(input, nil,
         [%r(^\s*\[\s*:a :b;$)m,
         %r(^\s+:c :d\s*\] \.$)m],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -133,17 +133,34 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . :a :b [:c :d] .)
       serialize(input, nil,
         [%r(^\s*\:a :b \[ :c :d\] \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
   end
-  
+
+  describe "BNodes" do
+    let(:input) {%(@prefix : <http://xmlns.com/foaf/0.1/> . _:a :b _:a .)}
+    it "reuses BNode labels by default" do
+      serialize(input, nil,
+        [%r(^\s*_:a :b _:a \.$)],
+        prefixes: { "" => RDF::FOAF}
+      )
+    end
+    it "uses generated BNodes with :unique_bnodes" do
+      serialize(input, nil,
+        [%r(^\s*_:g\w+ :b _:g\w+ \.$)],
+        prefixes: { "" => RDF::FOAF},
+        unique_bnodes: true
+      )
+    end
+  end
+
   describe "lists" do
     it "should generate bare list" do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . (:a :b) .)
       serialize(input, nil,
         [%r(^\(:a :b\) \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
 
@@ -151,7 +168,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . :a :b ( "apple" "banana" ) .)
       serialize(input, nil,
         [%r(^:a :b \("apple" "banana"\) \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -159,7 +176,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . :a :b () .)
       serialize(input, nil,
         [%r(^:a :b \(\) \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -167,7 +184,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . () :a :b .)
       serialize(input, nil,
         [%r(^\(\) :a :b \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -175,7 +192,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . (:a) :b :c .)
       serialize(input, nil,
         [%r(^\(:a\) :b :c \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
 
@@ -183,7 +200,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . [:listOf2Empties (() ())] .)
       serialize(input, nil,
         [%r(\[ :listOf2Empties \(\(\) \(\)\)\] \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -191,7 +208,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix : <http://xmlns.com/foaf/0.1/> . [:twoAnons ([a :mother] [a :father])] .)
       serialize(input, nil,
         [%r(\[ :twoAnons \(\[ a :mother\] \[ a :father\]\)\] \.$)],
-        :prefixes => { "" => RDF::FOAF}
+        prefixes: { "" => RDF::FOAF}
       )
     end
     
@@ -221,7 +238,7 @@ describe RDF::Turtle::Writer do
           %r(@prefix : <http://xmlns.com/foaf/0.1/> \.),
           %r(@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \.),
         ],
-        :prefixes => { "" => RDF::FOAF, :rdfs => RDF::RDFS, :owl => RDF::OWL, :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
+        prefixes: { "" => RDF::FOAF, :rdfs => RDF::RDFS, :owl => RDF::OWL, :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
       )
       #$verbose = false
     end
@@ -274,7 +291,7 @@ describe RDF::Turtle::Writer do
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
-          ], :canonicalize => true)
+          ], canonicalize: true)
         end
       end
     end
@@ -293,7 +310,7 @@ describe RDF::Turtle::Writer do
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
-          ], :canonicalize => true)
+          ], canonicalize: true)
         end
       end
     end
@@ -309,7 +326,7 @@ describe RDF::Turtle::Writer do
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
-          ], :canonicalize => true)
+          ], canonicalize: true)
         end
       end
     end
@@ -328,7 +345,7 @@ describe RDF::Turtle::Writer do
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
-          ], :canonicalize => true)
+          ], canonicalize: true)
         end
       end
     end
@@ -347,7 +364,7 @@ describe RDF::Turtle::Writer do
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
-          ], :canonicalize => true)
+          ], canonicalize: true)
         end
       end
     end
@@ -400,18 +417,14 @@ describe RDF::Turtle::Writer do
   # Serialize ntstr to a string and compare against regexps
   def serialize(ntstr, base = nil, regexps = [], options = {})
     prefixes = options[:prefixes] || {nil => ""}
-    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, :base_uri => base, :prefixes => prefixes, :validate => false)
+    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false)
     @debug = ["serialized:", ntstr]
-    result = RDF::Turtle::Writer.buffer(options.merge(:debug => @debug, :base_uri => base, :prefixes => prefixes)) do |writer|
+    result = RDF::Turtle::Writer.buffer(options.merge(debug: @debug, base_uri: base, prefixes: prefixes)) do |writer|
       writer << g
-    end
-    if $verbose
-      require 'cgi'
-      #puts CGI.escapeHTML(result)
     end
     
     regexps.each do |re|
-      result.should match_re(re, :about => base, :trace => @debug, :input => ntstr)
+      result.should match_re(re, about: base, trace: @debug, input: ntstr)
     end
     
     result

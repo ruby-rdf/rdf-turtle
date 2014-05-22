@@ -85,6 +85,8 @@ module RDF::Turtle
     #   Do not attempt to optimize graph presentation, suitable for streaming large graphs.
     # @option options [String]   :default_namespace (nil)
     #   URI to use as default namespace, same as `prefixes[nil]`
+    # @option options [Boolean]  :unique_bnodes   (false)
+    #   Use unique node identifiers, defaults to using the identifier which the node was originall initialized with (if any).
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
@@ -173,7 +175,7 @@ module RDF::Turtle
     def get_pname(resource)
       case resource
       when RDF::Node
-        return resource.to_s
+        return options[:unique_bnodes] ? resource.to_unique_base : resource.to_base
       when RDF::URI
         uri = resource.to_s
       else
@@ -277,7 +279,7 @@ module RDF::Turtle
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_node(node, options = {})
-      "_:%s" % node.id
+      options[:unique_bnodes] ? node.to_unique_base : node.to_base
     end
     
     protected
@@ -334,7 +336,7 @@ module RDF::Turtle
       # Sort subjects by resources over bnodes, ref_counts and the subject URI itself
       recursable = @subjects.keys.
         select {|s| !seen.include?(s)}.
-        map {|r| [r.is_a?(RDF::Node) ? 1 : 0, ref_count(r), r]}.
+        map {|r| [r.node? ? 1 : 0, ref_count(r), r]}.
         sort
       
       subjects += recursable.map{|r| r.last}
@@ -457,7 +459,7 @@ module RDF::Turtle
 
     # Can object be represented using a blankNodePropertyList?
     def p_squared?(resource, position)
-      resource.is_a?(RDF::Node) &&
+      resource.node? &&
         !@serialized.has_key?(resource) &&
         ref_count(resource) <= 1
     end
@@ -480,7 +482,7 @@ module RDF::Turtle
     # Default singular resource representation.
     def p_default(resource, position)
       #debug("p_default") {"#{resource.to_ntriples}, #{position}"}
-      l = (position == :subject ? "" : " ") + format_value(resource)
+      l = (position == :subject ? "" : " ") + format_value(resource, options)
       @output.write(l)
     end
 
@@ -537,8 +539,7 @@ module RDF::Turtle
       prop_list.each_with_index do |prop, i|
         begin
           @output.write(";\n#{indent(2)}") if i > 0
-          prop[0, 2] == "_:"
-          predicate(prop[0, 2] == "_:" ? RDF::Node.new(prop.split(':').last) : RDF::URI.intern(prop))
+          predicate(RDF::URI.intern(prop))
           objectList(properties[prop])
         end
       end
@@ -547,7 +548,7 @@ module RDF::Turtle
 
     # Can subject be represented as a blankNodePropertyList?
     def blankNodePropertyList?(subject)
-      ref_count(subject) == 0 && subject.is_a?(RDF::Node) && !is_valid_list?(subject)
+      ref_count(subject) == 0 && subject.node? && !is_valid_list?(subject)
     end
 
     # Represent subject as a blankNodePropertyList?
