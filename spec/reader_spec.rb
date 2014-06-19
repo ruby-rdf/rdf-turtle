@@ -149,7 +149,7 @@ describe "RDF::Turtle::Reader" do
         "€" => '<a> <b>  "€" .',
         "resumé" => ':a :resume  "resumé" .',
       }.each_pair do |contents, triple|
-        specify "test #{triple}", pending:  ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+        specify "test #{triple}" do
           graph = parse(triple, prefixes:  {nil => ''})
           statement = graph.statements.to_a.first
           expect(graph.size).to eq 1
@@ -157,7 +157,7 @@ describe "RDF::Turtle::Reader" do
         end
       end
       
-      it "should parse long literal with escape", pending:  ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+      it "should parse long literal with escape" do
         ttl = %(@prefix : <http://example/foo#> . <a> <b> "\\U00015678another" .)
         statement = parse(ttl).statements.to_a.first
         expect(statement.object.value).to eq "\u{15678}another"
@@ -286,7 +286,7 @@ describe "RDF::Turtle::Reader" do
         %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
         %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
-          it "for '#{ttl}'", pending:  ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+          it "for '#{ttl}'" do
             expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
           end
         end
@@ -295,7 +295,7 @@ describe "RDF::Turtle::Reader" do
         %(<#Dürst> a  "URI straight in UTF8".) => %(<#D\\u00FCrst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "URI straight in UTF8" .),
         %(<a> :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
-        it "for '#{ttl}'", pending:  ("Rubinius string array access problem" if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx") do
+        it "for '#{ttl}'" do
           expect(parse(ttl, prefixes:  {nil => ''})).to be_equivalent_graph(nt, trace:  @debug)
         end
       end
