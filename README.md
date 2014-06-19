@@ -21,7 +21,7 @@ Install with `gem install rdf-turtle`
 ## Usage
 Instantiate a reader from a local file:
 
-    graph = RDF::Graph.load("etc/doap.ttl", :format => :ttl)
+    graph = RDF::Graph.load("etc/doap.ttl", format:  :ttl)
 
 Define `@base` and `@prefix` definitions, and use for serialization using `:base_uri` an `:prefixes` options.
 
@@ -54,7 +54,7 @@ In some cases, the specification is unclear on certain issues:
 
 ### Freebase-specific Reader
 There is a special reader useful for processing [Freebase Dumps][]. To invoke
-this, add the `:freebase => true` option to the {RDF::Turtle::Reader.new}, or
+this, add the `freebase:  true` option to the {RDF::Turtle::Reader.new}, or
 use {RDF::Turtle::FreebaseReader} directly. As with {RDF::Turtle::Reader},
 prefix definitions may be passed in using the `:prefixes` option to
 RDF::Turtle::FreebaseReader} using the standard mechanism defined
@@ -69,16 +69,16 @@ An example of reading Freebase dumps:
     require "rdf/turtle"
     fb = "../freebase/freebase-rdf-2013-03-03-00-00.ttl"
     fb_prefixes = {
-      :ns => "http://rdf.freebase.com/ns/",
-      :key => "http://rdf.freebase.com/key/",
-      :owl => "http://www.w3.org/2002/07/owl#>",
-      :rdfs => "http://www.w3.org/2000/01/rdf-schema#",
-      :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-      :xsd => "http://www.w3.org/2001/XMLSchema#"
+      ns:  "http://rdf.freebase.com/ns/",
+      key:  "http://rdf.freebase.com/key/",
+      owl:  "http://www.w3.org/2002/07/owl#>",
+      rdfs:  "http://www.w3.org/2000/01/rdf-schema#",
+      rdf:  "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      xsd:  "http://www.w3.org/2001/XMLSchema#"
     }
     RDF::Turtle::Reader.open(fb,
-      :freebase => true,
-      :prefixes => fb_prefixes) do |r|
+      freebase:  true,
+      prefixes:  fb_prefixes) do |r|
 
       r.each_statement {|stmt| puts stmt.to_ntriples}
     end
