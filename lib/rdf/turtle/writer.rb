@@ -430,7 +430,7 @@ module RDF::Turtle
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
     def is_valid_list?(l)
       #debug("is_valid_list?") {l.inspect}
-      return (l.node? && RDF::List.new(l, @graph).valid?) || l == RDF.nil
+      return RDF::List.new(l, @graph).valid?
     end
     
     def do_list(l)
