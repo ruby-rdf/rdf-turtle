@@ -419,7 +419,12 @@ describe RDF::Turtle::Writer do
     prefixes = options[:prefixes] || {nil => ""}
     g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false)
     @debug = ["serialized:", ntstr]
-    result = RDF::Turtle::Writer.buffer(options.merge(debug: @debug, base_uri: base, prefixes: prefixes)) do |writer|
+    result = RDF::Turtle::Writer.buffer(options.merge(
+      debug: @debug,
+      base_uri: base,
+      prefixes: prefixes,
+      encoding: Encoding::UTF_8,
+    )) do |writer|
       writer << g
     end
     
