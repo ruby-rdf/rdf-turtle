@@ -30,25 +30,25 @@ describe "RDF::Turtle::FreebaseReader" do
     
     it "should yield reader" do
       inner = double("inner")
-      inner.should_receive(:called).with(RDF::Turtle::FreebaseReader)
+      expect(inner).to receive(:called).with(RDF::Turtle::FreebaseReader)
       RDF::Turtle::FreebaseReader.new(subject) do |reader|
         inner.called(reader.class)
       end
     end
     
     it "should return reader" do
-      RDF::Turtle::FreebaseReader.new(subject).should be_a(RDF::Turtle::FreebaseReader)
+      expect(RDF::Turtle::FreebaseReader.new(subject)).to be_a(RDF::Turtle::FreebaseReader)
     end
     
     it "should not raise errors" do
-      lambda {
-        RDF::Turtle::FreebaseReader.new(subject, :validate => true)
-      }.should_not raise_error
+      expect {
+        RDF::Turtle::FreebaseReader.new(subject, validate:  true)
+      }.not_to raise_error
     end
 
     it "should yield statements" do
       inner = double("inner")
-      inner.should_receive(:called).with(RDF::Statement).exactly(2)
+      expect(inner).to receive(:called).with(RDF::Statement).exactly(2)
       RDF::Turtle::FreebaseReader.new(subject).each_statement do |statement|
         inner.called(statement.class)
       end
@@ -56,7 +56,7 @@ describe "RDF::Turtle::FreebaseReader" do
     
     it "should yield triples" do
       inner = double("inner")
-      inner.should_receive(:called).exactly(2)
+      expect(inner).to receive(:called).exactly(2)
       RDF::Turtle::FreebaseReader.new(subject).each_triple do |subject, predicate, object|
         inner.called(subject.class, predicate.class, object.class)
       end
@@ -70,35 +70,35 @@ describe "RDF::Turtle::FreebaseReader" do
         foo:c foo:d <foobar> .
       )
     }
-    subject {RDF::Turtle::FreebaseReader.new(input, :prefixes => {:foo => "http://example/bar#"})}
+    subject {RDF::Turtle::FreebaseReader.new(input, prefixes:  {foo:  "http://example/bar#"})}
     it "should have prefix :foo" do
-      subject.prefix(:foo).should == "http://example/bar#"
+      expect(subject.prefix(:foo)).to eq "http://example/bar#"
     end
     it "should have prefix 'foo'" do
-      subject.prefix('foo').should == "http://example/bar#"
+      expect(subject.prefix('foo')).to eq "http://example/bar#"
     end
     its(:prefixes) {should have_key(:foo)}
 
     it "should parse equivalent to Turtle:Reader" do
       g = RDF::Graph.new << subject
-      g.should be_equivalent_graph("@prefix foo: <http://example/bar#> ." + input)
+      expect(g).to be_equivalent_graph("@prefix foo: <http://example/bar#> ." + input)
     end
   end
 
   describe "with simple sample data" do
     {
-      :qname      => %q(ns:m.012rkqx    ns:type.object.type ns:common.topic.),
-      :langString => %q(ns:m.012rkqx    ns:type.object.name "High Fidelity"@en.),
-      :string     => %q(ns:m.012rkqx    key:authority.musicbrainz   "258c45bd-4437-4580-8988-b3f3be975f9c".),
-      :boolean    => %q(ns:american_football.football_historical_roster_position.number ns:type.property.unique true .),
-      :iri        => %q(ns:g.1hhc3t8lm ns:common.licensed_object.attribution_uri <http://data.worldbank.org/indicator/IS.VEH.NVEH.P3> .),
-      :numeric    => %q(ns:g.11_plx64m ns:measurement_unit.dated_percentage.rate 9.2 .),
-      :date       => %q(ns:m.012rkqx    ns:film.film.initial_release_date    "2012-08-31"^^xsd:datetime .),
+      qname:       %q(ns:m.012rkqx    ns:type.object.type ns:common.topic.),
+      langString:  %q(ns:m.012rkqx    ns:type.object.name "High Fidelity"@en.),
+      string:      %q(ns:m.012rkqx    key:authority.musicbrainz   "258c45bd-4437-4580-8988-b3f3be975f9c".),
+      boolean:     %q(ns:american_football.football_historical_roster_position.number ns:type.property.unique true .),
+      iri:         %q(ns:g.1hhc3t8lm ns:common.licensed_object.attribution_uri <http://data.worldbank.org/indicator/IS.VEH.NVEH.P3> .),
+      numeric:     %q(ns:g.11_plx64m ns:measurement_unit.dated_percentage.rate 9.2 .),
+      date:        %q(ns:m.012rkqx    ns:film.film.initial_release_date    "2012-08-31"^^xsd:datetime .),
     }.each do |name, input|
       it name do
         ttl = prefixes + "\n" + input
         
-        parse(ttl).should be_equivalent_graph(ttl)
+        expect(parse(ttl)).to be_equivalent_graph(ttl)
       end
     end
   end
@@ -121,7 +121,7 @@ describe "RDF::Turtle::FreebaseReader" do
       it "should create typed literal for '#{input}'" do
         ttl = prefixes + "\n" + input
         
-        parse(ttl).should be_equivalent_graph(ttl)
+        expect(parse(ttl)).to be_equivalent_graph(ttl)
       end
     end
   end
@@ -133,10 +133,10 @@ describe "RDF::Turtle::FreebaseReader" do
       %(undef:a ns:b "c") => %r(prefix "undef" is not defined),
     }.each_pair do |ttl, error|
       it "should raise '#{error}' for '#{ttl}'" do
-        lambda {
+        expect {
           input = prefixes + "\n" + ttl
-          parse(input, :validate => true).should produce("")
-        }.should raise_error(error)
+          expect(parse(input, validate:  true)).to produce("")
+        }.to raise_error(error)
       end
     end
   end
@@ -144,9 +144,9 @@ describe "RDF::Turtle::FreebaseReader" do
   def parse(input, options = {})
     @debug = []
     options = {
-      :debug => @debug,
-      :validate => true,
-      :canonicalize => false,
+      debug:  @debug,
+      validate:  true,
+      canonicalize:  false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new
     RDF::Turtle::FreebaseReader.new(input, options).each do |statement|

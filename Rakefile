@@ -4,7 +4,7 @@ require 'rubygems'
 
 namespace :gem do
   desc "Build the rdf-turtle-#{File.read('VERSION').chomp}.gem file"
-  task :build => "lib/rdf/turtle/meta.rb" do
+  task build:  "lib/rdf/turtle/meta.rb" do
     sh "gem build rdf-turtle.gemspec && mv rdf-turtle-#{File.read('VERSION').chomp}.gem pkg/"
   end
 
@@ -15,8 +15,8 @@ namespace :gem do
 end
 
 desc 'Default: run specs.'
-task :default => :spec
-task :specs => :spec
+task default:  :spec
+task specs:  :spec
 
 require 'rspec/core/rake_task'
 desc 'Run specifications'
@@ -41,10 +41,10 @@ namespace :doc do
 end
 
 desc 'Create versions of ebnf files in etc'
-task :etc => %w{etc/turtle.sxp etc/turtle.ll1.sxp}
+task etc:  %w{etc/turtle.sxp etc/turtle.ll1.sxp}
 
 desc 'Build first, follow and branch tables'
-task :meta => "lib/rdf/turtle/meta.rb"
+task meta:  "lib/rdf/turtle/meta.rb"
 
 file "lib/rdf/turtle/meta.rb" => "etc/turtle.bnf" do |t|
   sh %{

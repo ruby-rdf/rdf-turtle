@@ -2,23 +2,23 @@
 require 'rdf/isomorphic'
 require 'json'
 JSON_STATE = JSON::State.new(
-   :indent       => "  ",
-   :space        => " ",
-   :space_before => "",
-   :object_nl    => "\n",
-   :array_nl     => "\n"
+   indent:        "  ",
+   space:         " ",
+   space_before:  "",
+   object_nl:     "\n",
+   array_nl:      "\n"
  )
 
 def normalize(graph)
   case graph
   when RDF::Queryable then graph
   when IO, StringIO
-    RDF::Graph.new.load(graph, :base_uri => @info.about)
+    RDF::Graph.new.load(graph, base_uri:  @info.about)
   else
     # Figure out which parser to use
     g = RDF::Repository.new
     reader_class = detect_format(graph)
-    reader_class.new(graph, :base_uri => @info.about).each {|s| g << s}
+    reader_class.new(graph, base_uri:  @info.about).each {|s| g << s}
     g
   end
 end
@@ -44,7 +44,7 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
     @actual.isomorphic_with?(@expected) rescue false
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     info = @info.respond_to?(:comment) ? @info.comment : @info.inspect
     if @expected.is_a?(RDF::Graph) && @actual.size != @expected.size
       "Graph entry count differs:\nexpected: #{@expected.size}\nactual:   #{@actual.size}"
@@ -56,8 +56,8 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
     "\n#{info + "\n" unless info.empty?}" +
     (@info.action ? "Input file: #{@info.action}\n" : "") +
     (@info.result ? "Result file: #{@info.result}\n" : "") +
-    "Unsorted Expected:\n#{@expected.dump(:ntriples, :standard_prefixes => true)}" +
-    "Unsorted Results:\n#{@actual.dump(:ntriples, :standard_prefixes => true)}" +
+    "Unsorted Expected:\n#{@expected.dump(:ntriples, standard_prefixes:  true)}" +
+    "Unsorted Results:\n#{@actual.dump(:ntriples, standard_prefixes:  true)}" +
     (@info.trace ? "\nDebug:\n#{@info.trace}" : "")
   end  
 end
@@ -81,7 +81,7 @@ RSpec::Matchers.define :match_re do |expected, info|
     @actual.to_s.match(@expected)
   end
   
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     info = @info.respond_to?(:comment) ? @info.comment : @info.inspect
     "Match failed" +
     "\n#{info + "\n" unless info.empty?}" +
@@ -95,10 +95,10 @@ end
 
 RSpec::Matchers.define :produce do |expected, info|
   match do |actual|
-    actual.should == expected
+    expect(actual).to eq expected
   end
   
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "Expected: #{[Array, Hash].include?(expected.class) ? expected.to_json(JSON_STATE) : expected.inspect}\n" +
     "Actual  : #{[Array, Hash].include?(actual.class) ? actual.to_json(JSON_STATE) : actual.inspect}\n" +
     #(expected.is_a?(Hash) && actual.is_a?(Hash) ? "Diff: #{expected.diff(actual).to_json(JSON_STATE)}\n" : "") +

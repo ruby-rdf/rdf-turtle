@@ -14,7 +14,7 @@ describe RDF::NTriples::Reader do
               t.debug = [t.inspect, "source:", t.input]
 
               reader = RDF::NTriples::Reader.new(t.input,
-                  :validate => true)
+                  validate:  true)
 
               graph = RDF::Graph.new
 
@@ -22,20 +22,20 @@ describe RDF::NTriples::Reader do
                 begin
                   graph << reader
                 rescue Exception => e
-                  e.message.should produce("Not exception #{e.inspect}", t.debug)
+                  expect(e.message).to produce("Not exception #{e.inspect}", t.debug)
                 end
               else
-                lambda {
+                expect {
                   graph << reader
-                  #graph.dump(:ntriples).should produce("", t.debug)
-                }.should raise_error
+                  #expect(graph.dump(:ntriples).should produce("", t.debug)
+                }.to raise_error
               end
 
               if t.evaluate?
-                output_graph = RDF::Graph.load(t.result, :format => :ntriples, :base_uri => t.base)
-                graph.should be_equivalent_graph(output_graph, t)
+                output_graph = RDF::Graph.load(t.result, format:  :ntriples, base_uri:  t.base)
+                expect(graph).to be_equivalent_graph(output_graph, t)
               else
-                graph.should be_a(RDF::Enumerable)
+                expect(graph).to be_a(RDF::Enumerable)
               end
             end
           end

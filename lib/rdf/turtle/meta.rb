@@ -4,326 +4,326 @@ module RDF::Turtle::Meta
   START = :turtleDoc
 
   BRANCH = {
-    :BlankNode => {
-      :ANON => [:ANON],
-      :BLANK_NODE_LABEL => [:BLANK_NODE_LABEL],
+    BlankNode:  {
+      ANON:  [:ANON],
+      BLANK_NODE_LABEL:  [:BLANK_NODE_LABEL],
     },
-    :BooleanLiteral => {
+    BooleanLiteral:  {
       "false" => ["false"],
       "true" => ["true"],
     },
-    :NumericLiteral => {
-      :DECIMAL => [:DECIMAL],
-      :DOUBLE => [:DOUBLE],
-      :INTEGER => [:INTEGER],
+    NumericLiteral:  {
+      DECIMAL:  [:DECIMAL],
+      DOUBLE:  [:DOUBLE],
+      INTEGER:  [:INTEGER],
     },
-    :PrefixedName => {
-      :PNAME_LN => [:PNAME_LN],
-      :PNAME_NS => [:PNAME_NS],
+    PrefixedName:  {
+      PNAME_LN:  [:PNAME_LN],
+      PNAME_NS:  [:PNAME_NS],
     },
-    :RDFLiteral => {
-      :STRING_LITERAL_LONG_QUOTE => [:String, :_RDFLiteral_1],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:String, :_RDFLiteral_1],
-      :STRING_LITERAL_QUOTE => [:String, :_RDFLiteral_1],
-      :STRING_LITERAL_SINGLE_QUOTE => [:String, :_RDFLiteral_1],
+    RDFLiteral:  {
+      STRING_LITERAL_LONG_QUOTE:  [:String, :_RDFLiteral_1],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:String, :_RDFLiteral_1],
+      STRING_LITERAL_QUOTE:  [:String, :_RDFLiteral_1],
+      STRING_LITERAL_SINGLE_QUOTE:  [:String, :_RDFLiteral_1],
     },
-    :_RDFLiteral_1 => {
+    _RDFLiteral_1:  {
       "(" => [],
       ")" => [],
       "," => [],
       "." => [],
       ";" => [],
-      :ANON => [],
-      :BLANK_NODE_LABEL => [],
-      :DECIMAL => [],
-      :DOUBLE => [],
-      :INTEGER => [],
-      :IRIREF => [],
-      :LANGTAG => [:_RDFLiteral_2],
-      :PNAME_LN => [],
-      :PNAME_NS => [],
-      :STRING_LITERAL_LONG_QUOTE => [],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [],
-      :STRING_LITERAL_QUOTE => [],
-      :STRING_LITERAL_SINGLE_QUOTE => [],
+      ANON:  [],
+      BLANK_NODE_LABEL:  [],
+      DECIMAL:  [],
+      DOUBLE:  [],
+      INTEGER:  [],
+      IRIREF:  [],
+      LANGTAG:  [:_RDFLiteral_2],
+      PNAME_LN:  [],
+      PNAME_NS:  [],
+      STRING_LITERAL_LONG_QUOTE:  [],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [],
+      STRING_LITERAL_QUOTE:  [],
+      STRING_LITERAL_SINGLE_QUOTE:  [],
       "[" => [],
       "]" => [],
       "^^" => [:_RDFLiteral_2],
       "false" => [],
       "true" => [],
     },
-    :_RDFLiteral_2 => {
-      :LANGTAG => [:LANGTAG],
+    _RDFLiteral_2:  {
+      LANGTAG:  [:LANGTAG],
       "^^" => [:_RDFLiteral_3],
     },
-    :_RDFLiteral_3 => {
+    _RDFLiteral_3:  {
       "^^" => ["^^", :iri],
     },
-    :String => {
-      :STRING_LITERAL_LONG_QUOTE => [:STRING_LITERAL_LONG_QUOTE],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:STRING_LITERAL_LONG_SINGLE_QUOTE],
-      :STRING_LITERAL_QUOTE => [:STRING_LITERAL_QUOTE],
-      :STRING_LITERAL_SINGLE_QUOTE => [:STRING_LITERAL_SINGLE_QUOTE],
+    String:  {
+      STRING_LITERAL_LONG_QUOTE:  [:STRING_LITERAL_LONG_QUOTE],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:STRING_LITERAL_LONG_SINGLE_QUOTE],
+      STRING_LITERAL_QUOTE:  [:STRING_LITERAL_QUOTE],
+      STRING_LITERAL_SINGLE_QUOTE:  [:STRING_LITERAL_SINGLE_QUOTE],
     },
-    :base => {
-      :BASE => [:BASE, :IRIREF, :_base_1],
+    base:  {
+      BASE:  [:BASE, :IRIREF, :_base_1],
     },
-    :_base_1 => {
+    _base_1:  {
       "(" => [],
       "." => ["."],
-      :ANON => [],
-      :BASE => [],
-      :BLANK_NODE_LABEL => [],
-      :IRIREF => [],
-      :PNAME_LN => [],
-      :PNAME_NS => [],
-      :PREFIX => [],
+      ANON:  [],
+      BASE:  [],
+      BLANK_NODE_LABEL:  [],
+      IRIREF:  [],
+      PNAME_LN:  [],
+      PNAME_NS:  [],
+      PREFIX:  [],
       "[" => [],
     },
-    :blankNodePropertyList => {
+    blankNodePropertyList:  {
       "[" => ["[", :predicateObjectList, "]"],
     },
-    :collection => {
+    collection:  {
       "(" => ["(", :_collection_1, ")"],
     },
-    :_collection_1 => {
+    _collection_1:  {
       "(" => [:_collection_2],
       ")" => [],
-      :ANON => [:_collection_2],
-      :BLANK_NODE_LABEL => [:_collection_2],
-      :DECIMAL => [:_collection_2],
-      :DOUBLE => [:_collection_2],
-      :INTEGER => [:_collection_2],
-      :IRIREF => [:_collection_2],
-      :PNAME_LN => [:_collection_2],
-      :PNAME_NS => [:_collection_2],
-      :STRING_LITERAL_LONG_QUOTE => [:_collection_2],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:_collection_2],
-      :STRING_LITERAL_QUOTE => [:_collection_2],
-      :STRING_LITERAL_SINGLE_QUOTE => [:_collection_2],
+      ANON:  [:_collection_2],
+      BLANK_NODE_LABEL:  [:_collection_2],
+      DECIMAL:  [:_collection_2],
+      DOUBLE:  [:_collection_2],
+      INTEGER:  [:_collection_2],
+      IRIREF:  [:_collection_2],
+      PNAME_LN:  [:_collection_2],
+      PNAME_NS:  [:_collection_2],
+      STRING_LITERAL_LONG_QUOTE:  [:_collection_2],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:_collection_2],
+      STRING_LITERAL_QUOTE:  [:_collection_2],
+      STRING_LITERAL_SINGLE_QUOTE:  [:_collection_2],
       "[" => [:_collection_2],
       "false" => [:_collection_2],
       "true" => [:_collection_2],
     },
-    :_collection_2 => {
+    _collection_2:  {
       "(" => [:object, :_collection_1],
-      :ANON => [:object, :_collection_1],
-      :BLANK_NODE_LABEL => [:object, :_collection_1],
-      :DECIMAL => [:object, :_collection_1],
-      :DOUBLE => [:object, :_collection_1],
-      :INTEGER => [:object, :_collection_1],
-      :IRIREF => [:object, :_collection_1],
-      :PNAME_LN => [:object, :_collection_1],
-      :PNAME_NS => [:object, :_collection_1],
-      :STRING_LITERAL_LONG_QUOTE => [:object, :_collection_1],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:object, :_collection_1],
-      :STRING_LITERAL_QUOTE => [:object, :_collection_1],
-      :STRING_LITERAL_SINGLE_QUOTE => [:object, :_collection_1],
+      ANON:  [:object, :_collection_1],
+      BLANK_NODE_LABEL:  [:object, :_collection_1],
+      DECIMAL:  [:object, :_collection_1],
+      DOUBLE:  [:object, :_collection_1],
+      INTEGER:  [:object, :_collection_1],
+      IRIREF:  [:object, :_collection_1],
+      PNAME_LN:  [:object, :_collection_1],
+      PNAME_NS:  [:object, :_collection_1],
+      STRING_LITERAL_LONG_QUOTE:  [:object, :_collection_1],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:object, :_collection_1],
+      STRING_LITERAL_QUOTE:  [:object, :_collection_1],
+      STRING_LITERAL_SINGLE_QUOTE:  [:object, :_collection_1],
       "[" => [:object, :_collection_1],
       "false" => [:object, :_collection_1],
       "true" => [:object, :_collection_1],
     },
-    :directive => {
-      :BASE => [:base],
-      :PREFIX => [:prefixID],
+    directive:  {
+      BASE:  [:base],
+      PREFIX:  [:prefixID],
     },
-    :iri => {
-      :IRIREF => [:IRIREF],
-      :PNAME_LN => [:PrefixedName],
-      :PNAME_NS => [:PrefixedName],
+    iri:  {
+      IRIREF:  [:IRIREF],
+      PNAME_LN:  [:PrefixedName],
+      PNAME_NS:  [:PrefixedName],
     },
-    :literal => {
-      :DECIMAL => [:NumericLiteral],
-      :DOUBLE => [:NumericLiteral],
-      :INTEGER => [:NumericLiteral],
-      :STRING_LITERAL_LONG_QUOTE => [:RDFLiteral],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:RDFLiteral],
-      :STRING_LITERAL_QUOTE => [:RDFLiteral],
-      :STRING_LITERAL_SINGLE_QUOTE => [:RDFLiteral],
+    literal:  {
+      DECIMAL:  [:NumericLiteral],
+      DOUBLE:  [:NumericLiteral],
+      INTEGER:  [:NumericLiteral],
+      STRING_LITERAL_LONG_QUOTE:  [:RDFLiteral],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:RDFLiteral],
+      STRING_LITERAL_QUOTE:  [:RDFLiteral],
+      STRING_LITERAL_SINGLE_QUOTE:  [:RDFLiteral],
       "false" => [:BooleanLiteral],
       "true" => [:BooleanLiteral],
     },
-    :object => {
+    object:  {
       "(" => [:collection],
-      :ANON => [:BlankNode],
-      :BLANK_NODE_LABEL => [:BlankNode],
-      :DECIMAL => [:literal],
-      :DOUBLE => [:literal],
-      :INTEGER => [:literal],
-      :IRIREF => [:iri],
-      :PNAME_LN => [:iri],
-      :PNAME_NS => [:iri],
-      :STRING_LITERAL_LONG_QUOTE => [:literal],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:literal],
-      :STRING_LITERAL_QUOTE => [:literal],
-      :STRING_LITERAL_SINGLE_QUOTE => [:literal],
+      ANON:  [:BlankNode],
+      BLANK_NODE_LABEL:  [:BlankNode],
+      DECIMAL:  [:literal],
+      DOUBLE:  [:literal],
+      INTEGER:  [:literal],
+      IRIREF:  [:iri],
+      PNAME_LN:  [:iri],
+      PNAME_NS:  [:iri],
+      STRING_LITERAL_LONG_QUOTE:  [:literal],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:literal],
+      STRING_LITERAL_QUOTE:  [:literal],
+      STRING_LITERAL_SINGLE_QUOTE:  [:literal],
       "[" => [:blankNodePropertyList],
       "false" => [:literal],
       "true" => [:literal],
     },
-    :objectList => {
+    objectList:  {
       "(" => [:object, :_objectList_1],
-      :ANON => [:object, :_objectList_1],
-      :BLANK_NODE_LABEL => [:object, :_objectList_1],
-      :DECIMAL => [:object, :_objectList_1],
-      :DOUBLE => [:object, :_objectList_1],
-      :INTEGER => [:object, :_objectList_1],
-      :IRIREF => [:object, :_objectList_1],
-      :PNAME_LN => [:object, :_objectList_1],
-      :PNAME_NS => [:object, :_objectList_1],
-      :STRING_LITERAL_LONG_QUOTE => [:object, :_objectList_1],
-      :STRING_LITERAL_LONG_SINGLE_QUOTE => [:object, :_objectList_1],
-      :STRING_LITERAL_QUOTE => [:object, :_objectList_1],
-      :STRING_LITERAL_SINGLE_QUOTE => [:object, :_objectList_1],
+      ANON:  [:object, :_objectList_1],
+      BLANK_NODE_LABEL:  [:object, :_objectList_1],
+      DECIMAL:  [:object, :_objectList_1],
+      DOUBLE:  [:object, :_objectList_1],
+      INTEGER:  [:object, :_objectList_1],
+      IRIREF:  [:object, :_objectList_1],
+      PNAME_LN:  [:object, :_objectList_1],
+      PNAME_NS:  [:object, :_objectList_1],
+      STRING_LITERAL_LONG_QUOTE:  [:object, :_objectList_1],
+      STRING_LITERAL_LONG_SINGLE_QUOTE:  [:object, :_objectList_1],
+      STRING_LITERAL_QUOTE:  [:object, :_objectList_1],
+      STRING_LITERAL_SINGLE_QUOTE:  [:object, :_objectList_1],
       "[" => [:object, :_objectList_1],
       "false" => [:object, :_objectList_1],
       "true" => [:object, :_objectList_1],
     },
-    :_objectList_1 => {
+    _objectList_1:  {
       "," => [:_objectList_3],
       "." => [],
       ";" => [],
       "]" => [],
     },
-    :_objectList_2 => {
+    _objectList_2:  {
       "," => [",", :object],
     },
-    :_objectList_3 => {
+    _objectList_3:  {
       "," => [:_objectList_2, :_objectList_1],
     },
-    :predicate => {
-      :IRIREF => [:iri],
-      :PNAME_LN => [:iri],
-      :PNAME_NS => [:iri],
+    predicate:  {
+      IRIREF:  [:iri],
+      PNAME_LN:  [:iri],
+      PNAME_NS:  [:iri],
     },
-    :predicateObjectList => {
-      :IRIREF => [:verb, :objectList, :_predicateObjectList_1],
-      :PNAME_LN => [:verb, :objectList, :_predicateObjectList_1],
-      :PNAME_NS => [:verb, :objectList, :_predicateObjectList_1],
+    predicateObjectList:  {
+      IRIREF:  [:verb, :objectList, :_predicateObjectList_1],
+      PNAME_LN:  [:verb, :objectList, :_predicateObjectList_1],
+      PNAME_NS:  [:verb, :objectList, :_predicateObjectList_1],
       "a" => [:verb, :objectList, :_predicateObjectList_1],
     },
-    :_predicateObjectList_1 => {
+    _predicateObjectList_1:  {
       "." => [],
       ";" => [:_predicateObjectList_3],
       "]" => [],
     },
-    :_predicateObjectList_2 => {
+    _predicateObjectList_2:  {
       ";" => [";", :_predicateObjectList_4],
     },
-    :_predicateObjectList_3 => {
+    _predicateObjectList_3:  {
       ";" => [:_predicateObjectList_2, :_predicateObjectList_1],
     },
-    :_predicateObjectList_4 => {
+    _predicateObjectList_4:  {
       "." => [],
       ";" => [],
-      :IRIREF => [:_predicateObjectList_5],
-      :PNAME_LN => [:_predicateObjectList_5],
-      :PNAME_NS => [:_predicateObjectList_5],
+      IRIREF:  [:_predicateObjectList_5],
+      PNAME_LN:  [:_predicateObjectList_5],
+      PNAME_NS:  [:_predicateObjectList_5],
       "]" => [],
       "a" => [:_predicateObjectList_5],
     },
-    :_predicateObjectList_5 => {
-      :IRIREF => [:verb, :objectList],
-      :PNAME_LN => [:verb, :objectList],
-      :PNAME_NS => [:verb, :objectList],
+    _predicateObjectList_5:  {
+      IRIREF:  [:verb, :objectList],
+      PNAME_LN:  [:verb, :objectList],
+      PNAME_NS:  [:verb, :objectList],
       "a" => [:verb, :objectList],
     },
-    :prefixID => {
-      :PREFIX => [:PREFIX, :PNAME_NS, :IRIREF, :_prefixID_1],
+    prefixID:  {
+      PREFIX:  [:PREFIX, :PNAME_NS, :IRIREF, :_prefixID_1],
     },
-    :_prefixID_1 => {
+    _prefixID_1:  {
       "(" => [],
       "." => ["."],
-      :ANON => [],
-      :BASE => [],
-      :BLANK_NODE_LABEL => [],
-      :IRIREF => [],
-      :PNAME_LN => [],
-      :PNAME_NS => [],
-      :PREFIX => [],
+      ANON:  [],
+      BASE:  [],
+      BLANK_NODE_LABEL:  [],
+      IRIREF:  [],
+      PNAME_LN:  [],
+      PNAME_NS:  [],
+      PREFIX:  [],
       "[" => [],
     },
-    :statement => {
+    statement:  {
       "(" => [:_statement_1],
-      :ANON => [:_statement_1],
-      :BASE => [:directive],
-      :BLANK_NODE_LABEL => [:_statement_1],
-      :IRIREF => [:_statement_1],
-      :PNAME_LN => [:_statement_1],
-      :PNAME_NS => [:_statement_1],
-      :PREFIX => [:directive],
+      ANON:  [:_statement_1],
+      BASE:  [:directive],
+      BLANK_NODE_LABEL:  [:_statement_1],
+      IRIREF:  [:_statement_1],
+      PNAME_LN:  [:_statement_1],
+      PNAME_NS:  [:_statement_1],
+      PREFIX:  [:directive],
       "[" => [:_statement_1],
     },
-    :_statement_1 => {
+    _statement_1:  {
       "(" => [:triples, "."],
-      :ANON => [:triples, "."],
-      :BLANK_NODE_LABEL => [:triples, "."],
-      :IRIREF => [:triples, "."],
-      :PNAME_LN => [:triples, "."],
-      :PNAME_NS => [:triples, "."],
+      ANON:  [:triples, "."],
+      BLANK_NODE_LABEL:  [:triples, "."],
+      IRIREF:  [:triples, "."],
+      PNAME_LN:  [:triples, "."],
+      PNAME_NS:  [:triples, "."],
       "[" => [:triples, "."],
     },
-    :subject => {
+    subject:  {
       "(" => [:collection],
-      :ANON => [:BlankNode],
-      :BLANK_NODE_LABEL => [:BlankNode],
-      :IRIREF => [:iri],
-      :PNAME_LN => [:iri],
-      :PNAME_NS => [:iri],
+      ANON:  [:BlankNode],
+      BLANK_NODE_LABEL:  [:BlankNode],
+      IRIREF:  [:iri],
+      PNAME_LN:  [:iri],
+      PNAME_NS:  [:iri],
     },
-    :triples => {
+    triples:  {
       "(" => [:_triples_1],
-      :ANON => [:_triples_1],
-      :BLANK_NODE_LABEL => [:_triples_1],
-      :IRIREF => [:_triples_1],
-      :PNAME_LN => [:_triples_1],
-      :PNAME_NS => [:_triples_1],
+      ANON:  [:_triples_1],
+      BLANK_NODE_LABEL:  [:_triples_1],
+      IRIREF:  [:_triples_1],
+      PNAME_LN:  [:_triples_1],
+      PNAME_NS:  [:_triples_1],
       "[" => [:_triples_2],
     },
-    :_triples_1 => {
+    _triples_1:  {
       "(" => [:subject, :predicateObjectList],
-      :ANON => [:subject, :predicateObjectList],
-      :BLANK_NODE_LABEL => [:subject, :predicateObjectList],
-      :IRIREF => [:subject, :predicateObjectList],
-      :PNAME_LN => [:subject, :predicateObjectList],
-      :PNAME_NS => [:subject, :predicateObjectList],
+      ANON:  [:subject, :predicateObjectList],
+      BLANK_NODE_LABEL:  [:subject, :predicateObjectList],
+      IRIREF:  [:subject, :predicateObjectList],
+      PNAME_LN:  [:subject, :predicateObjectList],
+      PNAME_NS:  [:subject, :predicateObjectList],
     },
-    :_triples_2 => {
+    _triples_2:  {
       "[" => [:blankNodePropertyList, :_triples_3],
     },
-    :_triples_3 => {
+    _triples_3:  {
       "." => [],
-      :IRIREF => [:predicateObjectList],
-      :PNAME_LN => [:predicateObjectList],
-      :PNAME_NS => [:predicateObjectList],
+      IRIREF:  [:predicateObjectList],
+      PNAME_LN:  [:predicateObjectList],
+      PNAME_NS:  [:predicateObjectList],
       "a" => [:predicateObjectList],
     },
-    :turtleDoc => {
+    turtleDoc:  {
       "(" => [:_turtleDoc_1],
-      :ANON => [:_turtleDoc_1],
-      :BASE => [:_turtleDoc_1],
-      :BLANK_NODE_LABEL => [:_turtleDoc_1],
-      :IRIREF => [:_turtleDoc_1],
-      :PNAME_LN => [:_turtleDoc_1],
-      :PNAME_NS => [:_turtleDoc_1],
-      :PREFIX => [:_turtleDoc_1],
+      ANON:  [:_turtleDoc_1],
+      BASE:  [:_turtleDoc_1],
+      BLANK_NODE_LABEL:  [:_turtleDoc_1],
+      IRIREF:  [:_turtleDoc_1],
+      PNAME_LN:  [:_turtleDoc_1],
+      PNAME_NS:  [:_turtleDoc_1],
+      PREFIX:  [:_turtleDoc_1],
       "[" => [:_turtleDoc_1],
     },
-    :_turtleDoc_1 => {
+    _turtleDoc_1:  {
       "(" => [:statement, :turtleDoc],
-      :ANON => [:statement, :turtleDoc],
-      :BASE => [:statement, :turtleDoc],
-      :BLANK_NODE_LABEL => [:statement, :turtleDoc],
-      :IRIREF => [:statement, :turtleDoc],
-      :PNAME_LN => [:statement, :turtleDoc],
-      :PNAME_NS => [:statement, :turtleDoc],
-      :PREFIX => [:statement, :turtleDoc],
+      ANON:  [:statement, :turtleDoc],
+      BASE:  [:statement, :turtleDoc],
+      BLANK_NODE_LABEL:  [:statement, :turtleDoc],
+      IRIREF:  [:statement, :turtleDoc],
+      PNAME_LN:  [:statement, :turtleDoc],
+      PNAME_NS:  [:statement, :turtleDoc],
+      PREFIX:  [:statement, :turtleDoc],
       "[" => [:statement, :turtleDoc],
     },
-    :verb => {
-      :IRIREF => [:predicate],
-      :PNAME_LN => [:predicate],
-      :PNAME_NS => [:predicate],
+    verb:  {
+      IRIREF:  [:predicate],
+      PNAME_LN:  [:predicate],
+      PNAME_NS:  [:predicate],
       "a" => ["a"],
     },
   }.freeze
@@ -356,64 +356,64 @@ module RDF::Turtle::Meta
     "true"
   ].freeze
   FIRST = {
-    :BlankNode => [
+    BlankNode:  [
       :BLANK_NODE_LABEL,
       :ANON],
-    :BooleanLiteral => [
+    BooleanLiteral:  [
       "true",
       "false"],
-    :NumericLiteral => [
+    NumericLiteral:  [
       :INTEGER,
       :DECIMAL,
       :DOUBLE],
-    :PrefixedName => [
+    PrefixedName:  [
       :PNAME_LN,
       :PNAME_NS],
-    :RDFLiteral => [
+    RDFLiteral:  [
       :STRING_LITERAL_QUOTE,
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_RDFLiteral_1 => [
+    _RDFLiteral_1:  [
       :_eps,
       :LANGTAG,
       "^^"],
-    :_RDFLiteral_2 => [
+    _RDFLiteral_2:  [
       :LANGTAG,
       "^^"],
-    :_RDFLiteral_3 => [
+    _RDFLiteral_3:  [
       "^^"],
-    :_RDFLiteral_4 => [
+    _RDFLiteral_4:  [
       :LANGTAG,
       :_eps,
       "^^"],
-    :String => [
+    String:  [
       :STRING_LITERAL_QUOTE,
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :base => [
+    base:  [
       :BASE],
-    :_base_1 => [
+    _base_1:  [
       ".",
       :_eps],
-    :_base_2 => [
+    _base_2:  [
       :IRIREF],
-    :_base_3 => [
+    _base_3:  [
       ".",
       :_eps],
-    :blankNodePropertyList => [
+    blankNodePropertyList:  [
       "["],
-    :_blankNodePropertyList_1 => [
+    _blankNodePropertyList_1:  [
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :_blankNodePropertyList_2 => [
+    _blankNodePropertyList_2:  [
       "]"],
-    :collection => [
+    collection:  [
       "("],
-    :_collection_1 => [
+    _collection_1:  [
       :_eps,
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -431,7 +431,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_collection_2 => [
+    _collection_2:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
@@ -448,7 +448,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_collection_3 => [
+    _collection_3:  [
       ")",
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -466,7 +466,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_collection_4 => [
+    _collection_4:  [
       :_eps,
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -484,18 +484,18 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_collection_5 => [
+    _collection_5:  [
       ")"],
-    :directive => [
+    directive:  [
       :PREFIX,
       :BASE],
-    :_empty => [
+    _empty:  [
       :_eps],
-    :iri => [
+    iri:  [
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :literal => [
+    literal:  [
       :INTEGER,
       :DECIMAL,
       :DOUBLE,
@@ -505,7 +505,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :object => [
+    object:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
@@ -522,7 +522,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :objectList => [
+    objectList:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
@@ -539,20 +539,20 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_objectList_1 => [
+    _objectList_1:  [
       :_eps,
       ","],
-    :_objectList_2 => [
+    _objectList_2:  [
       ","],
-    :_objectList_3 => [
+    _objectList_3:  [
       ","],
-    :_objectList_4 => [
+    _objectList_4:  [
       :_eps,
       ","],
-    :_objectList_5 => [
+    _objectList_5:  [
       :_eps,
       ","],
-    :_objectList_6 => [
+    _objectList_6:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
@@ -569,60 +569,34 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :predicate => [
+    predicate:  [
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :predicateObjectList => [
+    predicateObjectList:  [
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :_predicateObjectList_1 => [
+    _predicateObjectList_1:  [
       :_eps,
       ";"],
-    :_predicateObjectList_2 => [
+    _predicateObjectList_2:  [
       ";"],
-    :_predicateObjectList_3 => [
+    _predicateObjectList_3:  [
       ";"],
-    :_predicateObjectList_4 => [
-      :_eps,
-      "a",
-      :IRIREF,
-      :PNAME_LN,
-      :PNAME_NS],
-    :_predicateObjectList_5 => [
-      "a",
-      :IRIREF,
-      :PNAME_LN,
-      :PNAME_NS],
-    :_predicateObjectList_6 => [
-      :IRIREF,
-      :BLANK_NODE_LABEL,
-      :ANON,
-      "(",
-      "[",
-      :PNAME_LN,
-      :PNAME_NS,
-      :INTEGER,
-      :DECIMAL,
-      :DOUBLE,
-      "true",
-      "false",
-      :STRING_LITERAL_QUOTE,
-      :STRING_LITERAL_SINGLE_QUOTE,
-      :STRING_LITERAL_LONG_SINGLE_QUOTE,
-      :STRING_LITERAL_LONG_QUOTE],
-    :_predicateObjectList_7 => [
-      :_eps,
-      ";"],
-    :_predicateObjectList_8 => [
+    _predicateObjectList_4:  [
       :_eps,
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :_predicateObjectList_9 => [
+    _predicateObjectList_5:  [
+      "a",
+      :IRIREF,
+      :PNAME_LN,
+      :PNAME_NS],
+    _predicateObjectList_6:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
@@ -639,19 +613,45 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :prefixID => [
+    _predicateObjectList_7:  [
+      :_eps,
+      ";"],
+    _predicateObjectList_8:  [
+      :_eps,
+      "a",
+      :IRIREF,
+      :PNAME_LN,
+      :PNAME_NS],
+    _predicateObjectList_9:  [
+      :IRIREF,
+      :BLANK_NODE_LABEL,
+      :ANON,
+      "(",
+      "[",
+      :PNAME_LN,
+      :PNAME_NS,
+      :INTEGER,
+      :DECIMAL,
+      :DOUBLE,
+      "true",
+      "false",
+      :STRING_LITERAL_QUOTE,
+      :STRING_LITERAL_SINGLE_QUOTE,
+      :STRING_LITERAL_LONG_SINGLE_QUOTE,
+      :STRING_LITERAL_LONG_QUOTE],
+    prefixID:  [
       :PREFIX],
-    :_prefixID_1 => [
+    _prefixID_1:  [
       ".",
       :_eps],
-    :_prefixID_2 => [
+    _prefixID_2:  [
       :PNAME_NS],
-    :_prefixID_3 => [
+    _prefixID_3:  [
       :IRIREF],
-    :_prefixID_4 => [
+    _prefixID_4:  [
       ".",
       :_eps],
-    :statement => [
+    statement:  [
       :PREFIX,
       :BASE,
       "[",
@@ -661,7 +661,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_statement_1 => [
+    _statement_1:  [
       "[",
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -669,16 +669,16 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_statement_2 => [
+    _statement_2:  [
       "."],
-    :subject => [
+    subject:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :triples => [
+    triples:  [
       "[",
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -686,33 +686,33 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_triples_1 => [
+    _triples_1:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_triples_2 => [
+    _triples_2:  [
       "["],
-    :_triples_3 => [
+    _triples_3:  [
       :_eps,
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :_triples_4 => [
+    _triples_4:  [
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :_triples_5 => [
+    _triples_5:  [
       :_eps,
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :turtleDoc => [
+    turtleDoc:  [
       :_eps,
       :PREFIX,
       :BASE,
@@ -723,7 +723,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_turtleDoc_1 => [
+    _turtleDoc_1:  [
       :PREFIX,
       :BASE,
       "[",
@@ -733,7 +733,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_turtleDoc_2 => [
+    _turtleDoc_2:  [
       :_eps,
       :PREFIX,
       :BASE,
@@ -744,14 +744,14 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :verb => [
+    verb:  [
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
   }.freeze
   FOLLOW = {
-    :BlankNode => [
+    BlankNode:  [
       "a",
       ")",
       ",",
@@ -774,7 +774,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :BooleanLiteral => [
+    BooleanLiteral:  [
       ")",
       ",",
       ".",
@@ -796,7 +796,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :NumericLiteral => [
+    NumericLiteral:  [
       ")",
       ",",
       ".",
@@ -818,7 +818,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :PrefixedName => [
+    PrefixedName:  [
       "a",
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -841,7 +841,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :RDFLiteral => [
+    RDFLiteral:  [
       ")",
       ",",
       ".",
@@ -863,7 +863,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_RDFLiteral_1 => [
+    _RDFLiteral_1:  [
       ")",
       ",",
       ".",
@@ -885,7 +885,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_RDFLiteral_2 => [
+    _RDFLiteral_2:  [
       ")",
       ",",
       ".",
@@ -907,7 +907,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_RDFLiteral_3 => [
+    _RDFLiteral_3:  [
       ")",
       ",",
       ".",
@@ -929,7 +929,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_RDFLiteral_4 => [
+    _RDFLiteral_4:  [
       ")",
       ",",
       ".",
@@ -951,7 +951,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :String => [
+    String:  [
       :LANGTAG,
       "^^",
       ")",
@@ -975,7 +975,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :base => [
+    base:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -986,7 +986,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_base_1 => [
+    _base_1:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -997,7 +997,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_base_2 => [
+    _base_2:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1008,7 +1008,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_base_3 => [
+    _base_3:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1019,7 +1019,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :blankNodePropertyList => [
+    blankNodePropertyList:  [
       ".",
       "a",
       ")",
@@ -1042,7 +1042,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_blankNodePropertyList_1 => [
+    _blankNodePropertyList_1:  [
       ".",
       "a",
       ")",
@@ -1065,7 +1065,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_blankNodePropertyList_2 => [
+    _blankNodePropertyList_2:  [
       ".",
       "a",
       ")",
@@ -1088,7 +1088,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :collection => [
+    collection:  [
       "a",
       ")",
       ",",
@@ -1111,11 +1111,11 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_collection_1 => [
+    _collection_1:  [
       ")"],
-    :_collection_2 => [
+    _collection_2:  [
       ")"],
-    :_collection_3 => [
+    _collection_3:  [
       "a",
       ")",
       ",",
@@ -1138,9 +1138,9 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :_collection_4 => [
+    _collection_4:  [
       ")"],
-    :_collection_5 => [
+    _collection_5:  [
       "a",
       ")",
       ",",
@@ -1163,7 +1163,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :directive => [
+    directive:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1174,7 +1174,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :iri => [
+    iri:  [
       "a",
       :IRIREF,
       :BLANK_NODE_LABEL,
@@ -1197,7 +1197,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :literal => [
+    literal:  [
       ")",
       ",",
       ".",
@@ -1219,7 +1219,7 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :object => [
+    object:  [
       ")",
       ",",
       ".",
@@ -1241,37 +1241,37 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE],
-    :objectList => [
+    objectList:  [
       ".",
       "]",
       ";"],
-    :_objectList_1 => [
+    _objectList_1:  [
       ".",
       "]",
       ";"],
-    :_objectList_2 => [
+    _objectList_2:  [
       ",",
       ".",
       "]",
       ";"],
-    :_objectList_3 => [
+    _objectList_3:  [
       ".",
       "]",
       ";"],
-    :_objectList_4 => [
+    _objectList_4:  [
       ".",
       "]",
       ";"],
-    :_objectList_5 => [
+    _objectList_5:  [
       ".",
       "]",
       ";"],
-    :_objectList_6 => [
+    _objectList_6:  [
       ",",
       ".",
       "]",
       ";"],
-    :predicate => [
+    predicate:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,
@@ -1293,42 +1293,42 @@ module RDF::Turtle::Meta
       :STRING_LITERAL_LONG_SINGLE_QUOTE,
       :STRING_LITERAL_LONG_QUOTE,
       ";"],
-    :predicateObjectList => [
+    predicateObjectList:  [
       ".",
       "]"],
-    :_predicateObjectList_1 => [
+    _predicateObjectList_1:  [
       ".",
       "]"],
-    :_predicateObjectList_2 => [
+    _predicateObjectList_2:  [
       ";",
       ".",
       "]"],
-    :_predicateObjectList_3 => [
+    _predicateObjectList_3:  [
       ".",
       "]"],
-    :_predicateObjectList_4 => [
+    _predicateObjectList_4:  [
       ";",
       ".",
       "]"],
-    :_predicateObjectList_5 => [
+    _predicateObjectList_5:  [
       ";",
       ".",
       "]"],
-    :_predicateObjectList_6 => [
+    _predicateObjectList_6:  [
       ".",
       "]"],
-    :_predicateObjectList_7 => [
+    _predicateObjectList_7:  [
       ".",
       "]"],
-    :_predicateObjectList_8 => [
+    _predicateObjectList_8:  [
       ";",
       ".",
       "]"],
-    :_predicateObjectList_9 => [
+    _predicateObjectList_9:  [
       ";",
       ".",
       "]"],
-    :prefixID => [
+    prefixID:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1339,7 +1339,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_prefixID_1 => [
+    _prefixID_1:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1350,7 +1350,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_prefixID_2 => [
+    _prefixID_2:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1361,7 +1361,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_prefixID_3 => [
+    _prefixID_3:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1372,7 +1372,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_prefixID_4 => [
+    _prefixID_4:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1383,7 +1383,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :statement => [
+    statement:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1394,7 +1394,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_statement_1 => [
+    _statement_1:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1405,7 +1405,7 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :_statement_2 => [
+    _statement_2:  [
       :_eof,
       :PREFIX,
       :BASE,
@@ -1416,30 +1416,30 @@ module RDF::Turtle::Meta
       "(",
       :PNAME_LN,
       :PNAME_NS],
-    :subject => [
+    subject:  [
       "a",
       :IRIREF,
       :PNAME_LN,
       :PNAME_NS],
-    :triples => [
+    triples:  [
       "."],
-    :_triples_1 => [
+    _triples_1:  [
       "."],
-    :_triples_2 => [
+    _triples_2:  [
       "."],
-    :_triples_3 => [
+    _triples_3:  [
       "."],
-    :_triples_4 => [
+    _triples_4:  [
       "."],
-    :_triples_5 => [
+    _triples_5:  [
       "."],
-    :turtleDoc => [
+    turtleDoc:  [
       :_eof],
-    :_turtleDoc_1 => [
+    _turtleDoc_1:  [
       :_eof],
-    :_turtleDoc_2 => [
+    _turtleDoc_2:  [
       :_eof],
-    :verb => [
+    verb:  [
       :IRIREF,
       :BLANK_NODE_LABEL,
       :ANON,

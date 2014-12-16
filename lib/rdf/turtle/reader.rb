@@ -17,27 +17,27 @@ module RDF::Turtle
     terminal(:BLANK_NODE_LABEL,     BLANK_NODE_LABEL) do |prod, token, input|
       input[:resource] = self.bnode(token.value[2..-1])
     end
-    terminal(:IRIREF,               IRIREF, :unescape => true) do |prod, token, input|
+    terminal(:IRIREF,               IRIREF, unescape:  true) do |prod, token, input|
       input[:resource] = process_iri(token.value[1..-2])
     end
     terminal(:DOUBLE,               DOUBLE) do |prod, token, input|
       # Note that a Turtle Double may begin with a '.[eE]', so tack on a leading
       # zero if necessary
       value = token.value.sub(/\.([eE])/, '.0\1')
-      input[:resource] = literal(value, :datatype => RDF::XSD.double)
+      input[:resource] = literal(value, datatype:  RDF::XSD.double)
     end
     terminal(:DECIMAL,              DECIMAL) do |prod, token, input|
       # Note that a Turtle Decimal may begin with a '.', so tack on a leading
       # zero if necessary
       value = token.value
       value = "0#{token.value}" if token.value[0,1] == "."
-      input[:resource] = literal(value, :datatype => RDF::XSD.decimal)
+      input[:resource] = literal(value, datatype:  RDF::XSD.decimal)
     end
     terminal(:INTEGER,              INTEGER) do |prod, token, input|
-      input[:resource] = literal(token.value, :datatype => RDF::XSD.integer)
+      input[:resource] = literal(token.value, datatype:  RDF::XSD.integer)
     end
     # Spec confusion: spec says : "Literals , prefixed names and IRIs may also contain escape sequences"
-    terminal(:PNAME_LN,             PNAME_LN, :unescape => true) do |prod, token, input|
+    terminal(:PNAME_LN,             PNAME_LN, unescape:  true) do |prod, token, input|
       prefix, suffix = token.value.split(":", 2)
       input[:resource] = pname(prefix, suffix)
     end
@@ -53,16 +53,16 @@ module RDF::Turtle
         input[:resource] = pname(prefix, '')
       end
     end
-    terminal(:STRING_LITERAL_LONG_SINGLE_QUOTE, STRING_LITERAL_LONG_SINGLE_QUOTE, :unescape => true) do |prod, token, input|
+    terminal(:STRING_LITERAL_LONG_SINGLE_QUOTE, STRING_LITERAL_LONG_SINGLE_QUOTE, unescape:  true) do |prod, token, input|
       input[:string_value] = token.value[3..-4]
     end
-    terminal(:STRING_LITERAL_LONG_QUOTE, STRING_LITERAL_LONG_QUOTE, :unescape => true) do |prod, token, input|
+    terminal(:STRING_LITERAL_LONG_QUOTE, STRING_LITERAL_LONG_QUOTE, unescape:  true) do |prod, token, input|
       input[:string_value] = token.value[3..-4]
     end
-    terminal(:STRING_LITERAL_QUOTE,      STRING_LITERAL_QUOTE, :unescape => true) do |prod, token, input|
+    terminal(:STRING_LITERAL_QUOTE,      STRING_LITERAL_QUOTE, unescape:  true) do |prod, token, input|
       input[:string_value] = token.value[1..-2]
     end
-    terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE, :unescape => true) do |prod, token, input|
+    terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE, unescape:  true) do |prod, token, input|
       input[:string_value] = token.value[1..-2]
     end
     
@@ -250,11 +250,11 @@ module RDF::Turtle
     def initialize(input = nil, options = {}, &block)
       super do
         @options = {
-          :anon_base => "b0",
-          :validate => false,
-          :whitespace => WS,
+          anon_base:  "b0",
+          validate:  false,
+          whitespace:  WS,
         }.merge(options)
-        @options = {:prefixes => {nil => ""}}.merge(@options) unless @options[:validate]
+        @options = {prefixes:  {nil => ""}}.merge(@options) unless @options[:validate]
         @options[:debug] ||= case
         when RDF::Turtle.debug? then true
         when @options[:progress] then 2
@@ -291,15 +291,15 @@ module RDF::Turtle
       if block_given?
         @callback = block
 
-        parse(@input, START.to_sym, @options.merge(:branch => BRANCH,
-                                                   :first => FIRST,
-                                                   :follow => FOLLOW,
-                                                   :reset_on_start => true)
+        parse(@input, START.to_sym, @options.merge(branch:  BRANCH,
+                                                   first:  FIRST,
+                                                   follow:  FOLLOW,
+                                                   reset_on_start:  true)
         ) do |context, *data|
           case context
           when :statement
             loc = data.shift
-            s = RDF::Statement.from(data, :lineno => lineno)
+            s = RDF::Statement.from(data, lineno:  lineno)
             add_statement(loc, s) unless !s.valid? && validate?
           when :trace
             level, lineno, depth, *args = data
@@ -318,7 +318,7 @@ module RDF::Turtle
         end
       end
       enum_for(:each_statement)
-    rescue EBNF::LL1::Parser::Error, EBNF::LL1::Lexer::Error => e
+    rescue EBNF::LL1::Parser::Error, EBNF::LL1::Lexer::Error =>  e
       if validate?
         raise RDF::ReaderError.new(e.message, lineno: e.lineno, token: e.token)
       else
@@ -375,7 +375,7 @@ module RDF::Turtle
         "validate: #{validate?.inspect}, " +
         "c14n?: #{canonicalize?.inspect}"
       end
-      RDF::Literal.new(value, options.merge(:validate => validate?, :canonicalize => canonicalize?))
+      RDF::Literal.new(value, options.merge(validate:  validate?, canonicalize:  canonicalize?))
     end
 
     ##

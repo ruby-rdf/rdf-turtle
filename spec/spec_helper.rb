@@ -23,11 +23,11 @@ module RDF
 end
 
 ::RSpec.configure do |c|
-  c.filter_run :focus => true
+  c.filter_run focus:  true
   c.run_all_when_everything_filtered = true
   c.exclusion_filter = {
-    :ruby => lambda { |version| !(RUBY_VERSION.to_s =~ /^#{version.to_s}/) },
-    :not_jruby => lambda { RUBY_PLATFORM.to_s != 'jruby'}
+    ruby:  lambda { |version| !(RUBY_VERSION.to_s =~ /^#{version.to_s}/) },
+    not_jruby:  lambda { RUBY_PLATFORM.to_s != 'jruby'}
   }
   c.include(RDF::Spec::Matchers)
 end

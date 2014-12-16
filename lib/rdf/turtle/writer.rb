@@ -12,9 +12,9 @@ module RDF::Turtle
   # @example Obtaining a Turtle writer class
   #   RDF::Writer.for(:ttl)         #=> RDF::Turtle::Writer
   #   RDF::Writer.for("etc/test.ttl")
-  #   RDF::Writer.for(:file_name      => "etc/test.ttl")
-  #   RDF::Writer.for(:file_extension => "ttl")
-  #   RDF::Writer.for(:content_type   => "text/turtle")
+  #   RDF::Writer.for(file_name:       "etc/test.ttl")
+  #   RDF::Writer.for(file_extension:  "ttl")
+  #   RDF::Writer.for(content_type:    "text/turtle")
   #
   # @example Serializing RDF graph into an Turtle file
   #   RDF::Turtle::Writer.open("etc/test.ttl") do |writer|
@@ -36,7 +36,7 @@ module RDF::Turtle
   #   end
   #
   # @example Serializing RDF statements to a string in streaming mode
-  #   RDF::Turtle::Writer.buffer(:stream => true) do |writer|
+  #   RDF::Turtle::Writer.buffer(stream:  true) do |writer|
   #     graph.each_statement do |statement|
   #       writer << statement
   #     end
@@ -45,9 +45,9 @@ module RDF::Turtle
   # The writer will add prefix definitions, and use them for creating @prefix definitions, and minting QNames
   #
   # @example Creating @base and @prefix definitions in output
-  #   RDF::Turtle::Writer.buffer(:base_uri => "http://example.com/", :prefixes => {
+  #   RDF::Turtle::Writer.buffer(base_uri:  "http://example.com/", prefixes:  {
   #       nil => "http://example.com/ns#",
-  #       :foaf => "http://xmlns.com/foaf/0.1/"}
+  #       foaf:  "http://xmlns.com/foaf/0.1/"}
   #   ) do |writer|
   #     graph.each_statement do |statement|
   #       writer << statement
@@ -326,7 +326,7 @@ module RDF::Turtle
       
       # Add distinguished classes
       top_classes.each do |class_uri|
-        graph.query(:predicate => RDF.type, :object => class_uri).map {|st| st.subject}.sort.uniq.each do |subject|
+        graph.query(predicate:  RDF.type, object:  class_uri).map {|st| st.subject}.sort.uniq.each do |subject|
           debug("order_subjects") {subject.to_ntriples}
           subjects << subject
           seen[subject] = true
@@ -527,7 +527,7 @@ module RDF::Turtle
     # @return [Integer] the number of properties serialized
     def predicateObjectList(subject, from_bpl = false)
       properties = {}
-      @graph.query(:subject => subject) do |st|
+      @graph.query(subject:  subject) do |st|
         (properties[st.predicate.to_s] ||= []) << st.object
       end
 

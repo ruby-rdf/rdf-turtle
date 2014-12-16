@@ -22,7 +22,7 @@ describe RDF::Turtle::Terminals do
         it "from #{range.join(" to ").inspect}" do
           range.each do |string|
             string.force_encoding(Encoding::UTF_8)
-            string.should match(RDF::Turtle::Terminals::PN_CHARS_BASE)
+            expect(string).to match(RDF::Turtle::Terminals::PN_CHARS_BASE)
           end
         end
       end
@@ -34,7 +34,7 @@ describe RDF::Turtle::Terminals do
           range.each do |string|
             string = "<#{string}>"
             string.force_encoding(Encoding::UTF_8)
-            string.should match(RDF::Turtle::Terminals::IRIREF)
+            expect(string).to match(RDF::Turtle::Terminals::IRIREF)
           end
         end
       end
@@ -54,9 +54,10 @@ describe RDF::Turtle::Terminals do
         begin
           string = "<scheme:#{string}>"
           string.force_encoding(Encoding::UTF_8)
-          string.should match(RDF::Turtle::Terminals::IRIREF)
+          expect(string).to match(RDF::Turtle::Terminals::IRIREF)
         rescue RSpec::Expectations::ExpectationNotMetError
           pending "Escapes in IRIs"
+          fail
         end
       end
     end

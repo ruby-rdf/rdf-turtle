@@ -15,14 +15,14 @@ describe RDF::Turtle::Writer do
     [
       :turtle,
       'etc/doap.ttl',
-      {:file_name      => 'etc/doap.ttl'},
-      {:file_extension => 'ttl'},
-      {:content_type   => 'text/turtle'},
-      {:content_type   => 'application/turtle'},
-      {:content_type   => 'application/x-turtle'},
+      {file_name:       'etc/doap.ttl'},
+      {file_extension:  'ttl'},
+      {content_type:    'text/turtle'},
+      {content_type:    'application/turtle'},
+      {content_type:    'application/x-turtle'},
     ].each do |arg|
       it "discovers with #{arg.inspect}" do
-        RDF::Writer.for(arg).should == RDF::Turtle::Writer
+        expect(RDF::Writer.for(arg)).to eq RDF::Turtle::Writer
       end
     end
   end
@@ -86,7 +86,7 @@ describe RDF::Turtle::Writer do
           %r("label";\s+dc:title "title")m,
           %r("title";\s+:c :d \.$)m
         ],
-        prefixes: { "" => RDF::FOAF, :dc => "http://purl.org/dc/elements/1.1/", :rdfs => RDF::RDFS}
+        prefixes: { "" => RDF::FOAF, dc:  "http://purl.org/dc/elements/1.1/", rdfs:  RDF::RDFS}
       )
     end
     
@@ -238,7 +238,7 @@ describe RDF::Turtle::Writer do
           %r(@prefix : <http://xmlns.com/foaf/0.1/> \.),
           %r(@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \.),
         ],
-        prefixes: { "" => RDF::FOAF, :rdfs => RDF::RDFS, :owl => RDF::OWL, :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
+        prefixes: { "" => RDF::FOAF, rdfs:  RDF::RDFS, owl:  RDF::OWL, rdf:  "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
       )
       #$verbose = false
     end
@@ -384,7 +384,7 @@ describe RDF::Turtle::Writer do
               ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
               @debug += [t.inspect, "source:", t.expected]
               g2 = parse(ttl, base_uri: t.base)
-              g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, trace: @debug.join("\n"))
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
@@ -392,14 +392,14 @@ describe RDF::Turtle::Writer do
               ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
               @debug += [t.inspect, "source:", t.expected]
               g2 = parse(ttl, base_uri: t.base)
-              g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, trace: @debug.join("\n"))
             end
           end
           #specify "reserialize manifest" do
           #  graph = RDF::Graph.load(m.id)
           #  ttl = serialize(graph, m.id, [], format: :ttl, standard_prefixes: true)
           #  g2 = parse(ttl, base_uri: m.id, validate: true)
-          #  g2.should be_equivalent_graph(graph, trace: @debug.join("\n"))
+          #  expect(g2).to be_equivalent_graph(graph, trace: @debug.join("\n"))
           #end
         end
       end
@@ -419,12 +419,17 @@ describe RDF::Turtle::Writer do
     prefixes = options[:prefixes] || {nil => ""}
     g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false)
     @debug = ["serialized:", ntstr]
-    result = RDF::Turtle::Writer.buffer(options.merge(debug: @debug, base_uri: base, prefixes: prefixes)) do |writer|
+    result = RDF::Turtle::Writer.buffer(options.merge(
+      debug: @debug,
+      base_uri: base,
+      prefixes: prefixes,
+      encoding: Encoding::UTF_8,
+    )) do |writer|
       writer << g
     end
     
     regexps.each do |re|
-      result.should match_re(re, about: base, trace: @debug, input: ntstr)
+      expect(result).to match_re(re, about: base, trace: @debug, input: ntstr)
     end
     
     result
