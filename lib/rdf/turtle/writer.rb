@@ -267,7 +267,7 @@ module RDF::Turtle
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_uri(uri, options = {})
-      md = relativize(uri)
+      md = uri.relativize(base_uri)
       debug("relativize") {"#{uri.to_ntriples} => #{md.inspect}"} if md != uri.to_s
       md != uri.to_s ? "<#{md}>" : (get_pname(uri) || "<#{uri}>")
     end
@@ -291,14 +291,6 @@ module RDF::Turtle
       prefixes.keys.sort_by(&:to_s).each do |prefix|
         @output.write("#{indent}@prefix #{prefix}: <#{prefixes[prefix]}> .\n")
       end
-    end
-    
-    # If base_uri is defined, use it to try to make uri relative
-    # @param [#to_s] uri
-    # @return [String]
-    def relativize(uri)
-      uri = uri.to_s
-      base_uri ? uri.sub(base_uri.to_s, "") : uri
     end
 
     # Defines rdf:type of subjects to be emitted at the beginning of the graph. Defaults to rdfs:Class
