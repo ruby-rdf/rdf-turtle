@@ -11,7 +11,7 @@ gem 'ebnf', git: "git://github.com/gkellogg/ebnf.git", branch: "develop"
 group :debug do
   gem "wirble"
   gem "debugger", platforms: :mri_19
-  gem "byebug", platforms: [:mri_20, :mri_21]
+  gem "byebug", platforms: :mri_20
 end
 
 platforms :rbx do
