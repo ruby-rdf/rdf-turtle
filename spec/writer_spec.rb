@@ -5,11 +5,12 @@ require 'rdf/spec/writer'
 describe RDF::Turtle::Writer do
   before(:each) {$stderr, @old_stderr = StringIO.new, $stderr}
   after(:each) {$stderr = @old_stderr}
-  before(:each) do
-    @writer = RDF::Turtle::Writer.new(StringIO.new)
+
+  it_behaves_like 'an RDF::Writer' do
+    let(:writer) {RDF::Turtle::Writer.new}
   end
-  
-  include RDF_Writer
+
+  subject {described_class.new}
 
   describe ".for" do
     [
@@ -294,6 +295,22 @@ describe RDF::Turtle::Writer do
           ], canonicalize: true)
         end
       end
+
+      [
+        [true, "true"],
+        [false, "false"],
+        [1, "true"],
+        [0, "false"],
+        ["true", "true"],
+        ["false", "false"],
+        ["1", "true"],
+        ["0", "false"],
+        ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+      ].each do |(l,r)|
+        it "serializes #{l.inspect} to #{r.inspect}" do
+          expect(subject.format_literal(RDF::Literal::Boolean.new(l))).to eql r
+        end
+      end
     end
     
     describe "xsd:integer" do
@@ -311,6 +328,22 @@ describe RDF::Turtle::Writer do
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
           ], canonicalize: true)
+        end
+      end
+
+      [
+        [0, "0"],
+        [10, "10"],
+        [-1, "-1"],
+        ["0", "0"],
+        ["10", "10"],
+        ["-1", "-1"],
+        ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+        ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+        ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+      ].each do |(l,r)|
+        it "serializes #{l.inspect} to #{r.inspect}" do
+          expect(subject.format_literal(RDF::Literal::Integer.new(l))).to eql r
         end
       end
     end
@@ -348,6 +381,25 @@ describe RDF::Turtle::Writer do
           ], canonicalize: true)
         end
       end
+
+      [
+        [0, "0.0"],
+        [10, "10.0"],
+        [-1, "-1.0"],
+        ["0", "0.0"],
+        ["10", "10.0"],
+        ["-1", "-1.0"],
+        ["1.0", "1.0"],
+        ["0.1", "0.1"],
+        ["10.01", "10.01"],
+        ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+        ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+        ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+      ].each do |(l,r)|
+        it "serializes #{l.inspect} to #{r.inspect}" do
+          expect(subject.format_literal(RDF::Literal::Decimal.new(l))).to eql r
+        end
+      end
     end
     
     describe "xsd:double" do
@@ -358,6 +410,7 @@ describe RDF::Turtle::Writer do
         [%q(0.1e1), /1.0e0 ./],
         [%q("10.02e1"^^xsd:double), /1.002e2 ./],
         [%q(10.02e1), /1.002e2 ./],
+        [%q("14"^^xsd:double), /1.4e1 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
           ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
@@ -366,6 +419,25 @@ describe RDF::Turtle::Writer do
             r,
           ], canonicalize: true)
         end
+      end
+    end
+
+    [
+      [0, "0.0e0"],
+      [10, "1.0e1"],
+      [-1, "-1.0e0"],
+      ["0", "0.0e0"],
+      ["10", "1.0e1"],
+      ["-1", "-1.0e0"],
+      ["1.0", "1.0e0"],
+      ["0.1", "1.0e-1"],
+      ["10.01", "1.001e1"],
+      ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#double>}],
+      ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#double>}],
+      ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#double>}],
+    ].each do |(l,r)|
+      it "serializes #{l.inspect} to #{r.inspect}" do
+        expect(subject.format_literal(RDF::Literal::Double.new(l))).to eql r
       end
     end
   end
@@ -380,6 +452,7 @@ describe RDF::Turtle::Writer do
           m.entries.each do |t|
             next unless t.positive_test? && t.evaluate?
             specify "#{t.name}: #{t.comment}" do
+              skip("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
               @debug += [t.inspect, "source:", t.expected]
@@ -388,6 +461,7 @@ describe RDF::Turtle::Writer do
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
+              skip("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
               @debug += [t.inspect, "source:", t.expected]

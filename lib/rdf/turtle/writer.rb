@@ -244,11 +244,11 @@ module RDF::Turtle
       literal = literal.dup.canonicalize! if @options[:canonicalize]
       case literal
       when RDF::Literal
-        case literal.datatype
+        case literal.valid? ? literal.datatype : false
         when RDF::XSD.boolean, RDF::XSD.integer, RDF::XSD.decimal
-          literal.to_s
+          literal.canonicalize.to_s
         when RDF::XSD.double
-          literal.to_s.sub('E', 'e')  # Favor lower case exponent
+          literal.canonicalize.to_s.sub('E', 'e')  # Favor lower case exponent
         else
           text = quoted(literal.value)
           text << "@#{literal.language}" if literal.has_language?

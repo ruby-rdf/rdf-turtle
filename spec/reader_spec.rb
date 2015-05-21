@@ -10,13 +10,11 @@ describe "RDF::Turtle::Reader" do
   let!(:doap_nt) {File.expand_path("../../etc/doap.nt", __FILE__)}
   let!(:doap_count) {File.open(doap_nt).each_line.to_a.length}
 
-  before(:each) do
-    @reader_input = File.read(doap)
-    @reader = RDF::Turtle::Reader.new(@reader_input)
-    @reader_count = doap_count
+  it_behaves_like 'an RDF::Reader' do
+    let(:reader) {RDF::Turtle::Reader.new}
+    let(:reader_input) {File.read(doap)}
+    let(:reader_count) {doap_count}
   end
-
-  include RDF_Reader
 
   describe ".for" do
     formats = [
