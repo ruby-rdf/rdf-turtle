@@ -929,14 +929,14 @@ describe "RDF::Turtle::Reader" do
     end
   end
   
-  describe "NTriples" do
+  describe "NTriples", skip: ENV["CI"] do
     subject {
       RDF::Graph.load("http://www.w3.org/2000/10/rdf-tests/rdfcore/ntriples/test.nt", format:  :ttl)
     }
     it "parses test file" do
       expect(subject.count).to eq 30
     end
-  end
+  end 
 
   describe "spec examples" do
     {
