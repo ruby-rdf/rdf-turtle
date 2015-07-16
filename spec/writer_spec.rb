@@ -311,6 +311,25 @@ describe RDF::Turtle::Writer do
           expect(subject.format_literal(RDF::Literal::Boolean.new(l))).to eql r
         end
       end
+
+      context "without literal shorthand" do
+        subject {described_class.new($stdout, literal_shorthand: false)}
+        [
+          [true, %{"true"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          [false, %{"false"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          [1, %{"true"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          [0,  %{"false"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          ["false",  %{"false"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          ["1", %{"1"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          ["0",  %{"0"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+          ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#boolean>}],
+        ].each do |(l,r)|
+          it "serializes #{l.inspect} to #{r.inspect}" do
+            expect(subject.format_literal(RDF::Literal::Boolean.new(l))).to eql r
+          end
+        end
+      end
     end
     
     describe "xsd:integer" do
@@ -336,14 +355,29 @@ describe RDF::Turtle::Writer do
         [10, "10"],
         [-1, "-1"],
         ["0", "0"],
-        ["10", "10"],
-        ["-1", "-1"],
         ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#integer>}],
         ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#integer>}],
         ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#integer>}],
       ].each do |(l,r)|
         it "serializes #{l.inspect} to #{r.inspect}" do
           expect(subject.format_literal(RDF::Literal::Integer.new(l))).to eql r
+        end
+      end
+
+      context "without literal shorthand" do
+        subject {described_class.new($stdout, literal_shorthand: false)}
+        [
+          [0, %{"0"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+          [10, %{"10"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+          [-1, %{"-1"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+          ["0", %{"0"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+          ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+          ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+          ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#integer>}],
+        ].each do |(l,r)|
+          it "serializes #{l.inspect} to #{r.inspect}" do
+            expect(subject.format_literal(RDF::Literal::Integer.new(l))).to eql r
+          end
         end
       end
     end
@@ -400,6 +434,25 @@ describe RDF::Turtle::Writer do
           expect(subject.format_literal(RDF::Literal::Decimal.new(l))).to eql r
         end
       end
+
+      context "without literal shorthand" do
+        subject {described_class.new($stdout, literal_shorthand: false)}
+        [
+          [0, %{"0.0"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          [10, %{"10.0"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          [-1, %{"-1.0"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          ["0", %{"0"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          ["10", %{"10"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          ["-1", %{"-1"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          ["1.0", %{"1.0"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          ["0.1", %{"0.1"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+          ["10.01", %{"10.01"^^<http://www.w3.org/2001/XMLSchema#decimal>}],
+        ].each do |(l,r)|
+          it "serializes #{l.inspect} to #{r.inspect}" do
+            expect(subject.format_literal(RDF::Literal::Decimal.new(l))).to eql r
+          end
+        end
+      end
     end
     
     describe "xsd:double" do
@@ -438,6 +491,25 @@ describe RDF::Turtle::Writer do
     ].each do |(l,r)|
       it "serializes #{l.inspect} to #{r.inspect}" do
         expect(subject.format_literal(RDF::Literal::Double.new(l))).to eql r
+      end
+    end
+
+    context "without literal shorthand" do
+      subject {described_class.new($stdout, literal_shorthand: false)}
+      [
+        [0, %{"0.0"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        [10, %{"10.0"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        [-1, %{"-1.0"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["0", %{"0"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["10", %{"10"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["-1", %{"-1"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["1.0", %{"1.0"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["0.1", %{"0.1"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["10.01", %{"10.01"^^<http://www.w3.org/2001/XMLSchema#double>}],
+      ].each do |(l,r)|
+        it "serializes #{l.inspect} to #{r.inspect}" do
+          expect(subject.format_literal(RDF::Literal::Double.new(l))).to eql r
+        end
       end
     end
   end
