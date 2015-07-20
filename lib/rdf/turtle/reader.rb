@@ -200,6 +200,16 @@ module RDF::Turtle
     end
 
     ##
+    # Warnings found during processing
+    # @return [Array<String>]
+    attr_reader :warnings
+
+    ##
+    # Accumulated errors found during processing
+    # @return [Array<String>]
+    attr_reader :errors
+
+    ##
     # Redirect for Freebase Reader
     #
     # @private
@@ -236,6 +246,10 @@ module RDF::Turtle
     # @option options [Boolean]  :validate     (false)
     #   whether to validate the parsed statements and values. If not validating,
     #   the parser will attempt to recover from errors.
+    # @option options [Array] :errors
+    #   array for placing errors found when processing metadata. If not set, and validating, errors are output to `$stderr`
+    # @option options [Array] :warnings
+    #   array for placing warnings found when processing metadata. If not set, and validating, warnings are output to `$stderr`
     # @option options [Boolean] :progress
     #   Show progress of parser productions
     # @option options [Boolean, Integer, Array] :debug
@@ -260,6 +274,8 @@ module RDF::Turtle
         when @options[:progress] then 2
         when @options[:validate] then 1
         end
+        @errors = @options[:errors]
+        @warnings = @options[:warnings]
 
         @options[:base_uri] = RDF::URI(base_uri || "")
         debug("base IRI") {base_uri.inspect}
@@ -306,6 +322,8 @@ module RDF::Turtle
             message = "#{args.join(': ')}"
             d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
             str = "[#{lineno}](#{level})#{d_str}#{message}"
+            @errors << str if @errors && level == 0
+            @warnings << str if @warnings && level == 1
             case @options[:debug]
             when Array
               @options[:debug] << str
@@ -321,7 +339,7 @@ module RDF::Turtle
     rescue EBNF::LL1::Parser::Error, EBNF::LL1::Lexer::Error =>  e
       if validate?
         raise RDF::ReaderError.new(e.message, lineno: e.lineno, token: e.token)
-      else
+      elsif !@options[:errors]
         $stderr.puts e.message
       end
     end
