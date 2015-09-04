@@ -247,9 +247,9 @@ module RDF::Turtle
     #   whether to validate the parsed statements and values. If not validating,
     #   the parser will attempt to recover from errors.
     # @option options [Array] :errors
-    #   array for placing errors found when processing metadata. If not set, and validating, errors are output to `$stderr`
+    #   array for placing errors found when parsing
     # @option options [Array] :warnings
-    #   array for placing warnings found when processing metadata. If not set, and validating, warnings are output to `$stderr`
+    #   array for placing warnings found when parsing
     # @option options [Boolean] :progress
     #   Show progress of parser productions
     # @option options [Boolean, Integer, Array] :debug
@@ -269,13 +269,14 @@ module RDF::Turtle
           whitespace:  WS,
         }.merge(options)
         @options = {prefixes:  {nil => ""}}.merge(@options) unless @options[:validate]
+        @errors = @options[:errors]
+        @warnings = @options[:warnings]
+
         @options[:debug] ||= case
         when RDF::Turtle.debug? then true
         when @options[:progress] then 2
         when @options[:validate] then 1
         end
-        @errors = @options[:errors]
-        @warnings = @options[:warnings]
 
         @options[:base_uri] = RDF::URI(base_uri || "")
         debug("base IRI") {base_uri.inspect}
@@ -322,15 +323,19 @@ module RDF::Turtle
             message = "#{args.join(': ')}"
             d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
             str = "[#{lineno}](#{level})#{d_str}#{message}"
-            @errors << str if @errors && level == 0
-            @warnings << str if @warnings && level == 1
-            case @options[:debug]
-            when Array
-              @options[:debug] << str
-            when TrueClass
-              $stderr.puts str
-            when Integer
-              $stderr.puts(str) if level <= @options[:debug]
+            if @errors && level == 0
+              @errors << str
+            elsif @warnings && level == 1
+              @warnings << str
+            else
+              case @options[:debug]
+              when Array
+                @options[:debug] << str
+              when TrueClass
+                $stderr.puts str
+              when Integer
+                $stderr.puts(str) if level <= @options[:debug]
+              end
             end
           end
         end
@@ -378,7 +383,8 @@ module RDF::Turtle
 
     # Process a URI against base
     def process_iri(iri)
-      value = base_uri.join(iri)
+      value = RDF::URI(iri)
+      value = base_uri.join(value) if value.relative?
       value.validate! if validate?
       value.canonicalize! if canonicalize?
       value = RDF::URI.intern(value) if intern?

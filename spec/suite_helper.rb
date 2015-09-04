@@ -6,7 +6,7 @@ require 'json/ld'
 # For now, override RDF::Utils::File.open_file to look for the file locally before attempting to retrieve it
 module RDF::Util
   module File
-    REMOTE_PATH = "https://dvcs.w3.org/hg/rdf/raw-file/default/"
+    REMOTE_PATH = "http://www.w3.org/2013/TurtleTests/"
     LOCAL_PATH = ::File.expand_path("../w3c-rdf", __FILE__) + '/'
 
     ##
@@ -32,7 +32,7 @@ module RDF::Util
             #puts "use #{filename_or_url} locally"
             case filename_or_url.to_s
             when /\.ttl$/
-              def response.content_type; 'application/turtle'; end
+              def response.content_type; 'text/turtle'; end
             when /\.nt$/
               def response.content_type; 'application/n-triples'; end
             end

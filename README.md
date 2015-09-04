@@ -136,7 +136,7 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [YARD]:         http://yardoc.org/
 [YARD-GS]:      http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:          http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf/master/frames
+[RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf
 [EBNF]:         http://rubygems.org/gems/ebnf
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
