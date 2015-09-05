@@ -1611,10 +1611,10 @@ describe "RDF::Turtle::Reader" do
 
       # RFC3986 abnormal examples with file path
 
-      <urn:ex:s276> <urn:ex:p> <file:///a/g>.
-      <urn:ex:s277> <urn:ex:p> <file:///a/g>.
-      <urn:ex:s278> <urn:ex:p> <file:///a/g>.
-      <urn:ex:s279> <urn:ex:p> <file:///a/g>.
+      <urn:ex:s276> <urn:ex:p> <file:///g>.
+      <urn:ex:s277> <urn:ex:p> <file:///g>.
+      <urn:ex:s278> <urn:ex:p> <file:///g>.
+      <urn:ex:s279> <urn:ex:p> <file:///g>.
       <urn:ex:s280> <urn:ex:p> <file:///a/bb/ccc/g.>.
       <urn:ex:s281> <urn:ex:p> <file:///a/bb/ccc/.g>.
       <urn:ex:s282> <urn:ex:p> <file:///a/bb/ccc/g..>.
