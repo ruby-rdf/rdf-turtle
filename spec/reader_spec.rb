@@ -319,7 +319,7 @@ describe "RDF::Turtle::Reader" do
         %(http://example.com/\u003E),
       ].each do |uri|
         it "rejects #{('<' + uri + '>').inspect}" do
-          expect {parse(%(<s> <p> <#{uri}>), validate:  true)}.to raise_error RDF::ReaderError
+          expect {parse(%(<http://example/s> <http://example/p> <#{uri}>), validate:  true)}.to raise_error RDF::ReaderError
         end
       end
     end
@@ -380,7 +380,7 @@ describe "RDF::Turtle::Reader" do
     describe "@prefix" do
       it "raises an error when validating if not defined" do
         ttl = %(<a> a :a .)
-        expect(lambda {parse(ttl, validate:  true)}).to raise_error(RDF::ReaderError)
+        expect {parse(ttl, validate:  true)}.to raise_error(RDF::ReaderError)
       end
       
       it "allows undefined empty prefix if not validating" do
@@ -460,9 +460,9 @@ describe "RDF::Turtle::Reader" do
         "PrEfIx foo: <http://foo/bar#>" => true,
       }.each do |prefix, valid|
         context prefix do
-          it "sets prefix" do
-            ttl = %(#{prefix} <a> a foo:a.)
-            nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://foo/bar#a> .)
+          it "sets prefix", skip: !valid do
+            ttl = %(#{prefix} <http://example/a> a foo:a.)
+            nt = %(<http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://foo/bar#a> .)
             expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
           end
 
@@ -479,65 +479,62 @@ describe "RDF::Turtle::Reader" do
     end
 
     describe "@base" do
-      it "sets absolute base" do
-        ttl = %(@base <http://foo/bar> . <> <a> <b> . <#c> <d> </e>.)
-        nt = %(
-        <http://foo/bar> <http://foo/a> <http://foo/b> .
-        <http://foo/bar#c> <http://foo/d> <http://foo/e> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
-      end
-      
-      it "sets absolute base (trailing /)" do
-        ttl = %(@base <http://foo/bar/> . <> <a> <b> . <#c> <d> </e>.)
-        nt = %(
-        <http://foo/bar/> <http://foo/bar/a> <http://foo/bar/b> .
-        <http://foo/bar/#c> <http://foo/bar/d> <http://foo/e> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
-      end
-      
-      it "should set absolute base (trailing #)" do
-        ttl = %(@base <http://foo/bar#> . <> <a> <b> . <#c> <d> </e>.)
-        nt = %(
-        <http://foo/bar#> <http://foo/a> <http://foo/b> .
-        <http://foo/bar#c> <http://foo/d> <http://foo/e> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
-      end
-      
-      it "sets a relative base" do
-        ttl = %(
-        @base <http://example/products/>.
-        <> <a> <b>, <#c>.
-        @base <prod123/>.
-        <> <a> <b>, <#c>.
-        @base <../>.
-        <> <a> <d>, <#e>.
-        )
-        nt = %(
-        <http://example/products/> <http://example/products/a> <http://example/products/b> .
-        <http://example/products/> <http://example/products/a> <http://example/products/#c> .
-        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/b> .
-        <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/#c> .
-        <http://example/products/> <http://example/products/a> <http://example/products/d> .
-        <http://example/products/> <http://example/products/a> <http://example/products/#e> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
-      end
-      
-      it "redefine" do
-        ttl = %(
-        @base <http://example.com/ontolgies>. <a> <b> <foo/bar#baz>.
-        @base <path/DIFFERENT/>. <a2> <b2> <foo/bar#baz2>.
-        @prefix : <#>. <d3> :b3 <e3>.
-        )
-        nt = %(
-        <http://example.com/a> <http://example.com/b> <http://example.com/foo/bar#baz> .
-        <http://example.com/path/DIFFERENT/a2> <http://example.com/path/DIFFERENT/b2> <http://example.com/path/DIFFERENT/foo/bar#baz2> .
-        <http://example.com/path/DIFFERENT/d3> <http://example.com/path/DIFFERENT/#b3> <http://example.com/path/DIFFERENT/e3> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+      {
+        "absolute base" => [
+          %(@base <http://foo/bar> . <> <a> <b> . <#c> <d> </e>.),
+          %(
+            <http://foo/bar> <http://foo/a> <http://foo/b> .
+            <http://foo/bar#c> <http://foo/d> <http://foo/e> .
+          )
+        ],
+        "absolute base (trailing /)" => [
+          %(@base <http://foo/bar/> . <> <a> <b> . <#c> <d> </e>.),
+          %(
+            <http://foo/bar/> <http://foo/bar/a> <http://foo/bar/b> .
+            <http://foo/bar/#c> <http://foo/bar/d> <http://foo/e> .
+          )
+        ],
+        "absolute base (trailing #)" => [
+          %(@base <http://foo/bar#> . <> <a> <b> . <#c> <d> </e>.),
+          %(
+            <http://foo/bar#> <http://foo/a> <http://foo/b> .
+            <http://foo/bar#c> <http://foo/d> <http://foo/e> .
+          )
+        ],
+        "relative base" => [
+          %(
+            @base <http://example/products/>.
+            <> <a> <b>, <#c>.
+            @base <prod123/>.
+            <> <a> <b>, <#c>.
+            @base <../>.
+            <> <a> <d>, <#e>.
+          ),
+          %(
+            <http://example/products/> <http://example/products/a> <http://example/products/b> .
+            <http://example/products/> <http://example/products/a> <http://example/products/#c> .
+            <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/b> .
+            <http://example/products/prod123/> <http://example/products/prod123/a> <http://example/products/prod123/#c> .
+            <http://example/products/> <http://example/products/a> <http://example/products/d> .
+            <http://example/products/> <http://example/products/a> <http://example/products/#e> .
+          )
+        ],
+        "redefine" => [
+          %(
+            @base <http://example.com/ontolgies>. <a> <b> <foo/bar#baz>.
+            @base <path/DIFFERENT/>. <a2> <b2> <foo/bar#baz2>.
+            @prefix : <#>. <d3> :b3 <e3>.
+          ),
+          %(
+            <http://example.com/a> <http://example.com/b> <http://example.com/foo/bar#baz> .
+            <http://example.com/path/DIFFERENT/a2> <http://example.com/path/DIFFERENT/b2> <http://example.com/path/DIFFERENT/foo/bar#baz2> .
+            <http://example.com/path/DIFFERENT/d3> <http://example.com/path/DIFFERENT/#b3> <http://example.com/path/DIFFERENT/e3> .
+          )
+        ],
+      }.each do |name, (ttl, nt)|
+        it name do
+          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        end
       end
 
       {
@@ -551,7 +548,7 @@ describe "RDF::Turtle::Reader" do
         "BaSe <http://foo/bar>" => true,
       }.each do |base, valid|
         context base do
-          it "sets base" do
+          it "sets base", skip: !valid do
             ttl = %(#{base} <> <a> <b> . <#c> <d> </e>.)
             nt = %(
             <http://foo/bar> <http://foo/a> <http://foo/b> .
@@ -653,51 +650,70 @@ describe "RDF::Turtle::Reader" do
         expect(parse(ttl, prefixes:  {nil => ''})).to be_equivalent_graph(nt, trace:  @debug)
       end
     end
-    
+
+    describe "blankNodePropertyList" do
+      {
+        "sole_blankNodePropertyList" => [
+          %([ <http://a.example/p> <http://a.example/o> ] .),
+          %(_:a <http://a.example/p> <http://a.example/o> .)
+        ]
+      }.each do |name, (ttl, nt)|
+        it name do
+          expect(parse(ttl, validate: true)).to be_equivalent_graph(nt, trace:  @debug)
+        end
+      end
+    end
+
     describe "objectList" do
-      it "IRIs" do
-        ttl = %(<a> <b> <c>, <d>.)
-        nt = %(
-          <a> <b> <c> .
-          <a> <b> <d> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
-      end
-
-      it "literals" do
-        ttl = %(<a> <b> "1", "2" .)
-        nt = %(
-          <a> <b> "1" .
-          <a> <b> "2" .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
-      end
-
-      it "mixed" do
-        ttl = %(<a> <b> <c>, "2" .)
-        nt = %(
-          <a> <b> <c> .
-          <a> <b> "2" .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+      {
+        "IRIs" => [
+          %(<a> <b> <c>, <d>.),
+          %(
+            <a> <b> <c> .
+            <a> <b> <d> .
+          )
+        ],
+        "literals" => [
+          %(<a> <b> "1", "2" .),
+          %(
+            <a> <b> "1" .
+            <a> <b> "2" .
+          )
+        ],
+        "mixed" => [
+          %(<a> <b> <c>, "2" .),
+          %(
+            <a> <b> <c> .
+            <a> <b> "2" .
+          )
+        ],
+      }.each do |name, (ttl, nt)|
+        it name do
+          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        end
       end
     end
     
     describe "predicateObjectList" do
-      it "does that" do
-        ttl = %(
-        @prefix a: <http://foo/a#> .
+      {
+        "mixed" => [
+          %(
+            @prefix a: <http://foo/a#> .
 
-        a:b a:p1 "123" ; a:p1 "456" .
-        a:b a:p2 a:v1 ; a:p3 a:v2 .
-        )
-        nt = %(
-        <http://foo/a#b> <http://foo/a#p1> "123" .
-        <http://foo/a#b> <http://foo/a#p1> "456" .
-        <http://foo/a#b> <http://foo/a#p2> <http://foo/a#v1> .
-        <http://foo/a#b> <http://foo/a#p3> <http://foo/a#v2> .
-        )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+            a:b a:p1 "123" ; a:p1 "456" .
+            a:b a:p2 a:v1 ; a:p3 a:v2 .
+          ),
+          %(
+            <http://foo/a#b> <http://foo/a#p1> "123" .
+            <http://foo/a#b> <http://foo/a#p1> "456" .
+            <http://foo/a#b> <http://foo/a#p2> <http://foo/a#v1> .
+            <http://foo/a#b> <http://foo/a#p3> <http://foo/a#v2> .
+          )
+        ],
+      }.each do |name, (ttl, nt)|
+        it name do
+          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        end
       end
     end
     
@@ -883,7 +899,7 @@ describe "RDF::Turtle::Reader" do
       ],
       "malformed bnode object(3)" => [
         %q(<http://example/a> <http://example/b> _:-a, <http://example/d> .),
-        %q(),
+        %q()
       ],
       "malformed uri subject" => [
         %q(<"quoted"> <http://example/a> <http://example/b> . <http://example/c> <http://example/d> <http://example/e> .),
@@ -913,15 +929,14 @@ describe "RDF::Turtle::Reader" do
         %q(
           <http://example/a> <http://example/b> <http://http:urbis.com> .
           <http://example/a> <http://example/b> <http://example/e> .
-        ),
-        (RDF::VERSION.to_s < "1.1")
+        )
       ],
     }.each do |test, (input, expected, pending)|
       context test do
         it "raises an error if valiating" do
           expect {parse(input, validate:  true)}.to raise_error
         end
-        
+
         it "continues after an error", pending:  pending do
           expect(parse(input, validate:  false)).to be_equivalent_graph(expected, trace:  @debug)
         end

@@ -11,6 +11,8 @@ describe RDF::Turtle::Reader do
         m.entries.each do |t|
           specify "#{t.name}: #{t.comment}" do
             t.debug = [t.inspect, "source:", t.input]
+            t.warnings = []
+            t.errors = []
 
             reader = RDF::Turtle::Reader.new(t.input,
                 base_uri:  t.base,
@@ -24,7 +26,7 @@ describe RDF::Turtle::Reader do
               begin
                 graph << reader
               rescue Exception => e
-                expect(e.message).to produce("Not exception #{e.inspect}", t.debug)
+                expect(e.message).to produce("Not exception #{e.inspect}", t)
               end
 
               if t.evaluate?
@@ -36,7 +38,7 @@ describe RDF::Turtle::Reader do
             else
               expect {
                 graph << reader
-                expect(graph.dump(:ntriples)).to produce("not this", t.debug)
+                expect(graph.dump(:ntriples)).to produce("not this", t)
               }.to raise_error(RDF::ReaderError)
             end
           end
