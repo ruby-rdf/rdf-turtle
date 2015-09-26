@@ -1,5 +1,4 @@
 # coding: utf-8
-require 'rdf/turtle/meta'
 require 'ebnf/ll1/parser'
 
 module RDF::Turtle
@@ -144,12 +143,14 @@ module RDF::Turtle
           read_statement
         end
 
-        if validate? && !warnings.empty? && !@options[:warnings]
-          $stderr.puts "Warnings: #{warnings.join("\n")}"
-        end
-        if validate? && !errors.empty? && !@options[:errors]
-          $stderr.puts "Errors: #{errors.join("\n")}"
-          raise RDF::ReaderError, "Errors found during processing"
+        if validate?
+          if !warnings.empty? && !@options[:warnings]
+            $stderr.puts "Warnings: #{warnings.join("\n")}"
+          end
+          if !errors.empty?
+            $stderr.puts "Errors: #{errors.join("\n")}" unless @options[:errors]
+            raise RDF::ReaderError, "Errors found during processing"
+          end
         end
       end
       enum_for(:each_statement)
@@ -594,6 +595,10 @@ module RDF::Turtle
       when TrueClass
         $stderr.puts str
       when Integer
+        case debug_level
+        when 0 then return if @options[:errors]
+        when 1 then return if @options[:warnings]
+        end
         $stderr.puts(str) if debug_level <= @options[:debug]
       end
     end

@@ -12,9 +12,13 @@ describe RDF::NTriples::Reader do
           m.entries.each do |t|
             specify "#{t.name}: #{t.comment}" do
               t.debug = [t.inspect, "source:", t.input]
+              t.warnings = []
+              t.errors = []
 
               reader = RDF::NTriples::Reader.new(t.input,
-                  validate:  true)
+                errors: t.errors,
+                warnings: t.warnings,
+                validate:  true)
 
               graph = RDF::Graph.new
 

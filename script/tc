@@ -23,6 +23,23 @@ def earl_preamble(options)
   foaf:title "Implementor";
   foaf:homepage <http://greggkellogg.net/> .
 )
+
+  options[:output].puts options[:ntriples] ? %(
+<http://rubygems.org/gems/rdf>
+  doap:release <https://github.com/ruby-rdf/rdf/tree/#{RDF::VERSION}> .
+
+<https://github.com/ruby-rdf/rdf/tree/#{RDF::VERSION}> a doap:Version;
+  doap:name "RDF.rb-#{RDF::VERSION}";
+  doap:revision "#{RDF::VERSION}" .
+) : %(
+<http://rubygems.org/gems/rdf-turtle>
+  doap:release <https://github.com/ruby-rdf/rdf-turtle/tree/#{RDF::Turtle::VERSION}> .
+
+<https://github.com/ruby-rdf/rdf-turtle/tree/#{RDF::Turtle::VERSION}> a doap:Version;
+  doap:name "rdf-turtle-#{RDF::Turtle::VERSION}";
+  doap:created "#{File.mtime(File.expand_path('../../VERSION', __FILE__)).strftime('%Y-%m-%d')}"^^xsd:date;
+  doap:revision "#{RDF::Turtle::VERSION}" .
+)
 end
 
 def run_tc(tc, options)
@@ -36,9 +53,16 @@ def run_tc(tc, options)
 
   begin
     puts "open #{tc.action}" if options[:verbose]
-    options = {base_uri:  tc.base}.merge(options)
+    tc.warnings = []
+    tc.errors = []
+    options = {
+      base_uri:  tc.base,
+      warnings:  tc.warnings,
+      errors:    tc.errors,
+      validate:  true
+    }.merge(options)
 
-    reader = RDF::Reader.for(tc.action).new(tc.input, base_uri:  tc.base, validate:  true)
+    reader = RDF::Reader.for(tc.action).new(tc.input, options)
 
     graph = RDF::Repository.new
     result = nil
@@ -76,7 +100,11 @@ def run_tc(tc, options)
     end
   end
   
-  options[:output].puts("\nOutput:\n" + graph.dump(:ntriples)) unless options[:quiet]
+  unless options[:quiet]
+    options[:output].puts("\nWarnings:\n" + tc.warnings.join("\n"))
+    options[:output].puts("\nErrors:\n" + tc.errors.join("\n"))
+    options[:output].puts("\nOutput:\n" + graph.dump(:ntriples))
+  end
 
   if options[:earl]
     options[:output].puts %{

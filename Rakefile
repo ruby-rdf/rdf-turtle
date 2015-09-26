@@ -4,7 +4,7 @@ require 'rubygems'
 
 namespace :gem do
   desc "Build the rdf-turtle-#{File.read('VERSION').chomp}.gem file"
-  task build:  "lib/rdf/turtle/meta.rb" do
+  task :build do
     sh "gem build rdf-turtle.gemspec && mv rdf-turtle-#{File.read('VERSION').chomp}.gem pkg/"
   end
 
@@ -38,35 +38,4 @@ end
 require 'yard'
 namespace :doc do
   YARD::Rake::YardocTask.new
-end
-
-desc 'Create versions of ebnf files in etc'
-task etc:  %w{etc/turtle.sxp etc/turtle.ll1.sxp}
-
-desc 'Build first, follow and branch tables'
-task meta:  "lib/rdf/turtle/meta.rb"
-
-file "lib/rdf/turtle/meta.rb" => "etc/turtle.bnf" do |t|
-  sh %{
-    ebnf --ll1 turtleDoc --format rb \
-      --mod-name RDF::Turtle::Meta \
-      --output lib/rdf/turtle/meta.rb \
-      etc/turtle.bnf
-  }
-end
-
-file "etc/turtle.ll1.sxp" => "etc/turtle.bnf" do |t|
-  sh %{
-    ebnf --ll1 turtleDoc --format sxp \
-      --output etc/turtle.ll1.sxp \
-      etc/turtle.bnf
-  }
-end
-
-file "etc/turtle.sxp" => "etc/turtle.bnf" do |t|
-  sh %{
-    ebnf --bnf --format sxp \
-      --output etc/turtle.sxp \
-      etc/turtle.bnf
-  }
 end

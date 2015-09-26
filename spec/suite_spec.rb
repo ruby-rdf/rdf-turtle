@@ -16,6 +16,8 @@ describe RDF::Turtle::Reader do
 
             reader = RDF::Turtle::Reader.new(t.input,
                 base_uri:  t.base,
+                errors: t.errors,
+                warnings: t.warnings,
                 canonicalize:  false,
                 validate:  true,
                 debug:  t.debug)
