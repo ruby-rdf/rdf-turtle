@@ -14,7 +14,6 @@ rescue LoadError
     end
   end
 end
-require 'rdf/turtle/meta'
 require 'rdf/ntriples'
 require 'ebnf/ll1/parser'
 require 'getoptlong'

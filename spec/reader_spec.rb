@@ -450,17 +450,17 @@ describe "RDF::Turtle::Reader" do
       end
 
       {
-        "@prefix foo: <http://foo/bar#> ." => true,
-        "@PrEfIx foo: <http://foo/bar#> ." => false,
-        "prefix foo: <http://foo/bar#> ." => false,
-        "PrEfIx foo: <http://foo/bar#> ." => false,
-        "@prefix foo: <http://foo/bar#>" => false,
-        "@PrEfIx foo: <http://foo/bar#>" => false,
-        "prefix foo: <http://foo/bar#>" => true,
-        "PrEfIx foo: <http://foo/bar#>" => true,
-      }.each do |prefix, valid|
+        "@prefix foo: <http://foo/bar#> ." => [true, true],
+        "@PrEfIx foo: <http://foo/bar#> ." => [false, true],
+        "prefix foo: <http://foo/bar#> ." => [false, true],
+        "PrEfIx foo: <http://foo/bar#> ." => [false, true],
+        "@prefix foo: <http://foo/bar#>" => [false, false],
+        "@PrEfIx foo: <http://foo/bar#>" => [false, false],
+        "prefix foo: <http://foo/bar#>" => [true, true],
+        "PrEfIx foo: <http://foo/bar#>" => [true, true],
+      }.each do |prefix, (valid, continues)|
         context prefix do
-          it "sets prefix", skip: !valid do
+          it "sets prefix", pending: !continues do
             ttl = %(#{prefix} <http://example/a> a foo:a.)
             nt = %(<http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://foo/bar#a> .)
             expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
@@ -538,17 +538,17 @@ describe "RDF::Turtle::Reader" do
       end
 
       {
-        "@base <http://foo/bar> ." => true,
-        "@BaSe <http://foo/bar> ." => false,
-        "base <http://foo/bar> ." => false,
-        "BaSe <http://foo/bar> ." => false,
-        "@base <http://foo/bar>" => false,
-        "@BaSe <http://foo/bar>" => false,
-        "base <http://foo/bar>" => true,
-        "BaSe <http://foo/bar>" => true,
-      }.each do |base, valid|
+        "@base <http://foo/bar> ." => [true, true],
+        "@BaSe <http://foo/bar> ." => [false, true],
+        "base <http://foo/bar> ." => [false, true],
+        "BaSe <http://foo/bar> ." => [false, true],
+        "@base <http://foo/bar>" => [false, false],
+        "@BaSe <http://foo/bar>" => [false, false],
+        "base <http://foo/bar>" => [true, true],
+        "BaSe <http://foo/bar>" => [true, true],
+      }.each do |base, (valid, continues)|
         context base do
-          it "sets base", skip: !valid do
+          it "sets base", pending: !continues do
             ttl = %(#{base} <> <a> <b> . <#c> <d> </e>.)
             nt = %(
             <http://foo/bar> <http://foo/a> <http://foo/b> .
@@ -931,13 +931,13 @@ describe "RDF::Turtle::Reader" do
           <http://example/a> <http://example/b> <http://example/e> .
         )
       ],
-    }.each do |test, (input, expected, pending)|
+    }.each do |test, (input, expected)|
       context test do
         it "raises an error if valiating" do
           expect {parse(input, validate:  true)}.to raise_error
         end
 
-        it "continues after an error", pending:  pending do
+        it "continues after an error" do
           expect(parse(input, validate:  false)).to be_equivalent_graph(expected, trace:  @debug)
         end
       end
@@ -1826,8 +1826,6 @@ The second line
           g2 = parse(expected)
           g1 = parse(input)
           expect(g1).to be_equivalent_graph(g2, trace:  @debug)
-        rescue RDF::ReaderError
-          pending("Spec example fixes") if ["example 4", "example 5"].include?(name)
         end
       end
     end
