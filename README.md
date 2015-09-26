@@ -4,6 +4,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](http://badge.fury.io/rb/rdf-turtle)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
+[![Dependency Status](https://gemnasium.com/ruby-rdf/rdf-turtle.png)](https://gemnasium.com/ruby-rdf/rdf-turtle)
 
 ## Description
 This is a [Ruby][] implementation of a [Turtle][] parser for [RDF.rb][].
