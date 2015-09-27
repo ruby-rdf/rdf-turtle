@@ -437,7 +437,7 @@ module RDF::Turtle
             literal(value, language: @lexer.shift.value[1..-1].to_sym)
           when '^^'
             @lexer.shift
-            literal(value, language: read_iri)
+            literal(value, datatype: read_iri)
           else
             literal(value)
           end

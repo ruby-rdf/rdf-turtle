@@ -67,6 +67,13 @@ RSpec::Matchers.define :match_re do |expected, info|
   match do |actual|
     @info = if info.respond_to?(:input)
       info
+    elsif info.is_a?(Hash)
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      debug = info[:debug]
+      if debug.is_a?(Array)
+        debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+      end
+      Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
       Info.new(expected.is_a?(RDF::Graph) ? expected.context : info, "", info.to_s)
     end
@@ -83,7 +90,7 @@ RSpec::Matchers.define :match_re do |expected, info|
     (@info.result ? "Output file: #{@info.result}\n" : "") +
     "Expression: #{@expected}\n" +
     "Unsorted Results:\n#{@actual}" +
-    (@info.debug ? "\nDebug:\n#{@info.debug}" : "")
+    (@info.debug ? "\nDebug:\n#{@info.debug.join("\n")}" : "")
   end  
 end
 
@@ -91,6 +98,13 @@ RSpec::Matchers.define :produce do |expected, info|
   match do |actual|
     @info = if info.respond_to?(:input)
       info
+    elsif info.is_a?(Hash)
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      debug = info[:debug]
+      if debug.is_a?(Array)
+        debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+      end
+      Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
       Info.new(about: info, comment: "", debug: info.to_s)
     end

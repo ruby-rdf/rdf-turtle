@@ -156,12 +156,12 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "should parse long literal with escape" do
-        ttl = %(@prefix : <http://example/foo#> . <a> <b> "\\U00015678another" .)
+        ttl = %(@prefix : <http://example/foo#> . <a> <b> """\\U00015678another""" .)
         statement = parse(ttl, validate: false).statements.to_a.first
         expect(statement.object.value).to eq "\u{15678}another"
       end
       
-      context "STRING_LITERAL_LONG" do
+      context "STRING_LITERAL_LONG_QUOTE" do
         {
           "simple" => %q(foo),
           "muti-line" => %q(
@@ -177,7 +177,7 @@ describe "RDF::Turtle::Reader" do
             </html:b>
             baz
             <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
-          ),
+          )
         }.each do |test, string|
           it "parses LONG1 #{test}" do
             graph = parse(%(<a> <b> '''#{string}'''.), validate: false)
@@ -813,6 +813,8 @@ describe "RDF::Turtle::Reader" do
       %(123.E+1)            => %("123.0E1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       %(true)               => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
       %("lang"@EN)          => %("lang"@en),
+      %("""lang"""@EN)          => %("lang"@en),
+      %("""+1"""^^xsd:integer)  => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
         ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://example/a> <http://example/b> #{input} .)
