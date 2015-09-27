@@ -17,7 +17,6 @@ end
 require 'rdf/ntriples'
 require 'ebnf/ll1/parser'
 require 'getoptlong'
-require 'open-uri'
 
 def run(input, options)
   if options[:profile]
