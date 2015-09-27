@@ -29,15 +29,15 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
   match do |actual|
     @info = if info.respond_to?(:input)
       info
-    #elsif info.is_a?(Hash)
-    #  identifier = info[:identifier] || expected.is_a?(RDF::Enumerable) ? expected.context : info[:about]
-    #  trace = info[:trace]
-    #  if trace.is_a?(Array)
-    #    trace = trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
-    #  end
-    #  Info.new(identifier, info[:comment] || "", trace)
+    elsif info.is_a?(Hash)
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      debug = info[:debug]
+      if debug.is_a?(Array)
+        debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+      end
+      Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
-      Info.new(expected.is_a?(RDF::Enumerable) ? expected.context : info, "", info.to_s)
+      Info.new(about: expected.is_a?(RDF::Enumerable) ? expected.context : info, debug: info.to_s)
     end
     @expected = normalize(expected)
     @actual = normalize(actual)
@@ -67,13 +67,6 @@ RSpec::Matchers.define :match_re do |expected, info|
   match do |actual|
     @info = if info.respond_to?(:input)
       info
-    #elsif info.is_a?(Hash)
-    #  identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
-    #  trace = info[:trace]
-    #  if trace.is_a?(Array)
-    #    trace = trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
-    #  end
-    #  Info.new(identifier, info[:comment] || "", trace)
     else
       Info.new(expected.is_a?(RDF::Graph) ? expected.context : info, "", info.to_s)
     end
@@ -99,7 +92,7 @@ RSpec::Matchers.define :produce do |expected, info|
     @info = if info.respond_to?(:input)
       info
     else
-      Info.new(info, "", info.to_s)
+      Info.new(about: info, comment: "", debug: info.to_s)
     end
     expect(actual).to eq expected
   end

@@ -132,7 +132,7 @@ describe "RDF::Turtle::Reader" do
         "tab:\t"         => '<a> <b>  "tab:\\t" .',
       }.each_pair do |contents, triple|
         specify "test #{triple}" do
-          graph = parse(triple, prefixes:  {nil => ''})
+          graph = parse(triple, validate: false, prefixes:  {nil => ''})
           statement = graph.statements.to_a.first
           expect(graph.size).to eq 1
           expect(statement.object.value).to eq contents
@@ -148,7 +148,7 @@ describe "RDF::Turtle::Reader" do
         "resumé" => ':a :resume  "resumé" .',
       }.each_pair do |contents, triple|
         specify "test #{triple}" do
-          graph = parse(triple, prefixes:  {nil => ''})
+          graph = parse(triple, validate: false, prefixes:  {nil => ''})
           statement = graph.statements.to_a.first
           expect(graph.size).to eq 1
           expect(statement.object.value).to eq contents
@@ -157,7 +157,7 @@ describe "RDF::Turtle::Reader" do
       
       it "should parse long literal with escape" do
         ttl = %(@prefix : <http://example/foo#> . <a> <b> "\\U00015678another" .)
-        statement = parse(ttl).statements.to_a.first
+        statement = parse(ttl, validate: false).statements.to_a.first
         expect(statement.object.value).to eq "\u{15678}another"
       end
       
@@ -180,13 +180,13 @@ describe "RDF::Turtle::Reader" do
           ),
         }.each do |test, string|
           it "parses LONG1 #{test}" do
-            graph = parse(%(<a> <b> '''#{string}'''.))
+            graph = parse(%(<a> <b> '''#{string}'''.), validate: false)
             expect(graph.size).to eq 1
             expect(graph.statements.to_a.first.object.value).to eq string
           end
 
           it "parses LONG2 #{test}" do
-            graph = parse(%(<a> <b> """#{string}""".))
+            graph = parse(%(<a> <b> """#{string}""".), validate: false)
             expect(graph.size).to eq 1
             expect(graph.statements.to_a.first.object.value).to eq string
           end
@@ -194,13 +194,13 @@ describe "RDF::Turtle::Reader" do
       end
       
       it "LONG1 matches trailing escaped single-quote" do
-        graph = parse(%(<a> <b> '''\\''''.))
+        graph = parse(%(<a> <b> '''\\''''.), validate: false)
         expect(graph.size).to eq 1
         expect(graph.statements.to_a.first.object.value).to eq %q(')
       end
       
       it "LONG2 matches trailing escaped double-quote" do
-        graph = parse(%(<a> <b> """\\"""".))
+        graph = parse(%(<a> <b> """\\"""".), validate: false)
         expect(graph.size).to eq 1
         expect(graph.statements.to_a.first.object.value).to eq %q(")
       end
@@ -239,7 +239,7 @@ describe "RDF::Turtle::Reader" do
 
     it "should allow mixed-case language" do
       ttl = %(:x2 :p "xyz"@EN .)
-      statement = parse(ttl, prefixes:  {nil => ''}).statements.to_a.first
+      statement = parse(ttl, validate: false, prefixes:  {nil => ''}).statements.to_a.first
       expect(statement.object.to_ntriples).to eq %("xyz"@EN)
     end
 
@@ -274,18 +274,18 @@ describe "RDF::Turtle::Reader" do
           %q(<http://example/node> <http://example/prop> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
-          expect(parse(ttl, validate:  true)).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl, validate:  true)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
 
       {
-        %(<#Dürst> <knows> <jane>.) => '<#D\u00FCrst> <knows> <jane> .',
-        %(<Dürst> <knows> <jane>.) => '<D\u00FCrst> <knows> <jane> .',
-        %(<bob> <resumé> "Bob's non-normalized resumé".) => '<bob> <resumé> "Bob\'s non-normalized resumé" .',
-        %(<alice> <resumé> "Alice's normalized resumé".) => '<alice> <resumé> "Alice\'s normalized resumé" .',
+        %(<http://example/#Dürst> <http://example/knows> <http://example/jane>.) => '<http://example/#D\u00FCrst> <http://example/knows> <http://example/jane> .',
+        %(<http://example/Dürst> <http://example/knows> <http://example/jane>.) => '<http://example/D\u00FCrst> <http://example/knows> <http://example/jane> .',
+        %(<http://example/bob> <http://example/resumé> "Bob's non-normalized resumé".) => '<http://example/bob> <http://example/resumé> "Bob\'s non-normalized resumé" .',
+        %(<http://example/alice> <http://example/resumé> "Alice's normalized resumé".) => '<http://example/alice> <http://example/resumé> "Alice\'s normalized resumé" .',
         }.each_pair do |ttl, nt|
           it "for '#{ttl}'" do
-            expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+            expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
           end
         end
 
@@ -294,7 +294,7 @@ describe "RDF::Turtle::Reader" do
         %(<a> :related :ひらがな .) => %(<a> <related> <\\u3072\\u3089\\u304C\\u306A> .),
       }.each_pair do |ttl, nt|
         it "for '#{ttl}'" do
-          expect(parse(ttl, prefixes:  {nil => ''})).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl, validate: false, prefixes:  {nil => ''})).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
 
@@ -341,7 +341,7 @@ describe "RDF::Turtle::Reader" do
       it "rdf:type for 'a'" do
         ttl = %(@prefix a: <http://foo/a#> . a:b a <http://www.w3.org/2000/01/rdf-schema#resource> .)
         nt = %(<http://foo/a#b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#resource> .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
 
       {
@@ -359,21 +359,21 @@ describe "RDF::Turtle::Reader" do
         %(<a> <b> 123.E+1 .)  => %(<a> <b> "123.0E+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       }.each_pair do |ttl, nt|
         it "should create typed literal for '#{ttl}'" do
-          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
       
       it "should accept empty localname" do
         ttl1 = %(@prefix : <> .: : : .)
         ttl2 = %(<> <> <> .)
-        g2 = parse(ttl2)
-        expect(parse(ttl1)).to be_equivalent_graph(g2, trace:  @debug)
+        g2 = parse(ttl2, validate: false)
+        expect(parse(ttl1, validate: false)).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
       end
       
       it "should accept prefix with empty local name" do
         ttl = %(@prefix foo: <http://foo/bar#> . foo: foo: foo: .)
         nt = %(<http://foo/bar#> <http://foo/bar#> <http://foo/bar#> .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
     end
     
@@ -386,13 +386,13 @@ describe "RDF::Turtle::Reader" do
       it "allows undefined empty prefix if not validating" do
         ttl = %(:a :b :c .)
         nt = %(<a> <b> <c> .)
-        expect(parse(":a :b :c", validate:  false)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(":a :b :c", validate:  false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
 
       it "empty relative-IRI" do
         ttl = %(@prefix foo: <> . <a> a foo:a.)
         nt = %(<a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <a> .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
 
       it "<#> as a prefix and as a triple node" do
@@ -400,7 +400,7 @@ describe "RDF::Turtle::Reader" do
         nt = %(
         <#> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <#a> .
         )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "ignores _ as @prefix identifier" do
@@ -414,7 +414,7 @@ describe "RDF::Turtle::Reader" do
         _:a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <q> .
         )
         expect {parse(ttl, validate:  true)}.to raise_error(RDF::ReaderError)
-        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
 
       it "redefine" do
@@ -429,7 +429,7 @@ describe "RDF::Turtle::Reader" do
         <http://host/A#b> <http://host/A#p> <http://host/A#v> .
         <http://host/Z#b> <http://host/Z#p> <http://host/Z#v> .
         )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
 
       it "returns defined prefixes" do
@@ -463,7 +463,7 @@ describe "RDF::Turtle::Reader" do
           it "sets prefix", pending: !continues do
             ttl = %(#{prefix} <http://example/a> a foo:a.)
             nt = %(<http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://foo/bar#a> .)
-            expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+            expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
           end
 
           specify do
@@ -533,7 +533,7 @@ describe "RDF::Turtle::Reader" do
         ],
       }.each do |name, (ttl, nt)|
         it name do
-          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
 
@@ -554,7 +554,7 @@ describe "RDF::Turtle::Reader" do
             <http://foo/bar> <http://foo/a> <http://foo/b> .
             <http://foo/bar#c> <http://foo/d> <http://foo/e> .
             )
-            expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+            expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
           end
 
           if valid
@@ -576,14 +576,14 @@ describe "RDF::Turtle::Reader" do
       it "should create BNode for identifier with '_' prefix" do
         ttl = %(@prefix a: <http://foo/a#> . _:a a:p a:v .)
         nt = %(_:bnode0 <http://foo/a#p> <http://foo/a#v> .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "should create BNode for [] as subject" do
         ttl = %(@prefix a: <http://foo/a#> . [] a:p a:v .)
         nt = %(_:bnode0 <http://foo/a#p> <http://foo/a#v> .)
         g = parse(ttl, base_uri:  "http://a/b")
-        expect(g).to be_equivalent_graph(nt, about:  "http://a/b", trace:  @debug)
+        expect(g).to be_equivalent_graph(nt, about:  "http://a/b", errors: @errors, debug: @debug)
       end
       
       it "raises error for [] as predicate" do
@@ -599,13 +599,13 @@ describe "RDF::Turtle::Reader" do
       it "should create BNode for [] as object" do
         ttl = %(@prefix a: <http://foo/a#> . a:s a:p [] .)
         nt = %(<http://foo/a#s> <http://foo/a#p> _:bnode0 .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "creates BNode for [] as statement" do
         ttl = %([<a> <b>] .)
         nt = %(_:a <a> <b> .)
-        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "should create BNode as a single object" do
@@ -615,7 +615,7 @@ describe "RDF::Turtle::Reader" do
         _:a <http://foo/a#qq> "2" .
         <http://foo/a#b> <http://foo/a#oneRef> _:a .
         )
-        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "should create a shared BNode" do
@@ -632,7 +632,7 @@ describe "RDF::Turtle::Reader" do
         _:b <qq> "2" .
         _:a <pred> _:b .
         )
-        expect(parse(ttl, prefixes:  {nil => ''})).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate: false, prefixes:  {nil => ''})).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "should create nested BNodes" do
@@ -647,7 +647,7 @@ describe "RDF::Turtle::Reader" do
         _:b <p3> "v2" .
         _:b <p4> "v3" .
         )
-        expect(parse(ttl, prefixes:  {nil => ''})).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate: false, prefixes:  {nil => ''})).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
     end
 
@@ -659,7 +659,7 @@ describe "RDF::Turtle::Reader" do
         ]
       }.each do |name, (ttl, nt)|
         it name do
-          expect(parse(ttl, validate: true)).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl, validate: true)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
     end
@@ -689,7 +689,7 @@ describe "RDF::Turtle::Reader" do
         ],
       }.each do |name, (ttl, nt)|
         it name do
-          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
     end
@@ -712,7 +712,7 @@ describe "RDF::Turtle::Reader" do
         ],
       }.each do |name, (ttl, nt)|
         it name do
-          expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+          expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
         end
       end
     end
@@ -722,7 +722,7 @@ describe "RDF::Turtle::Reader" do
         ttl = %(@prefix :<http://example.com/>. :empty :set ().)
         nt = %(
         <http://example.com/empty> <http://example.com/set> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "single element" do
@@ -732,7 +732,7 @@ describe "RDF::Turtle::Reader" do
         _:bnode0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         <http://example.com/gregg> <http://example.com/wrote> _:bnode0 .
         )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "multiple elements" do
@@ -746,7 +746,7 @@ describe "RDF::Turtle::Reader" do
         _:bnode2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         <http://example.com/gregg> <http://example.com/name> _:bnode0 .
         )
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "as subject" do
@@ -764,13 +764,13 @@ describe "RDF::Turtle::Reader" do
           _:c <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         )
         expect {parse(ttl, validate:  true)}.to raise_error(RDF::ReaderError)
-        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
       it "adds property to nil list" do
         ttl = %(@prefix a: <http://foo/a#> . () a:prop "nilProp" .)
         nt = %(<http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> <http://foo/a#prop> "nilProp" .)
-        expect(parse(ttl)).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
 
       it "compound items" do
@@ -799,7 +799,7 @@ describe "RDF::Turtle::Reader" do
           _:f <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "value" .
           _:f <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
         )
-        expect(parse(ttl, prefixes:  {nil => ''})).to be_equivalent_graph(nt, trace:  @debug)
+        expect(parse(ttl, validate: false, prefixes:  {nil => ''})).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
       
     end
@@ -815,9 +815,9 @@ describe "RDF::Turtle::Reader" do
       %("lang"@EN)          => %("lang"@en),
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
-        ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <a> <b> #{input} .)
-        nt = %(<a> <b> #{result} .)
-        expect(parse(ttl, canonicalize:  true)).to be_equivalent_graph(nt, trace:  @debug)
+        ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://example/a> <http://example/b> #{input} .)
+        nt = %(<http://example/a> <http://example/b> #{result} .)
+        expect(parse(ttl, canonicalize:  true)).to be_equivalent_graph(nt, errors: @errors, debug: @debug)
       end
     end
   end
@@ -846,7 +846,7 @@ describe "RDF::Turtle::Reader" do
 
           context "with #{value}" do
             it "creates triple with invalid literal" do
-              expect(parse(@input, validate:  false)).to be_equivalent_graph(@expected, trace:  @debug)
+              expect(parse(@input, validate:  false)).to be_equivalent_graph(@expected, errors: @errors, debug: @debug)
             end
             
             it "does not create triple when validating" do
@@ -859,6 +859,7 @@ describe "RDF::Turtle::Reader" do
   end
 
   describe "validation" do
+    let(:errors) {[]}
     {
       %(<a> <b> "xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("xyz" is not a valid .*),
       %(<a> <b> "12xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("12xyz" is not a valid .*),
@@ -871,11 +872,17 @@ describe "RDF::Turtle::Reader" do
       %(@keywords prefix. :e prefix :f .) => RDF::ReaderError,
       %(@base) => RDF::ReaderError,
     }.each_pair do |ttl, error|
-      it "should raise '#{error}' for '#{ttl}'" do
-        expect {
-          parse("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . #{ttl}", base_uri:  "http://a/b",
-                validate:  true)
-        }.to raise_error(error)
+      context ttl do
+        it "should raise '#{error}' for '#{ttl}'" do
+          expect {
+            parse("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . #{ttl}",
+              base_uri:  "http://a/b",
+              errors: errors,
+              validate:  true)
+          }.to raise_error(RDF::ReaderError)
+
+          expect(errors.join("")).to match(error) if error.is_a?(Regexp)
+        end
       end
     end
   end
@@ -938,7 +945,7 @@ describe "RDF::Turtle::Reader" do
         end
 
         it "continues after an error" do
-          expect(parse(input, validate:  false)).to be_equivalent_graph(expected, trace:  @debug)
+          expect(parse(input, validate:  false)).to be_equivalent_graph(expected, errors: @errors, debug: @debug)
         end
       end
     end
@@ -1823,9 +1830,9 @@ The second line
     }.each do |name, (input, expected)|
       it "matches Turtle spec #{name}" do
         begin
-          g2 = parse(expected)
-          g1 = parse(input)
-          expect(g1).to be_equivalent_graph(g2, trace:  @debug)
+          g2 = parse(expected, validate: false)
+          g1 = parse(input, validate: false)
+          expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
         end
       end
     end
@@ -1833,9 +1840,11 @@ The second line
 
   def parse(input, options = {})
     @debug = []
+    @errors = []
     options = {
       debug:  @debug,
-      validate:  false,
+      errors: @errors,
+      validate:  true,
       canonicalize:  false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new

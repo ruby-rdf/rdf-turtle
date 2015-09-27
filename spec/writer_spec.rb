@@ -524,29 +524,23 @@ describe RDF::Turtle::Writer do
           m.entries.each do |t|
             next unless t.positive_test? && t.evaluate?
             specify "#{t.name}: #{t.comment}" do
-              skip("native literals canonicalized") if t.name == "turtle-subm-26"
+              pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
               @debug += [t.inspect, "source:", t.expected]
               g2 = parse(ttl, base_uri: t.base)
-              expect(g2).to be_equivalent_graph(graph, trace: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, debug: @debug.join("\n"))
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
-              skip("native literals canonicalized") if t.name == "turtle-subm-26"
+              pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
               @debug += [t.inspect, "source:", t.expected]
               g2 = parse(ttl, base_uri: t.base)
-              expect(g2).to be_equivalent_graph(graph, trace: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, debug: @debug.join("\n"))
             end
           end
-          #specify "reserialize manifest" do
-          #  graph = RDF::Graph.load(m.id)
-          #  ttl = serialize(graph, m.id, [], format: :ttl, standard_prefixes: true)
-          #  g2 = parse(ttl, base_uri: m.id, validate: true)
-          #  expect(g2).to be_equivalent_graph(graph, trace: @debug.join("\n"))
-          #end
         end
       end
     end
@@ -575,7 +569,7 @@ describe RDF::Turtle::Writer do
     end
     
     regexps.each do |re|
-      expect(result).to match_re(re, about: base, trace: @debug, input: ntstr)
+      expect(result).to match_re(re, about: base, debug: @debug, input: ntstr)
     end
     
     result

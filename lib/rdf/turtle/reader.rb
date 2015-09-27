@@ -214,6 +214,8 @@ module RDF::Turtle
         "c14n?: #{canonicalize?.inspect}"
       end
       RDF::Literal.new(value, options.merge(validate:  validate?, canonicalize:  canonicalize?))
+    rescue ArgumentError => e
+      error("Argument Error #{e.message}", production: :literal, token: @lexer.first)
     end
 
     ##
@@ -260,7 +262,7 @@ module RDF::Turtle
           read_directive || error("Failed to parse directive", production: :directive, token: token)
         else
           read_triples || error("Expected token", production: :statement, token: token)
-          unless @recovering
+          if !@recovering || @lexer.first === '.'
             # If recovering, we will have eaten the closing '.'
             token = @lexer.shift
             unless token && token.value == '.'
@@ -274,10 +276,11 @@ module RDF::Turtle
     # @return [void]
     def read_directive
       prod(:directive, %w{.}) do
-        token = @lexer.shift
+        token = @lexer.first
         case token.type
         when :BASE
           prod(:base) do
+            @lexer.shift
             terminated = token.value == '@base'
             iri = @lexer.shift
             error("Expected IRIREF", :production => :base, token: iri) unless iri === :IRIREF
@@ -295,6 +298,7 @@ module RDF::Turtle
           end
         when :PREFIX
           prod(:prefixID, %w{.}) do
+            @lexer.shift
             pfx, iri = @lexer.shift, @lexer.shift
             terminated = token.value == '@prefix'
             error("Expected PNAME_NS", :production => :prefix, token: pfx) unless pfx === :PNAME_NS
@@ -323,7 +327,7 @@ module RDF::Turtle
         case token.type || token.value
         when '['
           # blankNodePropertyList predicateObjectList? 
-          subject = read_blankNodePropertyList || error("Failed to parse blankNodePropertyList", production: :triples, token: token)
+          subject = read_blankNodePropertyList || error("Failed to parse blankNodePropertyList", production: :triples, token: @lexer.first)
           read_predicateObjectList(subject) || subject
         else
           # subject predicateObjectList
@@ -365,12 +369,10 @@ module RDF::Turtle
 
     # @return [RDF::URI]
     def read_verb
-      prod(:verb) do
-        error("read_verb", "Unexpected end of file") unless token = @lexer.first
-        case token.type || token.value
-        when 'a' then @lexer.shift && RDF.type
-        else read_iri
-        end
+      error("read_verb", "Unexpected end of file") unless token = @lexer.first
+      case token.type || token.value
+      when 'a' then prod(:verb) {@lexer.shift && RDF.type}
+      else prod(:verb) {read_iri}
       end
     end
 
@@ -401,17 +403,19 @@ module RDF::Turtle
 
     # @return [RDF::Literal]
     def read_literal
-      prod(:literal) do
-        error("read_literal", "Unexpected end of file") unless token = @lexer.first
-        case token.type || token.value
-        when :INTEGER then literal(@lexer.shift.value, datatype:  RDF::XSD.integer)
-        when :DECIMAL
+      error("Unexpected end of file", production: :literal) unless token = @lexer.first
+      case token.type || token.value
+      when :INTEGER then prod(:literal) {literal(@lexer.shift.value, datatype:  RDF::XSD.integer)}
+      when :DECIMAL
+        prod(:litearl) do
           value = @lexer.shift.value
           value = "0#{value}" if value.start_with?(".")
           literal(value, datatype:  RDF::XSD.decimal)
-        when :DOUBLE  then literal(@lexer.shift.value.sub(/\.([eE])/, '.0\1'), datatype:  RDF::XSD.double)
-        when "true", "false" then literal(@lexer.shift.value, datatype: RDF::XSD.boolean)
-        when :STRING_LITERAL_QUOTE, :STRING_LITERAL_SINGLE_QUOTE
+        end
+      when :DOUBLE then prod(:literal) {literal(@lexer.shift.value.sub(/\.([eE])/, '.0\1'), datatype:  RDF::XSD.double)}
+      when "true", "false" then prod(:literal) {literal(@lexer.shift.value, datatype: RDF::XSD.boolean)}
+      when :STRING_LITERAL_QUOTE, :STRING_LITERAL_SINGLE_QUOTE
+        prod(:literal) do
           value = @lexer.shift.value[1..-2]
           error("read_literal", "Unexpected end of file") unless token = @lexer.first
           case token.type || token.value
@@ -423,7 +427,9 @@ module RDF::Turtle
           else
             literal(value)
           end
-        when :STRING_LITERAL_LONG_QUOTE, :STRING_LITERAL_LONG_SINGLE_QUOTE
+        end
+      when :STRING_LITERAL_LONG_QUOTE, :STRING_LITERAL_LONG_SINGLE_QUOTE
+        prod(:literal) do
           value = @lexer.shift.value[3..-4]
           error("read_literal", "Unexpected end of file") unless token = @lexer.first
           case token.type || token.value
@@ -441,9 +447,9 @@ module RDF::Turtle
 
     # @return [RDF::Node]
     def read_blankNodePropertyList
-      prod(:blankNodePropertyList, %{]}) do
-        token = @lexer.first
-        if token === '['
+      token = @lexer.first
+      if token === '['
+        prod(:blankNodePropertyList, %{]}) do
           @lexer.shift
           progress("blankNodePropertyList") {"token: #{token.inspect}"}
           node = bnode
@@ -457,8 +463,8 @@ module RDF::Turtle
 
     # @return [RDF::Node]
     def read_collection
-      prod(:collection, %{)}) do
-        if @lexer.first === '('
+      if @lexer.first === '('
+        prod(:collection, %{)}) do
           @lexer.shift
           token = @lexer.first
           progress("collection") {"token: #{token.inspect}"}
@@ -479,23 +485,19 @@ module RDF::Turtle
 
     # @return [RDF::URI]
     def read_iri
-      prod(:iri) do
-        error("read_iri", "Unexpected end of file") unless token = @lexer.first
-        case token.type
-        when :IRIREF then process_iri(@lexer.shift)
-        when :PNAME_LN, :PNAME_NS then pname(*@lexer.shift.value.split(':', 2))
-        end
+      token = @lexer.first
+      case token && token.type
+      when :IRIREF then prod(:iri)  {process_iri(@lexer.shift)}
+      when :PNAME_LN, :PNAME_NS then prod(:iri) {pname(*@lexer.shift.value.split(':', 2))}
       end
     end
 
     # @return [RDF::Node]
     def read_BlankNode
-      prod(:BlankNode) do
-        error("read_BlankNode", "Unexpected end of file") unless token = @lexer.first
-        case token.type
-        when :BLANK_NODE_LABEL then bnode(@lexer.shift.value[2..-1])
-        when :ANON then @lexer.shift && bnode
-        end
+      token = @lexer.first
+      case token && token.type
+      when :BLANK_NODE_LABEL then prod(:BlankNode) {bnode(@lexer.shift.value[2..-1])}
+      when :ANON then @lexer.shift && prod(:BlankNode) {bnode}
       end
     end
 
