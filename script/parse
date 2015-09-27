@@ -14,11 +14,9 @@ rescue LoadError
     end
   end
 end
-require 'rdf/turtle/meta'
 require 'rdf/ntriples'
 require 'ebnf/ll1/parser'
 require 'getoptlong'
-require 'open-uri'
 
 def run(input, options)
   if options[:profile]
@@ -31,12 +29,14 @@ def run(input, options)
   start = Time.new
   num = 0
   Profiler__::start_profile if options[:profile]
-  if options[:output_format] == :ntriples || options[:quiet]
+  if options[:output_format] == :ntriples || options[:quiet] || options[:benchmark]
     r = reader_class.new(input, options[:parser_options])
     r.each do |statement|
       num += 1
       if options[:errors] && statement.invalid?
         $stderr.puts "Invalid statement at #{r.lineno}: #{statement.inspect}"
+      elsif options[:benchmark]
+        # Don't do anything
       elsif options[:quiet]
         print "." if options[:quiet] == 1
       else
@@ -91,6 +91,7 @@ input = nil
 opts = GetoptLong.new(
   ["--dbg", GetoptLong::NO_ARGUMENT],
   ["--base", GetoptLong::REQUIRED_ARGUMENT],
+  ["--benchmark", GetoptLong::NO_ARGUMENT],
   ["--errors", GetoptLong::NO_ARGUMENT],
   ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
   ["--canonicalize", GetoptLong::NO_ARGUMENT],
@@ -109,6 +110,7 @@ opts.each do |opt, arg|
   case opt
   when '--dbg'          then parser_options[:debug] = ::RDF::Turtle::debug = true
   when '--base'         then parser_options[:base_uri] = writer_options[:base_uri] = arg
+  when '--benchmark'    then options[:benchmark] = true
   when '--canonicalize' then parser_options[:canonicalize] = true
   when '--errors'       then options[:errors] = true
   when '--execute'      then input = arg

@@ -4,17 +4,20 @@ $:.unshift File.dirname(__FILE__)
 require "bundler/setup"
 require 'rspec'
 require 'matchers'
-require 'rdf/turtle'
 require 'rdf/ntriples'
 require 'rdf/spec'
 require 'rdf/spec/matchers'
 require 'rdf/isomorphic'
-require 'open-uri/cached'
-
-# Create and maintain a cache of downloaded URIs
-URI_CACHE = File.expand_path(File.join(File.dirname(__FILE__), "uri-cache"))
-Dir.mkdir(URI_CACHE) unless File.directory?(URI_CACHE)
-OpenURI::Cache.class_eval { @cache_path = URI_CACHE }
+require 'simplecov'
+require 'coveralls'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start do
+  add_filter "/spec/"
+end
+require 'rdf/turtle'
 
 module RDF
   module Isomorphic

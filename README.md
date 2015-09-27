@@ -4,6 +4,8 @@
 
 [![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](http://badge.fury.io/rb/rdf-turtle)
 [![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
+[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf-turtle)
+[![Dependency Status](https://gemnasium.com/ruby-rdf/rdf-turtle.png)](https://gemnasium.com/ruby-rdf/rdf-turtle)
 
 ## Description
 This is a [Ruby][] implementation of a [Turtle][] parser for [RDF.rb][].
@@ -46,10 +48,7 @@ Full documentation available on [Rubydoc.info][Turtle doc]
 ### Variations from the spec
 In some cases, the specification is unclear on certain issues:
 
-* The LC version of the [Turtle][] specification separates rules for `@base` and `@prefix` with
-  closing '.' from the
-  SPARQL-like `BASE` and `PREFIX` without closing '.'. This version implements a more flexible
-  syntax where the `@` and closing `.` are optional and `base/prefix` are matched case independently.
+* The LC version of the [Turtle][] specification separates rules for `@base` and `@prefix` with closing '.' from the SPARQL-like `BASE` and `PREFIX` without closing '.'. This version implements a more flexible syntax where the `@` and closing `.` are optional and `base/prefix` are matched case independently.
 * Additionally, both `a` and `A` match `rdf:type`.
 
 ### Freebase-specific Reader
@@ -83,19 +82,13 @@ An example of reading Freebase dumps:
       r.each_statement {|stmt| puts stmt.to_ntriples}
     end
 ## Implementation Notes
-The reader uses the [EBNF][] gem to generate first, follow and branch tables, and uses
-the `Parser` and `Lexer` modules to implement the Turtle parser.
-
-The parser takes branch and follow tables generated from the original [Turtle
-EBNF Grammar][Turtle EBNF] described in the [specification][Turtle]. Branch and
-Follow tables are specified in {RDF::Turtle::Meta}, which is in turn generated
-using the [EBNF][] gem.
+This version uses a hand-written parser using the Lexer from the [EBNF][] gem instead of a general [EBNF][] LL(1) parser for faster performance.
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 1.9.2)
-* [RDF.rb](http://rubygems.org/gems/rdf) (>= 1.1)
-* [EBNF][] (>= 0.3.0)
+* [Ruby](http://ruby-lang.org/) (>= 1.9.3)
+* [RDF.rb](http://rubygems.org/gems/rdf) (~> 1.1)
+* [EBNF][] (~> 0.3)
 
 ## Installation
 
@@ -136,7 +129,7 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [YARD]:         http://yardoc.org/
 [YARD-GS]:      http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:          http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf/master/frames
+[RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf
 [EBNF]:         http://rubygems.org/gems/ebnf
 [Backports]:    http://rubygems.org/gems/backports
 [N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples

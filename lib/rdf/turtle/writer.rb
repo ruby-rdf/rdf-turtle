@@ -87,6 +87,8 @@ module RDF::Turtle
     #   URI to use as default namespace, same as `prefixes[nil]`
     # @option options [Boolean]  :unique_bnodes   (false)
     #   Use unique node identifiers, defaults to using the identifier which the node was originall initialized with (if any).
+    # @option options [Boolean] :literal_shorthand (true)
+    #   Attempt to use Literal shorthands fo numbers and boolean values
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
@@ -97,6 +99,7 @@ module RDF::Turtle
       @graph = RDF::Graph.new
       @uri_to_pname = {}
       @uri_to_prefix = {}
+      options = {literal_shorthand: true}.merge(options)
       super do
         if block_given?
           case block.arity
@@ -244,7 +247,7 @@ module RDF::Turtle
       literal = literal.dup.canonicalize! if @options[:canonicalize]
       case literal
       when RDF::Literal
-        case literal.valid? ? literal.datatype : false
+        case @options[:literal_shorthand] && literal.valid? ? literal.datatype : false
         when RDF::XSD.boolean, RDF::XSD.integer, RDF::XSD.decimal
           literal.canonicalize.to_s
         when RDF::XSD.double

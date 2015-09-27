@@ -13,31 +13,31 @@ def normalize(graph)
   case graph
   when RDF::Queryable then graph
   when IO, StringIO
-    RDF::Graph.new.load(graph, base_uri:  @info.about)
+    RDF::Graph.new.load(graph, base_uri:  @info.about, validate: false)
   else
     # Figure out which parser to use
     g = RDF::Repository.new
     reader_class = detect_format(graph)
-    reader_class.new(graph, base_uri:  @info.about).each {|s| g << s}
+    reader_class.new(graph, base_uri:  @info.about, validate: false).each {|s| g << s}
     g
   end
 end
 
-Info = Struct.new(:about, :coment, :trace, :input, :result, :action, :expected)
+Info = Struct.new(:about, :coment, :debug, :input, :result, :action, :expected, :errors)
 
 RSpec::Matchers.define :be_equivalent_graph do |expected, info|
   match do |actual|
     @info = if info.respond_to?(:input)
       info
     elsif info.is_a?(Hash)
-      identifier = info[:identifier] || expected.is_a?(RDF::Enumerable) ? expected.context : info[:about]
-      trace = info[:trace]
-      if trace.is_a?(Array)
-        trace = trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      debug = info[:debug]
+      if debug.is_a?(Array)
+        debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
       end
-      Info.new(identifier, info[:comment] || "", trace)
+      Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
-      Info.new(expected.is_a?(RDF::Enumerable) ? expected.context : info, info.to_s)
+      Info.new(about: expected.is_a?(RDF::Enumerable) ? expected.context : info, debug: info.to_s)
     end
     @expected = normalize(expected)
     @actual = normalize(actual)
@@ -56,25 +56,26 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
     "\n#{info + "\n" unless info.empty?}" +
     (@info.action ? "Input file: #{@info.action}\n" : "") +
     (@info.result ? "Result file: #{@info.result}\n" : "") +
-    "Unsorted Expected:\n#{@expected.dump(:ntriples, standard_prefixes:  true)}" +
-    "Unsorted Results:\n#{@actual.dump(:ntriples, standard_prefixes:  true)}" +
-    (@info.trace ? "\nDebug:\n#{@info.trace}" : "")
+    "Unsorted Expected:\n#{@expected.dump(:ntriples, standard_prefixes:  true, validate: false)}" +
+    "Unsorted Results:\n#{@actual.dump(:ntriples, standard_prefixes:  true, validate: false)}" +
+    (@info.errors && !@info.errors.empty? ? "\nErrors:\n#{@info.errors.join("\n")}\n" : "") +
+    (@info.debug ? "\nDebug:\n#{@info.debug}" : "")
   end  
 end
 
 RSpec::Matchers.define :match_re do |expected, info|
   match do |actual|
-    @info = if info.respond_to?(:about)
+    @info = if info.respond_to?(:input)
       info
     elsif info.is_a?(Hash)
       identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
-      trace = info[:trace]
-      if trace.is_a?(Array)
-        trace = trace.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+      debug = info[:debug]
+      if debug.is_a?(Array)
+        debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
       end
-      Info.new(identifier, info[:comment] || "", trace)
+      Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
-      Info.new(expected.is_a?(RDF::Graph) ? expected.context : info, info.to_s)
+      Info.new(expected.is_a?(RDF::Graph) ? expected.context : info, "", info.to_s)
     end
     @expected = expected
     @actual = actual
@@ -89,19 +90,31 @@ RSpec::Matchers.define :match_re do |expected, info|
     (@info.result ? "Output file: #{@info.result}\n" : "") +
     "Expression: #{@expected}\n" +
     "Unsorted Results:\n#{@actual}" +
-    (@info.trace ? "\nDebug:\n#{@info.trace}" : "")
+    (@info.debug ? "\nDebug:\n#{@info.debug.join("\n")}" : "")
   end  
 end
 
 RSpec::Matchers.define :produce do |expected, info|
   match do |actual|
+    @info = if info.respond_to?(:input)
+      info
+    elsif info.is_a?(Hash)
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      debug = info[:debug]
+      if debug.is_a?(Array)
+        debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
+      end
+      Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
+    else
+      Info.new(about: info, comment: "", debug: info.to_s)
+    end
     expect(actual).to eq expected
   end
   
   failure_message do |actual|
     "Expected: #{[Array, Hash].include?(expected.class) ? expected.to_json(JSON_STATE) : expected.inspect}\n" +
     "Actual  : #{[Array, Hash].include?(actual.class) ? actual.to_json(JSON_STATE) : actual.inspect}\n" +
-    #(expected.is_a?(Hash) && actual.is_a?(Hash) ? "Diff: #{expected.diff(actual).to_json(JSON_STATE)}\n" : "") +
-    "Processing results:\n#{info.join("\n")}"
+    (@info.errors && !@info.errors.empty? ? "\nErrors:\n#{@info.errors.join("\n")}\n" : "") +
+    "Processing results:\n#{@info.debug.join("\n")}"
   end
 end
