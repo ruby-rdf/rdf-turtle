@@ -1831,11 +1831,15 @@ The second line
       ]
     }.each do |name, (input, expected)|
       it "matches Turtle spec #{name}" do
-        begin
-          g2 = parse(expected, validate: false)
-          g1 = parse(input, validate: false)
-          expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
-        end
+        g2 = parse(expected, validate: false)
+        g1 = parse(input, validate: false)
+        expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
+      end
+
+      it "matches Turtle spec #{name} (ASCII-8BIT)" do
+        g2 = parse(expected, validate: false)
+        g1 = parse(input.force_encoding(Encoding::ASCII_8BIT), validate: false)
+        expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
       end
     end
   end
