@@ -4,8 +4,6 @@ require 'spec_helper'
 require 'rdf/spec/reader'
 
 describe "RDF::Turtle::Reader" do
-  before(:each) {$stderr, @old_stderr = StringIO.new, $stderr}
-  after(:each) {$stderr = @old_stderr}
   let!(:doap) {File.expand_path("../../etc/doap.ttl", __FILE__)}
   let!(:doap_nt) {File.expand_path("../../etc/doap.nt", __FILE__)}
   let!(:doap_count) {File.open(doap_nt).each_line.to_a.length}
@@ -471,7 +469,7 @@ describe "RDF::Turtle::Reader" do
             if valid
               expect {parse(ttl, validate:  true)}.not_to raise_error
             else
-              expect {parse(ttl, validate:  true)}.to raise_error
+              expect {parse(ttl, validate:  true)}.to raise_error(RDF::ReaderError)
             end
           end
         end
@@ -565,7 +563,7 @@ describe "RDF::Turtle::Reader" do
           else
             specify do
               ttl = %(#{base} <> <a> <b> . <#c> <d> </e>.)
-              expect {parse(ttl, validate:  true)}.to raise_error
+              expect {parse(ttl, validate:  true)}.to raise_error(RDF::ReaderError)
             end
           end
         end
@@ -943,7 +941,7 @@ describe "RDF::Turtle::Reader" do
     }.each do |test, (input, expected)|
       context test do
         it "raises an error if valiating" do
-          expect {parse(input, validate:  true)}.to raise_error
+          expect {parse(input, validate:  true)}.to raise_error RDF::ReaderError
         end
 
         it "continues after an error" do

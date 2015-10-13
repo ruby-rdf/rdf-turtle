@@ -303,7 +303,7 @@ module RDF::Turtle
     # Defines order of predicates to to emit at begninning of a resource description. Defaults to
     # `\[rdf:type, rdfs:label, dc:title\]`
     # @return [Array<URI>]
-    def predicate_order; [RDF.type, RDF::RDFS.label, RDF::DC.title]; end
+    def predicate_order; [RDF.type, RDF::RDFS.label, RDF::URI("http://purl.org/dc/terms/title")]; end
     
     # Order subjects for output. Override this to output subjects in another order.
     #
