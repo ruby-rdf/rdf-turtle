@@ -1834,7 +1834,13 @@ The second line
         expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
       end
 
-      it "matches Turtle spec #{name} (ASCII-8BIT)" do
+      it "matches Turtle spec #{name} (ASCII-8BIT io)" do
+        g2 = parse(expected, validate: false)
+        g1 = parse(StringIO.new(input.force_encoding(Encoding::ASCII_8BIT)), validate: false)
+        expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
+      end
+
+      it "matches Turtle spec #{name} (ASCII-8BIT string)" do
         g2 = parse(expected, validate: false)
         g1 = parse(input.force_encoding(Encoding::ASCII_8BIT), validate: false)
         expect(g1).to be_equivalent_graph(g2, errors: @errors, debug: @debug)
