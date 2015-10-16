@@ -477,7 +477,7 @@ module RDF::Turtle
     # Default singular resource representation.
     def p_default(resource, position)
       #debug("p_default") {"#{resource.to_ntriples}, #{position}"}
-      l = (position == :subject ? "" : " ") + format_value(resource, options)
+      l = (position == :subject ? "" : " ") + format_term(resource, options)
       @output.write(l)
     end
 

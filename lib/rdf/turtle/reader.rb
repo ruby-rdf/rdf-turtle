@@ -283,7 +283,7 @@ module RDF::Turtle
             @lexer.shift
             terminated = token.value == '@base'
             iri = @lexer.shift
-            error("Expected IRIREF", :production => :base, token: iri) unless iri === :IRIREF
+            error("Expected IRIREF", production: :base, token: iri) unless iri === :IRIREF
             @options[:base_uri] = process_iri(iri)
             error("base", "#{token} should be downcased") if token.value.start_with?('@') && token.value != '@base'
 
@@ -301,8 +301,8 @@ module RDF::Turtle
             @lexer.shift
             pfx, iri = @lexer.shift, @lexer.shift
             terminated = token.value == '@prefix'
-            error("Expected PNAME_NS", :production => :prefix, token: pfx) unless pfx === :PNAME_NS
-            error("Expected IRIREF", :production => :prefix, token: iri) unless iri === :IRIREF
+            error("Expected PNAME_NS", production: :prefix, token: pfx) unless pfx === :PNAME_NS
+            error("Expected IRIREF", production: :prefix, token: iri) unless iri === :IRIREF
             debug("prefixID") {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
             prefix(pfx.value[0..-2], process_iri(iri))
             error("prefixId", "#{token} should be downcased") if token.value.start_with?('@') && token.value != '@prefix'
@@ -525,13 +525,13 @@ module RDF::Turtle
         end
       end
       raise EOFError, "End of input found when recovering" if @lexer.first.nil?
-      debug("recovery", "current token: #{@lexer.first.inspect}", :level => 4)
+      debug("recovery", "current token: #{@lexer.first.inspect}", level: 4)
 
       unless e.is_a?(Recovery)
         # Get the list of follows for this sequence, this production and the stacked productions.
-        debug("recovery", "stack follows:", :level => 4)
+        debug("recovery", "stack follows:", level: 4)
         @prod_stack.reverse.each do |prod|
-          debug("recovery", :level => 4) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
+          debug("recovery", level: 4) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
         end
       end
 
@@ -572,7 +572,7 @@ module RDF::Turtle
       m += " (found #{options[:token].inspect})" if options[:token]
       m += ", production = #{options[:production].inspect}" if options[:production]
       @warnings << m unless @recovering
-      debug(node, m, options.merge(:level => 1))
+      debug(node, m, options.merge(level: 1))
     end
 
     ##

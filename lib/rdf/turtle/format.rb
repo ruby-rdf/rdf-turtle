@@ -4,15 +4,15 @@ module RDF::Turtle
   #
   # @example Obtaining an Turtle format class
   #     RDF::Format.for("etc/foaf.ttl")
-  #     RDF::Format.for(:file_name      => "etc/foaf.ttl")
-  #     RDF::Format.for(:file_extension => "ttl")
-  #     RDF::Format.for(:content_type   => "text/turtle")
+  #     RDF::Format.for(file_name:      "etc/foaf.ttl")
+  #     RDF::Format.for(file_extension: "ttl")
+  #     RDF::Format.for(content_type:   "text/turtle")
   #
   # @example Obtaining serialization format MIME types
   #     RDF::Format.content_types      #=> {"text/turtle" => [RDF::Turtle::Format]}
   #
   # @example Obtaining serialization format file extension mappings
-  #     RDF::Format.file_extensions    #=> {:ttl => "text/turtle"}
+  #     RDF::Format.file_extensions    #=> {ttl: "text/turtle"}
   #
   # @see http://www.w3.org/TR/rdf-testcases/#ntriples
   class Format < RDF::Format

@@ -12,7 +12,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "redcarpet", :platforms => :ruby
+  gem "redcarpet", platforms: :ruby
   gem 'rdf-spec', git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
   gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
   gem 'json-ld', git: "git://github.com/ruby-rdf/json-ld.git", branch: "develop"
