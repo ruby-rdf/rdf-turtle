@@ -37,4 +37,4 @@ puts "NTriples Representation"
 puts g.dump(:ntriples)
 
 puts "Turtle Representation"
-puts g.dump(:ttl, :prefixes => r.prefixes)
+puts g.dump(:ttl, prefixes:  r.prefixes)

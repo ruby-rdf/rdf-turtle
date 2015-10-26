@@ -20,17 +20,21 @@ module RDF::Turtle
           readline.strip!
           line = @line
           unless blank? || read_prefix
-            subject   = read_pname(:intern => true) || fail_subject
-            predicate = read_pname(:intern => true) || fail_predicate
+            subject   = read_pname(intern:  true) || fail_subject
+            predicate = read_pname(intern:  true) || fail_predicate
             object    = read_pname || read_uriref || read_boolean || read_numeric || read_literal || fail_object
             if validate? && !read_eos
-              raise RDF::ReaderError, "expected end of statement in line #{lineno}: #{current_line.inspect}"
+              raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})", lineno: lineno)
             end
             return [subject, predicate, object]
           end
-        rescue RDF::ReaderError => e
+        rescue RDF::ReaderError =>  e
           raise e if validate?
-          $stderr.puts e.message
+          if @options[:errors]
+            @options[:errors] << e.message
+          else
+            $stderr.puts e.message
+          end
         end
       end
     end
@@ -59,13 +63,13 @@ module RDF::Turtle
           @line.insert(0, ".")
         end
         pfx_iri = prefix(ns)
-        raise RDF::ReaderError, "prefix #{ns.inspect} is not defined" unless pfx_iri
+        raise RDF::ReaderError.new("ERROR [line #{lineno}] prefix #{ns.inspect} is not defined", lineno: lineno) unless pfx_iri
         uri = RDF::URI(pfx_iri + suffix)
         uri.validate!     if validate?
         uri
       end
     rescue ArgumentError => e
-      raise RDF::ReaderError, "invalid PName"
+      raise RDF::ReaderError.new("ERROR [line #{lineno}] invalid PName", lineno: lineno)
     end
 
     ##
@@ -76,9 +80,9 @@ module RDF::Turtle
         literal_str = self.class.unescape(literal_str)
         literal = case
           when language = match(RDF::NTriples::Reader::LANGTAG)
-            RDF::Literal.new(literal_str, :language => language)
+            RDF::Literal.new(literal_str, language:  language)
           when datatype = match(/^(\^\^)/)
-            RDF::Literal.new(literal_str, :datatype => read_pname(:intern => true) || read_uriref || fail_object)
+            RDF::Literal.new(literal_str, datatype:  read_pname(intern:  true) || read_uriref || fail_object)
           else
             RDF::Literal.new(literal_str) # plain string literal
         end
@@ -95,12 +99,12 @@ module RDF::Turtle
       case
       when double_str = match(/^(#{DOUBLE})/)
         double_str = double_str.sub(/\.([eE])/, '.0\1')
-        RDF::Literal::Double.new(double_str, :canonicalize => canonicalize?)
+        RDF::Literal::Double.new(double_str, canonicalize:  canonicalize?)
       when decimal_str = match(/^(#{DECIMAL})/)
         decimal_str = "0#{decimal_str}" if decimal_str[0,1] == "."
-        RDF::Literal::Decimal.new(decimal_str, :canonicalize => canonicalize?)
+        RDF::Literal::Decimal.new(decimal_str, canonicalize:  canonicalize?)
       when integer_str = match(/^(#{INTEGER})/)
-        RDF::Literal::Integer.new(integer_str, :canonicalize => canonicalize?)
+        RDF::Literal::Integer.new(integer_str, canonicalize:  canonicalize?)
       end
     end
 
@@ -109,7 +113,7 @@ module RDF::Turtle
     # @return [RDF::Literal::Boolean]
     def read_boolean
       if bool_str = match(/^(true|false)/)
-        RDF::Literal::Boolean.new(bool_str, :canonicalize => canonicalize?)
+        RDF::Literal::Boolean.new(bool_str, canonicalize:  canonicalize?)
       end
     end
   end # class Reader

@@ -4,3 +4,5 @@
 /.rbx/
 /*.gem
 Gemfile.lock
+/.bundle/
+/coverage/

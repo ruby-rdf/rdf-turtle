@@ -23,6 +23,23 @@ def earl_preamble(options)
   foaf:title "Implementor";
   foaf:homepage <http://greggkellogg.net/> .
 )
+
+  options[:output].puts options[:ntriples] ? %(
+<http://rubygems.org/gems/rdf>
+  doap:release <https://github.com/ruby-rdf/rdf/tree/#{RDF::VERSION}> .
+
+<https://github.com/ruby-rdf/rdf/tree/#{RDF::VERSION}> a doap:Version;
+  doap:name "RDF.rb-#{RDF::VERSION}";
+  doap:revision "#{RDF::VERSION}" .
+) : %(
+<http://rubygems.org/gems/rdf-turtle>
+  doap:release <https://github.com/ruby-rdf/rdf-turtle/tree/#{RDF::Turtle::VERSION}> .
+
+<https://github.com/ruby-rdf/rdf-turtle/tree/#{RDF::Turtle::VERSION}> a doap:Version;
+  doap:name "rdf-turtle-#{RDF::Turtle::VERSION}";
+  doap:created "#{File.mtime(File.expand_path('../../VERSION', __FILE__)).strftime('%Y-%m-%d')}"^^xsd:date;
+  doap:revision "#{RDF::Turtle::VERSION}" .
+)
 end
 
 def run_tc(tc, options)
@@ -30,17 +47,22 @@ def run_tc(tc, options)
 
   if options[:verbose]
     puts "\nTestCase: #{tc.inspect}"
-    puts "\nInput:\n" + tc.input.read 
-    puts "\nExpected:\n" + tc.expected.read
-    tc.input.rewind
-    tc.expected.rewind
+    puts "\nInput:\n" + tc.input 
+    puts "\nExpected:\n" + tc.expected
   end
 
   begin
     puts "open #{tc.action}" if options[:verbose]
-    options = {:base_uri => tc.base}.merge(options)
+    tc.warnings = []
+    tc.errors = []
+    options = {
+      base_uri:  tc.base,
+      warnings:  tc.warnings,
+      errors:    tc.errors,
+      validate:  true
+    }.merge(options)
 
-    reader = RDF::Reader.for(tc.action).new(tc.input, :base_uri => tc.base, :validate => true)
+    reader = RDF::Reader.for(tc.action).new(tc.input, options)
 
     graph = RDF::Repository.new
     result = nil
@@ -63,7 +85,7 @@ def run_tc(tc, options)
     end
 
     if tc.evaluate? && result.nil?
-      output_graph = RDF::Repository.load(tc.result, :format => :ntriples, :base_uri => tc.base)
+      output_graph = RDF::Repository.load(tc.result, format:  :ntriples, base_uri:  tc.base)
       result = graph.isomorphic_with?(output_graph) ? "passed" : "failed"
     else
       result ||= "passed"
@@ -78,7 +100,11 @@ def run_tc(tc, options)
     end
   end
   
-  options[:output].puts("\nOutput:\n" + graph.dump(:ntriples)) unless options[:quiet]
+  unless options[:quiet]
+    options[:output].puts("\nWarnings:\n" + tc.warnings.join("\n"))
+    options[:output].puts("\nErrors:\n" + tc.errors.join("\n"))
+    options[:output].puts("\nOutput:\n" + graph.dump(:ntriples))
+  end
 
   if options[:earl]
     options[:output].puts %{
@@ -94,11 +120,14 @@ def run_tc(tc, options)
 }
   end
 
+  options[:result_count][result] ||= 0
+  options[:result_count][result] += 1
+
   puts "#{"test result:" unless options[:quiet]} #{result}"
 end
 
 options = {
-  :output => STDOUT,
+  output:  STDOUT,
 }
 
 opts = GetoptLong.new(
@@ -147,9 +176,15 @@ manifest = (options[:ntriples] ? Fixtures::SuiteTest::NTBASE : Fixtures::SuiteTe
 
 earl_preamble(options) if options[:earl]
 
+result_count = {}
+
 Fixtures::SuiteTest::Manifest.open(manifest) do |m|
   m.entries.each do |tc|
     next unless ARGV.empty? || ARGV.any? {|n| tc.name.match(/#{n}/)}
-    run_tc(tc, options)
+    run_tc(tc, options.merge(result_count: result_count))
   end
+end
+
+result_count.each do |result, count|
+  puts "#{result}: #{count}"
 end

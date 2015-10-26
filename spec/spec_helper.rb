@@ -4,17 +4,20 @@ $:.unshift File.dirname(__FILE__)
 require "bundler/setup"
 require 'rspec'
 require 'matchers'
-require 'rdf/turtle'
 require 'rdf/ntriples'
 require 'rdf/spec'
 require 'rdf/spec/matchers'
 require 'rdf/isomorphic'
-require 'open-uri/cached'
-
-# Create and maintain a cache of downloaded URIs
-URI_CACHE = File.expand_path(File.join(File.dirname(__FILE__), "uri-cache"))
-Dir.mkdir(URI_CACHE) unless File.directory?(URI_CACHE)
-OpenURI::Cache.class_eval { @cache_path = URI_CACHE }
+require 'simplecov'
+require 'coveralls'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start do
+  add_filter "/spec/"
+end
+require 'rdf/turtle'
 
 module RDF
   module Isomorphic
@@ -23,11 +26,11 @@ module RDF
 end
 
 ::RSpec.configure do |c|
-  c.filter_run :focus => true
+  c.filter_run focus:  true
   c.run_all_when_everything_filtered = true
   c.exclusion_filter = {
-    :ruby => lambda { |version| !(RUBY_VERSION.to_s =~ /^#{version.to_s}/) },
-    :not_jruby => lambda { RUBY_PLATFORM.to_s != 'jruby'}
+    ruby:  lambda { |version| !(RUBY_VERSION.to_s =~ /^#{version.to_s}/) },
+    not_jruby:  lambda { RUBY_PLATFORM.to_s != 'jruby'}
   }
   c.include(RDF::Spec::Matchers)
 end

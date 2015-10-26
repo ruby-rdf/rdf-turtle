@@ -1,13 +1,27 @@
 source "http://rubygems.org"
 
-gemspec :name => ""
+gemspec
 
-gem 'rdf', :git => "git://github.com/ruby-rdf/rdf.git"
-gem 'rdf-spec', :git => "git://github.com/ruby-rdf/rdf-spec.git"
-gem 'ebnf', :git => "git://github.com/gkellogg/ebnf.git"
-gem 'json-ld', :git => "git://github.com/gkellogg/json-ld.git"
+gem 'rdf', git: "git://github.com/ruby-rdf/rdf.git", branch: "develop"
+gem 'ebnf', git: "git://github.com/gkellogg/ebnf.git", branch: "develop"
 
-group :debug do
+group :development do
   gem "wirble"
-  gem "debugger", :platforms => :ruby_19
+  gem "byebug", platforms: :mri_21
+  gem 'psych',      platforms: [:mri, :rbx]
+end
+
+group :development, :test do
+  gem "redcarpet", platforms: :ruby
+  gem 'rdf-spec', git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
+  gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
+  gem 'json-ld', git: "git://github.com/ruby-rdf/json-ld.git", branch: "develop"
+  gem 'simplecov',  require: false
+  gem 'coveralls',  require: false
+end
+
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'rubinius', '~> 2.0'
+  gem 'json'
 end

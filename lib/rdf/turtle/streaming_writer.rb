@@ -29,15 +29,15 @@ module RDF::Turtle
       if statement.subject != @streaming_subject
         @output.puts ' .' if @streaming_subject
         @streaming_subject, @streaming_predicate = statement.subject, statement.predicate
-        @output.write "#{format_term(statement.subject)} "
-        @output.write "#{format_term(statement.predicate)} "
+        @output.write "#{format_term(statement.subject, options)} "
+        @output.write "#{format_term(statement.predicate, options)} "
       elsif statement.predicate != @streaming_predicate
         @streaming_predicate = statement.predicate
-        @output.write ";\n#{indent(1)}#{format_term(statement.predicate)} "
+        @output.write ";\n#{indent(1)}#{format_term(statement.predicate, options)} "
       else
         @output.write ",\n#{indent(2)}"
       end
-      @output.write("#{format_term(statement.object)}")
+      @output.write("#{format_term(statement.object, options)}")
     end
 
     ##

@@ -4,17 +4,19 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
 require "bundler/setup"
 require 'rdf'
 require 'rdf/turtle'
-%w(linkeddata).each do
-  begin
-    require 'linkeddata'
-  rescue LoadError => e
+begin
+  require 'linkeddata'
+rescue LoadError
+  %w(rdf-rdfa rdf-rdfxml).each do |gem|
+    begin
+      require gem
+    rescue LoadError => e
+    end
   end
 end
-require 'rdf/turtle/meta'
 require 'rdf/ntriples'
 require 'ebnf/ll1/parser'
 require 'getoptlong'
-require 'open-uri'
 
 def run(input, options)
   if options[:profile]
@@ -27,12 +29,14 @@ def run(input, options)
   start = Time.new
   num = 0
   Profiler__::start_profile if options[:profile]
-  if options[:output_format] == :ntriples || options[:quiet]
+  if options[:output_format] == :ntriples || options[:quiet] || options[:benchmark]
     r = reader_class.new(input, options[:parser_options])
     r.each do |statement|
       num += 1
       if options[:errors] && statement.invalid?
         $stderr.puts "Invalid statement at #{r.lineno}: #{statement.inspect}"
+      elsif options[:benchmark]
+        # Don't do anything
       elsif options[:quiet]
         print "." if options[:quiet] == 1
       else
@@ -48,7 +52,7 @@ def run(input, options)
     r = reader_class.new(input, options[:parser_options])
     g = RDF::Graph.new << r
     num = g.count
-    options[:output].puts g.dump(options[:output_format], {:prefixes => r.prefixes}.merge(options[:writer_options]))
+    options[:output].puts g.dump(options[:output_format], {prefixes:  r.prefixes}.merge(options[:writer_options]))
   end
   if options[:profile]
     Profiler__::stop_profile
@@ -65,28 +69,29 @@ rescue Exception => e
 end
 
 parser_options = {
-  :base_uri => nil,
-  :progress   => false,
-  :validate => false,
+  base_uri:  nil,
+  progress:    false,
+  validate:  false,
 }
 
 writer_options = {
-  :base_uri => nil,
-  :standard_prefixes => true
+  base_uri:  nil,
+  standard_prefixes:  true
 }
 
 options = {
-  :parser_options => parser_options,
-  :writer_options => writer_options,
-  :output => STDOUT,
-  :output_format => :ntriples,
-  :input_format => :ttl,
+  parser_options:  parser_options,
+  writer_options:  writer_options,
+  output:  STDOUT,
+  output_format:  :ntriples,
+  input_format:  :ttl,
 }
 input = nil
 
 opts = GetoptLong.new(
   ["--dbg", GetoptLong::NO_ARGUMENT],
   ["--base", GetoptLong::REQUIRED_ARGUMENT],
+  ["--benchmark", GetoptLong::NO_ARGUMENT],
   ["--errors", GetoptLong::NO_ARGUMENT],
   ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
   ["--canonicalize", GetoptLong::NO_ARGUMENT],
@@ -105,6 +110,7 @@ opts.each do |opt, arg|
   case opt
   when '--dbg'          then parser_options[:debug] = ::RDF::Turtle::debug = true
   when '--base'         then parser_options[:base_uri] = writer_options[:base_uri] = arg
+  when '--benchmark'    then options[:benchmark] = true
   when '--canonicalize' then parser_options[:canonicalize] = true
   when '--errors'       then options[:errors] = true
   when '--execute'      then input = arg
