@@ -3,9 +3,6 @@ require 'spec_helper'
 require 'rdf/spec/writer'
 
 describe RDF::Turtle::Writer do
-  before(:each) {$stderr, @old_stderr = StringIO.new, $stderr}
-  after(:each) {$stderr = @old_stderr}
-
   it_behaves_like 'an RDF::Writer' do
     let(:writer) {RDF::Turtle::Writer.new}
   end

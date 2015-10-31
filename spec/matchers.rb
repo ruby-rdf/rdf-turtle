@@ -14,6 +14,8 @@ def normalize(graph)
   when RDF::Queryable then graph
   when IO, StringIO
     RDF::Graph.new.load(graph, base_uri:  @info.about, validate: false)
+  when FalseClass
+    RDF::Graph.new  # FIXME: not really
   else
     # Figure out which parser to use
     g = RDF::Repository.new
@@ -30,14 +32,14 @@ RSpec::Matchers.define :be_equivalent_graph do |expected, info|
     @info = if info.respond_to?(:input)
       info
     elsif info.is_a?(Hash)
-      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.graph_name : info[:about]
       debug = info[:debug]
       if debug.is_a?(Array)
         debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
       end
       Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
-      Info.new(about: expected.is_a?(RDF::Enumerable) ? expected.context : info, debug: info.to_s)
+      Info.new(about: expected.is_a?(RDF::Enumerable) ? expected.graph_name : info, debug: info.to_s)
     end
     @expected = normalize(expected)
     @actual = normalize(actual)
@@ -68,14 +70,14 @@ RSpec::Matchers.define :match_re do |expected, info|
     @info = if info.respond_to?(:input)
       info
     elsif info.is_a?(Hash)
-      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.graph_name : info[:about]
       debug = info[:debug]
       if debug.is_a?(Array)
         debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")
       end
       Info.new(about: identifier, comment: (info[:comment] || ""), debug: debug, errors: info[:errors])
     else
-      Info.new(expected.is_a?(RDF::Graph) ? expected.context : info, "", info.to_s)
+      Info.new(expected.is_a?(RDF::Graph) ? expected.graph_name : info, "", info.to_s)
     end
     @expected = expected
     @actual = actual
@@ -99,7 +101,7 @@ RSpec::Matchers.define :produce do |expected, info|
     @info = if info.respond_to?(:input)
       info
     elsif info.is_a?(Hash)
-      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.context : info[:about]
+      identifier = info[:identifier] || expected.is_a?(RDF::Graph) ? expected.graph_name : info[:about]
       debug = info[:debug]
       if debug.is_a?(Array)
         debug = debug.map {|s| s.dup.force_encoding(Encoding::UTF_8)}.join("\n")

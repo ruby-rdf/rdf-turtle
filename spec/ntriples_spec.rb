@@ -32,7 +32,7 @@ describe RDF::NTriples::Reader do
                 expect {
                   graph << reader
                   #expect(graph.dump(:ntriples).should produce("", t.debug)
-                }.to raise_error
+                }.to raise_error RDF::ReaderError
               end
 
               if t.evaluate?

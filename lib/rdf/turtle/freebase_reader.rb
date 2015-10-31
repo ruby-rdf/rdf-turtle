@@ -30,7 +30,11 @@ module RDF::Turtle
           end
         rescue RDF::ReaderError =>  e
           raise e if validate?
-          $stderr.puts e.message
+          if @options[:errors]
+            @options[:errors] << e.message
+          else
+            $stderr.puts e.message
+          end
         end
       end
     end
