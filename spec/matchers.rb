@@ -14,6 +14,8 @@ def normalize(graph)
   when RDF::Queryable then graph
   when IO, StringIO
     RDF::Graph.new.load(graph, base_uri:  @info.about, validate: false)
+  when FalseClass
+    RDF::Graph.new  # FIXME: not really
   else
     # Figure out which parser to use
     g = RDF::Repository.new

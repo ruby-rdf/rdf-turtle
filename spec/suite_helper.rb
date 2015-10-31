@@ -104,6 +104,7 @@ module Fixtures
   module SuiteTest
     BASE = "http://www.w3.org/2013/TurtleTests/"
     NTBASE = "http://www.w3.org/2013/N-TriplesTests/"
+    MTBASE = "http://www.w3.org/2013/rdf-mt-tests/"
     FRAME = JSON.parse(%q({
       "@context": {
         "xsd": "http://www.w3.org/2001/XMLSchema#",
@@ -180,6 +181,10 @@ module Fixtures
         Array(attributes['@type']).join(" ").match(/Syntax/)
       end
 
+      def entailment?
+        Array(attributes['@type']).join(" ").match(/Entailment/)
+      end
+
       def positive_test?
         !Array(attributes['@type']).join(" ").match(/Negative/)
       end
@@ -193,6 +198,7 @@ module Fixtures
         "  syntax?: #{syntax?.inspect}\n" +
         "  positive?: #{positive_test?.inspect}\n" +
         "  evaluate?: #{evaluate?.inspect}\n" +
+        "  entailment?: #{entailment?.inspect}\n" +
         ">"
       )
       end
