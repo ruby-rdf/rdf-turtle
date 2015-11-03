@@ -54,21 +54,10 @@ module RDF::Turtle
         sample.match(%r("@(context|subject|iri)"))                      # JSON-LD
       )
     end
-  end
-  
-  # Alias for TTL format
-  #
-  # This allows the following:
-  #
-  # @example Obtaining an TTL format class
-  #     RDF::Format.for(:ttl)         # RDF::Turtle::TTL
-  #     RDF::Format.for(:ttl).reader  # RDF::Turtle::Reader
-  #     RDF::Format.for(:ttl).writer  # RDF::Turtle::Writer
-  class TTL < Format
-    content_encoding 'utf-8'
-    content_type     'text/turtle'
 
-    reader { RDF::Turtle::Reader }
-    writer { RDF::Turtle::Writer }
+    # List of symbols used to lookup this format
+    def self.symbols
+      [:turtle, :ttl]
+    end
   end
 end

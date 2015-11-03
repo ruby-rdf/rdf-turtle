@@ -10,6 +10,7 @@ describe RDF::Turtle::Format do
   describe ".for" do
     formats = [
       :turtle,
+      :ttl,
       'etc/doap.ttl',
       {file_name:       'etc/doap.ttl'},
       {file_extension:  'ttl'},
@@ -40,25 +41,6 @@ describe RDF::Turtle::Format do
 
     it "should discover 'ttl'" do
       expect(RDF::Format.for(:ttl).reader).to eq RDF::Turtle::Reader
-    end
-  end
-
-  describe RDF::Turtle::TTL do
-    formats = [
-      :ttl
-    ].each do |arg|
-      it "discovers with #{arg.inspect}" do
-        expect(RDF::Format.for(arg)).to eq RDF::Turtle::TTL
-      end
-    end
-
-    it "should discover 'ttl'" do
-      expect(RDF::Format.for(:ttl).reader).to eq RDF::Turtle::Reader
-      expect(RDF::Format.for(:ttl).writer).to eq RDF::Turtle::Writer
-    end
-
-    it "uses text/turtle as first content type" do
-      expect(RDF::Format.for(:ttl).content_type.first).to eq "text/turtle"
     end
   end
 
