@@ -1,6 +1,7 @@
 $:.unshift "."
 require 'spec_helper'
 require 'rdf/spec/writer'
+require 'rdf/vocab'
 
 describe RDF::Turtle::Writer do
   it_behaves_like 'an RDF::Writer' do
@@ -165,7 +166,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix ex: <http://example.com/> . ex:a ex:b () .)
       serialize(input, nil,
         [%r(^ex:a ex:b \(\) \.$)],
-        prefixes: { "" => RDF::FOAF}
+        prefixes: { "" => RDF::Vocab::FOAF}
       )
     end
     
