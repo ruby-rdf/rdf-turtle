@@ -26,14 +26,14 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 1.9.2'
   gem.requirements          = []
-  gem.add_runtime_dependency     'rdf',             '~> 1.1', '>= 1.1.10'
-  gem.add_runtime_dependency     'ebnf',            '~> 0.3', '>= 0.3.6'
-  gem.add_development_dependency 'rspec',           '~> 3.0.0'
+  gem.add_runtime_dependency     'rdf',             '~> 1.1', '>= 1.1.10', '< 1.99'
+  gem.add_runtime_dependency     'ebnf',            '~> 1.0'
+  gem.add_development_dependency 'rspec',           '~> 3.0'
   gem.add_development_dependency 'rspec-its',       '~> 1.0'
-  gem.add_development_dependency 'rdf-isomorphic',  '~> 1.1'
-  gem.add_development_dependency 'json-ld',         '~> 1.1'
-  gem.add_development_dependency 'yard' ,           '~> 0.8'
-  gem.add_development_dependency 'rdf-spec',        '~> 1.1'
+  gem.add_development_dependency 'rdf-isomorphic',  '~> 1.1', '< 1.99'
+  gem.add_development_dependency 'json-ld',         '~> 1.1', '< 1.99'
+  gem.add_development_dependency 'rdf-spec',        '~> 1.1', '< 1.99'
+  gem.add_development_dependency 'rdf-vocab',       '~> 0.8'
 
   gem.add_development_dependency 'rake',            '~> 10.4'
   gem.post_install_message  = nil

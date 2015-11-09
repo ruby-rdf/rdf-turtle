@@ -2,7 +2,6 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'rdf', git: "git://github.com/ruby-rdf/rdf.git", branch: "develop"
 gem 'ebnf', git: "git://github.com/gkellogg/ebnf.git", branch: "develop"
 
 group :development do
@@ -12,10 +11,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "redcarpet", :platforms => :ruby
-  gem 'rdf-spec', git: "git://github.com/ruby-rdf/rdf-spec.git", branch: "develop"
-  gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
-  gem 'json-ld', git: "git://github.com/ruby-rdf/json-ld.git", branch: "develop"
+  gem "redcarpet", platforms: :ruby
   gem 'simplecov',  require: false
   gem 'coveralls',  require: false
 end
