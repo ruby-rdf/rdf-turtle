@@ -17,8 +17,8 @@ group :development, :test do
   gem 'rdf-isomorphic', git: "git://github.com/ruby-rdf/rdf-isomorphic.git", branch: "develop"
   gem 'rdf-vocab', git: "git://github.com/ruby-rdf/rdf-vocab.git", branch: "develop"
   gem 'json-ld', git: "git://github.com/ruby-rdf/json-ld.git", branch: "develop"
-  gem 'simplecov',  require: false
-  gem 'coveralls',  require: false
+  gem 'simplecov',  require: false, platform: :mri_21 # Travis doesn't understand 22 yet.
+  gem 'coveralls',  require: false, platform: :mri_21 # Travis doesn't understand 22 yet.
 end
 
 platforms :rbx do
