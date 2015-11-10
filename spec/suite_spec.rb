@@ -10,17 +10,15 @@ describe RDF::Turtle::Reader do
       describe m.comment do
         m.entries.each do |t|
           specify "#{t.name}: #{t.comment}" do
-            t.debug = [t.inspect, "source:", t.input]
-            t.warnings = []
-            t.errors = []
+            t.logger = RDF::Spec.logger
+            t.logger.info t.inspect
+            t.logger.info "source:\n#{t.input}"
 
             reader = RDF::Turtle::Reader.new(t.input,
                 base_uri:  t.base,
-                errors: t.errors,
-                warnings: t.warnings,
                 canonicalize:  false,
                 validate:  true,
-                debug:  t.debug)
+                logger: t.logger)
 
             graph = RDF::Repository.new
 

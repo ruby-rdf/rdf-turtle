@@ -511,18 +511,20 @@ describe RDF::Turtle::Writer do
               pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
-              @debug += [t.inspect, "source:", t.expected]
+              @logger.info t.inspect
+              @logger.info "source: #{t.expected}"
               g2 = parse(ttl, base_uri: t.base)
-              expect(g2).to be_equivalent_graph(graph, debug: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, logger: @logger)
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
               pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
-              @debug += [t.inspect, "source:", t.expected]
+              @logger.info t.inspect
+              @logger.info "source: #{t.expected}"
               g2 = parse(ttl, base_uri: t.base)
-              expect(g2).to be_equivalent_graph(graph, debug: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, logger: @logger)
             end
           end
         end
@@ -541,10 +543,11 @@ describe RDF::Turtle::Writer do
   # Serialize ntstr to a string and compare against regexps
   def serialize(ntstr, base = nil, regexps = [], options = {})
     prefixes = options[:prefixes] || {nil => ""}
-    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false)
-    @debug = ["serialized:", ntstr]
+    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false, logger: [])
+    @logger = RDF::Spec.logger
+    @logger.info "serialized: #{ntstr}"
     result = RDF::Turtle::Writer.buffer(options.merge(
-      debug: @debug,
+      logger:   @logger,
       base_uri: base,
       prefixes: prefixes,
       encoding: Encoding::UTF_8
@@ -553,7 +556,7 @@ describe RDF::Turtle::Writer do
     end
     
     regexps.each do |re|
-      expect(result).to match_re(re, about: base, debug: @debug, input: ntstr)
+      expect(result).to match_re(re, about: base, logger: @logger, input: ntstr)
     end
     
     result

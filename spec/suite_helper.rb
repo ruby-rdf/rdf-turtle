@@ -156,9 +156,7 @@ module Fixtures
     end
  
     class Entry < JSON::LD::Resource
-      attr_accessor :debug
-      attr_accessor :warnings
-      attr_accessor :errors
+      attr_accessor :logger
 
       def base
         BASE + action.split('/').last

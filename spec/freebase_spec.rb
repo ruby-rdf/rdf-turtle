@@ -81,7 +81,7 @@ describe "RDF::Turtle::FreebaseReader" do
 
     it "should parse equivalent to Turtle:Reader" do
       g = RDF::Graph.new << subject
-      expect(g).to be_equivalent_graph("@prefix foo: <http://example/bar#> ." + input)
+      expect(g).to be_equivalent_graph("@prefix foo: <http://example/bar#> ." + input, logger: @logger)
     end
   end
 
@@ -98,7 +98,7 @@ describe "RDF::Turtle::FreebaseReader" do
       it name do
         ttl = prefixes + "\n" + input
         
-        expect(parse(ttl)).to be_equivalent_graph(ttl)
+        expect(parse(ttl)).to be_equivalent_graph(ttl, logger: @logger)
       end
     end
   end
@@ -121,7 +121,7 @@ describe "RDF::Turtle::FreebaseReader" do
       it "should create typed literal for '#{input}'" do
         ttl = prefixes + "\n" + input
         
-        expect(parse(ttl)).to be_equivalent_graph(ttl)
+        expect(parse(ttl)).to be_equivalent_graph(ttl, logger: @logger)
       end
     end
   end
@@ -135,16 +135,16 @@ describe "RDF::Turtle::FreebaseReader" do
       it "should raise '#{error}' for '#{ttl}'" do
         expect {
           input = prefixes + "\n" + ttl
-          expect(parse(input, validate:  true)).to produce("")
+          expect(parse(input, validate:  true)).to produce("", logger: @logger)
         }.to raise_error(error)
       end
     end
   end
 
   def parse(input, options = {})
-    @debug = []
+    @logger = RDF::Spec.logger
     options = {
-      debug:  @debug,
+      logger: @logger,
       validate:  true,
       canonicalize:  false,
     }.merge(options)
