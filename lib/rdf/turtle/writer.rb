@@ -117,6 +117,10 @@ module RDF::Turtle
     # @return [void]
     def write_statement(statement)
       case
+      when statement.incomplete?
+        log_error "Statement #{statement.inspect} is incomplete"
+      when validate? && statement.invalid?
+        log_error "Statement #{statement.inspect} is invalid"
       when @options[:stream]
         stream_statement(statement)
       else
@@ -171,6 +175,7 @@ module RDF::Turtle
           end
         end
       end
+      super
     end
     
     # Return a QName for the URI, or nil. Adds namespace of QName to defined prefixes
