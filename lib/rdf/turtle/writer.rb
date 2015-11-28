@@ -99,7 +99,7 @@ module RDF::Turtle
       @graph = RDF::Graph.new
       @uri_to_pname = {}
       @uri_to_prefix = {}
-      options = {literal_shorthand: true, log_depth: 0}.merge(options)
+      options = {literal_shorthand: true}.merge(options)
       super do
         reset
         if block_given?
@@ -380,12 +380,11 @@ module RDF::Turtle
     # @param [Integer] modifier Increase depth by specified amount
     # @return [String] A number of spaces, depending on current depth
     def indent(modifier = 0)
-      " " * (@options[:log_depth] * 2 + modifier)
+      " " * (log_depth * 2 + modifier)
     end
 
     # Reset internal helper instance variables
     def reset
-      @options[:log_depth] = 0
       @lists = {}
       @references = {}
       @serialized = {}
