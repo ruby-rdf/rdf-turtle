@@ -380,7 +380,7 @@ module RDF::Turtle
     # @param [Integer] modifier Increase depth by specified amount
     # @return [String] A number of spaces, depending on current depth
     def indent(modifier = 0)
-      " " * (log_depth * 2 + modifier)
+      " " * (@options.fetch(:log_depth, log_depth) * 2 + modifier)
     end
 
     # Reset internal helper instance variables
