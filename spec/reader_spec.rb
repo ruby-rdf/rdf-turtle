@@ -841,7 +841,7 @@ describe "RDF::Turtle::Reader" do
               <> rdf:value "#{value}"^^#{dt} .
             )
             dt_uri = RDF::XSD.send(dt.split(':').last)
-            @expected = RDF::Graph.new << RDF::Statement.new(RDF::URI(""), RDF.value, RDF::Literal.new(value, datatype:  dt_uri))
+            @expected = RDF::Graph.new << RDF::Statement(RDF::URI(""), RDF.value, RDF::Literal.new(value, datatype:  dt_uri))
           end
 
           context "with #{value}" do

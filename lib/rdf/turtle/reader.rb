@@ -439,7 +439,7 @@ module RDF::Turtle
           while object = read_object
             objects << object
           end
-          list = RDF::List.new(nil, nil, objects)
+          list = RDF::List.new(values: objects)
           list.each_statement do |statement|
             add_statement("collection", statement)
           end

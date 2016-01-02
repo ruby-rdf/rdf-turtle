@@ -410,11 +410,11 @@ module RDF::Turtle
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
     def is_valid_list?(l)
       #log_debug("is_valid_list?") {l.inspect}
-      return RDF::List.new(l, @graph).valid?
+      return RDF::List.new(subject: l, graph: @graph).valid?
     end
     
     def do_list(l)
-      list = RDF::List.new(l, @graph)
+      list = RDF::List.new(subject: l, graph: @graph)
       log_debug("do_list") {list.inspect}
       position = :subject
       list.each_statement do |st|
