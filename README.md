@@ -88,7 +88,7 @@ This version uses a hand-written parser using the Lexer from the [EBNF][] gem in
 
 * [Ruby](http://ruby-lang.org/) (>= 2.0)
 * [RDF.rb](http://rubygems.org/gems/rdf) (~> 2.0)
-* [EBNF][] (~> 0.3)
+* [EBNF][] (~> 1.0)
 
 ## Installation
 

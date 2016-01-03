@@ -10,7 +10,6 @@ describe RDF::Turtle::Reader do
       describe m.comment do
         m.entries.each do |t|
           specify "#{t.name}: #{t.comment}" do
-            pending("Invalid IRI") if t.name == 'localName_with_assigned_nfc_PN_CHARS_BASE_character_boundaries'
             t.logger = RDF::Spec.logger
             t.logger.info t.inspect
             t.logger.info "source:\n#{t.input}"
