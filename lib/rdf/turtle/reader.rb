@@ -32,6 +32,19 @@ module RDF::Turtle
     terminal(:LANGTAG,                          LANGTAG)
 
     ##
+    # Reader options
+    # @see http://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Reader#options-class_method
+    def self.options
+      super + [
+        RDF::CLI::Option.new(
+          symbol: :freebase,
+          datatype: TrueClass,
+          on: ["--freebase"],
+          description: "Use optimized Freebase reader.") {true},
+      ]
+    end
+
+    ##
     # Redirect for Freebase Reader
     #
     # @private

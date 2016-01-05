@@ -62,7 +62,35 @@ module RDF::Turtle
 
     # @return [Graph] Graph of statements serialized
     attr_accessor :graph
-    
+
+    ##
+    # Writer options
+    # @see http://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Writer#options-class_method
+    def self.options
+      super + [
+        RDF::CLI::Option.new(
+          symbol: :max_depth,
+          datatype: Integer,
+          on: ["--max-depth DEPTH"],
+          description: "Maximum depth for recursively defining resources, defaults to 3.") {true},
+        RDF::CLI::Option.new(
+          symbol: :stream,
+          datatype: TrueClass,
+          on: ["--stream"],
+          description: "Do not attempt to optimize graph presentation, suitable for streaming large graphs.") {true},
+        RDF::CLI::Option.new(
+          symbol: :default_namespace,
+          datatype: RDF::URI,
+          on: ["--default-namespace URI", :REQUIRED],
+          description: "URI to use as default namespace, same as prefixes.") {|arg| RDF::URI(arg)},
+        RDF::CLI::Option.new(
+          symbol: :literal_shorthand,
+          datatype: FalseClass,
+          on: ["--no-literal-shorthand"],
+          description: "Do not ttempt to use Literal shorthands fo numbers and boolean values.") {false},
+      ]
+    end
+
     ##
     # Initializes the Turtle writer instance.
     #
@@ -89,7 +117,7 @@ module RDF::Turtle
     # @option options [Boolean]  :unique_bnodes   (false)
     #   Use unique node identifiers, defaults to using the identifier which the node was originall initialized with (if any).
     # @option options [Boolean] :literal_shorthand (true)
-    #   Attempt to use Literal shorthands fo numbers and boolean values
+    #   Attempt to use Literal shorthands for numbers and boolean values
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
