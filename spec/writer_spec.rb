@@ -538,11 +538,7 @@ describe RDF::Turtle::Writer do
   end unless ENV['CI'] # Not for continuous integration
 
   def parse(input, options = {})
-    graph = RDF::Graph.new
-    RDF::Turtle::Reader.new(input, options).each do |statement|
-      graph << statement
-    end
-    graph
+    RDF::Turtle::Reader.new(input, options, &:each).to_a.extend(RDF::Enumerable)
   end
 
   # Serialize ntstr to a string and compare against regexps
