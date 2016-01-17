@@ -238,7 +238,7 @@ describe "RDF::Turtle::Reader" do
     it "should allow mixed-case language" do
       ttl = %(:x2 :p "xyz"@EN .)
       statement = parse(ttl, validate: false, prefixes:  {nil => ''}).statements.to_a.first
-      expect(statement.object.to_ntriples).to eq %("xyz"@EN)
+      expect(statement.object.to_ntriples).to eq %("xyz"@en)
     end
 
     it "should create typed literals" do
@@ -353,7 +353,7 @@ describe "RDF::Turtle::Reader" do
         %(<a> <b> 1.0e1 .)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
         %(<a> <b> 1.0e-1 .)  => %(<a> <b> "1.0e-1"^^<http://www.w3.org/2001/XMLSchema#double> .),
         %(<a> <b> 1.0e+1 .)  => %(<a> <b> "1.0e+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
-        %(<a> <b> 1.0E1 .)  => %(<a> <b> "1.0e1"^^<http://www.w3.org/2001/XMLSchema#double> .),
+        %(<a> <b> 1.0E1 .)  => %(<a> <b> "1.0E1"^^<http://www.w3.org/2001/XMLSchema#double> .),
         %(<a> <b> 123.E+1 .)  => %(<a> <b> "123.0E+1"^^<http://www.w3.org/2001/XMLSchema#double> .),
       }.each_pair do |ttl, nt|
         it "should create typed literal for '#{ttl}'" do
@@ -808,7 +808,7 @@ describe "RDF::Turtle::Reader" do
       %("+1"^^xsd:integer)  => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
       %(+1)                 => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
       %(.1)                 => %("0.1"^^<http://www.w3.org/2001/XMLSchema#decimal>),
-      %(123.E+1)            => %("123.0E1"^^<http://www.w3.org/2001/XMLSchema#double>),
+      %(123.E+1)            => %("1.23E3"^^<http://www.w3.org/2001/XMLSchema#double>),
       %(true)               => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
       %("lang"@EN)          => %("lang"@en),
       %("""lang"""@EN)          => %("lang"@en),
