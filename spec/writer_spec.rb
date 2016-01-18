@@ -78,8 +78,7 @@ describe RDF::Turtle::Writer do
         input: %(@prefix ex: <http://example.com/> . ex:b ex:c ex:d, ex:e .),
         regexp: [
           %r(^@prefix ex: <http://example.com/> \.$),
-          %r(^ex:b ex:c ex:d,$),
-          %r(^\s+ex:e \.$)
+          %r(^ex:b ex:c ex:[de],\s+ex:[de] \.$)m,
         ],
       },
       "property list" => {
