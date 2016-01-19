@@ -140,31 +140,18 @@ module RDF::Turtle
     end
 
     ##
-    # Adds a statement to be serialized
-    # @param  [RDF::Statement] statement
-    # @return [void]
-    def write_statement(statement)
-      case
-      when statement.incomplete?
-        log_error "Statement #{statement.inspect} is incomplete"
-      when validate? && statement.invalid?
-        log_error "Statement #{statement.inspect} is invalid"
-      when @options[:stream]
-        stream_statement(statement)
-      else
-        # Add to local graph and output in epilogue
-        @graph.insert(statement)
-      end
-    end
-
-    ##
     # Adds a triple to be serialized
     # @param  [RDF::Resource] subject
     # @param  [RDF::URI]      predicate
     # @param  [RDF::Value]    object
     # @return [void]
     def write_triple(subject, predicate, object)
-      write_statement(Statement.new(subject, predicate, object))
+      statement = RDF::Statement.new(subject, predicate, object)
+      if @options[:stream]
+        stream_statement(statement)
+      else
+        @graph.insert(statement)
+      end
     end
 
     ##
@@ -278,7 +265,6 @@ module RDF::Turtle
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
     def format_literal(literal, options = {})
-      literal = literal.dup.canonicalize! if @options[:canonicalize]
       case literal
       when RDF::Literal
         case @options[:literal_shorthand] && literal.valid? ? literal.datatype : false

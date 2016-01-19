@@ -234,27 +234,27 @@ describe RDF::Turtle::Writer do
   describe "literals" do
     describe "plain" do
       it "encodes embedded \"\"\"" do
-        ttl = %(:a :b """testing string parsing in Turtle.
+        ttl = %(<http://a> <http:/b> """testing string parsing in Turtle.
                 """ .)
         serialize(ttl, nil, [/testing string parsing in Turtle.\n/])
       end
 
       it "encodes embedded \"" do
-        ttl = %(:a :b """string with " escaped quote marks""" .)
+        ttl = %(<http://a> <http:/b> """string with " escaped quote marks""" .)
         serialize(ttl, nil, [/string with \\" escaped quote mark/])
       end
     end
     
     describe "with language" do
       it "specifies language for literal with language" do
-        ttl = %q(:a :b "string"@en .)
+        ttl = %q(<http://a> <http:/b> "string"@en .)
         serialize(ttl, nil, [%r("string"@en)])
       end
     end
     
     describe "xsd:anyURI" do
       it "uses xsd namespace for datatype" do
-        ttl = %q(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b "http://foo/"^^xsd:anyURI .)
+        ttl = %q(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> "http://foo/"^^xsd:anyURI .)
         serialize(ttl, nil, [
           %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
           %r("http://foo/"\^\^xsd:anyURI \.),
@@ -274,7 +274,7 @@ describe RDF::Turtle::Writer do
         [%q(false), /false ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -328,7 +328,7 @@ describe RDF::Turtle::Writer do
         [%q(10), /10 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -375,7 +375,7 @@ describe RDF::Turtle::Writer do
         [%q("10"^^xsd:int), /"10"\^\^xsd:int ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -394,7 +394,7 @@ describe RDF::Turtle::Writer do
         [%q(10.02), /10.02 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -452,7 +452,7 @@ describe RDF::Turtle::Writer do
         [%q("14"^^xsd:double), /1.4e1 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
