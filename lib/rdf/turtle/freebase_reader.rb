@@ -24,7 +24,7 @@ module RDF::Turtle
             predicate = read_pname(intern:  true) || fail_predicate
             object    = read_pname || read_uriref || read_boolean || read_numeric || read_literal || fail_object
             if validate? && !read_eos
-              raise RDF::ReaderError.new("ERROR [line #{lineno}] Expected end of statement (found: #{current_line.inspect})", lineno: lineno)
+              log_error("Expected end of statement (found: #{current_line.inspect})", lineno: lineno, exception: RDF::ReaderError)
             end
             return [subject, predicate, object]
           end

@@ -8,6 +8,7 @@ module RDF::Turtle
     format Format
     include EBNF::LL1::Parser
     include RDF::Turtle::Terminals
+    include RDF::Util::Logger
 
     # Terminals passed to lexer. Order matters!
     terminal(:ANON,                             ANON)
@@ -31,14 +32,17 @@ module RDF::Turtle
     terminal(:LANGTAG,                          LANGTAG)
 
     ##
-    # Accumulated errors found during processing
-    # @return [Array<String>]
-    attr_reader :errors
-
-    ##
-    # Accumulated warnings found during processing
-    # @return [Array<String>]
-    attr_reader :warnings
+    # Reader options
+    # @see http://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Reader#options-class_method
+    def self.options
+      super + [
+        RDF::CLI::Option.new(
+          symbol: :freebase,
+          datatype: TrueClass,
+          on: ["--freebase"],
+          description: "Use optimized Freebase reader.") {true},
+      ]
+    end
 
     ##
     # Redirect for Freebase Reader
@@ -73,18 +77,8 @@ module RDF::Turtle
     # @option options [Boolean]  :validate     (false)
     #   whether to validate the parsed statements and values. If not validating,
     #   the parser will attempt to recover from errors.
-    # @option options [Array] :errors
-    #   array for placing errors found when parsing
-    # @option options [Array] :warnings
-    #   array for placing warnings found when parsing
-    # @option options [Boolean] :progress
-    #   Show progress of parser productions
-    # @option options [Boolean, Integer, Array] :debug
-    #   Detailed debug output. If set to an Integer, output is restricted
-    #   to messages of that priority: `0` for errors, `1` for warnings,
-    #   `2` for processor tracing, and anything else for various levels
-    #   of debug. If set to an Array, information is collected in the array
-    #   instead of being output to `$stderr`.
+    # @option options [Logger, #write, #<<] :logger
+    #   Record error/info/debug output
     # @option options [Boolean] :freebase (false)
     #   Use optimized Freebase reader
     # @return [RDF::Turtle::Reader]
@@ -94,25 +88,17 @@ module RDF::Turtle
           anon_base:  "b0",
           validate:  false,
           whitespace:  WS,
+          log_depth: 0,
         }.merge(options)
         @options = {prefixes:  {nil => ""}}.merge(@options) unless @options[:validate]
-        @errors = @options[:errors] || []
-        @warnings = @options[:warnings] || []
-        @depth = 0
         @prod_stack = []
 
-        @options[:debug] ||= case
-        when RDF::Turtle.debug? then true
-        when @options[:progress] then 2
-        when @options[:validate] then 1
-        end
-
         @options[:base_uri] = RDF::URI(base_uri || "")
-        debug("base IRI") {base_uri.inspect}
+        log_debug("base IRI") {base_uri.inspect}
         
-        debug("validate") {validate?.inspect}
-        debug("canonicalize") {canonicalize?.inspect}
-        debug("intern") {intern?.inspect}
+        log_debug("validate") {validate?.inspect}
+        log_debug("canonicalize") {canonicalize?.inspect}
+        log_debug("intern") {intern?.inspect}
 
         @lexer = EBNF::LL1::Lexer.new(input, self.class.patterns, @options)
 
@@ -137,7 +123,7 @@ module RDF::Turtle
     # @return [void]
     def each_statement(&block)
       if block_given?
-        @recovering = false
+        log_recover
         @callback = block
 
         begin
@@ -148,14 +134,8 @@ module RDF::Turtle
           # Terminate loop if EOF found while recovering
         end
 
-        if validate?
-          if !warnings.empty? && !@options[:warnings]
-            $stderr.puts "Warnings: #{warnings.join("\n")}"
-          end
-          if !errors.empty?
-            $stderr.puts "Errors: #{errors.join("\n")}" unless @options[:errors]
-            raise RDF::ReaderError, "Errors found during processing"
-          end
+        if validate? && log_statistics[:error]
+          raise RDF::ReaderError, "Errors found during processing"
         end
       end
       enum_for(:each_statement)
@@ -207,7 +187,7 @@ module RDF::Turtle
     
     # Create a literal
     def literal(value, options = {})
-      debug("literal") do
+      log_debug("literal") do
         "value: #{value.inspect}, " +
         "options: #{options.inspect}, " +
         "validate: #{validate?.inspect}, " +
@@ -241,7 +221,7 @@ module RDF::Turtle
         base = ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      debug("pname") {"base: '#{base}', suffix: '#{suffix}'"}
+      log_debug("pname") {"base: '#{base}', suffix: '#{suffix}'"}
       process_iri(base + suffix.to_s)
     end
     
@@ -262,7 +242,7 @@ module RDF::Turtle
           read_directive || error("Failed to parse directive", production: :directive, token: token)
         else
           read_triples || error("Expected token", production: :statement, token: token)
-          if !@recovering || @lexer.first === '.'
+          if !log_recovering? || @lexer.first === '.'
             # If recovering, we will have eaten the closing '.'
             token = @lexer.shift
             unless token && token.value == '.'
@@ -303,7 +283,7 @@ module RDF::Turtle
             terminated = token.value == '@prefix'
             error("Expected PNAME_NS", production: :prefix, token: pfx) unless pfx === :PNAME_NS
             error("Expected IRIREF", production: :prefix, token: iri) unless iri === :IRIREF
-            debug("prefixID") {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
+            log_debug("prefixID") {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
             prefix(pfx.value[0..-2], process_iri(iri))
             error("prefixId", "#{token} should be downcased") if token.value.start_with?('@') && token.value != '@prefix'
 
@@ -451,7 +431,7 @@ module RDF::Turtle
       if token === '['
         prod(:blankNodePropertyList, %{]}) do
           @lexer.shift
-          progress("blankNodePropertyList") {"token: #{token.inspect}"}
+          log_info("blankNodePropertyList") {"token: #{token.inspect}"}
           node = bnode
           read_predicateObjectList(node)
           error("blankNodePropertyList", "Expected closing ']'") unless @lexer.first === ']'
@@ -467,12 +447,12 @@ module RDF::Turtle
         prod(:collection, %{)}) do
           @lexer.shift
           token = @lexer.first
-          progress("collection") {"token: #{token.inspect}"}
+          log_info("collection") {"token: #{token.inspect}"}
           objects = []
           while object = read_object
             objects << object
           end
-          list = RDF::List.new(nil, nil, objects)
+          list = RDF::List.new(values: objects)
           list.each_statement do |statement|
             add_statement("collection", statement)
           end
@@ -503,9 +483,8 @@ module RDF::Turtle
 
     def prod(production, recover_to = [])
       @prod_stack << {prod: production, recover_to: recover_to}
-      @depth += 1
-      @recovering = false
-      progress("#{production}(start)") {"token: #{@lexer.first.inspect}"}
+      @options[:log_depth] += 1
+      log_recover("#{production}(start)") {"token: #{@lexer.first.inspect}"}
       yield
     rescue EBNF::LL1::Lexer::Error, SyntaxError, Recovery =>  e
       # Lexer encountered an illegal token or the parser encountered
@@ -525,13 +504,13 @@ module RDF::Turtle
         end
       end
       raise EOFError, "End of input found when recovering" if @lexer.first.nil?
-      debug("recovery", "current token: #{@lexer.first.inspect}", level: 4)
+      log_debug("recovery", "current token: #{@lexer.first.inspect}")
 
       unless e.is_a?(Recovery)
         # Get the list of follows for this sequence, this production and the stacked productions.
-        debug("recovery", "stack follows:", level: 4)
+        log_debug("recovery", "stack follows:")
         @prod_stack.reverse.each do |prod|
-          debug("recovery", level: 4) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
+          log_debug("recovery", level: 4) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
         end
       end
 
@@ -541,9 +520,9 @@ module RDF::Turtle
       # Skip tokens until one is found in follows
       while (token = (@lexer.first rescue @lexer.recover)) && follows.none? {|t| token === t}
         skipped = @lexer.shift
-        progress("recovery") {"skip #{skipped.inspect}"}
+        log_debug("recovery") {"skip #{skipped.inspect}"}
       end
-      debug("recovery") {"found #{token.inspect} in follows"}
+      log_debug("recovery") {"found #{token.inspect} in follows"}
 
       # Re-raise the error unless token is a follows of this production
       raise Recovery unless Array(recover_to).any? {|t| token === t}
@@ -551,34 +530,15 @@ module RDF::Turtle
       # Skip that token to get something reasonable to start the next production with
       @lexer.shift
     ensure
-      progress("#{production}(finish)")
-      @depth -= 1
+      log_info("#{production}(finish)")
+      @options[:log_depth] -= 1
       @prod_stack.pop
-    end
-
-    ##
-    # Warning information, used as level `1` debug messages.
-    #
-    # @param [String] node Relevant location associated with message
-    # @param [String] message Error string
-    # @param [Hash] options
-    # @option options [URI, #to_s] :production
-    # @option options [Token] :token
-    # @see {#debug}
-    def warn(node, message, options = {})
-      m = "WARNING "
-      m += "[line: #{@lineno}] " if @lineno
-      m += message
-      m += " (found #{options[:token].inspect})" if options[:token]
-      m += ", production = #{options[:production].inspect}" if options[:production]
-      @warnings << m unless @recovering
-      debug(node, m, options.merge(level: 1))
     end
 
     ##
     # Error information, used as level `0` debug messages.
     #
-    # @overload debug(node, message, options)
+    # @overload error(node, message, options)
     #   @param [String] node Relevant location associated with message
     #   @param [String] message Error string
     #   @param [Hash] options
@@ -586,70 +546,15 @@ module RDF::Turtle
     #   @option options [Token] :token
     #   @see {#debug}
     def error(*args)
-      return if @recovering
-      options = args.last.is_a?(Hash) ? args.pop : {}
+      ctx = ""
+      ctx += "(found #{options[:token].inspect})" if options[:token]
+      ctx += ", production = #{options[:production].inspect}" if options[:production]
       lineno = @lineno || (options[:token].lineno if options[:token].respond_to?(:lineno))
-      message = "#{args.join(': ')}"
-      m = "ERROR "
-      m += "[line: #{lineno}] " if lineno
-      m += message
-      m += " (found #{options[:token].inspect})" if options[:token]
-      m += ", production = #{options[:production].inspect}" if options[:production]
-      @recovering = true
-      @errors << m
-      debug(m, options.merge(level: 0))
-      raise SyntaxError.new(m, lineno: lineno, token: options[:token], production: options[:production])
-    end
-
-    ##
-    # Progress output when debugging.
-    #
-    # The call is ignored, unless `@options[:debug]` is set, in which
-    # case it records tracing information as indicated. Additionally,
-    # if `@options[:debug]` is an Integer, the call is aborted if the
-    # `:level` option is less than than `:level`.
-    #
-    # @overload debug(node, message, options)
-    #   @param [Array<String>] args Relevant location associated with message
-    #   @param [Hash] options
-    #   @option options [Integer] :depth
-    #     Recursion depth for indenting output
-    #   @option options [Integer] :level
-    #     Level assigned to message, by convention, level `0` is for
-    #     errors, level `1` is for warnings, level `2` is for parser
-    #     progress information, and anything higher is for various levels
-    #     of debug information.
-    #
-    # @yieldparam [:trace] trace
-    # @yieldparam [Integer] level
-    # @yieldparam [Integer] lineno
-    # @yieldparam [Integer] depth Recursive depth of productions
-    # @yieldparam [Array<String>] args
-    # @yieldreturn [String] added to message
-    def debug(*args)
-      return unless @options[:debug]
-      options = args.last.is_a?(Hash) ? args.pop : {}
-      debug_level = options.fetch(:level, 3)
-      return if @options[:debug].is_a?(Integer) && debug_level > @options[:debug]
-
-      depth = options[:depth] || @depth
-      args << yield if block_given?
-
-      message = "#{args.join(': ')}"
-      d_str = depth > 100 ? ' ' * 100 + '+' : ' ' * depth
-      str = "[#{lineno}](#{debug_level})#{d_str}#{message}"
-      case @options[:debug]
-      when Array
-        @options[:debug] << str
-      when TrueClass
-        $stderr.puts str
-      when Integer
-        case debug_level
-        when 0 then return if @options[:errors]
-        when 1 then return if @options[:warnings]
-        end
-        $stderr.puts(str) if debug_level <= @options[:debug]
-      end
+      log_error(*args, ctx,
+        lineno:     lineno,
+        token:      options[:token],
+        production: options[:production],
+        exception:  SyntaxError)
     end
 
     # Used for internal error recovery

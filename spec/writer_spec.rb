@@ -1,8 +1,12 @@
 $:.unshift "."
 require 'spec_helper'
 require 'rdf/spec/writer'
+require 'rdf/vocab'
 
 describe RDF::Turtle::Writer do
+  let(:logger) {RDF::Spec.logger}
+  after(:each) {|example| puts logger.to_s if example.exception}
+
   it_behaves_like 'an RDF::Writer' do
     let(:writer) {RDF::Turtle::Writer.new}
   end
@@ -74,8 +78,7 @@ describe RDF::Turtle::Writer do
         input: %(@prefix ex: <http://example.com/> . ex:b ex:c ex:d, ex:e .),
         regexp: [
           %r(^@prefix ex: <http://example.com/> \.$),
-          %r(^ex:b ex:c ex:d,$),
-          %r(^\s+ex:e \.$)
+          %r(^ex:b ex:c ex:[de],\s+ex:[de] \.$)m,
         ],
       },
       "property list" => {
@@ -165,7 +168,7 @@ describe RDF::Turtle::Writer do
       input = %(@prefix ex: <http://example.com/> . ex:a ex:b () .)
       serialize(input, nil,
         [%r(^ex:a ex:b \(\) \.$)],
-        prefixes: { "" => RDF::FOAF}
+        prefixes: { "" => RDF::Vocab::FOAF}
       )
     end
     
@@ -231,27 +234,27 @@ describe RDF::Turtle::Writer do
   describe "literals" do
     describe "plain" do
       it "encodes embedded \"\"\"" do
-        ttl = %(:a :b """testing string parsing in Turtle.
+        ttl = %(<http://a> <http:/b> """testing string parsing in Turtle.
                 """ .)
         serialize(ttl, nil, [/testing string parsing in Turtle.\n/])
       end
 
       it "encodes embedded \"" do
-        ttl = %(:a :b """string with " escaped quote marks""" .)
+        ttl = %(<http://a> <http:/b> """string with " escaped quote marks""" .)
         serialize(ttl, nil, [/string with \\" escaped quote mark/])
       end
     end
     
     describe "with language" do
       it "specifies language for literal with language" do
-        ttl = %q(:a :b "string"@en .)
+        ttl = %q(<http://a> <http:/b> "string"@en .)
         serialize(ttl, nil, [%r("string"@en)])
       end
     end
     
     describe "xsd:anyURI" do
       it "uses xsd namespace for datatype" do
-        ttl = %q(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b "http://foo/"^^xsd:anyURI .)
+        ttl = %q(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> "http://foo/"^^xsd:anyURI .)
         serialize(ttl, nil, [
           %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
           %r("http://foo/"\^\^xsd:anyURI \.),
@@ -271,7 +274,7 @@ describe RDF::Turtle::Writer do
         [%q(false), /false ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -325,7 +328,7 @@ describe RDF::Turtle::Writer do
         [%q(10), /10 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -372,7 +375,7 @@ describe RDF::Turtle::Writer do
         [%q("10"^^xsd:int), /"10"\^\^xsd:int ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -391,7 +394,7 @@ describe RDF::Turtle::Writer do
         [%q(10.02), /10.02 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -449,7 +452,7 @@ describe RDF::Turtle::Writer do
         [%q("14"^^xsd:double), /1.4e1 ./],
       ].each do |(l,r)|
         it "uses token for #{l.inspect}" do
-          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . :a :b #{l} .)
+          ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> #{l} .)
           serialize(ttl, nil, [
             %r(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> \.),
             r,
@@ -510,18 +513,22 @@ describe RDF::Turtle::Writer do
               pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], format: :ttl, base_uri: t.base, standard_prefixes: true)
-              @debug += [t.inspect, "source:", t.expected]
+              logger.info t.inspect
+              logger.info "source: #{t.expected}"
               g2 = parse(ttl, base_uri: t.base)
-              expect(g2).to be_equivalent_graph(graph, debug: @debug.join("\n"))
+              logger.info "serialized: #{ttl}"
+              expect(g2).to be_equivalent_graph(graph, logger: logger)
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
               pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, t.base, [], stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
-              @debug += [t.inspect, "source:", t.expected]
+              logger.info t.inspect
+              logger.info "source: #{t.expected}"
+              logger.info "serialized: #{ttl}"
               g2 = parse(ttl, base_uri: t.base)
-              expect(g2).to be_equivalent_graph(graph, debug: @debug.join("\n"))
+              expect(g2).to be_equivalent_graph(graph, logger: logger)
             end
           end
         end
@@ -530,20 +537,16 @@ describe RDF::Turtle::Writer do
   end unless ENV['CI'] # Not for continuous integration
 
   def parse(input, options = {})
-    graph = RDF::Graph.new
-    RDF::Turtle::Reader.new(input, options).each do |statement|
-      graph << statement
-    end
-    graph
+    RDF::Turtle::Reader.new(input, options, &:each).to_a.extend(RDF::Enumerable)
   end
 
   # Serialize ntstr to a string and compare against regexps
   def serialize(ntstr, base = nil, regexps = [], options = {})
     prefixes = options[:prefixes] || {nil => ""}
-    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false)
-    @debug = ["serialized:", ntstr]
+    g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base, prefixes: prefixes, validate: false, logger: [])
+    logger.info "serialized: #{ntstr}"
     result = RDF::Turtle::Writer.buffer(options.merge(
-      debug: @debug,
+      logger:   logger,
       base_uri: base,
       prefixes: prefixes,
       encoding: Encoding::UTF_8
@@ -552,7 +555,7 @@ describe RDF::Turtle::Writer do
     end
     
     regexps.each do |re|
-      expect(result).to match_re(re, about: base, debug: @debug, input: ntstr)
+      expect(result).to match_re(re, about: base, logger: logger, input: ntstr)
     end
     
     result

@@ -11,13 +11,12 @@ describe RDF::NTriples::Reader do
         describe m.comment do
           m.entries.each do |t|
             specify "#{t.name}: #{t.comment}" do
-              t.debug = [t.inspect, "source:", t.input]
-              t.warnings = []
-              t.errors = []
+              t.logger = RDF::Spec.logger
+              t.logger.info t.inspect
+              t.logger.info "source:\n#{t.input}"
 
               reader = RDF::NTriples::Reader.new(t.input,
-                errors: t.errors,
-                warnings: t.warnings,
+                logger: t.logger,
                 validate:  true)
 
               graph = RDF::Graph.new
@@ -26,7 +25,7 @@ describe RDF::NTriples::Reader do
                 begin
                   graph << reader
                 rescue Exception => e
-                  expect(e.message).to produce("Not exception #{e.inspect}", t.debug)
+                  expect(e.message).to produce("Not exception #{e.inspect}", t.logger)
                 end
               else
                 expect {

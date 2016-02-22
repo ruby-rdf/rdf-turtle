@@ -2,6 +2,7 @@
 require 'rubygems'
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
 require "bundler/setup"
+require 'logger'
 require 'rdf/turtle'
 require 'rdf/isomorphic'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'spec_helper'))
@@ -51,15 +52,16 @@ def run_tc(tc, options)
     puts "\nExpected:\n" + tc.expected
   end
 
+  logger = Logger.new(STDERR)
+  logger.level = options[:level]
+  logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity}: #{msg}\n"}
+
   begin
     puts "open #{tc.action}" if options[:verbose]
-    tc.warnings = []
-    tc.errors = []
     options = {
       base_uri:  tc.base,
-      warnings:  tc.warnings,
-      errors:    tc.errors,
-      validate:  true
+      validate:  true,
+      logger: logger
     }.merge(options)
 
     reader = RDF::Reader.for(tc.action).new(tc.input, options)
@@ -100,12 +102,6 @@ def run_tc(tc, options)
     end
   end
   
-  unless options[:quiet]
-    options[:output].puts("\nWarnings:\n" + tc.warnings.join("\n"))
-    options[:output].puts("\nErrors:\n" + tc.errors.join("\n"))
-    options[:output].puts("\nOutput:\n" + graph.dump(:ntriples))
-  end
-
   if options[:earl]
     options[:output].puts %{
 [ a earl:Assertion;
@@ -128,6 +124,7 @@ end
 
 options = {
   output:  STDOUT,
+  level: Logger::WARN
 }
 
 opts = GetoptLong.new(
@@ -161,11 +158,15 @@ end
 opts.each do |opt, arg|
   case opt
   when '--help'             then help(options)
-  when '--dbg'              then ::RDF::Turtle::debug = true
-  when '--earl'             then options[:quiet] = options[:earl] = true
+  when '--dbg'              then options[:level] = Logger::DEBUG
+  when '--earl'
+    options[:quiet] = options[:earl] = true
+    options[:level] = Logger::FATAL
   when '--ntriples'         then options[:ntriples] = true
   when '--output'           then options[:output] = File.open(arg, "w")
-  when '--quiet'            then options[:quiet] = true
+  when '--quiet'
+    options[:quiet] = true
+    options[:level] = Logger::FATAL
   when '--skip-long'        then options[:skip] = true
   when '--validate'         then options[:validate] = true
   when '--verbose'          then options[:verbose] = true

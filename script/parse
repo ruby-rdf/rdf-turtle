@@ -2,6 +2,7 @@
 require 'rubygems'
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", 'lib')))
 require "bundler/setup"
+require 'logger'
 require 'rdf'
 require 'rdf/turtle'
 begin
@@ -68,15 +69,20 @@ rescue Exception => e
   raise e
 end
 
+logger = Logger.new(STDERR)
+logger.level = Logger::WARN
+logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity}: #{msg}\n"}
+
 parser_options = {
   base_uri:  nil,
-  progress:    false,
   validate:  false,
+  logger: logger,
 }
 
 writer_options = {
   base_uri:  nil,
-  standard_prefixes:  true
+  standard_prefixes:  true,
+  logger: logger,
 }
 
 options = {
@@ -108,7 +114,7 @@ opts = GetoptLong.new(
 )
 opts.each do |opt, arg|
   case opt
-  when '--dbg'          then parser_options[:debug] = ::RDF::Turtle::debug = true
+  when '--dbg'          then logger.level = Logger::DEBUG
   when '--base'         then parser_options[:base_uri] = writer_options[:base_uri] = arg
   when '--benchmark'    then options[:benchmark] = true
   when '--canonicalize' then parser_options[:canonicalize] = true
@@ -119,8 +125,10 @@ opts.each do |opt, arg|
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
   when '--profile'      then options[:profile] = true
-  when '--progress'     then parser_options[:debug] ||= 2
-  when '--quiet'        then options[:quiet] = options[:quiet].to_i + 1
+  when '--progress'     then logger.level = Logger::INFO
+  when '--quiet'
+    options[:quiet] = options[:quiet].to_i + 1
+    logger.level = Logger::FATAL
   when '--stream'       then writer_options[:stream] = true
   when '--validate'     then parser_options[:validate] = true
   when '--verbose'      then $verbose = true
