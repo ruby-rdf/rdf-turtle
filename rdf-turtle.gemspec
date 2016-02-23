@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
 
   gem.name                  = "rdf-turtle"
   gem.homepage              = "http://ruby-rdf.github.com/rdf-turtle"
-  gem.license               = 'Public Domain' if gem.respond_to?(:license=)
+  gem.license               = 'Unlicense'
   gem.summary               = "Turtle reader/writer for Ruby."
   gem.description           = %q{RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite.}
   gem.rubyforge_project     = 'rdf-turtle'
@@ -27,13 +27,13 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.0'
   gem.requirements          = []
   gem.add_runtime_dependency     'rdf',             '>= 2.0.0.beta', '< 3'
-  gem.add_runtime_dependency     'ebnf',            '~> 1.0', '>= 1.0.1'
+  gem.add_runtime_dependency     'ebnf',            '~> 1.0', '>= 1.0.1.beta'
   gem.add_development_dependency 'rspec',           '~> 3.0'
   gem.add_development_dependency 'rspec-its',       '~> 1.0'
   gem.add_development_dependency 'rdf-isomorphic',  '>= 2.0.0.beta', '< 3'
   gem.add_development_dependency 'json-ld',         '>= 2.0.0.beta', '< 3'
   gem.add_development_dependency 'rdf-spec',        '>= 2.0.0.beta', '< 3'
-  gem.add_development_dependency 'rdf-vocab',       '>= 0.8'
+  gem.add_development_dependency 'rdf-vocab',       '>= 2.0.0.beta', '< 3'
 
   gem.add_development_dependency 'rake',            '~> 10.4'
   gem.post_install_message  = nil
