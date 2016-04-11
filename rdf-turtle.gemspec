@@ -36,5 +36,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-vocab',       '~> 2.0'
 
   gem.add_development_dependency 'rake',            '~> 10.4'
+  gem.add_development_dependency 'yard' ,           '~> 0.8'
   gem.post_install_message  = nil
 end
