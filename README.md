@@ -17,7 +17,7 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](http://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby >= 2.0.
+* Compatible with Ruby >= 2.2.2.
 * Optional streaming writer, to serialize large graphs
 
 ## Usage
