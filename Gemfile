@@ -16,7 +16,7 @@ group :development, :test do
   gem 'rdf-spec',       github: "ruby-rdf/rdf-spec",        branch: "develop"
   gem 'rdf-isomorphic', github: "ruby-rdf/rdf-isomorphic",  branch: "develop"
   gem 'rdf-vocab',      github: "ruby-rdf/rdf-vocab",       branch: "develop"
-  gem 'sxp',            github: "gkellogg/sxp-ruby",        branch: "develop"
+  gem 'sxp',            github: "dryruby/sxp.rb",           branch: "develop"
   gem "redcarpet",      platforms: :ruby
   gem 'simplecov',      require: false, platform: :mri
   gem 'coveralls',      require: false, platform: :mri
