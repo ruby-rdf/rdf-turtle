@@ -6,7 +6,6 @@ gem 'rdf',  github: "ruby-rdf/rdf",  branch: "develop"
 gem 'ebnf', github: "gkellogg/ebnf", branch: "develop"
 
 group :development do
-  gem "wirble"
   gem "byebug", platforms: :mri
   gem 'psych',  platforms: [:mri, :rbx]
 end
