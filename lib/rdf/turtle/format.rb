@@ -20,8 +20,8 @@ module RDF::Turtle
                      extension: :ttl,
                      aliases: %w(
                        text/rdf+turtle
-                       application/turtle
-                       application/x-turtle
+                       application/turtle;q=0.2
+                       application/x-turtle;q=0.2
                      )
     content_encoding 'utf-8'
 
