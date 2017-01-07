@@ -549,7 +549,7 @@ module RDF::Turtle
       ctx = ""
       ctx += "(found #{options[:token].inspect})" if options[:token]
       ctx += ", production = #{options[:production].inspect}" if options[:production]
-      lineno = @lineno || (options[:token].lineno if options[:token].respond_to?(:lineno))
+      lineno = @lineno || (options[:token].lineno if options[:token].respond_to?(:lineno)) || @lexer.lineno
       log_error(*args, ctx,
         lineno:     lineno,
         token:      options[:token],
