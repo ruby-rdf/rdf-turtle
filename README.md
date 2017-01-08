@@ -40,8 +40,6 @@ Full documentation available on [Rubydoc.info][Turtle doc]
 
 ### Principle Classes
 * {RDF::Turtle::Format}
-  * {RDF::Turtle::TTL}
-    Asserts :ttl format, text/turtle mime-type and .ttl file extension.
 * {RDF::Turtle::Reader}
 * {RDF::Turtle::Writer}
 
