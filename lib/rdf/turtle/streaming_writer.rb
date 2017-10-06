@@ -18,7 +18,6 @@ module RDF::Turtle
       preprocess
       start_document
       @output.puts ""
-      self
     end
 
     ##

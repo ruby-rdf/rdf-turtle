@@ -79,6 +79,7 @@ An example of reading Freebase dumps:
 
       r.each_statement {|stmt| puts stmt.to_ntriples}
     end
+
 ## Implementation Notes
 This version uses a hand-written parser using the Lexer from the [EBNF][] gem instead of a general [EBNF][] LL(1) parser for faster performance.
 
