@@ -3,7 +3,7 @@ $:.unshift "."
 require 'spec_helper'
 require 'rdf/spec/reader'
 
-describe "RDF::Turtle::FreebaseReader" do
+describe RDF::Turtle::FreebaseReader do
   let!(:prefixes) {
     %q(
       @prefix ns: <http://rdf.freebase.com/ns/>.

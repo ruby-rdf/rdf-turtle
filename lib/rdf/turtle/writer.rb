@@ -163,6 +163,7 @@ module RDF::Turtle
         stream_prologue
       else
       end
+      super
     end
 
     ##
