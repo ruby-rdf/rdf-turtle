@@ -243,6 +243,17 @@ describe RDF::Turtle::Writer do
         ttl = %(<http://a> <http:/b> """string with " escaped quote marks""" .)
         serialize(ttl, nil, [/string with \\" escaped quote mark/])
       end
+
+      it "encodes embedded \\" do
+        ttl = %(<http://a> <http:/b> "string with \\\\ escaped quote marks" .)
+        serialize(ttl, nil, [/string with \\\\ escaped quote mark/])
+      end
+
+      it "encodes embedded \\ multi-line" do
+        ttl = %(:a :b """string with \\\\ escaped quote marks
+  """ .)
+        serialize(ttl, nil, [/string with \\\\ escaped quote mark/])
+      end
     end
     
     describe "with language" do

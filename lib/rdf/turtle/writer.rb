@@ -413,7 +413,7 @@ module RDF::Turtle
     # @return [String]
     def quoted(string)
       if string.to_s.match(/[\t\n\r]/)
-        string = string.gsub('\\', '\\\\').gsub('"""', '\\"""')
+        string = string.gsub('\\', '\\\\\\\\').gsub('"""', '\\"""')
         %("""#{string}""")
       else
         "\"#{escaped(string)}\""
