@@ -186,6 +186,12 @@ module RDF::Turtle
 
         start_document
 
+        # Remove lists that are referenced and have non-list properties;
+        # these are legal, but can't be serialized as lists
+        @lists.reject! do |node, list|
+          ref_count(node) > 0 && non_list_prop_count(node) > 0
+        end
+
         order_subjects.each do |subject|
           unless is_done?(subject)
             statement(subject)
@@ -194,7 +200,7 @@ module RDF::Turtle
       end
       super
     end
-    
+
     # Return a QName for the URI, or nil. Adds namespace of QName to defined prefixes
     # @param [RDF::Resource] resource
     # @return [String, nil] value to use to identify URI
@@ -211,7 +217,7 @@ module RDF::Turtle
       pname = case
       when @uri_to_pname.has_key?(uri)
         return @uri_to_pname[uri]
-      when u = @uri_to_prefix.keys.sort_by {|u| u.length}.reverse.detect {|u| uri.index(u.to_s) == 0}
+      when u = @uri_to_prefix.keys.sort_by {|uu| uu.length}.reverse.detect {|uu| uri.index(uu.to_s) == 0}
         # Use a defined prefix
         prefix = @uri_to_prefix[u]
         unless u.to_s.empty?
@@ -228,7 +234,7 @@ module RDF::Turtle
       else
         nil
       end
-      
+
       # Make sure pname is a valid pname
       if pname
         md = Terminals::PNAME_LN.match(pname) || Terminals::PNAME_NS.match(pname)
@@ -237,7 +243,7 @@ module RDF::Turtle
 
       @uri_to_pname[uri] = pname
     end
-    
+
     # Take a hash from predicate uris to lists of values.
     # Sort the lists of values.  Return a sorted list of properties.
     # @param [Hash{String => Array<Resource>}] properties A hash of Property to Resource mappings
@@ -245,17 +251,17 @@ module RDF::Turtle
     def sort_properties(properties)
       # Make sorted list of properties
       prop_list = []
-      
+
       predicate_order.each do |prop|
         next unless properties[prop.to_s]
         prop_list << prop.to_s
       end
-      
+
       properties.keys.sort.each do |prop|
         next if prop_list.include?(prop.to_s)
         prop_list << prop.to_s
       end
-      
+
       log_debug("sort_properties") {prop_list.join(', ')}
       prop_list
     end
@@ -284,7 +290,7 @@ module RDF::Turtle
         quoted(literal.to_s)
       end
     end
-    
+
     ##
     # Returns the Turtle representation of a URI reference.
     #
@@ -296,7 +302,7 @@ module RDF::Turtle
       log_debug("relativize") {"#{uri.to_ntriples} => #{md.inspect}"} if md != uri.to_s
       md != uri.to_s ? "<#{md}>" : (get_pname(uri) || "<#{uri}>")
     end
-    
+
     ##
     # Returns the Turtle representation of a blank node.
     #
@@ -306,12 +312,12 @@ module RDF::Turtle
     def format_node(node, options = {})
       options[:unique_bnodes] ? node.to_unique_base : node.to_base
     end
-    
+
     protected
     # Output @base and @prefix definitions
     def start_document
       @output.write("#{indent}@base <#{base_uri}> .\n") unless base_uri.to_s.empty?
-      
+
       log_debug("start_document") {prefixes.inspect}
       prefixes.keys.sort_by(&:to_s).each do |prefix|
         @output.write("#{indent}@prefix #{prefix}: <#{prefixes[prefix]}> .\n")
@@ -326,7 +332,7 @@ module RDF::Turtle
     # `\[rdf:type, rdfs:label, dc:title\]`
     # @return [Array<URI>]
     def predicate_order; [RDF.type, RDF::RDFS.label, RDF::URI("http://purl.org/dc/terms/title")]; end
-    
+
     # Order subjects for output. Override this to output subjects in another order.
     #
     # Uses #top_classes and #base_uri.
@@ -334,13 +340,13 @@ module RDF::Turtle
     def order_subjects
       seen = {}
       subjects = []
-      
+
       # Start with base_uri
       if base_uri && @subjects.keys.include?(base_uri)
         subjects << RDF::URI(base_uri)
         seen[RDF::URI(base_uri)] = true
       end
-      
+
       # Add distinguished classes
       top_classes.each do |class_uri|
         graph.query(predicate:  RDF.type, object:  class_uri).
@@ -360,15 +366,18 @@ module RDF::Turtle
           seen[st.object] if @lists.has_key?(st.object)
         end
 
+      # List elements should not be targets for top-level serialization
+      list_elements = @lists.values.map(&:to_a).flatten.compact
+
       # Sort subjects by resources over bnodes, ref_counts and the subject URI itself
-      recursable = @subjects.keys.
+      recursable = (@subjects.keys - list_elements).
         select {|s| !seen.include?(s)}.
         map {|r| [r.node? ? 1 : 0, ref_count(r), r]}.
         sort
 
-      subjects += recursable.map{|r| r.last}
+      subjects + recursable.map{|r| r.last}
     end
-    
+
     # Perform any preprocessing of statements required
     def preprocess
       # Load defined prefixes
@@ -386,18 +395,21 @@ module RDF::Turtle
         @graph.each {|statement| preprocess_statement(statement)}
       end
     end
-    
+
     # Perform any statement preprocessing required. This is used to perform reference counts and determine required
     # prefixes.
     # @param [Statement] statement
     def preprocess_statement(statement)
       #log_debug("preprocess") {statement.to_ntriples}
       bump_reference(statement.object)
-      @subjects[statement.subject] = true
+      # Count properties of this subject
+      (@subjects[statement.subject] ||= {})[statement.predicate] ||= 0
+      @subjects[statement.subject][statement.predicate] += 1
 
       # Collect lists
       if statement.predicate == RDF.first
-        @lists[statement.subject] = RDF::List.new(subject: statement.subject, graph: graph)
+        l = RDF::List.new(subject: statement.subject, graph: graph)
+        @lists[statement.subject] = l if l.valid?
       end
 
       if statement.object == RDF.nil || statement.subject == RDF.nil
@@ -449,11 +461,10 @@ module RDF::Turtle
       #log_debug("is_valid_list?") {l.inspect}
       return @lists[l] && @lists[l].valid?
     end
-    
-    def do_list(l)
+
+    def do_list(l, position)
       list = @lists[l]
       log_debug("do_list") {list.inspect}
-      position = :subject
       subject_done(RDF.nil)
       list.each_statement do |st|
         next unless st.predicate == RDF.first
@@ -466,38 +477,38 @@ module RDF::Turtle
 
     def collection(node, position)
       return false if !is_valid_list?(node)
+      return false if position == :subject && ref_count(node) > 0
+      return false if position == :object && non_list_prop_count(node) > 0
       #log_debug("collection") {"#{node.to_ntriples}, #{position}"}
 
       @output.write(position == :subject ? "(" : " (")
-      log_depth {do_list(node)}
+      log_depth {do_list(node, position)}
       @output.write(')')
     end
 
-    # Can object be represented using a blankNodePropertyList?
-    def p_squared?(resource, position)
+    # Can subject be represented as a blankNodePropertyList?
+    def blankNodePropertyList?(resource, position)
       resource.node? &&
-        !@serialized.has_key?(resource) &&
-        ref_count(resource) <= 1
+        !is_valid_list?(resource) &&
+        (!is_done?(resource) || position == :subject) &&
+        ref_count(resource) == (position == :object ? 1 : 0)
     end
 
-    # Represent an object as a blankNodePropertyList
-    def p_squared(resource, position)
-      return false unless p_squared?(resource, position)
+    # Represent resource as a blankNodePropertyList
+    def blankNodePropertyList(resource, position)
+      return false unless blankNodePropertyList?(resource, position)
 
-      #log_debug("p_squared") {"#{resource.to_ntriples}, #{position}"}
+      log_debug("blankNodePropertyList") {resource.to_ntriples}
       subject_done(resource)
-      @output.write(position == :subject ? '[' : ' [')
-      log_depth do
-        num_props = predicateObjectList(resource, true)
-        @output.write(num_props > 1 ? "\n#{indent} ]" : "]")
-      end
-      
+      @output.write(position == :subject ? "\n#{indent} [" : ' [')
+      num_props = log_depth {predicateObjectList(resource, true)}
+      @output.write((num_props > 1 ? "\n#{indent}" : "") + (position == :object ? ']' : '] .'))
       true
     end
 
     # Default singular resource representation.
-    def p_default(resource, position)
-      #log_debug("p_default") {"#{resource.to_ntriples}, #{position}"}
+    def p_term(resource, position)
+      #log_debug("p_term") {"#{resource.to_ntriples}, #{position}"}
       l = (position == :subject ? "" : " ") + format_term(resource, options)
       @output.write(l)
     end
@@ -509,12 +520,15 @@ module RDF::Turtle
         "#{resource.to_ntriples}, " +
         "pos: #{position}, " +
         "()?: #{is_valid_list?(resource)}, " +
-        "[]?: #{p_squared?(resource, position)}, " +
+        "[]?: #{blankNodePropertyList?(resource, position)}, " +
         "rc: #{ref_count(resource)}"
       end
-      raise RDF::WriterError, "Cannot serialize resource '#{resource}'" unless collection(resource, position) || p_squared(resource, position) || p_default(resource, position)
+      raise RDF::WriterError, "Cannot serialize resource '#{resource}'" unless
+        collection(resource, position) ||
+        blankNodePropertyList(resource, position) ||
+        p_term(resource, position)
     end
-    
+
     def predicate(resource)
       log_debug("predicate") {resource.to_ntriples}
       if resource == RDF.type
@@ -530,7 +544,7 @@ module RDF::Turtle
       return if objects.empty?
 
       objects.each_with_index do |obj, i|
-        if i > 0 && p_squared?(obj, :object)
+        if i > 0 && blankNodePropertyList?(obj, :object)
           @output.write ", "
         elsif i > 0
           @output.write ",\n#{indent(4)}"
@@ -548,7 +562,7 @@ module RDF::Turtle
       end
 
       prop_list = sort_properties(properties)
-      prop_list -= [RDF.first.to_s, RDF.rest.to_s] if subject.node?
+      prop_list -= [RDF.first.to_s, RDF.rest.to_s] if @lists.include?(subject)
       log_debug("predicateObjectList") {prop_list.inspect}
       return 0 if prop_list.empty?
 
@@ -563,22 +577,6 @@ module RDF::Turtle
       properties.keys.length
     end
 
-    # Can subject be represented as a blankNodePropertyList?
-    def blankNodePropertyList?(subject)
-      ref_count(subject) == 0 && subject.node? && !is_valid_list?(subject)
-    end
-
-    # Represent subject as a blankNodePropertyList?
-    def blankNodePropertyList(subject)
-      return false unless blankNodePropertyList?(subject)
-      
-      log_debug("blankNodePropertyList") {subject.to_ntriples}
-      @output.write("\n#{indent} [")
-      num_props = log_depth {predicateObjectList(subject, true)}
-      @output.write(num_props > 1 ? "\n#{indent} ] ." : "] .")
-      true
-    end
-
     # Render triples having the same subject using an explicit subject
     def triples(subject)
       @output.write("\n#{indent}")
@@ -587,18 +585,28 @@ module RDF::Turtle
       @output.write(" .")
       true
     end
-    
+
     def statement(subject)
-      log_debug("statement") {"#{subject.to_ntriples}, bnodePL?: #{blankNodePropertyList?(subject)}"}
+      log_debug("statement") {"#{subject.to_ntriples}, bnodePL?: #{blankNodePropertyList?(subject, :subject)}"}
       subject_done(subject)
-      blankNodePropertyList(subject) || triples(subject)
+      blankNodePropertyList(subject, :subject) || triples(subject)
       @output.puts
     end
-    
-    def is_done?(subject)
-      @serialized.include?(subject)
+
+    # Return the number of statements having this resource as a subject
+    # @return [Integer]
+    def prop_count(subject)
+      @subjects.fetch(subject, {}).values.reduce(:+) || 0
     end
-    
+
+    # Return the number of statements having this resource as a subject other than for list properties
+    # @return [Integer]
+    def non_list_prop_count(subject)
+      @subjects.fetch(subject, {}).
+        reject {|k, v| [RDF.type, RDF.first, RDF.rest].include?(k)}.
+        values.reduce(:+) || 0
+    end
+
     # Return the number of times this node has been referenced in the object position
     # @return [Integer]
     def ref_count(resource)
@@ -611,7 +619,11 @@ module RDF::Turtle
     def bump_reference(resource)
       @references[resource] = ref_count(resource) + 1
     end
-    
+
+    def is_done?(subject)
+      @serialized.include?(subject)
+    end
+
     # Mark a subject as done.
     def subject_done(subject)
       @serialized[subject] = true
