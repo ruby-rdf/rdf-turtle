@@ -189,7 +189,7 @@ module RDF::Turtle
         # Remove lists that are referenced and have non-list properties;
         # these are legal, but can't be serialized as lists
         @lists.reject! do |node, list|
-          ref_count(node) > 0 && non_list_prop_count(node) > 0
+          ref_count(node) > 0 && prop_count(node) > 0
         end
 
         order_subjects.each do |subject|
@@ -454,6 +454,44 @@ module RDF::Turtle
       end
     end
 
+    # Can subject be represented as a blankNodePropertyList?
+    def blankNodePropertyList?(resource, position)
+      resource.node? &&
+        !is_valid_list?(resource) &&
+        (!is_done?(resource) || position == :subject) &&
+        ref_count(resource) == (position == :object ? 1 : 0)
+    end
+
+    # Return the number of statements having this resource as a subject other than for list properties
+    # @return [Integer]
+    def prop_count(subject)
+      @subjects.fetch(subject, {}).
+        reject {|k, v| [RDF.type, RDF.first, RDF.rest].include?(k)}.
+        values.reduce(:+) || 0
+    end
+
+    # Return the number of times this node has been referenced in the object position
+    # @return [Integer]
+    def ref_count(resource)
+      @references.fetch(resource, 0)
+    end
+
+    # Increase the reference count of this resource
+    # @param [RDF::Resource] resource
+    # @return [Integer] resulting reference count
+    def bump_reference(resource)
+      @references[resource] = ref_count(resource) + 1
+    end
+
+    def is_done?(subject)
+      @serialized.include?(subject)
+    end
+
+    # Mark a subject as done.
+    def subject_done(subject)
+      @serialized[subject] = true
+    end
+
     private
 
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
@@ -478,20 +516,12 @@ module RDF::Turtle
     def collection(node, position)
       return false if !is_valid_list?(node)
       return false if position == :subject && ref_count(node) > 0
-      return false if position == :object && non_list_prop_count(node) > 0
+      return false if position == :object && prop_count(node) > 0
       #log_debug("collection") {"#{node.to_ntriples}, #{position}"}
 
       @output.write(position == :subject ? "(" : " (")
       log_depth {do_list(node, position)}
       @output.write(')')
-    end
-
-    # Can subject be represented as a blankNodePropertyList?
-    def blankNodePropertyList?(resource, position)
-      resource.node? &&
-        !is_valid_list?(resource) &&
-        (!is_done?(resource) || position == :subject) &&
-        ref_count(resource) == (position == :object ? 1 : 0)
     end
 
     # Represent resource as a blankNodePropertyList
@@ -591,42 +621,6 @@ module RDF::Turtle
       subject_done(subject)
       blankNodePropertyList(subject, :subject) || triples(subject)
       @output.puts
-    end
-
-    # Return the number of statements having this resource as a subject
-    # @return [Integer]
-    def prop_count(subject)
-      @subjects.fetch(subject, {}).values.reduce(:+) || 0
-    end
-
-    # Return the number of statements having this resource as a subject other than for list properties
-    # @return [Integer]
-    def non_list_prop_count(subject)
-      @subjects.fetch(subject, {}).
-        reject {|k, v| [RDF.type, RDF.first, RDF.rest].include?(k)}.
-        values.reduce(:+) || 0
-    end
-
-    # Return the number of times this node has been referenced in the object position
-    # @return [Integer]
-    def ref_count(resource)
-      @references.fetch(resource, 0)
-    end
-
-    # Increase the reference count of this resource
-    # @param [RDF::Resource] resource
-    # @return [Integer] resulting reference count
-    def bump_reference(resource)
-      @references[resource] = ref_count(resource) + 1
-    end
-
-    def is_done?(subject)
-      @serialized.include?(subject)
-    end
-
-    # Mark a subject as done.
-    def subject_done(subject)
-      @serialized[subject] = true
     end
   end
 end
