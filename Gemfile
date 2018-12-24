@@ -17,6 +17,9 @@ group :development, :test do
   gem 'rdf-vocab',      git: "https://github.com/ruby-rdf/rdf-vocab",       branch: "develop"
   gem 'sxp',            git: "https://github.com/dryruby/sxp.rb",           branch: "develop"
   gem "redcarpet",      platforms: :ruby
+
+  # Until version >= 3.4.2 with support for Ruby 2.6
+  gem "webmock",        git: "git@github.com:bblimke/webmock.git"
   gem 'simplecov',      require: false, platform: :mri
   gem 'coveralls',      require: false, platform: :mri
 end
