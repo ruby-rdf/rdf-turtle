@@ -19,7 +19,7 @@ group :development, :test do
   gem "redcarpet",      platforms: :ruby
 
   # Until version >= 3.4.2 with support for Ruby 2.6
-  gem "webmock",        git: "git@github.com:bblimke/webmock.git"
+  gem "webmock",        git: "https://github.com/bblimke/webmock"
   gem 'simplecov',      require: false, platform: :mri
   gem 'coveralls',      require: false, platform: :mri
 end
