@@ -3,7 +3,7 @@ $:.unshift "."
 require 'spec_helper'
 require 'rdf/spec/reader'
 
-describe "RDF::Turtle::Reader" do
+describe RDF::Turtle::Reader do
   let!(:doap) {File.expand_path("../../etc/doap.ttl", __FILE__)}
   let!(:doap_nt) {File.expand_path("../../etc/doap.nt", __FILE__)}
   let!(:doap_count) {File.open(doap_nt).each_line.to_a.length}
@@ -84,6 +84,23 @@ describe "RDF::Turtle::Reader" do
   end
 
   describe "with simple ntriples" do
+    context "with base_uri" do
+      let(:base_uri) {"http://example.com/base/"}
+      it "detects undefined nil prefix" do
+        expect do
+          r = RDF::Turtle::Reader.new(":a :b :c .", base_uri: base_uri, validate: true)
+          r.each {|statement|}
+        end.to raise_error RDF::ReaderError
+      end
+
+      it "detects undefined nil prefix with other prefixes defined" do
+        expect do
+          r = RDF::Turtle::Reader.new(":a rdf:type :c .", base_uri: base_uri, validate: true, prefixes: {rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"})
+          r.each {|statement|}
+        end.to raise_error RDF::ReaderError
+      end
+    end
+
     context "simple triple" do
       before(:each) do
         ttl_string = %(<http://example/> <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .)

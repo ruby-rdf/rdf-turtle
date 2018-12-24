@@ -86,11 +86,9 @@ module RDF::Turtle
       super do
         @options = {
           anon_base:  "b0",
-          validate:  false,
           whitespace:  WS,
           log_depth: 0,
-        }.merge(options)
-        @options = {prefixes:  {nil => ""}}.merge(@options) unless @options[:validate]
+        }.merge(@options)
         @prod_stack = []
 
         @options[:base_uri] = RDF::URI(base_uri || "")
@@ -178,7 +176,7 @@ module RDF::Turtle
       value = RDF::URI(iri)
       value = base_uri.join(value) if value.relative?
       value.validate! if validate?
-      value.canonicalize! if canonicalize?
+      value.canonicalize! if canonicalize? && !value.frozen?
       value = RDF::URI.intern(value) if intern?
       value
     rescue ArgumentError => e
@@ -214,11 +212,13 @@ module RDF::Turtle
     # Expand a PNAME using string concatenation
     def pname(prefix, suffix)
       # Prefixes must be defined, except special case for empty prefix being alias for current @base
-      if prefix(prefix)
-        base = prefix(prefix).to_s
-      elsif !prefix(prefix)
+      base = if prefix(prefix)
+        prefix(prefix).to_s
+      elsif prefix.to_s.empty? && !validate?
+        base_uri.to_s
+      else
         error("undefined prefix", production: :pname, token: prefix)
-        base = ''
+        ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
       log_debug("pname") {"base: '#{base}', suffix: '#{suffix}'"}
