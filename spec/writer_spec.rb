@@ -90,7 +90,7 @@ describe RDF::Turtle::Writer do
       },
       "bare anon" => {
         input: %(@prefix ex: <http://example.com/> . [ex:a ex:b] .),
-        regexp: [%r(^\s*\[ ex:a ex:b\] \.$)],
+        regexp: [%r(^\s*\[ex:a ex:b\] \.$)],
         regexp_stream: [%r(_:\w+ ex:a ex:b \.$)]
       },
       "anon as subject" => {
@@ -106,7 +106,7 @@ describe RDF::Turtle::Writer do
       },
       "anon as object" => {
         input: %(@prefix ex: <http://example.com/> . ex:a ex:b [ex:c ex:d] .),
-        regexp: [%r(^ex:a ex:b \[ ex:c ex:d\] \.$)],
+        regexp: [%r(^ex:a ex:b \[ex:c ex:d\] \.$)],
         regexp_stream: []
       },
       "reuses BNode labels by default" => {
@@ -178,6 +178,14 @@ describe RDF::Turtle::Writer do
       "list anon": {
         input: %(@prefix ex: <http://example.com/> . [ex:twoAnons ([a ex:mother] [a ex:father])] .),
         regexp: [%r(\[\s*ex:twoAnons \(\s*\[\s*a ex:mother\s*\] \[\s*a ex:father\s*\]\)\] \.$)]
+      },
+      "list subjects": {
+        input: %(@prefix ex: <http://example.com/> . (ex:a ex:b) . ex:a a ex:Thing . ex:b a ex:Thing .),
+        regexp: [
+          %r(\(ex:a ex:b\) \.),
+          %r(ex:a a ex:Thing \.),
+          %r(ex:b a ex:Thing \.),
+        ]
       },
       "owl:unionOf list": {
         input: %(
@@ -531,24 +539,24 @@ describe RDF::Turtle::Writer do
           ], canonicalize: true)
         end
       end
-    end
 
-    [
-      [0, "0.0e0"],
-      [10, "1.0e1"],
-      [-1, "-1.0e0"],
-      ["0", "0.0e0"],
-      ["10", "1.0e1"],
-      ["-1", "-1.0e0"],
-      ["1.0", "1.0e0"],
-      ["0.1", "1.0e-1"],
-      ["10.01", "1.001e1"],
-      ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#double>}],
-      ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#double>}],
-      ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#double>}],
-    ].each do |(l,r)|
-      it "serializes #{l.inspect} to #{r.inspect}" do
-        expect(subject.format_literal(RDF::Literal::Double.new(l))).to eql r
+      [
+        [0, "0.0e0"],
+        [10, "1.0e1"],
+        [-1, "-1.0e0"],
+        ["0", "0.0e0"],
+        ["10", "1.0e1"],
+        ["-1", "-1.0e0"],
+        ["1.0", "1.0e0"],
+        ["0.1", "1.0e-1"],
+        ["10.01", "1.001e1"],
+        ["true", %{"true"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["false", %{"false"^^<http://www.w3.org/2001/XMLSchema#double>}],
+        ["string", %{"string"^^<http://www.w3.org/2001/XMLSchema#double>}],
+      ].each do |(l,r)|
+        it "serializes #{l.inspect} to #{r.inspect}" do
+          expect(subject.format_literal(RDF::Literal::Double.new(l))).to eql r
+        end
       end
     end
 

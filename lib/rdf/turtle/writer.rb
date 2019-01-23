@@ -366,8 +366,8 @@ module RDF::Turtle
           seen[st.object] if @lists.has_key?(st.object)
         end
 
-      # List elements should not be targets for top-level serialization
-      list_elements = @lists.values.map(&:to_a).flatten.compact
+        # List elements which are bnodes should not be targets for top-level serialization
+        list_elements = @lists.values.map(&:to_a).flatten.select(&:node?).compact
 
       # Sort subjects by resources over bnodes, ref_counts and the subject URI itself
       recursable = (@subjects.keys - list_elements).
@@ -504,12 +504,15 @@ module RDF::Turtle
       list = @lists[l]
       log_debug("do_list") {list.inspect}
       subject_done(RDF.nil)
+      index = 0
       list.each_statement do |st|
         next unless st.predicate == RDF.first
         log_debug {" list this: #{st.subject} first: #{st.object}[#{position}]"}
+        @output.write(" ") if index > 0
         path(st.object, position)
         subject_done(st.subject)
         position = :object
+        index += 1
       end
     end
 
@@ -519,7 +522,7 @@ module RDF::Turtle
       return false if position == :object && prop_count(node) > 0
       #log_debug("collection") {"#{node.to_ntriples}, #{position}"}
 
-      @output.write(position == :subject ? "(" : " (")
+      @output.write("(")
       log_depth {do_list(node, position)}
       @output.write(')')
     end
@@ -530,16 +533,20 @@ module RDF::Turtle
 
       log_debug("blankNodePropertyList") {resource.to_ntriples}
       subject_done(resource)
-      @output.write(position == :subject ? "\n#{indent} [" : ' [')
+      @output.write(position == :subject ? "\n#{indent} [" : '[')
       num_props = log_depth {predicateObjectList(resource, true)}
-      @output.write((num_props > 1 ? "\n#{indent}" : "") + (position == :object ? ']' : '] .'))
+      @output.write((num_props > 1 ? "\n#{indent(2)}" : "") + (position == :object ? ']' : '] .'))
       true
     end
 
     # Default singular resource representation.
     def p_term(resource, position)
       #log_debug("p_term") {"#{resource.to_ntriples}, #{position}"}
-      l = (position == :subject ? "" : " ") + format_term(resource, options)
+      l = if resource == RDF.nil
+        "()"
+      else
+        format_term(resource, options)
+      end
       @output.write(l)
     end
 
@@ -562,7 +569,7 @@ module RDF::Turtle
     def predicate(resource)
       log_debug("predicate") {resource.to_ntriples}
       if resource == RDF.type
-        @output.write(" a")
+        @output.write("a")
       else
         path(resource, :predicate)
       end
@@ -601,6 +608,7 @@ module RDF::Turtle
         begin
           @output.write(";\n#{indent(2)}") if i > 0
           predicate(RDF::URI.intern(prop))
+          @output.write(" ")
           objectList(properties[prop])
         end
       end
@@ -611,8 +619,9 @@ module RDF::Turtle
     def triples(subject)
       @output.write("\n#{indent}")
       path(subject, :subject)
-      predicateObjectList(subject)
-      @output.write(" .")
+      @output.write(" ")
+      num_props = predicateObjectList(subject)
+      @output.write("#{num_props > 0 ? ' ' : ''}.")
       true
     end
 
