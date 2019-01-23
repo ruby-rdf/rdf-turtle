@@ -20,9 +20,3 @@ group :development, :test do
   gem 'simplecov',      require: false, platform: :mri
   gem 'coveralls',      require: false, platform: :mri
 end
-
-platforms :rbx do
-  gem 'rubysl', '~> 2.0'
-  gem 'rubinius', '~> 2.0'
-  gem 'json'
-end
