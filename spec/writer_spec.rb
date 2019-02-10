@@ -147,7 +147,7 @@ describe RDF::Turtle::Writer do
       end
     end
   end
-  
+
   describe "lists" do
     {
       "bare list": {
@@ -301,7 +301,7 @@ describe RDF::Turtle::Writer do
   describe "literals" do
     describe "plain" do
       {
-        "embedded \"\"\"": {
+        "\"\"\" delimited": {
           input: %(<http://a> <http:/b> """testing string parsing in Turtle.\n""" .),
           regexp: [/testing string parsing in Turtle.\n/]
         },
@@ -318,20 +318,35 @@ describe RDF::Turtle::Writer do
           regexp: [/string with \\\\ escaped quote mark/],
           prefixes: {nil => ""}
         },
+        "embedded \"\"\" multi-line": {
+          input: %(:a :b """string with \\""" escaped triple-quote marks\n""" .),
+          regexp: [/string with \\"\\"\\" escaped triple-quote marks/],
+          prefixes: {nil => ""}
+        },
+        "embedded \"\"\"\"\" multi-line": {
+          input: %(:a :b """string with many \\"""\\"" escaped quote marks\n""" .),
+          regexp: [/string with many \\"\\"\\"\\"\\" escaped quote marks/],
+          prefixes: {nil => ""}
+        },
+        "ending \" multi-line": {
+          input: %(:a :b """multi-line \nstring with ending \\"quote marks\\\"""" .),
+          regexp: [/multi-line \nstring with ending \\"quote marks\\"/],
+          prefixes: {nil => ""}
+        },
       }.each do |name, params|
         it name do
           serialize(params[:input], params[:regexp], params)
         end
       end
     end
-    
+
     describe "with language" do
       it "specifies language for literal with language" do
         ttl = %q(<http://a> <http:/b> "string"@en .)
         serialize(ttl, [%r("string"@en)])
       end
     end
-    
+
     describe "xsd:anyURI" do
       it "uses xsd namespace for datatype" do
         ttl = %q(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://a> <http:/b> "http://foo/"^^xsd:anyURI .)
@@ -341,7 +356,7 @@ describe RDF::Turtle::Writer do
         ])
       end
     end
-    
+
     describe "xsd:boolean" do
       [
         [%q("true"^^xsd:boolean), /true ./],
@@ -397,7 +412,7 @@ describe RDF::Turtle::Writer do
         end
       end
     end
-    
+
     describe "xsd:integer" do
       [
         [%q("1"^^xsd:integer), /1 ./],
@@ -520,7 +535,7 @@ describe RDF::Turtle::Writer do
         end
       end
     end
-    
+
     describe "xsd:double" do
       [
         [%q("1.0e1"^^xsd:double), /1.0e1 ./],
@@ -639,7 +654,7 @@ describe RDF::Turtle::Writer do
       logger.info "match: #{re.inspect}"
       expect(result).to match_re(re, about: base_uri, logger: logger, input: ntstr), logger.to_s
     end
-    
+
     result
   end
 end
