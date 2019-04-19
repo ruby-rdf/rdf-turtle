@@ -74,7 +74,7 @@ module RDF::Turtle
 
     ##
     # @return [RDF::Literal]
-    # @see    http://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
+    # @see    https://www.w3.org/TR/rdf-testcases/#ntrip_grammar (literal)
     def read_literal
       if literal_str = match(LITERAL_PLAIN)
         literal_str = self.class.unescape(literal_str)

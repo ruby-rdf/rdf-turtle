@@ -30,7 +30,7 @@
 * Replace remaining uses of SPARQL with RDF::Turtle or RDF::LL1
 
 ### 0.0.3
- * Completed RDF 1.1 Turtle based on http://www.w3.org/TR/2011/WD-turtle-20110809/
+ * Completed RDF 1.1 Turtle based on https://www.w3.org/TR/2011/WD-turtle-20110809/
     * Reader
     * Writer
  * Issues:

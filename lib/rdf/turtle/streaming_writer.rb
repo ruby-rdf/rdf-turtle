@@ -3,7 +3,7 @@ require 'rdf/turtle/terminals'
 module RDF::Turtle
   ##
   # Streaming writer interface
-  # @author [Gregg Kellogg](http://greggkellogg.net/)
+  # @author [Gregg Kellogg](https://greggkellogg.net/)
   module StreamingWriter
     ##
     # Write out declarations

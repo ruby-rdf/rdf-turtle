@@ -1702,7 +1702,7 @@ describe RDF::Turtle::Reader do
           @prefix dc: <http://purl.org/dc/elements/1.1/> .
           @prefix ex: <http://example/stuff/1.0/> .
 
-          <http://www.w3.org/TR/rdf-syntax-grammar>
+          <https://www.w3.org/TR/rdf-syntax-grammar>
             dc:title "RDF/XML Syntax Specification (Revised)" ;
             ex:editor [
               ex:fullname "Dave Beckett";
@@ -1714,7 +1714,7 @@ describe RDF::Turtle::Reader do
           @prefix dc: <http://purl.org/dc/elements/1.1/> .
           @prefix ex: <http://example/stuff/1.0/> .
 
-          <http://www.w3.org/TR/rdf-syntax-grammar>
+          <https://www.w3.org/TR/rdf-syntax-grammar>
             dc:title "RDF/XML Syntax Specification (Revised)";
             ex:editor _:a .
           _:a ex:fullname "Dave Beckett";
