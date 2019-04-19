@@ -14,7 +14,7 @@ module RDF::Turtle
   # @example Obtaining serialization format file extension mappings
   #     RDF::Format.file_extensions    #=> {ttl: "text/turtle"}
   #
-  # @see http://www.w3.org/TR/rdf-testcases/#ntriples
+  # @see https://www.w3.org/TR/rdf-testcases/#ntriples
   class Format < RDF::Format
     content_type     'text/turtle',
                      extension: :ttl,

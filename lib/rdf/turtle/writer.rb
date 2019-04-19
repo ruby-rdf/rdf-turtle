@@ -54,7 +54,7 @@ module RDF::Turtle
   #     end
   #   end
   #
-  # @author [Gregg Kellogg](http://greggkellogg.net/)
+  # @author [Gregg Kellogg](https://greggkellogg.net/)
   class Writer < RDF::Writer
     include StreamingWriter
     include RDF::Util::Logger
@@ -65,7 +65,7 @@ module RDF::Turtle
 
     ##
     # Writer options
-    # @see http://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Writer#options-class_method
+    # @see https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Writer#options-class_method
     def self.options
       super + [
         RDF::CLI::Option.new(
@@ -363,7 +363,7 @@ module RDF::Turtle
       # Mark as seen lists that are part of another list
       @lists.values.map(&:statements).
         flatten.each do |st|
-          seen[st.object] if @lists.has_key?(st.object)
+          seen[st.object] = true if @lists.has_key?(st.object)
         end
 
         # List elements which are bnodes should not be targets for top-level serialization

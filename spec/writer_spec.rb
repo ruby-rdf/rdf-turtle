@@ -595,7 +595,7 @@ describe RDF::Turtle::Writer do
     end
   end
 
-  # W3C Turtle Test suite from http://www.w3.org/TR/turtle/tests/
+  # W3C Turtle Test suite from https://www.w3.org/TR/turtle/tests/
   describe "w3c turtle tests" do
     require 'suite_helper'
 

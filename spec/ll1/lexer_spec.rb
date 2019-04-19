@@ -30,7 +30,7 @@ describe EBNF::LL1::Lexer do
   end
   
   describe ".unescape_codepoints" do
-    # @see http://www.w3.org/TR/rdf-sparql-query/#codepointEscape
+    # @see https://www.w3.org/TR/rdf-sparql-query/#codepointEscape
 
     it "unescapes \\uXXXX codepoint escape sequences" do
       inputs = {
@@ -72,7 +72,7 @@ describe EBNF::LL1::Lexer do
   end
 
   describe ".unescape_string" do
-    # @see http://www.w3.org/TR/rdf-sparql-query/#grammarEscapes
+    # @see https://www.w3.org/TR/rdf-sparql-query/#grammarEscapes
 
     context "escape sequences" do
       EBNF::LL1::Lexer::ESCAPE_CHARS.each do |escaped, unescaped|

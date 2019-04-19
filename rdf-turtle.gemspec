@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.date                  = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name                  = "rdf-turtle"
-  gem.homepage              = "http://ruby-rdf.github.com/rdf-turtle"
+  gem.homepage              = "https://ruby-rdf.github.com/rdf-turtle"
   gem.license               = 'Unlicense'
   gem.summary               = "Turtle reader/writer for Ruby."
   gem.description           = %q{RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite.}
