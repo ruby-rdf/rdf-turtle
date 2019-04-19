@@ -363,7 +363,7 @@ module RDF::Turtle
       # Mark as seen lists that are part of another list
       @lists.values.map(&:statements).
         flatten.each do |st|
-          seen[st.object] if @lists.has_key?(st.object)
+          seen[st.object] = true if @lists.has_key?(st.object)
         end
 
         # List elements which are bnodes should not be targets for top-level serialization
