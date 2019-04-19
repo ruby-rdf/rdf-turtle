@@ -2,8 +2,8 @@
 
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
-[![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](http://badge.fury.io/rb/rdf-turtle)
-[![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](http://travis-ci.org/ruby-rdf/rdf-turtle)
+[![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](https://badge.fury.io/rb/rdf-turtle)
+[![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf-turtle)
 [![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf-turtle)
 [![Dependency Status](https://gemnasium.com/ruby-rdf/rdf-turtle.png)](https://gemnasium.com/ruby-rdf/rdf-turtle)
 
@@ -15,7 +15,7 @@ RDF::Turtle parses [Turtle][Turtle] and [N-Triples][N-Triples] into statements o
 
 Install with `gem install rdf-turtle`
 
-* 100% free and unencumbered [public domain](http://unlicense.org/) software.
+* 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
 * Compatible with Ruby >= 2.2.2.
 * Optional streaming writer, to serialize large graphs
@@ -85,22 +85,22 @@ This version uses a hand-written parser using the Lexer from the [EBNF][] gem in
 
 ## Dependencies
 
-* [Ruby](http://ruby-lang.org/) (>= 2.2)
-* [RDF.rb](http://rubygems.org/gems/rdf) (~> 3.0)
+* [Ruby](https://ruby-lang.org/) (>= 2.2)
+* [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.0)
 * [EBNF][] (~> 1.1)
 
 ## Installation
 
-The recommended installation method is via [RubyGems](http://rubygems.org/).
+The recommended installation method is via [RubyGems](https://rubygems.org/).
 To install the latest official release of the `RDF::Turtle` gem, do:
 
     % [sudo] gem install rdf-turtle
 
 ## Mailing List
-* <http://lists.w3.org/Archives/Public/public-rdf-ruby/>
+* <https://lists.w3.org/Archives/Public/public-rdf-ruby/>
 
 ## Author
-* [Gregg Kellogg](http://github.com/gkellogg) - <http://greggkellogg.net/>
+* [Gregg Kellogg](https://github.com/gkellogg) - <https://greggkellogg.net/>
 
 ## Contributing
 This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange development and release activity. All submissions _must_ be on a feature branch based on the _develop_ branch to ease staging and integration.
@@ -119,20 +119,20 @@ This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange develo
 
 ## License
 This is free and unencumbered public domain software. For more information,
-see <http://unlicense.org/> or the accompanying {file:UNLICENSE} file.
+see <https://unlicense.org/> or the accompanying {file:UNLICENSE} file.
 
-A copy of the [Turtle EBNF][] and derived parser files are included in the repository, which are not covered under the UNLICENSE. These files are covered via the [W3C Document License](http://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231).
+A copy of the [Turtle EBNF][] and derived parser files are included in the repository, which are not covered under the UNLICENSE. These files are covered via the [W3C Document License](https://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231).
 
-[Ruby]:         http://ruby-lang.org/
-[RDF]:          http://www.w3.org/RDF/
-[YARD]:         http://yardoc.org/
-[YARD-GS]:      http://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:          http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
-[RDF.rb]:       http://rubydoc.info/github/ruby-rdf/rdf
-[EBNF]:         http://rubygems.org/gems/ebnf
-[Backports]:    http://rubygems.org/gems/backports
-[N-Triples]:    http://www.w3.org/TR/rdf-testcases/#ntriples
-[Turtle]:       http://www.w3.org/TR/2012/WD-turtle-20120710/
-[Turtle doc]:   http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
-[Turtle EBNF]:  http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
+[Ruby]:         https://ruby-lang.org/
+[RDF]:          https://www.w3.org/RDF/
+[YARD]:         https://yardoc.org/
+[YARD-GS]:      https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
+[PDD]:          https://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[RDF.rb]:       https://rubydoc.info/github/ruby-rdf/rdf
+[EBNF]:         https://rubygems.org/gems/ebnf
+[Backports]:    https://rubygems.org/gems/backports
+[N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
+[Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
+[Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
+[Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data

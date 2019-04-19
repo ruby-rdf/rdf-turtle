@@ -9,31 +9,31 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'spec_h
 require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'suite_helper'))
 require 'getoptlong'
 
-ASSERTOR = "http://greggkellogg.net/foaf#me"
+ASSERTOR = "https://greggkellogg.net/foaf#me"
 RUN_TIME = Time.now
 
 def earl_preamble(options)
   options[:output].write File.read(File.expand_path("../../etc/doap#{'-ntriples' if options[:ntriples]}.ttl", __FILE__))
   options[:output].puts %(
-<> foaf:primaryTopic <http://rubygems.org/gems/rdf#{'-turtle' unless options[:ntriples]}> ;
+<> foaf:primaryTopic <https://rubygems.org/gems/rdf#{'-turtle' unless options[:ntriples]}> ;
   dc:issued "#{RUN_TIME.xmlschema}"^^xsd:dateTime ;
   foaf:maker <#{ASSERTOR}> .
 
 <#{ASSERTOR}> a foaf:Person, earl:Assertor;
   foaf:name "Gregg Kellogg";
   foaf:title "Implementor";
-  foaf:homepage <http://greggkellogg.net/> .
+  foaf:homepage <https://greggkellogg.net/> .
 )
 
   options[:output].puts options[:ntriples] ? %(
-<http://rubygems.org/gems/rdf>
+<https://rubygems.org/gems/rdf>
   doap:release <https://github.com/ruby-rdf/rdf/tree/#{RDF::VERSION}> .
 
 <https://github.com/ruby-rdf/rdf/tree/#{RDF::VERSION}> a doap:Version;
   doap:name "RDF.rb-#{RDF::VERSION}";
   doap:revision "#{RDF::VERSION}" .
 ) : %(
-<http://rubygems.org/gems/rdf-turtle>
+<https://rubygems.org/gems/rdf-turtle>
   doap:release <https://github.com/ruby-rdf/rdf-turtle/tree/#{RDF::Turtle::VERSION}> .
 
 <https://github.com/ruby-rdf/rdf-turtle/tree/#{RDF::Turtle::VERSION}> a doap:Version;
@@ -106,7 +106,7 @@ def run_tc(tc, options)
     options[:output].puts %{
 [ a earl:Assertion;
   earl:assertedBy <#{ASSERTOR}>;
-  earl:subject <http://rubygems.org/gems/rdf#{'-turtle' unless options[:ntriples]}>;
+  earl:subject <https://rubygems.org/gems/rdf#{'-turtle' unless options[:ntriples]}>;
   earl:test <#{tc.id}>;
   earl:result [
     a earl:TestResult;

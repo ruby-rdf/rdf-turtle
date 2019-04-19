@@ -54,7 +54,7 @@ module RDF::Turtle
   #     end
   #   end
   #
-  # @author [Gregg Kellogg](http://greggkellogg.net/)
+  # @author [Gregg Kellogg](https://greggkellogg.net/)
   class Writer < RDF::Writer
     include StreamingWriter
     include RDF::Util::Logger
@@ -65,7 +65,7 @@ module RDF::Turtle
 
     ##
     # Writer options
-    # @see http://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Writer#options-class_method
+    # @see https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Writer#options-class_method
     def self.options
       super + [
         RDF::CLI::Option.new(

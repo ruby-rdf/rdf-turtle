@@ -15,10 +15,10 @@ module RDF
   #     end
   #   end
   #
-  # @see http://rubydoc.info/github/ruby-rdf/rdf/master/frames
-  # @see http://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/index.html
+  # @see https://rubydoc.info/github/ruby-rdf/rdf/master/frames
+  # @see https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/index.html
   #
-  # @author [Gregg Kellogg](http://greggkellogg.net/)
+  # @author [Gregg Kellogg](https://greggkellogg.net/)
   module Turtle
     require  'rdf/turtle/format'
     autoload :Reader,         'rdf/turtle/reader'
