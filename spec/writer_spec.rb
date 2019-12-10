@@ -139,11 +139,11 @@ describe RDF::Turtle::Writer do
       }
     }.each do |name, params|
       it name do
-        serialize(params[:input], params[:regexp], params)
+        serialize(params[:input], params[:regexp], **params)
       end
 
       it "#{name} (stream)" do
-        serialize(params[:input], params.fetch(:regexp_stream, params[:regexp]), params.merge(stream: true))
+        serialize(params[:input], params.fetch(:regexp_stream, params[:regexp]), stream: true, **params)
       end
     end
   end
@@ -293,7 +293,7 @@ describe RDF::Turtle::Writer do
       },
     }.each do |name, params|
       it name do
-        serialize(params[:input], params[:regexp], params)
+        serialize(params[:input], params[:regexp], **params)
       end
     end
   end
@@ -335,7 +335,7 @@ describe RDF::Turtle::Writer do
         },
       }.each do |name, params|
         it name do
-          serialize(params[:input], params[:regexp], params)
+          serialize(params[:input], params[:regexp], **params)
         end
       end
     end
@@ -631,8 +631,8 @@ describe RDF::Turtle::Writer do
     end
   end unless ENV['CI'] # Not for continuous integration
 
-  def parse(input, options = {})
-    RDF::Turtle::Reader.new(input, options, &:each).to_a.extend(RDF::Enumerable)
+  def parse(input, **options)
+    RDF::Turtle::Reader.new(input, **options, &:each).to_a.extend(RDF::Enumerable)
   end
 
   # Serialize ntstr to a string and compare against regexps
@@ -640,12 +640,13 @@ describe RDF::Turtle::Writer do
     prefixes = options[:prefixes] || {}
     g = ntstr.is_a?(RDF::Enumerable) ? ntstr : parse(ntstr, base_uri: base_uri, prefixes: prefixes, validate: false, logger: [])
     logger.info "serialized: #{ntstr}"
-    result = RDF::Turtle::Writer.buffer(options.merge(
+    result = RDF::Turtle::Writer.buffer(
       logger:   logger,
       base_uri: base_uri,
       prefixes: prefixes,
-      encoding: Encoding::UTF_8
-    )) do |writer|
+      encoding: Encoding::UTF_8,
+      **options
+    ) do |writer|
       writer << g
     end
 

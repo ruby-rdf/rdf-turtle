@@ -48,14 +48,14 @@ module RDF::Turtle
     # Redirect for Freebase Reader
     #
     # @private
-    def self.new(input = nil, options = {}, &block)
+    def self.new(input = nil, **options, &block)
       klass = if options[:freebase]
         FreebaseReader
       else
         self
       end
       reader = klass.allocate
-      reader.send(:initialize, input, options, &block)
+      reader.send(:initialize, input, **options, &block)
       reader
     end
 
@@ -82,7 +82,7 @@ module RDF::Turtle
     # @option options [Boolean] :freebase (false)
     #   Use optimized Freebase reader
     # @return [RDF::Turtle::Reader]
-    def initialize(input = nil, options = {}, &block)
+    def initialize(input = nil, **options, &block)
       super do
         @options = {
           anon_base:  "b0",
@@ -98,7 +98,7 @@ module RDF::Turtle
         log_debug("canonicalize") {canonicalize?.inspect}
         log_debug("intern") {intern?.inspect}
 
-        @lexer = EBNF::LL1::Lexer.new(input, self.class.patterns, @options)
+        @lexer = EBNF::LL1::Lexer.new(input, self.class.patterns, **@options)
 
         if block_given?
           case block.arity
@@ -184,14 +184,14 @@ module RDF::Turtle
     end
     
     # Create a literal
-    def literal(value, options = {})
+    def literal(value, **options)
       log_debug("literal") do
         "value: #{value.inspect}, " +
         "options: #{options.inspect}, " +
         "validate: #{validate?.inspect}, " +
         "c14n?: #{canonicalize?.inspect}"
       end
-      RDF::Literal.new(value, options.merge(validate:  validate?, canonicalize:  canonicalize?))
+      RDF::Literal.new(value, validate:  validate?, canonicalize:  canonicalize?, **options)
     rescue ArgumentError => e
       error("Argument Error #{e.message}", production: :literal, token: @lexer.first)
     end
@@ -587,7 +587,7 @@ module RDF::Turtle
       # @option options [Symbol]         :production  (nil)
       # @option options [String]         :token  (nil)
       # @option options [Integer]        :lineno (nil)
-      def initialize(message, options = {})
+      def initialize(message, **options)
         @production = options[:production]
         @token      = options[:token]
         @lineno     = options[:lineno] || (@token.lineno if @token.respond_to?(:lineno))

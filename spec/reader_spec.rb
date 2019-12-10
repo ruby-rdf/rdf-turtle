@@ -1865,7 +1865,7 @@ The second line
     end
   end
 
-  def parse(input, options = {})
+  def parse(input, **options)
     @logger = RDF::Spec.logger
     options = {
       logger: @logger,
@@ -1873,7 +1873,7 @@ The second line
       canonicalize:  false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new
-    RDF::Turtle::Reader.new(input, options).each do |statement|
+    RDF::Turtle::Reader.new(input, **options).each do |statement|
       graph << statement
     end
     graph
