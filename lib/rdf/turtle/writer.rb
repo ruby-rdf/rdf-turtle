@@ -349,7 +349,7 @@ module RDF::Turtle
 
       # Add distinguished classes
       top_classes.each do |class_uri|
-        graph.query(predicate:  RDF.type, object:  class_uri).
+        graph.query({predicate:  RDF.type, object:  class_uri}).
           map {|st| st.subject}.
           sort.
           uniq.
@@ -595,7 +595,7 @@ module RDF::Turtle
     # @return [Integer] the number of properties serialized
     def predicateObjectList(subject, from_bpl = false)
       properties = {}
-      @graph.query(subject:  subject) do |st|
+      @graph.query({subject:  subject}) do |st|
         (properties[st.predicate.to_s] ||= []) << st.object
       end
 
