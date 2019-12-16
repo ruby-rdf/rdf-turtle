@@ -24,10 +24,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency     'ebnf',            '~> 1.2'
   gem.add_development_dependency 'rspec',           '~> 3.9'
   gem.add_development_dependency 'rspec-its',       '~> 1.3'
-  gem.add_development_dependency 'rdf-isomorphic',  '~> 3.0'
-  #gem.add_development_dependency 'json-ld',         '~> 3.0'
+  gem.add_development_dependency 'rdf-isomorphic',  '~> 3.1'
+  gem.add_development_dependency 'json-ld',         '~> 3.1'
   gem.add_development_dependency 'rdf-spec',        '~> 3.1'
-  gem.add_development_dependency 'rdf-vocab',       '~> 3.0'
+  gem.add_development_dependency 'rdf-vocab',       '~> 3.1'
   gem.add_development_dependency 'json-ld',         '>= 3.1'
 
   gem.add_development_dependency 'rake',            '~> 13.0'
