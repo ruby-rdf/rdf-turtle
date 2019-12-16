@@ -28,7 +28,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'json-ld',         '~> 3.1'
   gem.add_development_dependency 'rdf-spec',        '~> 3.1'
   gem.add_development_dependency 'rdf-vocab',       '~> 3.1'
-  gem.add_development_dependency 'json-ld',         '>= 3.1'
 
   gem.add_development_dependency 'rake',            '~> 13.0'
   gem.add_development_dependency 'yard' ,           '~> 0.9.20'
