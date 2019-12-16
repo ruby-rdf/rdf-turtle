@@ -141,7 +141,7 @@ describe RDF::Turtle::FreebaseReader do
     end
   end
 
-  def parse(input, options = {})
+  def parse(input, **options)
     @logger = RDF::Spec.logger
     options = {
       logger: @logger,
@@ -149,7 +149,7 @@ describe RDF::Turtle::FreebaseReader do
       canonicalize:  false,
     }.merge(options)
     graph = options[:graph] || RDF::Graph.new
-    RDF::Turtle::FreebaseReader.new(input, options).each do |statement|
+    RDF::Turtle::FreebaseReader.new(input, **options).each do |statement|
       graph << statement
     end
     graph

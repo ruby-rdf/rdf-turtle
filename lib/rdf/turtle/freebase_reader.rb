@@ -55,7 +55,7 @@ module RDF::Turtle
     ##
     # Read a PNAME of the form `prefix:suffix`.
     # @return [RDF::URI]
-    def read_pname(options = {})
+    def read_pname(**options)
       if pname_str = match(/^(\w+:\S+)/)
         ns, suffix = pname_str.split(':', 2)
         if suffix[-1,1] == "."

@@ -123,7 +123,7 @@ module RDF::Turtle
     # @yieldreturn [void]
     # @yield  [writer]
     # @yieldparam [RDF::Writer] writer
-    def initialize(output = $stdout, options = {}, &block)
+    def initialize(output = $stdout, **options, &block)
       @graph = RDF::Graph.new
       @uri_to_pname = {}
       @uri_to_prefix = {}
@@ -272,7 +272,7 @@ module RDF::Turtle
     # @param  [RDF::Literal, String, #to_s] literal
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
-    def format_literal(literal, options = {})
+    def format_literal(literal, **options)
       case literal
       when RDF::Literal
         case @options[:literal_shorthand] && literal.valid? ? literal.datatype : false
@@ -297,7 +297,7 @@ module RDF::Turtle
     # @param  [RDF::URI] uri
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
-    def format_uri(uri, options = {})
+    def format_uri(uri, **options)
       md = uri.relativize(base_uri)
       log_debug("relativize") {"#{uri.to_ntriples} => #{md.inspect}"} if md != uri.to_s
       md != uri.to_s ? "<#{md}>" : (get_pname(uri) || "<#{uri}>")
@@ -309,7 +309,7 @@ module RDF::Turtle
     # @param  [RDF::Node] node
     # @param  [Hash{Symbol => Object}] options
     # @return [String]
-    def format_node(node, options = {})
+    def format_node(node, **options)
       options[:unique_bnodes] ? node.to_unique_base : node.to_base
     end
 
@@ -349,7 +349,7 @@ module RDF::Turtle
 
       # Add distinguished classes
       top_classes.each do |class_uri|
-        graph.query(predicate:  RDF.type, object:  class_uri).
+        graph.query({predicate:  RDF.type, object:  class_uri}).
           map {|st| st.subject}.
           sort.
           uniq.
@@ -546,7 +546,7 @@ module RDF::Turtle
       l = if resource == RDF.nil
         "()"
       else
-        format_term(resource, options)
+        format_term(resource, **options)
       end
       @output.write(l)
     end
@@ -595,7 +595,7 @@ module RDF::Turtle
     # @return [Integer] the number of properties serialized
     def predicateObjectList(subject, from_bpl = false)
       properties = {}
-      @graph.query(subject:  subject) do |st|
+      @graph.query({subject:  subject}) do |st|
         (properties[st.predicate.to_s] ||= []) << st.object
       end
 
