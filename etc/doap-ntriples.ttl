@@ -1,31 +1,28 @@
+@base         <https://rubygems.org/gems/rdf> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc:   <http://purl.org/dc/terms/> .
-@prefix earl: <http://www.w3.org/ns/earl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix doap: <http://usefulinc.com/ns/doap#> .
-@prefix ex:   <http://example.org/> .
-@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-<https://rubygems.org/gems/rdf> a doap:Project ;
+<> a doap:Project ;
   doap:name          "RDF.rb" ;
   doap:homepage      <https://rubygems.org/gems/rdf> ;
   doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "A Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:description   "RDF.rb is a pure-Ruby library for working with Resource Description Framework (RDF) data."@en ;
   doap:created       "2007-10-23" ;
-  doap:platform      "Ruby" ;
+  doap:programming-language "Ruby" ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
-  doap:implements    <https://www.w3.org/TR/rdf11-concepts/>,
-                     <https://www.w3.org/TR/n-quads/>,
-                     <https://www.w3.org/TR/n-triples/> ;
+  doap:implements    <http://www.w3.org/TR/rdf11-concepts/>,
+                     <http://www.w3.org/TR/n-quads/>,
+                     <http://www.w3.org/TR/n-triples/> ;
   doap:download-page <https://rubygems.org/gems/rdf/> ;
   doap:bug-database  <https://github.com/ruby-rdf/rdf/issues> ;
   doap:blog          <https://ar.to/>, <http://blog.datagraph.org/> ;
-  doap:vendor        <http://datagraph.org/> ;
   doap:developer     <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
-  doap:maintainer    <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
+  doap:maintainer    <https://greggkellogg.net/foaf#me> ;
   doap:documenter    <https://ar.to/#self>, <https://bhuga.net/#ben>, <https://greggkellogg.net/foaf#me> ;
   doap:helper        [a foaf:Person ;
                       foaf:name "Călin Ardelean" ;
@@ -63,15 +60,13 @@
   foaf:mbox_sha1sum  "a033f652c84a4d73b8c26d318c2395699dd2bdfb",
                      "d0737cceb55eb7d740578d2db1bc0727e3ed49ce" ;
   foaf:homepage      <https://ar.to/> ;
-  foaf:made          <> ;
-  rdfs:isDefinedBy   <http://datagraph.org/bendiken/foaf> .
+  foaf:made          <>  .
 
 <https://bhuga.net/#ben> a foaf:Person ;
   foaf:name          "Ben Lavender" ;
   foaf:mbox          <mailto:blavender@gmail.com> ;
   foaf:mbox_sha1sum  "dbf45f4ffbd27b67aa84f02a6a31c144727d10af" ;
-  foaf:homepage      <https://bhuga.net/> ;
-  rdfs:isDefinedBy   <http://datagraph.org/bhuga/foaf> .
+  foaf:homepage      <https://bhuga.net/> .
 
 <https://greggkellogg.net/foaf#me> a foaf:Person ;
   foaf:name          "Gregg Kellogg" ;

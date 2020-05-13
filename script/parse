@@ -8,7 +8,7 @@ require 'rdf/turtle'
 begin
   require 'linkeddata'
 rescue LoadError
-  %w(rdf-rdfa rdf-rdfxml).each do |gem|
+  %w(rdf/rdfa rdf/rdfxml rdf/vocab rdf/xsd).each do |gem|
     begin
       require gem
     rescue LoadError => e

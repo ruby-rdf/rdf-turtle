@@ -1,3 +1,4 @@
+@base         <https://rubygems.org/gems/rdf-turtle> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc:   <http://purl.org/dc/terms/> .
@@ -7,10 +8,10 @@
 @prefix ex:   <http://example.org/> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-<https://rubygems.org/gems/rdf-turtle> a doap:Project, earl:TestSubject, earl:Software ;
+<> a doap:Project, earl:TestSubject, earl:Software ;
   doap:name          "RDF::Turtle" ;
   doap:homepage      <https://ruby-rdf.github.com/rdf-turtle> ;
-  doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
+  doap:license       <https://creativecommons.org/licenses/publicdomain/> ;
   doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
   doap:description   "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
   doap:created       "2011-08-29"^^xsd:date ;
@@ -18,7 +19,7 @@
   doap:implements    <https://www.w3.org/TR/turtle/> ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
-  doap:download-page <https://rubygems.org/gems/rdf-turtle> ;
+  doap:download-page <> ;
   doap:mailing-list  <https://lists.w3.org/Archives/Public/public-rdf-ruby/> ;
   doap:bug-database  <https://github.com/ruby-rdf/rdf-turtle/issues> ;
   doap:blog          <https://greggkellogg.net/> ;
