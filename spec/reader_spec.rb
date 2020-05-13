@@ -7,6 +7,7 @@ describe RDF::Turtle::Reader do
   let!(:doap) {File.expand_path("../../etc/doap.ttl", __FILE__)}
   let!(:doap_nt) {File.expand_path("../../etc/doap.nt", __FILE__)}
   let!(:doap_count) {File.open(doap_nt).each_line.to_a.length}
+  after(:each) {|example| puts @logger.to_s if example.exception}
 
   it_behaves_like 'an RDF::Reader' do
     let(:reader) {RDF::Turtle::Reader.new}
@@ -816,7 +817,82 @@ describe RDF::Turtle::Reader do
         )
         expect(parse(ttl, validate: false, prefixes:  {nil => ''})).to be_equivalent_graph(nt, logger: @logger)
       end
-      
+    end
+  end
+
+  context "RDF*" do
+    {
+      "subject-iii" => [
+        %(
+          @prefix ex: <http://example/> .
+          <<ex:s1 ex:p1 ex:o1>> ex:p ex:o .
+        ),
+        %(
+          <<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
+          <http://example/s1> <http://example/p1> <http://example/o1> .
+        )
+      ],
+      "subject-iib": [
+        %(
+          @prefix ex: <http://example/> .
+          <<ex:s1 ex:p1 _:o1>> ex:p ex:o .
+        ),
+        '<<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .'
+      ],
+      "subject-iil": [
+        %(
+          @prefix ex: <http://example/> .
+          <<ex:s1 ex:p1 "o1">> ex:p ex:o .
+        ),
+        '<<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .'
+      ],
+      "subject-bii": [
+        %(
+          @prefix ex: <http://example/> .
+          <<_:s1 ex:p1 ex:o1>> ex:p ex:o .
+        ),
+        '<<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .'
+      ],
+      "subject-bib": [
+        %(
+          @prefix ex: <http://example/> .
+          <<_:s1 ex:p1 _:o1>> ex:p ex:o .
+        ),
+        '<<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .'
+      ],
+      "subject-bil": [
+        %(
+          @prefix ex: <http://example/> .
+          <<_:s1 ex:p1 "o1">> ex:p ex:o .
+        ),
+        '<<_:s1 <http://example/p1> "o1">> <http://example/p> <http://example/o> .'
+      ],
+      "object-iii":  [
+        %(
+          @prefix ex: <http://example/> .
+          ex:s ex:p <<ex:s1 ex:p1 ex:o1>> .
+        ),
+        '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .'
+      ],
+      "object-iib":  [
+        %(
+          @prefix ex: <http://example/> .
+          ex:s ex:p <<ex:s1 ex:p1 _:o1>> .
+        ),
+        '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .'
+      ],
+      "object-iil":  [
+        %(
+          @prefix ex: <http://example/> .
+          ex:s ex:p <<ex:s1 ex:p1 "o1">> .
+        ),
+        '<http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .'
+      ],
+    }.each do |name, (ttl, nt)|
+      it name do
+        expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: :PG)}
+        expect(parse(ttl, rdfstar: :PG, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+      end
     end
   end
 
