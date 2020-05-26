@@ -40,7 +40,7 @@ Write a graph to a file:
 
 Both reader and writer include provisional support for [Turtle*][RDF*].
 
-Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`. (Currently no prohibition for recursive statements any deeper, but no prohibition, either).
+Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
 ### Serializing a Graph containing embedded statements
 
@@ -176,7 +176,7 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [Backports]:    https://rubygems.org/gems/backports
 [N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
-[RDF*][]:       https://lists.w3.org/Archives/Public/public-rdf-star/
+[RDF*]:         https://lists.w3.org/Archives/Public/public-rdf-star/
 [Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data
