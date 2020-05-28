@@ -42,6 +42,8 @@ Both reader and writer include provisional support for [Turtle*][RDF*].
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
+**Note: This feature is subject to change or elimination as the standards process progresses.**
+
 ### Serializing a Graph containing embedded statements
 
     require 'rdf/turtle'
@@ -52,10 +54,10 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
 
 ### Reading a Graph containing embedded statements
 
-By default, the N-Triples reader will reject a document containing a subject resource.
+By default, the Turtle reader will reject a document containing a subject resource.
 
     ttl = %(
-      @prefix foaf: <> .
+      @prefix foaf: <http://xmlns.com/foaf/0.1/> .
       @prefix ex: <http://example.com/> .
       <<<bob> foaf:age 23>> ex:certainty 9.0e-1 .
     )
