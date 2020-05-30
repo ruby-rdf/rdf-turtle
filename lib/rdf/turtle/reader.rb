@@ -25,7 +25,7 @@ module RDF::Turtle
     terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE,      unescape:  true)
     
     # String terminals
-    terminal(nil,                               %r([\(\),.;\[\]Aa]|\^\^|true|false))
+    terminal(nil,                               %r([\(\),.;\[\]Aa]|\^\^|true|false|<<|>>))
 
     terminal(:PREFIX,                           PREFIX)
     terminal(:BASE,                             BASE)
@@ -87,7 +87,7 @@ module RDF::Turtle
         @options = {
           anon_base:  "b0",
           whitespace:  WS,
-          log_depth: 0,
+          depth: 0,
         }.merge(@options)
         @prod_stack = []
 
@@ -185,7 +185,7 @@ module RDF::Turtle
     
     # Create a literal
     def literal(value, **options)
-      log_debug("literal") do
+      log_debug("literal", depth: @options[:depth]) do
         "value: #{value.inspect}, " +
         "options: #{options.inspect}, " +
         "validate: #{validate?.inspect}, " +
@@ -221,7 +221,7 @@ module RDF::Turtle
         ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      log_debug("pname") {"base: '#{base}', suffix: '#{suffix}'"}
+      log_debug("pname", depth: options[:depth]) {"base: '#{base}', suffix: '#{suffix}'"}
       process_iri(base + suffix.to_s)
     end
     
@@ -283,7 +283,7 @@ module RDF::Turtle
             terminated = token.value == '@prefix'
             error("Expected PNAME_NS", production: :prefix, token: pfx) unless pfx === :PNAME_NS
             error("Expected IRIREF", production: :prefix, token: iri) unless iri === :IRIREF
-            log_debug("prefixID") {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
+            log_debug("prefixID", depth: options[:depth]) {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
             prefix(pfx.value[0..-2], process_iri(iri))
             error("prefixId", "#{token} should be downcased") if token.value.start_with?('@') && token.value != '@prefix'
 
@@ -362,6 +362,7 @@ module RDF::Turtle
         read_iri ||
         read_BlankNode ||
         read_collection ||
+        read_rdfstar ||
         error( "Expected subject", production: :subject, token: @lexer.first)
       end
     end
@@ -373,10 +374,33 @@ module RDF::Turtle
           read_BlankNode ||
           read_collection ||
           read_blankNodePropertyList ||
-          read_literal
+          read_literal ||
+          read_rdfstar
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
           object
+        end
+      end
+    end
+
+    # Read an RDF* reified statement
+    # @return [RDF::Statement]
+    def read_rdfstar
+      return unless @options[:rdfstar]
+      if @lexer.first.value == '<<'
+        prod(:rdfstar) do
+          @lexer.shift # eat <<
+          subject = read_subject || error("Failed to parse subject", production: :rdfstar, token: @lexer.first)
+          predicate = read_verb || error("Failed to parse predicate", production: :rdfstar, token: @lexer.first)
+          object = read_object || error("Failed to parse object", production: :rdfstar, token: @lexer.first)
+          unless @lexer.first.value == '>>'
+            error("Failed to end of embedded triple", production: :rdfstar, token: @lexer.first)
+          end
+          @lexer.shift
+          statement = RDF::Statement(subject, predicate, object)
+          # Emit the statement if in Property Graph mode
+          add_statement(:rdfstar, statement) if @options[:rdfstar] == :PG
+          statement
         end
       end
     end
@@ -431,7 +455,7 @@ module RDF::Turtle
       if token === '['
         prod(:blankNodePropertyList, %{]}) do
           @lexer.shift
-          log_info("blankNodePropertyList") {"token: #{token.inspect}"}
+          log_info("blankNodePropertyList", depth: options[:depth]) {"token: #{token.inspect}"}
           node = bnode
           read_predicateObjectList(node)
           error("blankNodePropertyList", "Expected closing ']'") unless @lexer.first === ']'
@@ -447,7 +471,7 @@ module RDF::Turtle
         prod(:collection, %{)}) do
           @lexer.shift
           token = @lexer.first
-          log_info("collection") {"token: #{token.inspect}"}
+          log_info("collection", depth: options[:depth]) {"token: #{token.inspect}"}
           objects = []
           while object = read_object
             objects << object
@@ -483,8 +507,8 @@ module RDF::Turtle
 
     def prod(production, recover_to = [])
       @prod_stack << {prod: production, recover_to: recover_to}
-      @options[:log_depth] += 1
-      log_recover("#{production}(start)") {"token: #{@lexer.first.inspect}"}
+      @options[:depth] += 1
+      log_recover("#{production}(start)", depth: options[:depth]) {"token: #{@lexer.first.inspect}"}
       yield
     rescue EBNF::LL1::Lexer::Error, SyntaxError, Recovery =>  e
       # Lexer encountered an illegal token or the parser encountered
@@ -504,13 +528,13 @@ module RDF::Turtle
         end
       end
       raise EOFError, "End of input found when recovering" if @lexer.first.nil?
-      log_debug("recovery", "current token: #{@lexer.first.inspect}")
+      log_debug("recovery", "current token: #{@lexer.first.inspect}", depth: options[:depth])
 
       unless e.is_a?(Recovery)
         # Get the list of follows for this sequence, this production and the stacked productions.
-        log_debug("recovery", "stack follows:")
+        log_debug("recovery", "stack follows:", depth: options[:depth])
         @prod_stack.reverse.each do |prod|
-          log_debug("recovery", level: 4) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
+          log_debug("recovery", level: 4, depth: options[:depth]) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
         end
       end
 
@@ -520,9 +544,9 @@ module RDF::Turtle
       # Skip tokens until one is found in follows
       while (token = (@lexer.first rescue @lexer.recover)) && follows.none? {|t| token === t}
         skipped = @lexer.shift
-        log_debug("recovery") {"skip #{skipped.inspect}"}
+        log_debug("recovery", depth: options[:depth]) {"skip #{skipped.inspect}"}
       end
-      log_debug("recovery") {"found #{token.inspect} in follows"}
+      log_debug("recovery", depth: options[:depth]) {"found #{token.inspect} in follows"}
 
       # Re-raise the error unless token is a follows of this production
       raise Recovery unless Array(recover_to).any? {|t| token === t}
@@ -530,8 +554,8 @@ module RDF::Turtle
       # Skip that token to get something reasonable to start the next production with
       @lexer.shift
     ensure
-      log_info("#{production}(finish)")
-      @options[:log_depth] -= 1
+      log_info("#{production}(finish)", depth: options[:depth])
+      @options[:depth] -= 1
       @prod_stack.pop
     end
 
@@ -554,7 +578,8 @@ module RDF::Turtle
         lineno:     lineno,
         token:      options[:token],
         production: options[:production],
-        exception:  SyntaxError)
+        depth:      options[:depth],
+        exception:  SyntaxError,)
     end
 
     # Used for internal error recovery

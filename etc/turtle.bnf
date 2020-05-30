@@ -7,12 +7,13 @@
 [7] predicateObjectList               ::= verb objectList ( ";" ( verb objectList)? )*
 [8] objectList                        ::= object ( "," object )* 
 [9] verb                              ::= predicate | "a"
-[10] subject                          ::= iri | BlankNode | collection
+[10] subject                          ::= iri | BlankNode | collection | embTriple
 [11] predicate                        ::= iri 
-[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList| literal 
+[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList| literal | embTriple
 [13] literal                          ::= RDFLiteral | NumericLiteral | BooleanLiteral 
 [14] blankNodePropertyList            ::= "[" predicateObjectList "]" 
 [15] collection                       ::= "(" object* ")" 
+[xx] embTriple                        ::= "<<" subject predicate object ">>"
 [16] NumericLiteral                   ::= INTEGER | DECIMAL | DOUBLE 
 [128s] RDFLiteral                     ::= String ( LANGTAG | ( "^^" iri ) )? 
 [133s] BooleanLiteral                 ::= "true" | "false" 

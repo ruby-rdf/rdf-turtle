@@ -1,3 +1,4 @@
+@base         <https://rubygems.org/gems/rdf-turtle> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc:   <http://purl.org/dc/terms/> .
@@ -7,10 +8,10 @@
 @prefix ex:   <http://example.org/> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-<https://rubygems.org/gems/rdf-turtle> a doap:Project, earl:TestSubject, earl:Software ;
+<> a doap:Project, earl:TestSubject, earl:Software ;
   doap:name          "RDF::Turtle" ;
   doap:homepage      <https://ruby-rdf.github.com/rdf-turtle> ;
-  doap:license       <http://creativecommons.org/licenses/publicdomain/> ;
+  doap:license       <https://unlicense.org/1.0/> ;
   doap:shortdesc     "Turtle reader/writer for Ruby."@en ;
   doap:description   "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en ;
   doap:created       "2011-08-29"^^xsd:date ;
@@ -18,7 +19,7 @@
   doap:implements    <https://www.w3.org/TR/turtle/> ;
   doap:category      <http://dbpedia.org/resource/Resource_Description_Framework>,
                      <http://dbpedia.org/resource/Ruby_(programming_language)> ;
-  doap:download-page <https://rubygems.org/gems/rdf-turtle> ;
+  doap:download-page <> ;
   doap:mailing-list  <https://lists.w3.org/Archives/Public/public-rdf-ruby/> ;
   doap:bug-database  <https://github.com/ruby-rdf/rdf-turtle/issues> ;
   doap:blog          <https://greggkellogg.net/> ;
@@ -33,7 +34,7 @@
   dc:isPartOf        <https://rubygems.org/gems/rdf> .
 
 <> foaf:primaryTopic <https://rubygems.org/gems/rdf-turtle> ;
-  dc:issued "2015-09-27T13:31:47-07:00"^^xsd:dateTime ;
+  dc:issued "2020-05-20T17:02:36-07:00"^^xsd:dateTime ;
   foaf:maker <https://greggkellogg.net/foaf#me> .
 
 <https://greggkellogg.net/foaf#me> a foaf:Person, earl:Assertor;
@@ -42,2919 +43,2989 @@
   foaf:homepage <https://greggkellogg.net/> .
 
 <https://rubygems.org/gems/rdf-turtle>
-  doap:release <https://github.com/ruby-rdf/rdf-turtle/tree/1.1.8> .
+  doap:release <https://github.com/ruby-rdf/rdf-turtle/tree/3.1.0> .
 
-<https://github.com/ruby-rdf/rdf-turtle/tree/1.1.8> a doap:Version;
-  doap:name "rdf-turtle-1.1.8";
-  doap:created "2015-09-27"^^xsd:date;
-  doap:revision "1.1.8" .
+<https://github.com/ruby-rdf/rdf-turtle/tree/3.1.0> a doap:Version;
+  doap:name "rdf-turtle-3.1.0";
+  doap:created "2019-12-16"^^xsd:date;
+  doap:revision "3.1.0" .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#IRI_subject>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI_subject>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#IRI_with_four_digit_numeric_escape>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI_with_four_digit_numeric_escape>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#IRI_with_eight_digit_numeric_escape>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI_with_eight_digit_numeric_escape>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#IRI_with_all_punctuation>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI_with_all_punctuation>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#bareword_a_predicate>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#bareword_a_predicate>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#old_style_prefix>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#old_style_prefix>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#SPARQL_style_prefix>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#SPARQL_style_prefix>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefixed_IRI_predicate>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefixed_IRI_predicate>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefixed_IRI_object>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefixed_IRI_object>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefix_only_IRI>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefix_only_IRI>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefix_with_PN_CHARS_BASE_character_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefix_with_PN_CHARS_BASE_character_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefix_with_non_leading_extras>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefix_with_non_leading_extras>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#default_namespace_IRI>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#default_namespace_IRI>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefix_reassigned_and_used>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefix_reassigned_and_used>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#reserved_escaped_localName>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#reserved_escaped_localName>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#percent_escaped_localName>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#percent_escaped_localName>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#HYPHEN_MINUS_in_localName>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#HYPHEN_MINUS_in_localName>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#underscore_in_localName>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#underscore_in_localName>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localname_with_COLON>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localname_with_COLON>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localName_with_assigned_nfc_bmp_PN_CHARS_BASE_character_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localName_with_assigned_nfc_bmp_PN_CHARS_BASE_character_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localName_with_assigned_nfc_PN_CHARS_BASE_character_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localName_with_assigned_nfc_PN_CHARS_BASE_character_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localName_with_nfc_PN_CHARS_BASE_character_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localName_with_nfc_PN_CHARS_BASE_character_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localName_with_leading_underscore>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localName_with_leading_underscore>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localName_with_leading_digit>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localName_with_leading_digit>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#localName_with_non_leading_extras>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#localName_with_non_leading_extras>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#old_style_base>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#old_style_base>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#SPARQL_style_base>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#SPARQL_style_base>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#labeled_blank_node_subject>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#labeled_blank_node_subject>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#labeled_blank_node_object>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#labeled_blank_node_object>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#labeled_blank_node_with_PN_CHARS_BASE_character_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#labeled_blank_node_with_PN_CHARS_BASE_character_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#labeled_blank_node_with_leading_underscore>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#labeled_blank_node_with_leading_underscore>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#labeled_blank_node_with_leading_digit>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#labeled_blank_node_with_leading_digit>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#labeled_blank_node_with_non_leading_extras>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#labeled_blank_node_with_non_leading_extras>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#anonymous_blank_node_subject>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#anonymous_blank_node_subject>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#anonymous_blank_node_object>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#anonymous_blank_node_object>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#sole_blankNodePropertyList>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#sole_blankNodePropertyList>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#blankNodePropertyList_as_subject>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#blankNodePropertyList_as_subject>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#blankNodePropertyList_as_object>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#blankNodePropertyList_as_object>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#blankNodePropertyList_with_multiple_triples>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#blankNodePropertyList_as_object_containing_objectList>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#nested_blankNodePropertyLists>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#blankNodePropertyList_as_object_containing_objectList_of_two_objects>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#blankNodePropertyList_containing_collection>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#blankNodePropertyList_with_multiple_triples>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#collection_subject>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#nested_blankNodePropertyLists>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#collection_object>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#blankNodePropertyList_containing_collection>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#empty_collection>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#collection_subject>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#nested_collection>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#collection_object>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#first>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#empty_collection>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#last>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#nested_collection>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL1>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#first>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL1_ascii_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#last>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL1_with_UTF8_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL1>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL1_all_controls>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL1_ascii_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL1_all_punctuation>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL1_with_UTF8_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG1>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL1_all_controls>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG1_ascii_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL1_all_punctuation>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG1_with_UTF8_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG1>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG1_with_1_squote>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG1_ascii_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG1_with_2_squotes>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG1_with_UTF8_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL2>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG1_with_1_squote>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL2_ascii_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG1_with_2_squotes>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL2_with_UTF8_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL2>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG2>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL2_ascii_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG2_ascii_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL2_with_UTF8_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG2_with_UTF8_boundaries>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG2>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG2_with_1_squote>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG2_ascii_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG2_with_2_squotes>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG2_with_UTF8_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_CHARACTER_TABULATION>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG2_with_1_squote>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_BACKSPACE>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG2_with_2_squotes>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_LINE_FEED>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_CHARACTER_TABULATION>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_CARRIAGE_RETURN>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_BACKSPACE>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_FORM_FEED>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_LINE_FEED>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_REVERSE_SOLIDUS>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_CARRIAGE_RETURN>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_escaped_CHARACTER_TABULATION>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_FORM_FEED>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_escaped_BACKSPACE>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_REVERSE_SOLIDUS>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_escaped_LINE_FEED>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_escaped_CHARACTER_TABULATION>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_escaped_CARRIAGE_RETURN>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_escaped_BACKSPACE>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_escaped_FORM_FEED>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_escaped_LINE_FEED>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_numeric_escape4>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_escaped_CARRIAGE_RETURN>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_with_numeric_escape8>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_escaped_FORM_FEED>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#IRIREF_datatype>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_numeric_escape4>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#prefixed_name_datatype>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_with_numeric_escape8>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#bareword_integer>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRIREF_datatype>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#bareword_decimal>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#prefixed_name_datatype>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#bareword_double>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#bareword_integer>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#double_lower_case_e>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#bareword_decimal>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#negative_numeric>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#bareword_double>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#positive_numeric>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#double_lower_case_e>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#numeric_with_leading_0>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#negative_numeric>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_true>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#positive_numeric>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#literal_false>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#numeric_with_leading_0>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#langtagged_non_LONG>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_true>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#langtagged_LONG>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#literal_false>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#lantag_with_subtag>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#langtagged_non_LONG>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#objectList_with_two_objects>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#langtagged_LONG>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#predicateObjectList_with_two_objectLists>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#lantag_with_subtag>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#repeated_semis_at_end>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#objectList_with_two_objects>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#repeated_semis_not_at_end>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#predicateObjectList_with_two_objectLists>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#comment_following_localName>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#predicateObjectList_with_blankNodePropertyList_as_object>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#number_sign_following_localName>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#repeated_semis_at_end>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#comment_following_PNAME_NS>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#repeated_semis_not_at_end>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#number_sign_following_PNAME_NS>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#comment_following_localName>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#LITERAL_LONG2_with_REVERSE_SOLIDUS>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#number_sign_following_localName>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-LITERAL2_with_langtag_and_datatype>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#comment_following_PNAME_NS>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#two_LITERAL_LONG2s>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#number_sign_following_PNAME_NS>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#langtagged_LONG_with_subtag>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#LITERAL_LONG2_with_REVERSE_SOLIDUS>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-file-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-LITERAL2_with_langtag_and_datatype>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-file-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#two_LITERAL_LONG2s>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-file-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#langtagged_LONG_with_subtag>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-uri-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-file-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-uri-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-file-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-uri-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-file-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-uri-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-uri-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-base-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-uri-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-base-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-uri-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-base-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-uri-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-base-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-base-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-base-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-base-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-base-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-prefix-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-prefix-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-10>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-string-11>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-str-esc-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-str-esc-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-str-esc-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-string-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-pname-esc-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-str-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-pname-esc-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-str-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-pname-esc-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-str-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-pname-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-pname-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-pname-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bnode-10>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bnode-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-10>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-number-11>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-datatypes-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-datatypes-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-kw-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-number-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-kw-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-datatypes-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-kw-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-datatypes-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-struct-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-kw-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-struct-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-kw-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-struct-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-kw-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-struct-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-struct-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-struct-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-struct-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-lists-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-struct-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-lists-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-struct-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-lists-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-struct-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-lists-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-lists-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-lists-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-lists-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-uri-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-lists-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-uri-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-lists-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-uri-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-lists-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-uri-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-uri-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-uri-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-uri-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-prefix-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-uri-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-prefix-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-uri-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-prefix-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-uri-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-prefix-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-prefix-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-prefix-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-prefix-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-base-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-prefix-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-base-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-prefix-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-base-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-prefix-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-base-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-base-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-base-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-kw-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-kw-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-kw-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-kw-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-kw-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-kw-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-kw-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-kw-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-kw-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-kw-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-10>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-11>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-12>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-n3-extras-13>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-12>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-10>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-n3-extras-13>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-11>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-12>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-13>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-14>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-15>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-12>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-16>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-13>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-struct-17>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-14>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-lang-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-15>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-esc-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-16>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-esc-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-struct-17>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-esc-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-lang-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-esc-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-pname-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-pname-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-pname-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-esc-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-pname-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-pname-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-pname-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-string-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-num-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-num-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-num-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-string-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-num-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-num-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-num-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-num-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-eval-struct-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-num-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-eval-struct-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-num-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-num-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-struct-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-struct-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-05>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-06>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-07>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-08>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-09>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-10>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-11>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-12>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-13>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-10>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-14>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-11>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-15>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-12>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-16>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-13>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-17>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-14>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-18>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-15>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-19>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-16>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-20>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-17>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-21>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-18>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-22>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-19>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-23>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-20>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-24>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-21>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-25>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-22>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-26>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-23>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-subm-27>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-24>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-eval-bad-01>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-25>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-eval-bad-02>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-26>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-eval-bad-03>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-subm-27>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-eval-bad-04>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-bad-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-blank-label-dot-end>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-bad-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-ln-dash-start>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-bad-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-ln-escape-start>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-eval-bad-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-ln-escape>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-blank-label-dot-end>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-missing-ns-dot-end>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-ln-dash-start>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-missing-ns-dot-start>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-ln-escape-start>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-ns-dot-end>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-ln-escape>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-ns-dot-start>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-missing-ns-dot-end>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-bad-number-dot-in-anon>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-missing-ns-dot-start>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-blank-label>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-ns-dot-end>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-ln-colons>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-ns-dot-start>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-ln-dots>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-bad-number-dot-in-anon>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf-turtle>;
-  earl:test <http://www.w3.org/2013/TurtleTests/manifest.ttl#turtle-syntax-ns-dots>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-blank-label>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2015-09-27T13:31:47-07:00"^^xsd:dateTime];
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-ln-colons>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-ln-dots>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#turtle-syntax-ns-dots>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI-resolution-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI-resolution-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI-resolution-07>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf-turtle>;
+  earl:test <http://w3c.github.io/rdf-tests/turtle/manifest.ttl#IRI-resolution-08>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2020-05-20T17:02:36-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .

@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.date                  = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name                  = "rdf-turtle"
-  gem.homepage              = "https://ruby-rdf.github.com/rdf-turtle"
+  gem.homepage              = "https://github.com/ruby-rdf/rdf-turtle"
   gem.license               = 'Unlicense'
   gem.summary               = "Turtle reader/writer for Ruby."
   gem.description           = %q{RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite.}
@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.4'
   gem.requirements          = []
-  gem.add_runtime_dependency     'rdf',             '~> 3.1'
+  gem.add_runtime_dependency     'rdf',             '~> 3.1', '>= 3.1.2'
   gem.add_runtime_dependency     'ebnf',            '~> 1.2'
   gem.add_development_dependency 'rspec',           '~> 3.9'
   gem.add_development_dependency 'rspec-its',       '~> 1.3'

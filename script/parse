@@ -8,7 +8,7 @@ require 'rdf/turtle'
 begin
   require 'linkeddata'
 rescue LoadError
-  %w(rdf-rdfa rdf-rdfxml).each do |gem|
+  %w(rdf/rdfa rdf/rdfxml rdf/vocab rdf/xsd).each do |gem|
     begin
       require gem
     rescue LoadError => e
@@ -95,7 +95,7 @@ options = {
 input = nil
 
 opts = GetoptLong.new(
-  ["--dbg", GetoptLong::NO_ARGUMENT],
+  ["--debug", GetoptLong::NO_ARGUMENT],
   ["--base", GetoptLong::REQUIRED_ARGUMENT],
   ["--benchmark", GetoptLong::NO_ARGUMENT],
   ["--errors", GetoptLong::NO_ARGUMENT],
@@ -108,13 +108,14 @@ opts = GetoptLong.new(
   ["--profile", GetoptLong::NO_ARGUMENT],
   ["--progress", GetoptLong::NO_ARGUMENT],
   ["--quiet", GetoptLong::NO_ARGUMENT],
+  ["--rdfstar", GetoptLong::OPTIONAL_ARGUMENT],
   ["--stream", GetoptLong::NO_ARGUMENT],
   ["--validate", GetoptLong::NO_ARGUMENT],
   ["--verbose", GetoptLong::NO_ARGUMENT]
 )
 opts.each do |opt, arg|
   case opt
-  when '--dbg'          then logger.level = Logger::DEBUG
+  when '--debug'        then logger.level = Logger::DEBUG
   when '--base'         then parser_options[:base_uri] = writer_options[:base_uri] = arg
   when '--benchmark'    then options[:benchmark] = true
   when '--canonicalize' then parser_options[:canonicalize] = true
@@ -126,6 +127,7 @@ opts.each do |opt, arg|
   when '--output'       then options[:output] = File.open(arg, "w")
   when '--profile'      then options[:profile] = true
   when '--progress'     then logger.level = Logger::INFO
+  when '--rdfstar'      then parser_options[:rdfstar] = (arg || :PG).to_sym
   when '--quiet'
     options[:quiet] = options[:quiet].to_i + 1
     logger.level = Logger::FATAL

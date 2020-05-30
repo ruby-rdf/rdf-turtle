@@ -313,6 +313,17 @@ module RDF::Turtle
       options[:unique_bnodes] ? node.to_unique_base : node.to_base
     end
 
+    ##
+    # Returns an embedded triples
+    #
+    # @param [RDF::Statement] statement
+    # @param [Hash{Symbol => Object}] options
+    # @return [String]
+    def format_rdfstar(statement, **options)
+      log_debug("rdfstar") {"#{statement.to_ntriples}"}
+      "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
+    end
+
     protected
     # Output @base and @prefix definitions
     def start_document
@@ -457,7 +468,7 @@ module RDF::Turtle
 
     # Can subject be represented as a blankNodePropertyList?
     def blankNodePropertyList?(resource, position)
-      resource.node? &&
+      !resource.statement? && resource.node? &&
         !is_valid_list?(resource) &&
         (!is_done?(resource) || position == :subject) &&
         ref_count(resource) == (position == :object ? 1 : 0)

@@ -19,6 +19,7 @@ Install with `gem install rdf-turtle`
 * Implements a complete parser for [Turtle][].
 * Compatible with Ruby >= 2.2.2.
 * Optional streaming writer, to serialize large graphs
+* Provisional support for [Turtle*][RDF*].
 
 ## Usage
 Instantiate a reader from a local file:
@@ -34,6 +35,50 @@ Write a graph to a file:
     RDF::Turtle::Writer.open("etc/test.ttl") do |writer|
        writer << graph
     end
+
+## Turtle* (RDFStar)
+
+Both reader and writer include provisional support for [Turtle*][RDF*].
+
+Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
+
+**Note: This feature is subject to change or elimination as the standards process progresses.**
+
+### Serializing a Graph containing embedded statements
+
+    require 'rdf/turtle'
+    statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
+    graph = RDF::Graph.new << [statement, RDF::URI("ex:certainty"), RDF::Literal(0.9)]
+    graph.dump(:ttl, validate: false, standard_prefixes: true)
+    # => '<<<bob> foaf:age 23>> <ex:certainty> 9.0e-1 .'
+
+### Reading a Graph containing embedded statements
+
+By default, the Turtle reader will reject a document containing a subject resource.
+
+    ttl = %(
+      @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+      @prefix ex: <http://example.com/> .
+      <<<bob> foaf:age 23>> ex:certainty 9.0e-1 .
+    )
+    graph = RDF::Graph.new do |graph|
+      RDF::Turtle::Reader.new(ttl) {|reader| graph << reader}
+    end
+    # => RDF::ReaderError
+
+Readers support a `rdfstar` option with either `:PG` (Property Graph) or `:SA` (Separate Assertions) modes. In `:PG` mode, statements that are used in the subject or object positions are also implicitly added to the graph:
+
+    graph = RDF::Graph.new do |graph|
+      RDF::Turtle::Reader.new(ttl, rdfstar: :PG) {|reader| graph << reader}
+    end
+    graph.count #=> 2
+
+When using the `:SA` mode, only one statement is asserted, although the reified statement is contained within the graph.
+
+    graph = RDF::Graph.new do |graph|
+      RDF::Turtle::Reader.new(ttl, rdfstar: :SA) {|reader| graph << reader}
+    end
+    graph.count #=> 1
 
 ## Documentation
 Full documentation available on [Rubydoc.info][Turtle doc]
@@ -133,6 +178,7 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [Backports]:    https://rubygems.org/gems/backports
 [N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
+[RDF*]:         https://lists.w3.org/Archives/Public/public-rdf-star/
 [Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data
