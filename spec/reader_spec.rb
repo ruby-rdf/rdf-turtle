@@ -159,6 +159,7 @@ describe RDF::Turtle::Reader do
       # "\"D\xC3\xBCrst\""[1..-2] => "D\xC3\xBCrst\""
       {
         'Dürst' => '<a> <b> "Dürst" .',
+        'Dürster' => '<a> <b> <Dürster> .',
         "é" => '<a> <b>  "é" .',
         "€" => '<a> <b>  "€" .',
         "resumé" => ':a :resume  "resumé" .',
@@ -942,8 +943,9 @@ describe RDF::Turtle::Reader do
       %(123.E+1)            => %("1.23E3"^^<http://www.w3.org/2001/XMLSchema#double>),
       %(true)               => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
       %("lang"@EN)          => %("lang"@en),
-      %("""lang"""@EN)          => %("lang"@en),
+      %("""lang"""@EN)      => %("lang"@en),
       %("""+1"""^^xsd:integer)  => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
+      %(<http://example/Dürst>) => %(<http://example/Dürst>)
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
         ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://example/a> <http://example/b> #{input} .)
