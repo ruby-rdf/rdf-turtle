@@ -92,11 +92,11 @@ module RDF::Turtle
         @prod_stack = []
 
         @options[:base_uri] = RDF::URI(base_uri || "")
-        log_debug("base IRI") {base_uri.inspect}
+        debug("base IRI") {base_uri.inspect}
         
-        log_debug("validate") {validate?.inspect}
-        log_debug("canonicalize") {canonicalize?.inspect}
-        log_debug("intern") {intern?.inspect}
+        debug("validate") {validate?.inspect}
+        debug("canonicalize") {canonicalize?.inspect}
+        debug("intern") {intern?.inspect}
 
         @lexer = EBNF::LL1::Lexer.new(input, self.class.patterns, **@options)
 
@@ -185,7 +185,7 @@ module RDF::Turtle
     
     # Create a literal
     def literal(value, **options)
-      log_debug("literal", depth: @options[:depth]) do
+      debug("literal", depth: @options[:depth]) do
         "value: #{value.inspect}, " +
         "options: #{options.inspect}, " +
         "validate: #{validate?.inspect}, " +
@@ -221,7 +221,7 @@ module RDF::Turtle
         ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      log_debug("pname", depth: options[:depth]) {"base: '#{base}', suffix: '#{suffix}'"}
+      debug("pname", depth: options[:depth]) {"base: '#{base}', suffix: '#{suffix}'"}
       process_iri(base + suffix.to_s)
     end
     
@@ -283,7 +283,7 @@ module RDF::Turtle
             terminated = token.value == '@prefix'
             error("Expected PNAME_NS", production: :prefix, token: pfx) unless pfx === :PNAME_NS
             error("Expected IRIREF", production: :prefix, token: iri) unless iri === :IRIREF
-            log_debug("prefixID", depth: options[:depth]) {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
+            debug("prefixID", depth: options[:depth]) {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
             prefix(pfx.value[0..-2], process_iri(iri))
             error("prefixId", "#{token} should be downcased") if token.value.start_with?('@') && token.value != '@prefix'
 
@@ -411,7 +411,7 @@ module RDF::Turtle
       case token.type || token.value
       when :INTEGER then prod(:literal) {literal(@lexer.shift.value, datatype:  RDF::XSD.integer)}
       when :DECIMAL
-        prod(:litearl) do
+        prod(:literal) do
           value = @lexer.shift.value
           value = "0#{value}" if value.start_with?(".")
           literal(value, datatype:  RDF::XSD.decimal)
@@ -455,7 +455,7 @@ module RDF::Turtle
       if token === '['
         prod(:blankNodePropertyList, %{]}) do
           @lexer.shift
-          log_info("blankNodePropertyList", depth: options[:depth]) {"token: #{token.inspect}"}
+          progress("blankNodePropertyList", depth: options[:depth]) {"token: #{token.inspect}"}
           node = bnode
           read_predicateObjectList(node)
           error("blankNodePropertyList", "Expected closing ']'") unless @lexer.first === ']'
@@ -471,7 +471,7 @@ module RDF::Turtle
         prod(:collection, %{)}) do
           @lexer.shift
           token = @lexer.first
-          log_info("collection", depth: options[:depth]) {"token: #{token.inspect}"}
+          progress("collection", depth: options[:depth]) {"token: #{token.inspect}"}
           objects = []
           while object = read_object
             objects << object
@@ -508,7 +508,7 @@ module RDF::Turtle
     def prod(production, recover_to = [])
       @prod_stack << {prod: production, recover_to: recover_to}
       @options[:depth] += 1
-      log_recover("#{production}(start)", depth: options[:depth]) {"token: #{@lexer.first.inspect}"}
+      recover("#{production}(start)", depth: options[:depth], token: @lexer.first)
       yield
     rescue EBNF::LL1::Lexer::Error, SyntaxError, Recovery =>  e
       # Lexer encountered an illegal token or the parser encountered
@@ -528,13 +528,13 @@ module RDF::Turtle
         end
       end
       raise EOFError, "End of input found when recovering" if @lexer.first.nil?
-      log_debug("recovery", "current token: #{@lexer.first.inspect}", depth: options[:depth])
+      debug("recovery", "current token: #{@lexer.first.inspect}", depth: options[:depth])
 
       unless e.is_a?(Recovery)
         # Get the list of follows for this sequence, this production and the stacked productions.
-        log_debug("recovery", "stack follows:", depth: options[:depth])
+        debug("recovery", "stack follows:", depth: options[:depth])
         @prod_stack.reverse.each do |prod|
-          log_debug("recovery", level: 4, depth: options[:depth]) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
+          debug("recovery", level: 4, depth: options[:depth]) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
         end
       end
 
@@ -544,9 +544,9 @@ module RDF::Turtle
       # Skip tokens until one is found in follows
       while (token = (@lexer.first rescue @lexer.recover)) && follows.none? {|t| token === t}
         skipped = @lexer.shift
-        log_debug("recovery", depth: options[:depth]) {"skip #{skipped.inspect}"}
+        debug("recovery", depth: options[:depth]) {"skip #{skipped.inspect}"}
       end
-      log_debug("recovery", depth: options[:depth]) {"found #{token.inspect} in follows"}
+      debug("recovery", depth: options[:depth]) {"found #{token.inspect} in follows"}
 
       # Re-raise the error unless token is a follows of this production
       raise Recovery unless Array(recover_to).any? {|t| token === t}
@@ -554,9 +554,33 @@ module RDF::Turtle
       # Skip that token to get something reasonable to start the next production with
       @lexer.shift
     ensure
-      log_info("#{production}(finish)", depth: options[:depth])
+      progress("#{production}(finish)", depth: options[:depth])
       @options[:depth] -= 1
       @prod_stack.pop
+    end
+
+    def progress(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 1
+      opts[:lineno] ||= lineno
+      log_info(*args, **opts, &block)
+    end
+
+    def recover(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 1
+      opts[:lineno] ||= lineno
+      log_recover(*args, **opts, &block)
+    end
+
+    def debug(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 0
+      opts[:lineno] ||= lineno
+      log_debug(*args, **opts, &block)
     end
 
     ##

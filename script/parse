@@ -71,7 +71,7 @@ end
 
 logger = Logger.new(STDERR)
 logger.level = Logger::WARN
-logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity}: #{msg}\n"}
+logger.formatter = lambda {|severity, datetime, progname, msg| "%5s %s\n" % [severity, msg]}
 
 parser_options = {
   base_uri:  nil,

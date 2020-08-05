@@ -374,11 +374,11 @@ module RDF::Turtle
       # Mark as seen lists that are part of another list
       @lists.values.map(&:statements).
         flatten.each do |st|
-          seen[st.object] = true if @lists.has_key?(st.object)
+          seen[st.object] = true if @lists.key?(st.object)
         end
 
-        # List elements which are bnodes should not be targets for top-level serialization
-        list_elements = @lists.values.map(&:to_a).flatten.select(&:node?).compact
+      # List elements which are bnodes should not be targets for top-level serialization
+      list_elements = @lists.values.map(&:to_a).flatten.select(&:node?).compact
 
       # Sort subjects by resources over bnodes, ref_counts and the subject URI itself
       recursable = (@subjects.keys - list_elements).
@@ -469,7 +469,7 @@ module RDF::Turtle
     # Can subject be represented as a blankNodePropertyList?
     def blankNodePropertyList?(resource, position)
       !resource.statement? && resource.node? &&
-        !is_valid_list?(resource) &&
+        !collection?(resource) &&
         (!is_done?(resource) || position == :subject) &&
         ref_count(resource) == (position == :object ? 1 : 0)
     end
@@ -507,35 +507,33 @@ module RDF::Turtle
     private
 
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
-    def is_valid_list?(l)
-      #log_debug("is_valid_list?") {l.inspect}
-      return @lists[l] && @lists[l].valid?
-    end
-
-    def do_list(l, position)
-      list = @lists[l]
-      log_debug("do_list") {list.inspect}
-      subject_done(RDF.nil)
-      index = 0
-      list.each_statement do |st|
-        next unless st.predicate == RDF.first
-        log_debug {" list this: #{st.subject} first: #{st.object}[#{position}]"}
-        @output.write(" ") if index > 0
-        path(st.object, position)
-        subject_done(st.subject)
-        position = :object
-        index += 1
-      end
+    def collection?(l)
+      #log_debug("collection?") {l.inspect}
+      return @lists.key?(l)
     end
 
     def collection(node, position)
-      return false if !is_valid_list?(node)
+      return false if !collection?(node)
       return false if position == :subject && ref_count(node) > 0
       return false if position == :object && prop_count(node) > 0
       #log_debug("collection") {"#{node.to_ntriples}, #{position}"}
 
       @output.write("(")
-      log_depth {do_list(node, position)}
+      log_depth do
+        list = @lists[node]
+        log_debug("collection") {list.inspect}
+        subject_done(RDF.nil)
+        index = 0
+        list.each_statement do |st|
+          next unless st.predicate == RDF.first
+          log_debug {" list this: #{st.subject} first: #{st.object}[#{position}]"}
+          @output.write(" ") if index > 0
+          path(st.object, position)
+          subject_done(st.subject)
+          position = :object
+          index += 1
+        end
+      end
       @output.write(')')
     end
 
@@ -568,7 +566,7 @@ module RDF::Turtle
       log_debug("path") do
         "#{resource.to_ntriples}, " +
         "pos: #{position}, " +
-        "()?: #{is_valid_list?(resource)}, " +
+        "()?: #{collection?(resource)}, " +
         "[]?: #{blankNodePropertyList?(resource, position)}, " +
         "rc: #{ref_count(resource)}"
       end
@@ -611,7 +609,7 @@ module RDF::Turtle
       end
 
       prop_list = sort_properties(properties)
-      prop_list -= [RDF.first.to_s, RDF.rest.to_s] if @lists.include?(subject)
+      prop_list -= [RDF.first.to_s, RDF.rest.to_s] if @lists.key?(subject)
       log_debug("predicateObjectList") {prop_list.inspect}
       return 0 if prop_list.empty?
 
