@@ -132,6 +132,7 @@ module RDF::Turtle
           # Terminate loop if EOF found while recovering
         end
 
+        #require 'byebug'; byebug
         if validate? && log_statistics[:error]
           raise RDF::ReaderError, "Errors found during processing"
         end
@@ -362,8 +363,18 @@ module RDF::Turtle
         read_iri ||
         read_BlankNode ||
         read_collection ||
-        read_rdfstar ||
+        read_embTriple ||
         error( "Expected subject", production: :subject, token: @lexer.first)
+      end
+    end
+
+    # @return [RDF::Resource]
+    def read_embSubject
+      prod(:embSubject) do
+        read_iri ||
+        read_BlankNode ||
+        read_embTriple ||
+        error( "Expected embedded subject", production: :embSubject, token: @lexer.first)
       end
     end
 
@@ -375,7 +386,7 @@ module RDF::Turtle
           read_collection ||
           read_blankNodePropertyList ||
           read_literal ||
-          read_rdfstar
+          read_embTriple
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
           object
@@ -383,23 +394,33 @@ module RDF::Turtle
       end
     end
 
+    # @return [RDF::Term]
+    def read_embObject(subject = nil, predicate = nil)
+      prod(:embObject) do
+        read_iri ||
+        read_BlankNode ||
+        read_literal ||
+        read_embTriple
+      end
+    end
+
     # Read an RDF* reified statement
     # @return [RDF::Statement]
-    def read_rdfstar
+    def read_embTriple
       return unless @options[:rdfstar]
       if @lexer.first.value == '<<'
-        prod(:rdfstar) do
+        prod(:embTriple) do
           @lexer.shift # eat <<
-          subject = read_subject || error("Failed to parse subject", production: :rdfstar, token: @lexer.first)
-          predicate = read_verb || error("Failed to parse predicate", production: :rdfstar, token: @lexer.first)
-          object = read_object || error("Failed to parse object", production: :rdfstar, token: @lexer.first)
+          subject = read_embSubject || error("Failed to parse subject", production: :embTriple, token: @lexer.first)
+          predicate = read_verb || error("Failed to parse predicate", production: :embTriple, token: @lexer.first)
+          object = read_embObject || error("Failed to parse object", production: :embTriple, token: @lexer.first)
           unless @lexer.first.value == '>>'
-            error("Failed to end of embedded triple", production: :rdfstar, token: @lexer.first)
+            error("Failed to end of embedded triple", production: :embTriple, token: @lexer.first)
           end
           @lexer.shift
           statement = RDF::Statement(subject, predicate, object)
           # Emit the statement if in Property Graph mode
-          add_statement(:rdfstar, statement) if @options[:rdfstar] == :PG
+          add_statement(:embTriple, statement) if @options[:rdfstar] == :PG
           statement
         end
       end

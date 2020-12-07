@@ -13,7 +13,6 @@
 [13] literal                          ::= RDFLiteral | NumericLiteral | BooleanLiteral 
 [14] blankNodePropertyList            ::= "[" predicateObjectList "]" 
 [15] collection                       ::= "(" object* ")" 
-[xx] embTriple                        ::= "<<" subject predicate object ">>"
 [16] NumericLiteral                   ::= INTEGER | DECIMAL | DOUBLE 
 [128s] RDFLiteral                     ::= String ( LANGTAG | ( "^^" iri ) )? 
 [133s] BooleanLiteral                 ::= "true" | "false" 
@@ -22,6 +21,9 @@
 [135s] iri                            ::= IRIREF | PrefixedName 
 [136s] PrefixedName                   ::= PNAME_LN | PNAME_NS 
 [137s] BlankNode                      ::= BLANK_NODE_LABEL | ANON 
+[27] embTriple                        ::= "<<" embSubject predicate embObject ">>"
+[28] embSubject                       ::=	iri | BlankNode | embTriple
+[29] embObject                        ::=	iri | BlankNode | literal | embTriple
 
 @terminals
 
