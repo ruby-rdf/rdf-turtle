@@ -79,6 +79,23 @@ When using the `:SA` mode, only one statement is asserted, although the reified 
     end
     graph.count #=> 1
 
+### Reading a Graph containing statement annotations
+
+Annotations are introduced using the `{| ... |}` syntax, which is treated like a `blankNodePropertyList`,
+where the subject is the the triple ending with that annotation.
+
+    ttl = %(
+      @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+      @prefix ex: <http://example.com/> .
+      <bob> foaf:age 23 {| ex:certainty 9.0e-1 |} .
+    )
+    graph = RDF::Graph.new do |graph|
+      RDF::Turtle::Reader.new(ttl) {|reader| graph << reader}
+    end
+    # => RDF::ReaderError
+
+Note that this requires the `rdfstar` option to be set, but works the same regardless of `:PG` or `:SA` mode.
+
 ## Documentation
 Full documentation available on [Rubydoc.info][Turtle doc]
 

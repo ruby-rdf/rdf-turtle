@@ -25,7 +25,14 @@ module RDF::Turtle
     terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE,      unescape:  true)
     
     # String terminals
-    terminal(nil,                               %r([\(\),.;\[\]Aa]|\^\^|true|false|<<|>>))
+    terminal(nil,                               %r(
+                                                    [\(\),.;\[\]Aa]
+                                                  | \^\^
+                                                  | \{\|
+                                                  | \|\}
+                                                  | true|false
+                                                  | <<|>>
+                                                )x)
 
     terminal(:PREFIX,                           PREFIX)
     terminal(:BASE,                             BASE)
@@ -132,7 +139,6 @@ module RDF::Turtle
           # Terminate loop if EOF found while recovering
         end
 
-        #require 'byebug'; byebug
         if validate? && log_statistics[:error]
           raise RDF::ReaderError, "Errors found during processing"
         end
@@ -368,16 +374,6 @@ module RDF::Turtle
       end
     end
 
-    # @return [RDF::Resource]
-    def read_embSubject
-      prod(:embSubject) do
-        read_iri ||
-        read_BlankNode ||
-        read_embTriple ||
-        error( "Expected embedded subject", production: :embSubject, token: @lexer.first)
-      end
-    end
-
     # @return [void]
     def read_object(subject = nil, predicate = nil)
       prod(:object) do
@@ -389,18 +385,11 @@ module RDF::Turtle
           read_embTriple
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
+
+          # If object is followed by an annotation, read that and also emit an embedded triple.
+          read_annotation(subject, predicate, object)
           object
         end
-      end
-    end
-
-    # @return [RDF::Term]
-    def read_embObject(subject = nil, predicate = nil)
-      prod(:embObject) do
-        read_iri ||
-        read_BlankNode ||
-        read_literal ||
-        read_embTriple
       end
     end
 
@@ -424,6 +413,43 @@ module RDF::Turtle
           statement
         end
       end
+    end
+
+    # @return [RDF::Resource]
+    def read_embSubject
+      prod(:embSubject) do
+        read_iri ||
+        read_BlankNode ||
+        read_embTriple ||
+        error( "Expected embedded subject", production: :embSubject, token: @lexer.first)
+      end
+    end
+
+    # @return [RDF::Term]
+    def read_embObject(subject = nil, predicate = nil)
+      prod(:embObject) do
+        read_iri ||
+        read_BlankNode ||
+        read_literal ||
+        read_embTriple
+      end
+    end
+
+    # Read an annotation on a triple
+    def read_annotation(subject, predicate, object)
+      error("Unexpected end of file", production: :annotation) unless token = @lexer.first
+      if token === '{|'
+        prod(:annotation, %(|})) do
+          @lexer.shift
+
+          # Statement becomes subject for predicateObjectList
+          statement = RDF::Statement(subject, predicate, object)
+          read_predicateObjectList(statement)
+          error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
+          @lexer.shift
+        end
+      end
+
     end
 
     # @return [RDF::Literal]

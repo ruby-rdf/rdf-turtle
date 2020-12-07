@@ -9,7 +9,8 @@
 [9] verb                              ::= predicate | "a"
 [10] subject                          ::= iri | BlankNode | collection | embTriple
 [11] predicate                        ::= iri 
-[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList| literal | embTriple
+[12] object                           ::= (iri | BlankNode | collection | blankNodePropertyList | literal | embTriple)
+                                          annotation?
 [13] literal                          ::= RDFLiteral | NumericLiteral | BooleanLiteral 
 [14] blankNodePropertyList            ::= "[" predicateObjectList "]" 
 [15] collection                       ::= "(" object* ")" 
@@ -24,6 +25,7 @@
 [27] embTriple                        ::= "<<" embSubject predicate embObject ">>"
 [28] embSubject                       ::=	iri | BlankNode | embTriple
 [29] embObject                        ::=	iri | BlankNode | literal | embTriple
+[30] annotation                       ::= '{|' predicateObjectList '|}'
 
 @terminals
 

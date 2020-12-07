@@ -997,6 +997,49 @@ describe RDF::Turtle::Reader do
         expect {parse(ttl, rdfstar: :SA)}.to raise_error(RDF::ReaderError)
       end
     end
+
+    context "annotations" do
+      {
+        'turtle-star-annotation-1' => [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| :r :z |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <<<http://example/s> <http://example/p> <http://example/o>>> <http://example/r> <http://example/z> .
+          )
+        ],
+        'turtle-star-annotation-2' => [
+          %(
+            PREFIX :       <http://example/>
+            PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+
+            :s :p :o {| :source [ :graph <http://host1/> ;
+                                  :date "2020-01-20"^^xsd:date
+                                ] ;
+                        :source [ :graph <http://host2/> ;
+                                  :date "2020-12-31"^^xsd:date
+                                ]
+                      |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <<<http://example/s> <http://example/p> <http://example/o>>> <http://example/source> _:anno1 .
+            <<<http://example/s> <http://example/p> <http://example/o>>> <http://example/source> _:anno2 .
+            _:anno1 <http://example/graph> <http://host1/> .
+            _:anno1 <http://example/date> "2020-01-20"^^<http://www.w3.org/2001/XMLSchema#date> .
+            _:anno2 <http://example/graph> <http://host2/> .
+            _:anno2 <http://example/date> "2020-12-31"^^<http://www.w3.org/2001/XMLSchema#date> .
+          )
+        ]
+      }.each do |name, (ttl, nt)|
+        it name do
+          expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: :PG)}
+          expect(parse(ttl, rdfstar: :SA, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+        end
+      end
+    end
   end
 
   describe "canonicalization" do
