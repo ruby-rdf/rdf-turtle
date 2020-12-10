@@ -347,6 +347,10 @@ module RDF::Turtle
         last_object = nil
         while object = prod(:_objectList_2) {read_object(subject, predicate)}
           last_object = object
+
+          # If object is followed by an annotation, read that and also emit an embedded triple.
+          read_annotation(subject, predicate, object)
+
           break unless @lexer.first === ','
           @lexer.shift while @lexer.first === ','
         end
@@ -385,9 +389,6 @@ module RDF::Turtle
           read_embTriple
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
-
-          # If object is followed by an annotation, read that and also emit an embedded triple.
-          read_annotation(subject, predicate, object)
           object
         end
       end

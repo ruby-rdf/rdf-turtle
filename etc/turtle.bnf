@@ -5,12 +5,11 @@
 [5] base                              ::= BASE IRIREF "."?
 [6] triples                           ::= subject predicateObjectList | blankNodePropertyList predicateObjectList? 
 [7] predicateObjectList               ::= verb objectList ( ";" ( verb objectList)? )*
-[8] objectList                        ::= object ( "," object )* 
+[8] objectList                        ::= object annotation? ( "," object annotation? )* 
 [9] verb                              ::= predicate | "a"
 [10] subject                          ::= iri | BlankNode | collection | embTriple
 [11] predicate                        ::= iri 
-[12] object                           ::= (iri | BlankNode | collection | blankNodePropertyList | literal | embTriple)
-                                          annotation?
+[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList | literal | embTriple
 [13] literal                          ::= RDFLiteral | NumericLiteral | BooleanLiteral 
 [14] blankNodePropertyList            ::= "[" predicateObjectList "]" 
 [15] collection                       ::= "(" object* ")" 
