@@ -146,7 +146,8 @@ module Fixtures
         "mf": "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#",
         "mq": "http://www.w3.org/2001/sw/DataAccess/tests/test-query#",
         "rdft": "http://www.w3.org/ns/rdftest#",
-    
+
+        "label": "rdfs:label",
         "comment": "rdfs:comment",
         "entries": {"@id": "mf:entries", "@container": "@list"},
         "name": "mf:name",
@@ -217,14 +218,18 @@ module Fixtures
         Array(attributes['@type']).join(" ").match(/Entailment/)
       end
 
+      def ntriples?
+        Array(attributes['@type']).join(" ").match(/NTriples/)
+      end
+
       def positive_test?
         !Array(attributes['@type']).join(" ").match(/Negative/)
       end
-      
+
       def negative_test?
         !positive_test?
       end
-      
+
       def inspect
         super.sub('>', "\n" +
         "  syntax?: #{syntax?.inspect}\n" +
