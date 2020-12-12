@@ -707,6 +707,48 @@ describe RDF::Turtle::Writer do
         serialize(graph, params.fetch(:regexp, []), prefixes: {ex: 'http://example/'}, **params)
       end
     end
+
+    context "annotations" do
+      {
+        'turtle-star-annotation-1' => {
+          input: %(
+            PREFIX : <http://example/>
+            :s :p :o {| :r :z |} .
+          ),
+          regexp: [
+            %r(ex:s ex:p ex:o {\| ex:r ex:z \|} \.)
+          ]
+        },
+        'turtle-star-annotation-2' => {
+          input: %(
+            PREFIX :       <http://example/>
+            PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+
+            :s :p :o {| :source [ :graph <http://host1/> ;
+                                  :date "2020-01-20"^^xsd:date
+                                ] ;
+                        :source [ :graph <http://host2/> ;
+                                  :date "2020-12-31"^^xsd:date
+                                ]
+                      |} .
+          ),
+          regexp: [
+            %r(ex:s ex:p ex:o {\| ex:source \[),
+            %r(\s+ex:date "2020-01-20"\^\^<http://www.w3.org/2001/XMLSchema#date>;),
+            %r(\s+ex:graph <http://host1/>),
+            %r(\s+\], \[),
+            %r(\s+ex:date "2020-12-31"\^\^<http://www.w3.org/2001/XMLSchema#date>;),
+            %r(\s+ex:graph <http://host2/>),
+            %r(\s+\] \|} \.)
+          ]
+        }
+      }.each do |name, params|
+        it name do
+          graph = RDF::Graph.new {|g| g << parse(params[:input], rdfstar: true)}
+          serialize(graph, params.fetch(:regexp, []), prefixes: {ex: 'http://example/'}, **params)
+        end
+      end
+    end
   end
 
   # W3C Turtle Test suite from https://www.w3.org/TR/turtle/tests/

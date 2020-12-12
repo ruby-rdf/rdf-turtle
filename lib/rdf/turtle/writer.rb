@@ -380,10 +380,10 @@ module RDF::Turtle
       # List elements which are bnodes should not be targets for top-level serialization
       list_elements = @lists.values.map(&:to_a).flatten.select(&:node?).compact
 
-      # Sort subjects by resources over bnodes, ref_counts and the subject URI itself
+      # Sort subjects by resources and statements over bnodes, ref_counts and the subject URI itself
       recursable = (@subjects.keys - list_elements).
         select {|s| !seen.include?(s)}.
-        map {|r| [r.node? ? 1 : 0, ref_count(r), r]}.
+        map {|r| [r.node? ? 2 : (r.statement? ? 1 : 0), ref_count(r), r]}.
         sort
 
       subjects + recursable.map{|r| r.last}
@@ -586,7 +586,7 @@ module RDF::Turtle
     end
 
     # Render an objectList having a common subject and predicate
-    def objectList(objects)
+    def objectList(subject, predicate, objects)
       log_debug("objectList") {objects.inspect}
       return if objects.empty?
 
@@ -597,6 +597,15 @@ module RDF::Turtle
           @output.write ",\n#{indent(4)}"
         end
         path(obj, :object)
+
+        # If subject, predicate, and object are embedded, write those bits out too.
+        emb = RDF::Statement(subject, predicate, obj)
+        if !@graph.query({subject: emb}).empty?
+          @output.write ' {| '
+          predicateObjectList(emb, true)
+          @output.write ' |}'
+          subject_done(emb)
+        end
       end
     end
 
@@ -616,10 +625,11 @@ module RDF::Turtle
       @output.write("\n#{indent(2)}") if properties.keys.length > 1 && from_bpl
       prop_list.each_with_index do |prop, i|
         begin
+          pred = RDF::URI.intern(prop)
           @output.write(";\n#{indent(2)}") if i > 0
-          predicate(RDF::URI.intern(prop))
+          predicate(pred)
           @output.write(" ")
-          objectList(properties[prop])
+          objectList(subject, pred, properties[prop])
         end
       end
       properties.keys.length
