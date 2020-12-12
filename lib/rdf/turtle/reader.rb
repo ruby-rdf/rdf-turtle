@@ -409,8 +409,6 @@ module RDF::Turtle
           end
           @lexer.shift
           statement = RDF::Statement(subject, predicate, object)
-          # Emit the statement if in Property Graph mode
-          add_statement(:embTriple, statement) if @options[:rdfstar] == :PG
           statement
         end
       end

@@ -837,7 +837,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> <http://example/o1> .
         )
       ],
       "subject-iib": [
@@ -847,7 +846,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> _:o1 .
         )
       ],
       "subject-iil": [
@@ -857,7 +855,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> "o1" .
         )
       ],
       "subject-iia": [
@@ -867,7 +864,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> _:anon>> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> _:anon .
         )
       ],
       "subject-bii": [
@@ -877,7 +873,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> <http://example/o1> .
         )
       ],
       "subject-bib": [
@@ -887,7 +882,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> _:o1 .
         )
       ],
       "subject-bil": [
@@ -897,7 +891,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> "o1">> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> "o1" .
         )
       ],
       "subject-bia": [
@@ -907,7 +900,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> _:anon>> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> _:anon .
         )
       ],
       "object-iii":  [
@@ -917,7 +909,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .
-          <http://example/s1> <http://example/p1> <http://example/o1> .
         )
       ],
       "object-iib":  [
@@ -927,7 +918,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .
-          <http://example/s1> <http://example/p1> _:o1 .
         )
       ],
       "object-iil":  [
@@ -937,7 +927,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .
-          <http://example/s1> <http://example/p1> "o1" .
         )
       ],
       "object-iia":  [
@@ -947,7 +936,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:anon>> .
-          <http://example/s1> <http://example/p1> _:anon .
         )
       ],
       "recursive-subject": [
@@ -960,41 +948,12 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
-          <<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1> .
-          <http://example/s2> <http://example/p2> <http://example/o2> .
         )
       ],
     }.each do |name, (ttl, nt)|
       it name do
-        expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: :PG)}
-        expect(parse(ttl, rdfstar: :PG, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
-      end
-    end
-
-    {
-      "subject-lii" =>  %(
-        @prefix ex: <http://example/> .
-        <<"s1" ex:p1 ex:o1>> ex:p ex:o .
-      ),
-      "subject-ili" =>  %(
-        @prefix ex: <http://example/> .
-        <<ex:s1 "p1" ex:o1>> ex:p ex:o .
-      ),
-      "subject-iiB" =>  %(
-        @prefix ex: <http://example/> .
-        <<ex:s1 ex:p1 [ex:p2 ex:o2]>> ex:p ex:o .
-      ),
-      "subject-iiL" =>  %(
-        @prefix ex: <http://example/> .
-        <<ex:s1 ex:p1 ()>> ex:p ex:o .
-      ),
-      "subject-iiL 2" =>  %(
-        @prefix ex: <http://example/> .
-        <<ex:s1 ex:p1 ("o1")>> ex:p ex:o .
-      ),
-    }.each do |name, ttl|
-      it "raises error for #{name}" do
-        expect {parse(ttl, rdfstar: :SA)}.to raise_error(RDF::ReaderError)
+        expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+        expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
       end
     end
 
@@ -1035,8 +994,8 @@ describe RDF::Turtle::Reader do
         ]
       }.each do |name, (ttl, nt)|
         it name do
-          expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: :PG)}
-          expect(parse(ttl, rdfstar: :SA, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+          expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+          expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
         end
       end
     end

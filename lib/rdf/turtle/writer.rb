@@ -314,12 +314,12 @@ module RDF::Turtle
     end
 
     ##
-    # Returns an embedded triples
+    # Returns an embedded triple.
     #
     # @param [RDF::Statement] statement
     # @param [Hash{Symbol => Object}] options
     # @return [String]
-    def format_rdfstar(statement, **options)
+    def format_embTriple(statement, **options)
       log_debug("rdfstar") {"#{statement.to_ntriples}"}
       "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
     end

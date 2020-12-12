@@ -18,7 +18,7 @@ describe RDF::Turtle::Reader do
                 base_uri:  t.base,
                 canonicalize:  false,
                 validate:  true,
-                rdfstar: :SA,
+                rdfstar: true,
                 logger: t.logger)
 
             graph = RDF::Repository.new

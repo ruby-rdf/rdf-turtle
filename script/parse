@@ -109,7 +109,7 @@ OPT_ARGS = [
   ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT, "Save output to file"],
   ["--profile", GetoptLong::NO_ARGUMENT, "Show an execution profile"],
   ["--quiet", GetoptLong::NO_ARGUMENT, "Do not show parser output"],
-  ["--rdfstar", GetoptLong::OPTIONAL_ARGUMENT, "Parse as RDF* (PG or SA)"],
+  ["--rdfstar", GetoptLong::NO_ARGUMENT, "Parse as RDF*"],
   ["--stream", GetoptLong::NO_ARGUMENT, "Use streaming writer"],
   ["--uri", GetoptLong::REQUIRED_ARGUMENT, "Default base URI"],
   ["--validate", GetoptLong::NO_ARGUMENT, "Run parser in strict validation mode"],
@@ -152,7 +152,7 @@ opts.each do |opt, arg|
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
   when '--profile'      then options[:profile] = true
-  when '--rdfstar'      then parser_options[:rdfstar] = (arg || :PG).to_sym
+  when '--rdfstar'      then parser_options[:rdfstar] = true
   when '--quiet'
     options[:quiet] = options[:quiet].to_i + 1
     logger.level = Logger::FATAL

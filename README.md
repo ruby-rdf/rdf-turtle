@@ -65,17 +65,10 @@ By default, the Turtle reader will reject a document containing a subject resour
     end
     # => RDF::ReaderError
 
-Readers support a `rdfstar` option with either `:PG` (Property Graph) or `:SA` (Separate Assertions) modes. In `:PG` mode, statements that are used in the subject or object positions are also implicitly added to the graph:
+Readers support a boolean valued `rdfstar` option; only one statement is asserted, although the reified statement is contained within the graph.
 
     graph = RDF::Graph.new do |graph|
-      RDF::Turtle::Reader.new(ttl, rdfstar: :PG) {|reader| graph << reader}
-    end
-    graph.count #=> 2
-
-When using the `:SA` mode, only one statement is asserted, although the reified statement is contained within the graph.
-
-    graph = RDF::Graph.new do |graph|
-      RDF::Turtle::Reader.new(ttl, rdfstar: :SA) {|reader| graph << reader}
+      RDF::Turtle::Reader.new(ttl, rdfstar: true) {|reader| graph << reader}
     end
     graph.count #=> 1
 
@@ -94,7 +87,7 @@ where the subject is the the triple ending with that annotation.
     end
     # => RDF::ReaderError
 
-Note that this requires the `rdfstar` option to be set, but works the same regardless of `:PG` or `:SA` mode.
+Note that this requires the `rdfstar` option to be se.
 
 ## Documentation
 Full documentation available on [Rubydoc.info][Turtle doc]
@@ -196,7 +189,7 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [Backports]:    https://rubygems.org/gems/backports
 [N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
-[RDF*]:         https://lists.w3.org/Archives/Public/public-rdf-star/
+[RDF*]:         https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data
