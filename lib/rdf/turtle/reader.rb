@@ -443,7 +443,8 @@ module RDF::Turtle
 
           # Statement becomes subject for predicateObjectList
           statement = RDF::Statement(subject, predicate, object)
-          read_predicateObjectList(statement)
+          read_predicateObjectList(statement) ||
+            error("Expected predicateObjectList", production: :annotation, token: @lexer.first)
           error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
           @lexer.shift
         end
