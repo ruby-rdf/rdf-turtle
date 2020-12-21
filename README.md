@@ -3,8 +3,9 @@
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
 [![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](https://badge.fury.io/rb/rdf-turtle)
-[![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf-turtle)
-[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf-turtle)
+[![Build Status](https://github.com/ruby-rdf/rdf-turtle/workflows/CI/badge.svg?branch=develop)](https://github.com/ruby-rdf/rdf-turtle/actions?query=workflow%3ACI)
+[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/github/ruby-rdf/rdf-turtle)
+[![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
 
 ## Description
 This is a [Ruby][] implementation of a [Turtle][] parser for [RDF.rb][].
