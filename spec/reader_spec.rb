@@ -16,7 +16,7 @@ describe RDF::Turtle::Reader do
   end
 
   describe ".for" do
-    formats = [
+    [
       :turtle,
       'etc/doap.ttl',
       {file_name:       'etc/doap.ttl'},
@@ -89,14 +89,21 @@ describe RDF::Turtle::Reader do
       let(:base_uri) {"http://example.com/base/"}
       it "detects undefined nil prefix" do
         expect do
-          r = RDF::Turtle::Reader.new(":a :b :c .", base_uri: base_uri, validate: true)
+          r = RDF::Turtle::Reader.new(":a :b :c .",
+            base_uri: base_uri,
+            validate: true,
+            logger: false)
           r.each {|statement|}
         end.to raise_error RDF::ReaderError
       end
 
       it "detects undefined nil prefix with other prefixes defined" do
         expect do
-          r = RDF::Turtle::Reader.new(":a rdf:type :c .", base_uri: base_uri, validate: true, prefixes: {rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"})
+          r = RDF::Turtle::Reader.new(":a rdf:type :c .",
+            base_uri: base_uri,
+            validate: true,
+            logger: false, 
+            prefixes: {rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"})
           r.each {|statement|}
         end.to raise_error RDF::ReaderError
       end
@@ -159,6 +166,7 @@ describe RDF::Turtle::Reader do
       # "\"D\xC3\xBCrst\""[1..-2] => "D\xC3\xBCrst\""
       {
         'Dürst' => '<a> <b> "Dürst" .',
+        'Dürster' => '<a> <b> <Dürster> .',
         "é" => '<a> <b>  "é" .',
         "€" => '<a> <b>  "€" .',
         "resumé" => ':a :resume  "resumé" .',
@@ -227,7 +235,7 @@ describe RDF::Turtle::Reader do
       expect(graph.size).to eq 1
       statement = graph.statements.to_a.first
       expect(statement.subject).to be_a(RDF::Node)
-      expect(statement.subject.id).to match /anon/
+      expect(statement.subject.id).to match(/anon/)
       expect(statement.predicate.to_s).to eq "http://example/property"
       expect(statement.object.to_s).to eq "http://example/resource2"
     end
@@ -250,7 +258,7 @@ describe RDF::Turtle::Reader do
       expect(statement.subject.to_s).to eq "http://example/resource2"
       expect(statement.predicate.to_s).to eq "http://example/property"
       expect(statement.object).to be_a(RDF::Node)
-      expect(statement.object.id).to match /anon/
+      expect(statement.object.id).to match(/anon/)
     end
 
     it "should allow mixed-case language" do
@@ -402,7 +410,7 @@ describe RDF::Turtle::Reader do
       it "allows undefined empty prefix if not validating" do
         ttl = %(:a :b :c .)
         nt = %(<a> <b> <c> .)
-        expect(parse(":a :b :c", validate:  false)).to be_equivalent_graph(nt, logger: @logger)
+        expect(parse(ttl, validate:  false)).to be_equivalent_graph(nt, logger: @logger)
       end
 
       it "empty relative-IRI" do
@@ -829,7 +837,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> <http://example/o1> .
         )
       ],
       "subject-iib": [
@@ -839,7 +846,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> _:o1>> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> _:o1 .
         )
       ],
       "subject-iil": [
@@ -849,7 +855,15 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<http://example/s1> <http://example/p1> "o1">> <http://example/p> <http://example/o> .
-          <http://example/s1> <http://example/p1> "o1"
+        )
+      ],
+      "subject-iia": [
+        %(
+          @prefix ex: <http://example/> .
+          <<ex:s1 ex:p1 []>> ex:p ex:o .
+        ),
+        %(
+          <<<http://example/s1> <http://example/p1> _:anon>> <http://example/p> <http://example/o> .
         )
       ],
       "subject-bii": [
@@ -859,7 +873,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> <http://example/o1> .
         )
       ],
       "subject-bib": [
@@ -869,7 +882,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> _:o1>> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> _:o1 .
         )
       ],
       "subject-bil": [
@@ -879,7 +891,15 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<_:s1 <http://example/p1> "o1">> <http://example/p> <http://example/o> .
-          _:s1 <http://example/p1> "o1" .
+        )
+      ],
+      "subject-bia": [
+        %(
+          @prefix ex: <http://example/> .
+          <<_:s1 ex:p1 []>> ex:p ex:o .
+        ),
+        %(
+          <<_:s1 <http://example/p1> _:anon>> <http://example/p> <http://example/o> .
         )
       ],
       "object-iii":  [
@@ -889,7 +909,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> <http://example/o1>>> .
-          <http://example/s1> <http://example/p1> <http://example/o1> .
         )
       ],
       "object-iib":  [
@@ -899,7 +918,6 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:o1>> .
-          <http://example/s1> <http://example/p1> _:o1
         )
       ],
       "object-iil":  [
@@ -909,7 +927,15 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> "o1">> .
-          <http://example/s1> <http://example/p1> "o1" .
+        )
+      ],
+      "object-iia":  [
+        %(
+          @prefix ex: <http://example/> .
+          ex:s ex:p <<ex:s1 ex:p1 []>> .
+        ),
+        %(
+          <http://example/s> <http://example/p> <<<http://example/s1> <http://example/p1> _:anon>> .
         )
       ],
       "recursive-subject": [
@@ -922,14 +948,55 @@ describe RDF::Turtle::Reader do
         ),
         %(
           <<<<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1>>> <http://example/p> <http://example/o> .
-          <<<http://example/s2> <http://example/p2> <http://example/o2>>> <http://example/p1> <http://example/o1> .
-          <http://example/s2> <http://example/p2> <http://example/o2> .
         )
       ],
     }.each do |name, (ttl, nt)|
       it name do
-        expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: :PG)}
-        expect(parse(ttl, rdfstar: :PG, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+        expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+        expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+      end
+    end
+
+    context "annotations" do
+      {
+        'turtle-star-annotation-1' => [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| :r :z |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <<<http://example/s> <http://example/p> <http://example/o>>> <http://example/r> <http://example/z> .
+          )
+        ],
+        'turtle-star-annotation-2' => [
+          %(
+            PREFIX :       <http://example/>
+            PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+
+            :s :p :o {| :source [ :graph <http://host1/> ;
+                                  :date "2020-01-20"^^xsd:date
+                                ] ;
+                        :source [ :graph <http://host2/> ;
+                                  :date "2020-12-31"^^xsd:date
+                                ]
+                      |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <<<http://example/s> <http://example/p> <http://example/o>>> <http://example/source> _:anno1 .
+            <<<http://example/s> <http://example/p> <http://example/o>>> <http://example/source> _:anno2 .
+            _:anno1 <http://example/graph> <http://host1/> .
+            _:anno1 <http://example/date> "2020-01-20"^^<http://www.w3.org/2001/XMLSchema#date> .
+            _:anno2 <http://example/graph> <http://host2/> .
+            _:anno2 <http://example/date> "2020-12-31"^^<http://www.w3.org/2001/XMLSchema#date> .
+          )
+        ]
+      }.each do |name, (ttl, nt)|
+        it name do
+          expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+          expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+        end
       end
     end
   end
@@ -942,8 +1009,9 @@ describe RDF::Turtle::Reader do
       %(123.E+1)            => %("1.23E3"^^<http://www.w3.org/2001/XMLSchema#double>),
       %(true)               => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
       %("lang"@EN)          => %("lang"@en),
-      %("""lang"""@EN)          => %("lang"@en),
+      %("""lang"""@EN)      => %("lang"@en),
       %("""+1"""^^xsd:integer)  => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
+      %(<http://example/Dürst>) => %(<http://example/Dürst>)
     }.each_pair do |input, result|
       it "returns object #{result} given #{input}" do
         ttl = %(@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . <http://example/a> <http://example/b> #{input} .)

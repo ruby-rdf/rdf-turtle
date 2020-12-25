@@ -7,7 +7,6 @@ gem 'ebnf', git: "https://github.com/dryruby/ebnf",  branch: "develop"
 
 group :development do
   gem "byebug", platforms: :mri
-  gem 'psych',  platforms: [:mri, :rbx]
 end
 
 group :development, :test do

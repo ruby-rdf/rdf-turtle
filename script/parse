@@ -11,7 +11,7 @@ rescue LoadError
   %w(rdf/rdfa rdf/rdfxml rdf/vocab rdf/xsd).each do |gem|
     begin
       require gem
-    rescue LoadError => e
+    rescue LoadError
     end
   end
 end
@@ -71,7 +71,7 @@ end
 
 logger = Logger.new(STDERR)
 logger.level = Logger::WARN
-logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity}: #{msg}\n"}
+logger.formatter = lambda {|severity, datetime, progname, msg| "%5s %s\n" % [severity, msg]}
 
 parser_options = {
   base_uri:  nil,
@@ -94,40 +94,65 @@ options = {
 }
 input = nil
 
-opts = GetoptLong.new(
-  ["--debug", GetoptLong::NO_ARGUMENT],
-  ["--base", GetoptLong::REQUIRED_ARGUMENT],
-  ["--benchmark", GetoptLong::NO_ARGUMENT],
-  ["--errors", GetoptLong::NO_ARGUMENT],
-  ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT],
-  ["--canonicalize", GetoptLong::NO_ARGUMENT],
-  ["--freebase", GetoptLong::NO_ARGUMENT],
-  ["--format", GetoptLong::REQUIRED_ARGUMENT],
-  ["--input-format", GetoptLong::REQUIRED_ARGUMENT],
-  ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT],
-  ["--profile", GetoptLong::NO_ARGUMENT],
-  ["--progress", GetoptLong::NO_ARGUMENT],
-  ["--quiet", GetoptLong::NO_ARGUMENT],
-  ["--rdfstar", GetoptLong::OPTIONAL_ARGUMENT],
-  ["--stream", GetoptLong::NO_ARGUMENT],
-  ["--validate", GetoptLong::NO_ARGUMENT],
-  ["--verbose", GetoptLong::NO_ARGUMENT]
-)
+OPT_ARGS = [
+  ["--benchmark", GetoptLong::NO_ARGUMENT, "Just parse, do not process output"],
+  ["--canonicalize", GetoptLong::NO_ARGUMENT, "Canonize all terms"],
+  ["--data", GetoptLong::NO_ARGUMENT, "Remove all except plain RDF triples (formulae, forAll, etc)v"],
+  ["--debug", GetoptLong::NO_ARGUMENT, "Debugging output"],
+  ["--errors", GetoptLong::NO_ARGUMENT, "Display invalid statements"],
+  ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT, "Run against source in argument"],
+  ["--format", GetoptLong::REQUIRED_ARGUMENT, "Output format, any RDF format symbol, sxp, or inspect"],
+  ["--freebase", GetoptLong::NO_ARGUMENT, "Use Freebase reader (obsolete)"],
+  ["--help", "-?", GetoptLong::NO_ARGUMENT, "print this message"],
+  ["--input-format", GetoptLong::REQUIRED_ARGUMENT, "Format of the input file, defaults to ttl"],
+  ["--info", GetoptLong::NO_ARGUMENT, "Show progress on execution"],
+  ["--output", "-o", GetoptLong::REQUIRED_ARGUMENT, "Save output to file"],
+  ["--profile", GetoptLong::NO_ARGUMENT, "Show an execution profile"],
+  ["--quiet", GetoptLong::NO_ARGUMENT, "Do not show parser output"],
+  ["--rdfstar", GetoptLong::NO_ARGUMENT, "Parse as RDF*"],
+  ["--stream", GetoptLong::NO_ARGUMENT, "Use streaming writer"],
+  ["--uri", GetoptLong::REQUIRED_ARGUMENT, "Default base URI"],
+  ["--validate", GetoptLong::NO_ARGUMENT, "Run parser in strict validation mode"],
+  ["--verbose", GetoptLong::NO_ARGUMENT, "Verbose output"],
+]
+
+def usage
+  STDERR.puts %{
+    RDF::Turtle version #{RDF::Turtle::VERSION}
+    
+    Usage: #{$0} [options] file ...
+  }.gsub(/^    /, '')
+  width = OPT_ARGS.map do |o|
+    l = o.first.length
+    l += o[1].length + 2 if o[1].is_a?(String)
+    l
+  end.max
+  OPT_ARGS.each do |o|
+    s = "  %-*s  " % [width, (o[1].is_a?(String) ? "#{o[0,2].join(', ')}" : o[0])]
+    s += o.last
+    STDERR.puts s
+  end
+  exit(1)
+end
+
+opts = GetoptLong.new(*OPT_ARGS.map {|o| o[0..-2]})
+
 opts.each do |opt, arg|
   case opt
   when '--debug'        then logger.level = Logger::DEBUG
-  when '--base'         then parser_options[:base_uri] = writer_options[:base_uri] = arg
+  when '--uri'          then parser_options[:base_uri] = writer_options[:base_uri] = arg
   when '--benchmark'    then options[:benchmark] = true
   when '--canonicalize' then parser_options[:canonicalize] = true
   when '--errors'       then options[:errors] = true
   when '--execute'      then input = arg
   when '--format'       then options[:output_format] = arg.to_sym
   when '--freebase'     then parser_options[:freebase] = true
+  when "--help"         then usage()
+  when '--info'         then logger.level = Logger::INFO
   when '--input-format' then options[:input_format] = arg.to_sym
   when '--output'       then options[:output] = File.open(arg, "w")
   when '--profile'      then options[:profile] = true
-  when '--progress'     then logger.level = Logger::INFO
-  when '--rdfstar'      then parser_options[:rdfstar] = (arg || :PG).to_sym
+  when '--rdfstar'      then parser_options[:rdfstar] = true
   when '--quiet'
     options[:quiet] = options[:quiet].to_i + 1
     logger.level = Logger::FATAL

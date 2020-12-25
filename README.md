@@ -3,8 +3,9 @@
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
 [![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](https://badge.fury.io/rb/rdf-turtle)
-[![Build Status](https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master)](https://travis-ci.org/ruby-rdf/rdf-turtle)
-[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/r/ruby-rdf/rdf-turtle)
+[![Build Status](https://github.com/ruby-rdf/rdf-turtle/workflows/CI/badge.svg?branch=develop)](https://github.com/ruby-rdf/rdf-turtle/actions?query=workflow%3ACI)
+[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/github/ruby-rdf/rdf-turtle)
+[![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
 
 ## Description
 This is a [Ruby][] implementation of a [Turtle][] parser for [RDF.rb][].
@@ -65,19 +66,29 @@ By default, the Turtle reader will reject a document containing a subject resour
     end
     # => RDF::ReaderError
 
-Readers support a `rdfstar` option with either `:PG` (Property Graph) or `:SA` (Separate Assertions) modes. In `:PG` mode, statements that are used in the subject or object positions are also implicitly added to the graph:
+Readers support a boolean valued `rdfstar` option; only one statement is asserted, although the reified statement is contained within the graph.
 
     graph = RDF::Graph.new do |graph|
-      RDF::Turtle::Reader.new(ttl, rdfstar: :PG) {|reader| graph << reader}
-    end
-    graph.count #=> 2
-
-When using the `:SA` mode, only one statement is asserted, although the reified statement is contained within the graph.
-
-    graph = RDF::Graph.new do |graph|
-      RDF::Turtle::Reader.new(ttl, rdfstar: :SA) {|reader| graph << reader}
+      RDF::Turtle::Reader.new(ttl, rdfstar: true) {|reader| graph << reader}
     end
     graph.count #=> 1
+
+### Reading a Graph containing statement annotations
+
+Annotations are introduced using the `{| ... |}` syntax, which is treated like a `blankNodePropertyList`,
+where the subject is the the triple ending with that annotation.
+
+    ttl = %(
+      @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+      @prefix ex: <http://example.com/> .
+      <bob> foaf:age 23 {| ex:certainty 9.0e-1 |} .
+    )
+    graph = RDF::Graph.new do |graph|
+      RDF::Turtle::Reader.new(ttl) {|reader| graph << reader}
+    end
+    # => RDF::ReaderError
+
+Note that this requires the `rdfstar` option to be se.
 
 ## Documentation
 Full documentation available on [Rubydoc.info][Turtle doc]
@@ -159,7 +170,9 @@ This repository uses [Git Flow](https://github.com/nvie/gitflow) to mange develo
   list in the the `README`. Alphabetical order applies.
 * Do note that in order for us to merge any non-trivial changes (as a rule
   of thumb, additions larger than about 15 lines of code), we need an
-  explicit [public domain dedication][PDD] on record from you.
+  explicit [public domain dedication][PDD] on record from you,
+  which you will be asked to agree to on the first commit to a repo within the organization.
+  Note that the agreement applies to all repos in the [Ruby RDF](https://github.com/ruby-rdf/) organization.
 
 ## License
 This is free and unencumbered public domain software. For more information,
@@ -171,13 +184,13 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [RDF]:          https://www.w3.org/RDF/
 [YARD]:         https://yardoc.org/
 [YARD-GS]:      https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
-[PDD]:          https://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html
+[PDD]:              https://unlicense.org/#unlicensing-contributions
 [RDF.rb]:       https://rubydoc.info/github/ruby-rdf/rdf
 [EBNF]:         https://rubygems.org/gems/ebnf
 [Backports]:    https://rubygems.org/gems/backports
 [N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
-[RDF*]:         https://lists.w3.org/Archives/Public/public-rdf-star/
+[RDF*]:         https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data

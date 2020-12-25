@@ -25,7 +25,14 @@ module RDF::Turtle
     terminal(:STRING_LITERAL_SINGLE_QUOTE,      STRING_LITERAL_SINGLE_QUOTE,      unescape:  true)
     
     # String terminals
-    terminal(nil,                               %r([\(\),.;\[\]Aa]|\^\^|true|false|<<|>>))
+    terminal(nil,                               %r(
+                                                    [\(\),.;\[\]Aa]
+                                                  | \^\^
+                                                  | \{\|
+                                                  | \|\}
+                                                  | true|false
+                                                  | <<|>>
+                                                )x)
 
     terminal(:PREFIX,                           PREFIX)
     terminal(:BASE,                             BASE)
@@ -92,11 +99,11 @@ module RDF::Turtle
         @prod_stack = []
 
         @options[:base_uri] = RDF::URI(base_uri || "")
-        log_debug("base IRI") {base_uri.inspect}
+        debug("base IRI") {base_uri.inspect}
         
-        log_debug("validate") {validate?.inspect}
-        log_debug("canonicalize") {canonicalize?.inspect}
-        log_debug("intern") {intern?.inspect}
+        debug("validate") {validate?.inspect}
+        debug("canonicalize") {canonicalize?.inspect}
+        debug("intern") {intern?.inspect}
 
         @lexer = EBNF::LL1::Lexer.new(input, self.class.patterns, **@options)
 
@@ -185,7 +192,7 @@ module RDF::Turtle
     
     # Create a literal
     def literal(value, **options)
-      log_debug("literal", depth: @options[:depth]) do
+      debug("literal", depth: @options[:depth]) do
         "value: #{value.inspect}, " +
         "options: #{options.inspect}, " +
         "validate: #{validate?.inspect}, " +
@@ -221,7 +228,7 @@ module RDF::Turtle
         ''
       end
       suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
-      log_debug("pname", depth: options[:depth]) {"base: '#{base}', suffix: '#{suffix}'"}
+      debug("pname", depth: options[:depth]) {"base: '#{base}', suffix: '#{suffix}'"}
       process_iri(base + suffix.to_s)
     end
     
@@ -283,7 +290,7 @@ module RDF::Turtle
             terminated = token.value == '@prefix'
             error("Expected PNAME_NS", production: :prefix, token: pfx) unless pfx === :PNAME_NS
             error("Expected IRIREF", production: :prefix, token: iri) unless iri === :IRIREF
-            log_debug("prefixID", depth: options[:depth]) {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
+            debug("prefixID", depth: options[:depth]) {"Defined prefix #{pfx.inspect} mapping to #{iri.inspect}"}
             prefix(pfx.value[0..-2], process_iri(iri))
             error("prefixId", "#{token} should be downcased") if token.value.start_with?('@') && token.value != '@prefix'
 
@@ -340,6 +347,10 @@ module RDF::Turtle
         last_object = nil
         while object = prod(:_objectList_2) {read_object(subject, predicate)}
           last_object = object
+
+          # If object is followed by an annotation, read that and also emit an embedded triple.
+          read_annotation(subject, predicate, object)
+
           break unless @lexer.first === ','
           @lexer.shift while @lexer.first === ','
         end
@@ -362,7 +373,7 @@ module RDF::Turtle
         read_iri ||
         read_BlankNode ||
         read_collection ||
-        read_rdfstar ||
+        read_embTriple ||
         error( "Expected subject", production: :subject, token: @lexer.first)
       end
     end
@@ -375,7 +386,7 @@ module RDF::Turtle
           read_collection ||
           read_blankNodePropertyList ||
           read_literal ||
-          read_rdfstar
+          read_embTriple
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
           object
@@ -385,24 +396,60 @@ module RDF::Turtle
 
     # Read an RDF* reified statement
     # @return [RDF::Statement]
-    def read_rdfstar
+    def read_embTriple
       return unless @options[:rdfstar]
       if @lexer.first.value == '<<'
-        prod(:rdfstar) do
+        prod(:embTriple) do
           @lexer.shift # eat <<
-          subject = read_subject || error("Failed to parse subject", production: :rdfstar, token: @lexer.first)
-          predicate = read_verb || error("Failed to parse predicate", production: :rdfstar, token: @lexer.first)
-          object = read_object || error("Failed to parse object", production: :rdfstar, token: @lexer.first)
+          subject = read_embSubject || error("Failed to parse subject", production: :embTriple, token: @lexer.first)
+          predicate = read_verb || error("Failed to parse predicate", production: :embTriple, token: @lexer.first)
+          object = read_embObject || error("Failed to parse object", production: :embTriple, token: @lexer.first)
           unless @lexer.first.value == '>>'
-            error("Failed to end of embedded triple", production: :rdfstar, token: @lexer.first)
+            error("Failed to end of embedded triple", production: :embTriple, token: @lexer.first)
           end
           @lexer.shift
           statement = RDF::Statement(subject, predicate, object)
-          # Emit the statement if in Property Graph mode
-          add_statement(:rdfstar, statement) if @options[:rdfstar] == :PG
           statement
         end
       end
+    end
+
+    # @return [RDF::Resource]
+    def read_embSubject
+      prod(:embSubject) do
+        read_iri ||
+        read_BlankNode ||
+        read_embTriple ||
+        error( "Expected embedded subject", production: :embSubject, token: @lexer.first)
+      end
+    end
+
+    # @return [RDF::Term]
+    def read_embObject(subject = nil, predicate = nil)
+      prod(:embObject) do
+        read_iri ||
+        read_BlankNode ||
+        read_literal ||
+        read_embTriple
+      end
+    end
+
+    # Read an annotation on a triple
+    def read_annotation(subject, predicate, object)
+      error("Unexpected end of file", production: :annotation) unless token = @lexer.first
+      if token === '{|'
+        prod(:annotation, %(|})) do
+          @lexer.shift
+
+          # Statement becomes subject for predicateObjectList
+          statement = RDF::Statement(subject, predicate, object)
+          read_predicateObjectList(statement) ||
+            error("Expected predicateObjectList", production: :annotation, token: @lexer.first)
+          error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
+          @lexer.shift
+        end
+      end
+
     end
 
     # @return [RDF::Literal]
@@ -411,7 +458,7 @@ module RDF::Turtle
       case token.type || token.value
       when :INTEGER then prod(:literal) {literal(@lexer.shift.value, datatype:  RDF::XSD.integer)}
       when :DECIMAL
-        prod(:litearl) do
+        prod(:literal) do
           value = @lexer.shift.value
           value = "0#{value}" if value.start_with?(".")
           literal(value, datatype:  RDF::XSD.decimal)
@@ -455,7 +502,7 @@ module RDF::Turtle
       if token === '['
         prod(:blankNodePropertyList, %{]}) do
           @lexer.shift
-          log_info("blankNodePropertyList", depth: options[:depth]) {"token: #{token.inspect}"}
+          progress("blankNodePropertyList", depth: options[:depth]) {"token: #{token.inspect}"}
           node = bnode
           read_predicateObjectList(node)
           error("blankNodePropertyList", "Expected closing ']'") unless @lexer.first === ']'
@@ -471,7 +518,7 @@ module RDF::Turtle
         prod(:collection, %{)}) do
           @lexer.shift
           token = @lexer.first
-          log_info("collection", depth: options[:depth]) {"token: #{token.inspect}"}
+          progress("collection", depth: options[:depth]) {"token: #{token.inspect}"}
           objects = []
           while object = read_object
             objects << object
@@ -508,7 +555,7 @@ module RDF::Turtle
     def prod(production, recover_to = [])
       @prod_stack << {prod: production, recover_to: recover_to}
       @options[:depth] += 1
-      log_recover("#{production}(start)", depth: options[:depth]) {"token: #{@lexer.first.inspect}"}
+      recover("#{production}(start)", depth: options[:depth], token: @lexer.first)
       yield
     rescue EBNF::LL1::Lexer::Error, SyntaxError, Recovery =>  e
       # Lexer encountered an illegal token or the parser encountered
@@ -528,13 +575,13 @@ module RDF::Turtle
         end
       end
       raise EOFError, "End of input found when recovering" if @lexer.first.nil?
-      log_debug("recovery", "current token: #{@lexer.first.inspect}", depth: options[:depth])
+      debug("recovery", "current token: #{@lexer.first.inspect}", depth: options[:depth])
 
       unless e.is_a?(Recovery)
         # Get the list of follows for this sequence, this production and the stacked productions.
-        log_debug("recovery", "stack follows:", depth: options[:depth])
+        debug("recovery", "stack follows:", depth: options[:depth])
         @prod_stack.reverse.each do |prod|
-          log_debug("recovery", level: 4, depth: options[:depth]) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
+          debug("recovery", level: 4, depth: options[:depth]) {"  #{prod[:prod]}: #{prod[:recover_to].inspect}"}
         end
       end
 
@@ -544,9 +591,9 @@ module RDF::Turtle
       # Skip tokens until one is found in follows
       while (token = (@lexer.first rescue @lexer.recover)) && follows.none? {|t| token === t}
         skipped = @lexer.shift
-        log_debug("recovery", depth: options[:depth]) {"skip #{skipped.inspect}"}
+        debug("recovery", depth: options[:depth]) {"skip #{skipped.inspect}"}
       end
-      log_debug("recovery", depth: options[:depth]) {"found #{token.inspect} in follows"}
+      debug("recovery", depth: options[:depth]) {"found #{token.inspect} in follows"}
 
       # Re-raise the error unless token is a follows of this production
       raise Recovery unless Array(recover_to).any? {|t| token === t}
@@ -554,9 +601,33 @@ module RDF::Turtle
       # Skip that token to get something reasonable to start the next production with
       @lexer.shift
     ensure
-      log_info("#{production}(finish)", depth: options[:depth])
+      progress("#{production}(finish)", depth: options[:depth])
       @options[:depth] -= 1
       @prod_stack.pop
+    end
+
+    def progress(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 1
+      opts[:lineno] ||= lineno
+      log_info(*args, **opts, &block)
+    end
+
+    def recover(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 1
+      opts[:lineno] ||= lineno
+      log_recover(*args, **opts, &block)
+    end
+
+    def debug(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 0
+      opts[:lineno] ||= lineno
+      log_debug(*args, **opts, &block)
     end
 
     ##

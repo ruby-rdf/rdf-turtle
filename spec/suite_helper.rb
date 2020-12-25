@@ -10,6 +10,8 @@ module RDF::Util
     LOCAL_PATH = ::File.expand_path("../w3c-rdf/turtle", __FILE__) + '/'
     REMOTE_PATH_NT = "http://w3c.github.io/rdf-tests/ntriples/"
     LOCAL_PATH_NT = ::File.expand_path("../w3c-rdf/ntriples", __FILE__) + '/'
+    REMOTE_PATH_STAR = "https://w3c.github.io/rdf-star/"
+    LOCAL_PATH_STAR = ::File.expand_path("../w3c-rdf-star/", __FILE__) + '/'
 
     class << self
       alias_method :original_open_file, :open_file
@@ -93,6 +95,38 @@ module RDF::Util
         else
           remote_document
         end
+      when (filename_or_url.to_s =~ %r{^#{REMOTE_PATH_STAR}} && Dir.exist?(LOCAL_PATH_STAR))
+        #puts "attempt to open #{filename_or_url} locally"
+        localpath = filename_or_url.to_s.sub(REMOTE_PATH_STAR, LOCAL_PATH_STAR)
+        response = begin
+          ::File.open(localpath)
+        rescue Errno::ENOENT => e
+          raise IOError, e.message
+        end
+        document_options = {
+          base_uri:     RDF::URI(filename_or_url),
+          charset:      Encoding::UTF_8,
+          code:         200,
+          headers:      {}
+        }
+        #puts "use #{filename_or_url} locally"
+        document_options[:headers][:content_type] = case filename_or_url.to_s
+        when /\.ttl$/    then 'text/turtle'
+        when /\.nt$/     then 'application/n-triples'
+        when /\.jsonld$/ then 'application/ld+json'
+        else                  'unknown'
+        end
+
+        document_options[:headers][:content_type] = response.content_type if response.respond_to?(:content_type)
+        # For overriding content type from test data
+        document_options[:headers][:content_type] = options[:contentType] if options[:contentType]
+
+        remote_document = RDF::Util::File::RemoteDocument.new(response.read, **document_options)
+        if block_given?
+          yield remote_document
+        else
+          remote_document
+        end
       else
         original_open_file(filename_or_url, **options, &block)
       end
@@ -112,7 +146,8 @@ module Fixtures
         "mf": "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#",
         "mq": "http://www.w3.org/2001/sw/DataAccess/tests/test-query#",
         "rdft": "http://www.w3.org/ns/rdftest#",
-    
+
+        "label": "rdfs:label",
         "comment": "rdfs:comment",
         "entries": {"@id": "mf:entries", "@container": "@list"},
         "name": "mf:name",
@@ -183,14 +218,18 @@ module Fixtures
         Array(attributes['@type']).join(" ").match(/Entailment/)
       end
 
+      def ntriples?
+        Array(attributes['@type']).join(" ").match(/NTriples/)
+      end
+
       def positive_test?
         !Array(attributes['@type']).join(" ").match(/Negative/)
       end
-      
+
       def negative_test?
         !positive_test?
       end
-      
+
       def inspect
         super.sub('>', "\n" +
         "  syntax?: #{syntax?.inspect}\n" +

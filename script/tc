@@ -54,7 +54,7 @@ def run_tc(tc, **options)
 
   logger = Logger.new(STDERR)
   logger.level = options[:level]
-  logger.formatter = lambda {|severity, datetime, progname, msg| "#{severity}: #{msg}\n"}
+  logger.formatter = lambda {|severity, datetime, progname, msg| "%5s %s\n" % [severity, msg]}
 
   begin
     puts "open #{tc.action}" if options[:verbose]
