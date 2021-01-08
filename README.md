@@ -4,7 +4,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](https://badge.fury.io/rb/rdf-turtle)
 [![Build Status](https://github.com/ruby-rdf/rdf-turtle/workflows/CI/badge.svg?branch=develop)](https://github.com/ruby-rdf/rdf-turtle/actions?query=workflow%3ACI)
-[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg)](https://coveralls.io/github/ruby-rdf/rdf-turtle)
+[![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg?branch=develop)](https://coveralls.io/github/ruby-rdf/rdf-turtle?branch=develop)
 [![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
 
 ## Description
