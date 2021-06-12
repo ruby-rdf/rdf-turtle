@@ -17,9 +17,9 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby >= 2.2.2.
+* Compatible with Ruby >= 2.4.
 * Optional streaming writer, to serialize large graphs
-* Provisional support for [Turtle*][RDF*].
+* Provisional support for [Turtle-star][RDF-star].
 
 ## Usage
 Instantiate a reader from a local file:
@@ -36,9 +36,9 @@ Write a graph to a file:
        writer << graph
     end
 
-## Turtle* (RDFStar)
+## Turtle-star (RDF-star)
 
-Both reader and writer include provisional support for [Turtle*][RDF*].
+Both reader and writer include provisional support for [Turtle-star][RDF-star].
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
@@ -88,7 +88,7 @@ where the subject is the the triple ending with that annotation.
     end
     # => RDF::ReaderError
 
-Note that this requires the `rdfstar` option to be se.
+Note that this requires the `rdfstar` option to be set.
 
 ## Documentation
 Full documentation available on [Rubydoc.info][Turtle doc]
@@ -190,7 +190,7 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [Backports]:    https://rubygems.org/gems/backports
 [N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
-[RDF*]:         https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
+[RDF-star]:         https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
 [Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data

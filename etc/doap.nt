@@ -10,7 +10,7 @@
 <https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/creator> <https://greggkellogg.net/foaf#me> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#created> "2011-08-29"^^<http://www.w3.org/2001/XMLSchema#date> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#bug-database> <https://github.com/ruby-rdf/rdf-turtle/issues> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#name> "RDF::Turtle" .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#name> "Ruby RDF::Turtle" .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#mailing-list> <https://lists.w3.org/Archives/Public/public-rdf-ruby/> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#license> <https://unlicense.org/1.0/> .
 <https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestSubject> .

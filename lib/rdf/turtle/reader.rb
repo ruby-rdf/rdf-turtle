@@ -394,7 +394,7 @@ module RDF::Turtle
       end
     end
 
-    # Read an RDF* reified statement
+    # Read an RDF-star reified statement
     # @return [RDF::Statement]
     def read_embTriple
       return unless @options[:rdfstar]
