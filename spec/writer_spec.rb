@@ -761,7 +761,6 @@ describe RDF::Turtle::Writer do
           m.entries.each do |t|
             next unless t.positive_test? && t.evaluate?
             specify "#{t.name}: #{t.comment}" do
-              pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, format: :ttl, base_uri: t.base, standard_prefixes: true)
               logger.info t.inspect
@@ -772,7 +771,6 @@ describe RDF::Turtle::Writer do
             end
 
             specify "#{t.name}: #{t.comment} (stream)" do
-              pending("native literals canonicalized") if t.name == "turtle-subm-26"
               graph = parse(t.expected, format: :ntriples)
               ttl = serialize(graph, stream: true, format: :ttl, base_uri: t.base, standard_prefixes: true)
               logger.info t.inspect

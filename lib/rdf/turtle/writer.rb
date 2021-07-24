@@ -276,10 +276,23 @@ module RDF::Turtle
       case literal
       when RDF::Literal
         case @options[:literal_shorthand] && literal.valid? ? literal.datatype : false
-        when RDF::XSD.boolean, RDF::XSD.integer, RDF::XSD.decimal
-          literal.canonicalize.to_s
+        when RDF::XSD.boolean
+          %w(true false).include?(literal.value) ? literal.value : literal.canonicalize.to_s
+        when RDF::XSD.integer
+          literal.value.match?(/^[\+\-]?\d+$/) && !canonicalize? ? literal.value : literal.canonicalize.to_s
+        when RDF::XSD.decimal
+          literal.value.match?(/^[\+\-]?\d+\.\d+?$/) && !canonicalize? ?
+            literal.value :
+            literal.canonicalize.to_s
         when RDF::XSD.double
-          literal.canonicalize.to_s.sub('E', 'e')  # Favor lower case exponent
+          in_form = case literal.value
+          when /[\+\-]?\d+\.\d*E[\+\-]?\d+$/i then true
+          when /[\+\-]?\.\d+E[\+\-]?\d+$/i    then true
+          when /[\+\-]?\d+E[\+\-]?\d+$/i      then true
+          else false
+          end && !canonicalize?
+
+          in_form ? literal.value : literal.canonicalize.to_s.sub('E', 'e').to_s
         else
           text = quoted(literal.value)
           text << "@#{literal.language}" if literal.has_language?
@@ -319,7 +332,7 @@ module RDF::Turtle
     # @param [RDF::Statement] statement
     # @param [Hash{Symbol => Object}] options
     # @return [String]
-    def format_embTriple(statement, **options)
+    def format_quotedTriple(statement, **options)
       log_debug("rdfstar") {"#{statement.to_ntriples}"}
       "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
     end
