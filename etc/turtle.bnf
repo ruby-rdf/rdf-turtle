@@ -9,9 +9,9 @@
 [7] predicateObjectList               ::= verb objectList ( ";" ( verb objectList)? )*
 [8] objectList                        ::= object annotation? ( "," object annotation? )* 
 [9] verb                              ::= predicate | "a"
-[10] subject                          ::= iri | BlankNode | collection | embTriple
+[10] subject                          ::= iri | BlankNode | collection | quotedTriple
 [11] predicate                        ::= iri 
-[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList | literal | embTriple
+[12] object                           ::= iri | BlankNode | collection | blankNodePropertyList | literal | quotedTriple
 [13] literal                          ::= RDFLiteral | NumericLiteral | BooleanLiteral 
 [14] blankNodePropertyList            ::= "[" predicateObjectList "]" 
 [15] collection                       ::= "(" object* ")" 
@@ -23,9 +23,9 @@
 [135s] iri                            ::= IRIREF | PrefixedName 
 [136s] PrefixedName                   ::= PNAME_LN | PNAME_NS 
 [137s] BlankNode                      ::= BLANK_NODE_LABEL | ANON 
-[27] embTriple                        ::= "<<" embSubject predicate embObject ">>"
-[28] embSubject                       ::=	iri | BlankNode | embTriple
-[29] embObject                        ::=	iri | BlankNode | literal | embTriple
+[27] quotedTriple                     ::= "<<" qtSubject predicate qtObject ">>"
+[28] qtSubject                        ::=	iri | BlankNode | quotedTriple
+[29] qtObject                         ::=	iri | BlankNode | literal | quotedTriple
 [30] annotation                       ::= '{|' predicateObjectList '|}'
 
 @terminals

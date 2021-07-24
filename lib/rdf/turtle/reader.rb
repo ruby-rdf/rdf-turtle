@@ -373,7 +373,7 @@ module RDF::Turtle
         read_iri ||
         read_BlankNode ||
         read_collection ||
-        read_embTriple ||
+        read_quotedTriple ||
         error( "Expected subject", production: :subject, token: @lexer.first)
       end
     end
@@ -386,7 +386,7 @@ module RDF::Turtle
           read_collection ||
           read_blankNodePropertyList ||
           read_literal ||
-          read_embTriple
+          read_quotedTriple
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
           object
@@ -396,16 +396,16 @@ module RDF::Turtle
 
     # Read an RDF-star reified statement
     # @return [RDF::Statement]
-    def read_embTriple
+    def read_quotedTriple
       return unless @options[:rdfstar]
       if @lexer.first.value == '<<'
-        prod(:embTriple) do
+        prod(:quotedTriple) do
           @lexer.shift # eat <<
-          subject = read_embSubject || error("Failed to parse subject", production: :embTriple, token: @lexer.first)
-          predicate = read_verb || error("Failed to parse predicate", production: :embTriple, token: @lexer.first)
-          object = read_embObject || error("Failed to parse object", production: :embTriple, token: @lexer.first)
+          subject = read_qtSubject || error("Failed to parse subject", production: :quotedTriple, token: @lexer.first)
+          predicate = read_verb || error("Failed to parse predicate", production: :quotedTriple, token: @lexer.first)
+          object = read_qtObject || error("Failed to parse object", production: :quotedTriple, token: @lexer.first)
           unless @lexer.first.value == '>>'
-            error("Failed to end of embedded triple", production: :embTriple, token: @lexer.first)
+            error("Failed to end of embedded triple", production: :quotedTriple, token: @lexer.first)
           end
           @lexer.shift
           statement = RDF::Statement(subject, predicate, object)
@@ -415,22 +415,22 @@ module RDF::Turtle
     end
 
     # @return [RDF::Resource]
-    def read_embSubject
-      prod(:embSubject) do
+    def read_qtSubject
+      prod(:qtSubject) do
         read_iri ||
         read_BlankNode ||
-        read_embTriple ||
-        error( "Expected embedded subject", production: :embSubject, token: @lexer.first)
+        read_quotedTriple ||
+        error( "Expected embedded subject", production: :qtSubject, token: @lexer.first)
       end
     end
 
     # @return [RDF::Term]
-    def read_embObject(subject = nil, predicate = nil)
-      prod(:embObject) do
+    def read_qtObject(subject = nil, predicate = nil)
+      prod(:qtObject) do
         read_iri ||
         read_BlankNode ||
         read_literal ||
-        read_embTriple
+        read_quotedTriple
       end
     end
 
