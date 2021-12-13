@@ -17,7 +17,7 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby >= 2.4.
+* Compatible with Ruby >= 2.6.
 * Optional streaming writer, to serialize large graphs
 * Provisional support for [Turtle-star][RDF-star].
 
@@ -140,9 +140,9 @@ This version uses a hand-written parser using the Lexer from the [EBNF][] gem in
 
 ## Dependencies
 
-* [Ruby](https://ruby-lang.org/) (>= 2.4)
-* [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.1)
-* [EBNF][] (~> 1.1)
+* [Ruby](https://ruby-lang.org/) (>= 2.6)
+* [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.2)
+* [EBNF][] (~> 1.2)
 
 ## Installation
 
