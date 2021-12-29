@@ -34,7 +34,7 @@ describe RDF::Turtle::Reader do
                 end
 
                 if t.evaluate?
-                  output_graph = RDF::Repository.load(t.result, format:  :ntriples, rdfstar: true, base_uri:  t.base)
+                  output_graph = RDF::Repository.load(t.result, format: :ntriples, rdfstar: true, base_uri:  t.base)
                   expect(graph).to be_equivalent_graph(output_graph, t)
                 else
                   expect(graph).to be_a(RDF::Enumerable)

@@ -828,7 +828,7 @@ describe RDF::Turtle::Reader do
     end
   end
 
-  context "RDF*" do
+  context "RDF-star" do
     {
       "subject-iii" => [
         %(

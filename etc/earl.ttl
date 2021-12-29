@@ -9,7 +9,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
 <> a doap:Project, earl:TestSubject, earl:Software ;
-  doap:name          "RDF::Turtle" ;
+  doap:name          "Ruby RDF::Turtle" ;
   doap:homepage      <https://ruby-rdf.github.com/rdf-turtle> ;
   doap:license       <https://unlicense.org/1.0/> ;
   doap:shortdesc     "Turtle reader/writer for Ruby."@en ;

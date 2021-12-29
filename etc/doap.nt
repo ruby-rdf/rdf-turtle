@@ -1,26 +1,23 @@
-<https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
-<https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestSubject> .
-<https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Software> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#name> "RDF::Turtle" .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#homepage> <https://ruby-rdf.github.com/rdf-turtle> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#license> <https://unlicense.org/1.0/> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#shortdesc> "Turtle reader/writer for Ruby."@en .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#description> "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#created> "2011-08-29"^^<http://www.w3.org/2001/XMLSchema#date> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#programming-language> "Ruby" .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#implements> <https://www.w3.org/TR/turtle/> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Resource_Description_Framework> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Ruby_(programming_language)> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#download-page> <https://rubygems.org/gems/rdf-turtle> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#mailing-list> <https://lists.w3.org/Archives/Public/public-rdf-ruby/> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#bug-database> <https://github.com/ruby-rdf/rdf-turtle/issues> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#blog> <https://greggkellogg.net/> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#developer> <https://greggkellogg.net/foaf#me> .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#maintainer> <https://greggkellogg.net/foaf#me> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#implements> <https://www.w3.org/TR/turtle/> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#description> "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#documenter> <https://greggkellogg.net/foaf#me> .
-<https://rubygems.org/gems/rdf-turtle> <http://xmlns.com/foaf/0.1/maker> <https://greggkellogg.net/foaf#me> .
-<https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/title> "RDF::Turtle" .
-<https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/description> "RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite."@en .
-<https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/date> "2011-08-29"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Ruby_(programming_language)> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Resource_Description_Framework> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#programming-language> "Ruby" .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#homepage> <https://ruby-rdf.github.com/rdf-turtle> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#shortdesc> "Turtle reader/writer for RDF.rb."@en .
 <https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/creator> <https://greggkellogg.net/foaf#me> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#created> "2011-08-29"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#bug-database> <https://github.com/ruby-rdf/rdf-turtle/issues> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#name> "Ruby RDF::Turtle" .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#mailing-list> <https://lists.w3.org/Archives/Public/public-rdf-ruby/> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#license> <https://unlicense.org/1.0/> .
+<https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestSubject> .
+<https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://usefulinc.com/ns/doap#Project> .
+<https://rubygems.org/gems/rdf-turtle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Software> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#download-page> <https://rubygems.org/gems/rdf-turtle> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#blog> <https://greggkellogg.net/> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#maintainer> <https://greggkellogg.net/foaf#me> .
 <https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/isPartOf> <https://rubygems.org/gems/rdf> .
+<https://rubygems.org/gems/rdf-turtle> <http://xmlns.com/foaf/0.1/maker> <https://greggkellogg.net/foaf#me> .
