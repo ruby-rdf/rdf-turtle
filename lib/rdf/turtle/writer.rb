@@ -201,7 +201,7 @@ module RDF::Turtle
       super
     end
 
-    # Return a QName for the URI, or nil. Adds namespace of QName to defined prefixes
+    # Return a PName for the URI, or nil. Adds namespace of PName to defined prefixes
     # @param [RDF::Resource] resource
     # @return [String, nil] value to use to identify URI
     def get_pname(resource)
@@ -223,14 +223,15 @@ module RDF::Turtle
         unless u.to_s.empty?
           prefix(prefix, u) unless u.to_s.empty?
           log_debug("get_pname") {"add prefix #{prefix.inspect} => #{u}"}
-          uri.sub(u.to_s, "#{prefix}:")
+          # Escape suffix, as necessary
+          RDF::URI(uri).pname(prefixes: {prefix => u})
         end
       when @options[:standard_prefixes] && vocab = RDF::Vocabulary.each.to_a.detect {|v| uri.index(v.to_uri.to_s) == 0}
         prefix = vocab.__name__.to_s.split('::').last.downcase
         @uri_to_prefix[vocab.to_uri.to_s] = prefix
         prefix(prefix, vocab.to_uri) # Define for output
         log_debug("get_pname") {"add standard prefix #{prefix.inspect} => #{vocab.to_uri}"}
-        uri.sub(vocab.to_uri.to_s, "#{prefix}:")
+        RDF::URI(uri).pname(prefixes: {prefix => vocab.to_uri})
       else
         nil
       end
