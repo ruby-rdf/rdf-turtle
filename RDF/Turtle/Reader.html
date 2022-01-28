@@ -1,0 +1,3581 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: RDF::Turtle::Reader
+  
+    &mdash; Notation-3 and Turtle reader/writer for RDF.rb.
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "RDF::Turtle::Reader";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (R)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Turtle.html" title="RDF::Turtle (module)">Turtle</a></span></span>
+     &raquo; 
+    <span class="title">Reader</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: RDF::Turtle::Reader
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Reader</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Reader</li>
+          
+            <li class="next">RDF::Turtle::Reader</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd>EBNF::LL1::Parser, <span class='object_link'><a href="Terminals.html" title="RDF::Turtle::Terminals (module)">Terminals</a></span>, Util::Logger</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/rdf/turtle/reader.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>A parser for the Turtle 2</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Reader/Recovery.html" title="RDF::Turtle::Reader::Recovery (class)">Recovery</a></span>, <span class='object_link'><a href="Reader/SyntaxError.html" title="RDF::Turtle::Reader::SyntaxError (class)">SyntaxError</a></span>
+    
+  
+</p>
+
+
+
+  <h2>Constant Summary</h2>
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="Terminals.html" title="RDF::Turtle::Terminals (module)">Terminals</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Terminals.html#ANON-constant" title="RDF::Turtle::Terminals::ANON (constant)">Terminals::ANON</a></span>, <span class='object_link'><a href="Terminals.html#BASE-constant" title="RDF::Turtle::Terminals::BASE (constant)">Terminals::BASE</a></span>, <span class='object_link'><a href="Terminals.html#BLANK_NODE_LABEL-constant" title="RDF::Turtle::Terminals::BLANK_NODE_LABEL (constant)">Terminals::BLANK_NODE_LABEL</a></span>, <span class='object_link'><a href="Terminals.html#DECIMAL-constant" title="RDF::Turtle::Terminals::DECIMAL (constant)">Terminals::DECIMAL</a></span>, <span class='object_link'><a href="Terminals.html#DOUBLE-constant" title="RDF::Turtle::Terminals::DOUBLE (constant)">Terminals::DOUBLE</a></span>, <span class='object_link'><a href="Terminals.html#ECHAR-constant" title="RDF::Turtle::Terminals::ECHAR (constant)">Terminals::ECHAR</a></span>, <span class='object_link'><a href="Terminals.html#EXPONENT-constant" title="RDF::Turtle::Terminals::EXPONENT (constant)">Terminals::EXPONENT</a></span>, <span class='object_link'><a href="Terminals.html#INTEGER-constant" title="RDF::Turtle::Terminals::INTEGER (constant)">Terminals::INTEGER</a></span>, <span class='object_link'><a href="Terminals.html#IRIREF-constant" title="RDF::Turtle::Terminals::IRIREF (constant)">Terminals::IRIREF</a></span>, <span class='object_link'><a href="Terminals.html#IRI_RANGE-constant" title="RDF::Turtle::Terminals::IRI_RANGE (constant)">Terminals::IRI_RANGE</a></span>, <span class='object_link'><a href="Terminals.html#LANGTAG-constant" title="RDF::Turtle::Terminals::LANGTAG (constant)">Terminals::LANGTAG</a></span>, <span class='object_link'><a href="Terminals.html#PERCENT-constant" title="RDF::Turtle::Terminals::PERCENT (constant)">Terminals::PERCENT</a></span>, <span class='object_link'><a href="Terminals.html#PLX-constant" title="RDF::Turtle::Terminals::PLX (constant)">Terminals::PLX</a></span>, <span class='object_link'><a href="Terminals.html#PNAME_LN-constant" title="RDF::Turtle::Terminals::PNAME_LN (constant)">Terminals::PNAME_LN</a></span>, <span class='object_link'><a href="Terminals.html#PNAME_NS-constant" title="RDF::Turtle::Terminals::PNAME_NS (constant)">Terminals::PNAME_NS</a></span>, <span class='object_link'><a href="Terminals.html#PN_CHARS-constant" title="RDF::Turtle::Terminals::PN_CHARS (constant)">Terminals::PN_CHARS</a></span>, <span class='object_link'><a href="Terminals.html#PN_CHARS_BASE-constant" title="RDF::Turtle::Terminals::PN_CHARS_BASE (constant)">Terminals::PN_CHARS_BASE</a></span>, <span class='object_link'><a href="Terminals.html#PN_CHARS_BODY-constant" title="RDF::Turtle::Terminals::PN_CHARS_BODY (constant)">Terminals::PN_CHARS_BODY</a></span>, <span class='object_link'><a href="Terminals.html#PN_CHARS_U-constant" title="RDF::Turtle::Terminals::PN_CHARS_U (constant)">Terminals::PN_CHARS_U</a></span>, <span class='object_link'><a href="Terminals.html#PN_LOCAL-constant" title="RDF::Turtle::Terminals::PN_LOCAL (constant)">Terminals::PN_LOCAL</a></span>, <span class='object_link'><a href="Terminals.html#PN_LOCAL_BODY-constant" title="RDF::Turtle::Terminals::PN_LOCAL_BODY (constant)">Terminals::PN_LOCAL_BODY</a></span>, <span class='object_link'><a href="Terminals.html#PN_LOCAL_ESC-constant" title="RDF::Turtle::Terminals::PN_LOCAL_ESC (constant)">Terminals::PN_LOCAL_ESC</a></span>, <span class='object_link'><a href="Terminals.html#PN_PREFIX-constant" title="RDF::Turtle::Terminals::PN_PREFIX (constant)">Terminals::PN_PREFIX</a></span>, <span class='object_link'><a href="Terminals.html#PREFIX-constant" title="RDF::Turtle::Terminals::PREFIX (constant)">Terminals::PREFIX</a></span>, <span class='object_link'><a href="Terminals.html#STRING_LITERAL_LONG_QUOTE-constant" title="RDF::Turtle::Terminals::STRING_LITERAL_LONG_QUOTE (constant)">Terminals::STRING_LITERAL_LONG_QUOTE</a></span>, <span class='object_link'><a href="Terminals.html#STRING_LITERAL_LONG_SINGLE_QUOTE-constant" title="RDF::Turtle::Terminals::STRING_LITERAL_LONG_SINGLE_QUOTE (constant)">Terminals::STRING_LITERAL_LONG_SINGLE_QUOTE</a></span>, <span class='object_link'><a href="Terminals.html#STRING_LITERAL_QUOTE-constant" title="RDF::Turtle::Terminals::STRING_LITERAL_QUOTE (constant)">Terminals::STRING_LITERAL_QUOTE</a></span>, <span class='object_link'><a href="Terminals.html#STRING_LITERAL_SINGLE_QUOTE-constant" title="RDF::Turtle::Terminals::STRING_LITERAL_SINGLE_QUOTE (constant)">Terminals::STRING_LITERAL_SINGLE_QUOTE</a></span>, <span class='object_link'><a href="Terminals.html#UCHAR-constant" title="RDF::Turtle::Terminals::UCHAR (constant)">Terminals::UCHAR</a></span>, <span class='object_link'><a href="Terminals.html#U_CHARS1-constant" title="RDF::Turtle::Terminals::U_CHARS1 (constant)">Terminals::U_CHARS1</a></span>, <span class='object_link'><a href="Terminals.html#U_CHARS2-constant" title="RDF::Turtle::Terminals::U_CHARS2 (constant)">Terminals::U_CHARS2</a></span>, <span class='object_link'><a href="Terminals.html#WS-constant" title="RDF::Turtle::Terminals::WS (constant)">Terminals::WS</a></span></p>
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#options-class_method" title="options (class method)">.<strong>options</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Reader options.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_statement-instance_method" title="#add_statement (instance method)">#<strong>add_statement</strong>(production, statement)  &#x21d2; RDF::Statement </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>add a statement, object can be literal or URI or bnode.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bnode-instance_method" title="#bnode (instance method)">#<strong>bnode</strong>(value = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Keep track of allocated BNodes.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#debug-instance_method" title="#debug (instance method)">#<strong>debug</strong>(*args, &amp;block)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#each_statement-instance_method" title="#each_statement (instance method)">#<strong>each_statement</strong> {|statement| ... } </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Iterates the given block for each RDF statement in the input.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#each_triple-instance_method" title="#each_triple (instance method)">#<strong>each_triple</strong> {|subject, predicate, object| ... } </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Iterates the given block for each RDF triple in the input.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#error-instance_method" title="#error (instance method)">#<strong>error</strong>(node, message, options)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Error information, used as level <code>0</code> debug messages.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(input = nil, **options, &amp;block)  &#x21d2; RDF::Turtle::Reader </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initializes a new reader instance.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#literal-instance_method" title="#literal (instance method)">#<strong>literal</strong>(value, **options)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Create a literal.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pname-instance_method" title="#pname (instance method)">#<strong>pname</strong>(prefix, suffix)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Expand a PNAME using string concatenation.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#prefix-instance_method" title="#prefix (instance method)">#<strong>prefix</strong>(prefix, iri = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Override #prefix to take a relative IRI.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#process_iri-instance_method" title="#process_iri (instance method)">#<strong>process_iri</strong>(iri)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Process a URI against base.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#prod-instance_method" title="#prod (instance method)">#<strong>prod</strong>(production, recover_to = [])  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#progress-instance_method" title="#progress (instance method)">#<strong>progress</strong>(*args, &amp;block)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_annotation-instance_method" title="#read_annotation (instance method)">#<strong>read_annotation</strong>(subject, predicate, object)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Read an annotation on a triple.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_BlankNode-instance_method" title="#read_BlankNode (instance method)">#<strong>read_BlankNode</strong>  &#x21d2; RDF::Node </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_blankNodePropertyList-instance_method" title="#read_blankNodePropertyList (instance method)">#<strong>read_blankNodePropertyList</strong>  &#x21d2; RDF::Node </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_collection-instance_method" title="#read_collection (instance method)">#<strong>read_collection</strong>  &#x21d2; RDF::Node </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_directive-instance_method" title="#read_directive (instance method)">#<strong>read_directive</strong>  </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_iri-instance_method" title="#read_iri (instance method)">#<strong>read_iri</strong>  &#x21d2; RDF::URI </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_literal-instance_method" title="#read_literal (instance method)">#<strong>read_literal</strong>  &#x21d2; RDF::Literal </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_object-instance_method" title="#read_object (instance method)">#<strong>read_object</strong>(subject = nil, predicate = nil)  </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_objectList-instance_method" title="#read_objectList (instance method)">#<strong>read_objectList</strong>(subject, predicate)  &#x21d2; RDF::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The last matched subject.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_predicateObjectList-instance_method" title="#read_predicateObjectList (instance method)">#<strong>read_predicateObjectList</strong>(subject)  &#x21d2; RDF::URI </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The last matched verb.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_qtObject-instance_method" title="#read_qtObject (instance method)">#<strong>read_qtObject</strong>(subject = nil, predicate = nil)  &#x21d2; RDF::Term </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_qtSubject-instance_method" title="#read_qtSubject (instance method)">#<strong>read_qtSubject</strong>  &#x21d2; RDF::Resource </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_quotedTriple-instance_method" title="#read_quotedTriple (instance method)">#<strong>read_quotedTriple</strong>  &#x21d2; RDF::Statement </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Read an RDF-star reified statement.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_statement-instance_method" title="#read_statement (instance method)">#<strong>read_statement</strong>  </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_subject-instance_method" title="#read_subject (instance method)">#<strong>read_subject</strong>  &#x21d2; RDF::Resource </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_triples-instance_method" title="#read_triples (instance method)">#<strong>read_triples</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the last verb matched, or subject BNode on predicateObjectList?.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#read_verb-instance_method" title="#read_verb (instance method)">#<strong>read_verb</strong>  &#x21d2; RDF::URI </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#recover-instance_method" title="#recover (instance method)">#<strong>recover</strong>(*args, &amp;block)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(input = nil, **options, &amp;block)  &#x21d2; <tt><span class='object_link'><a href="" title="RDF::Turtle::Reader (class)">RDF::Turtle::Reader</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initializes a new reader instance.</p>
+
+<p>Note, the spec does not define a default mapping for the empty prefix, but it is so commonly used in examples that we define it to be the empty string anyway, except when validating.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>input</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; Object}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>**options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:prefixes</span>
+          <span class="type">(<tt>Hash</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>Hash.new</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>the prefix mappings to use (for acessing intermediate parser productions)</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:base_uri</span>
+          <span class="type">(<tt>#to_s</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>nil</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>the base URI to use when resolving relative URIs (for acessing intermediate parser productions)</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:anon_base</span>
+          <span class="type">(<tt>#to_s</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>&quot;b0&quot;</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Basis for generating anonymous Nodes</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:validate</span>
+          <span class="type">(<tt>Boolean</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>false</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>whether to validate the parsed statements and values. If not validating, the parser will attempt to recover from errors.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:logger</span>
+          <span class="type">(<tt>Logger</tt>, <tt>#write</tt>, <tt>#&lt;&lt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Record error/info/debug output</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:freebase</span>
+          <span class="type">(<tt>Boolean</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>false</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Use optimized Freebase reader</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 92</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>super</span> <span class='kw'>do</span>
+    <span class='ivar'>@options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+      <span class='label'>anon_base:</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>b0</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='label'>whitespace:</span>  <span class='const'><span class='object_link'><a href="Terminals.html#WS-constant" title="RDF::Turtle::Terminals::WS (constant)">WS</a></span></span><span class='comma'>,</span>
+      <span class='label'>depth:</span> <span class='int'>0</span><span class='comma'>,</span>
+    <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='ivar'>@options</span><span class='rparen'>)</span>
+    <span class='ivar'>@prod_stack</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+    <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:base_uri</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>URI</span><span class='lparen'>(</span><span class='id identifier rubyid_base_uri'>base_uri</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>base IRI</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span>
+    
+    <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validate</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_validate?'>validate?</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span>
+    <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>canonicalize</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_canonicalize?'>canonicalize?</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span>
+    <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>intern</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_intern?'>intern?</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span>
+
+    <span class='ivar'>@lexer</span> <span class='op'>=</span> <span class='const'>EBNF</span><span class='op'>::</span><span class='const'>LL1</span><span class='op'>::</span><span class='const'>Lexer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_input'>input</span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_patterns'>patterns</span><span class='comma'>,</span> <span class='op'>**</span><span class='ivar'>@options</span><span class='rparen'>)</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+      <span class='kw'>case</span> <span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_arity'>arity</span>
+        <span class='kw'>when</span> <span class='int'>0</span> <span class='kw'>then</span> <span class='id identifier rubyid_instance_eval'>instance_eval</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+        <span class='kw'>else</span> <span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="options-class_method">
+  
+    .<strong>options</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reader options</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://ruby-rdf.github.io/rdf/RDF/Reader#options-class_method" target="_parent" title="https://ruby-rdf.github.io/rdf/RDF/Reader#options-class_method">https://ruby-rdf.github.io/rdf/RDF/Reader#options-class_method</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+44
+45
+46
+47
+48
+49
+50
+51
+52</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 44</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_options'>options</span>
+  <span class='kw'>super</span> <span class='op'>+</span> <span class='lbracket'>[</span>
+    <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>CLI</span><span class='op'>::</span><span class='const'>Option</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
+      <span class='label'>symbol:</span> <span class='symbol'>:freebase</span><span class='comma'>,</span>
+      <span class='label'>datatype:</span> <span class='const'>TrueClass</span><span class='comma'>,</span>
+      <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--freebase</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Use optimized Freebase reader.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='kw'>true</span><span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="add_statement-instance_method">
+  
+    #<strong>add_statement</strong>(production, statement)  &#x21d2; <tt>RDF::Statement</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>add a statement, object can be literal or URI or bnode</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>production</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>statement</span>
+      
+      
+        <span class='type'>(<tt>RDF::Statement</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the subject of the statement</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Statement</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Added statement</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::ReaderError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Checks parameter types and raises if they are incorrect if parsing mode is <em>validate</em>.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+172
+173
+174
+175
+176
+177
+178</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 172</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_statement'>add_statement</span><span class='lparen'>(</span><span class='id identifier rubyid_production'>production</span><span class='comma'>,</span> <span class='id identifier rubyid_statement'>statement</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Statement is invalid: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='id identifier rubyid_produciton'>produciton</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_validate?'>validate?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_invalid?'>invalid?</span>
+  <span class='ivar'>@callback</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_subject'>subject</span> <span class='op'>&amp;&amp;</span>
+                               <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>&amp;&amp;</span>
+                               <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span> <span class='op'>&amp;&amp;</span>
+                               <span class='lparen'>(</span><span class='id identifier rubyid_validate?'>validate?</span> <span class='op'>?</span> <span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_valid?'>valid?</span> <span class='op'>:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="bnode-instance_method">
+  
+    #<strong>bnode</strong>(value = nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Keep track of allocated BNodes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+236
+237
+238
+239
+240</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 236</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bnode'>bnode</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Node</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>unless</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='ivar'>@bnode_cache</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@bnode_cache</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Node</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="debug-instance_method">
+  
+    #<strong>debug</strong>(*args, &amp;block)  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+625
+626
+627
+628
+629
+630
+631</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 625</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span> <span class='op'>:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:level</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='int'>0</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:lineno</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='id identifier rubyid_lineno'>lineno</span>
+  <span class='id identifier rubyid_log_debug'>log_debug</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_opts'>opts</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="each_statement-instance_method">
+  
+    #<strong>each_statement</strong> {|statement| ... } 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Iterates the given block for each RDF statement in the input.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>statement</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>statement</span>
+      
+      
+        <span class='type'>(<tt>RDF::Statement</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 129</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_each_statement'>each_statement</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='id identifier rubyid_log_recover'>log_recover</span>
+    <span class='ivar'>@callback</span> <span class='op'>=</span> <span class='id identifier rubyid_block'>block</span>
+
+    <span class='kw'>begin</span>
+      <span class='kw'>while</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='kw'>rescue</span> <span class='kw'>true</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_read_statement'>read_statement</span>
+      <span class='kw'>end</span>
+    <span class='kw'>rescue</span> <span class='const'>EBNF</span><span class='op'>::</span><span class='const'>LL1</span><span class='op'>::</span><span class='const'>Lexer</span><span class='op'>::</span><span class='const'>Error</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="Reader/SyntaxError.html" title="RDF::Turtle::Reader::SyntaxError (class)">SyntaxError</a></span></span><span class='comma'>,</span> <span class='const'>EOFError</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="Reader/Recovery.html" title="RDF::Turtle::Reader::Recovery (class)">Recovery</a></span></span>
+      <span class='comment'># Terminate loop if EOF found while recovering
+</span>    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_validate?'>validate?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_log_statistics'>log_statistics</span><span class='lbracket'>[</span><span class='symbol'>:error</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>ReaderError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Errors found during processing</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_statement</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="each_triple-instance_method">
+  
+    #<strong>each_triple</strong> {|subject, predicate, object| ... } 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Iterates the given block for each RDF triple in the input.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>subject</tt>, <tt>predicate</tt>, <tt>object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>subject</span>
+      
+      
+        <span class='type'>(<tt>RDF::Resource</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>predicate</span>
+      
+      
+        <span class='type'>(<tt>RDF::URI</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>object</span>
+      
+      
+        <span class='type'>(<tt>RDF::Value</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+157
+158
+159
+160
+161
+162
+163
+164</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 157</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_each_triple'>each_triple</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+    <span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
+      <span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_triple'>to_triple</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each_triple</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="error-instance_method">
+  
+    #<strong>error</strong>(node, message, options)  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Error information, used as level <code>0</code> debug messages.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>node</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Relevant location associated with message</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>message</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Error string</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:production</span>
+          <span class="type">(<tt>URI</tt>, <tt>#to_s</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+        </li>
+      
+        <li>
+          <span class="name">:token</span>
+          <span class="type">(<tt>Token</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li>RDF::Turtle::Reader.{{#debug}</li>
+    
+  </ul>
+
+</div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 643</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ctx'>ctx</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_ctx'>ctx</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(found </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_ctx'>ctx</span> <span class='op'>+=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>, production = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:production</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:production</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='ivar'>@lineno</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span>
+  <span class='id identifier rubyid_log_error'>log_error</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='id identifier rubyid_ctx'>ctx</span><span class='comma'>,</span>
+    <span class='label'>lineno:</span>     <span class='id identifier rubyid_lineno'>lineno</span><span class='comma'>,</span>
+    <span class='label'>token:</span>      <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='label'>production:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:production</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='label'>depth:</span>      <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='label'>exception:</span>  <span class='const'><span class='object_link'><a href="Reader/SyntaxError.html" title="RDF::Turtle::Reader::SyntaxError (class)">SyntaxError</a></span></span><span class='comma'>,</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="inspect-instance_method">
+  
+    #<strong>inspect</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+119
+120
+121</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 119</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
+  <span class='id identifier rubyid_sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#&lt;%s:%#0x(%s)&gt;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid___id__'>__id__</span><span class='comma'>,</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="literal-instance_method">
+  
+    #<strong>literal</strong>(value, **options)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Create a literal</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 194</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>literal</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>value: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>, </span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>options: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>, </span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validate: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_validate?'>validate?</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'>, </span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>c14n?: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_canonicalize?'>canonicalize?</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>validate:</span>  <span class='id identifier rubyid_validate?'>validate?</span><span class='comma'>,</span> <span class='label'>canonicalize:</span>  <span class='id identifier rubyid_canonicalize?'>canonicalize?</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='const'>ArgumentError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Argument Error </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:literal</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pname-instance_method">
+  
+    #<strong>pname</strong>(prefix, suffix)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Expand a PNAME using string concatenation</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 220</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_pname'>pname</span><span class='lparen'>(</span><span class='id identifier rubyid_prefix'>prefix</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
+  <span class='comment'># Prefixes must be defined, except special case for empty prefix being alias for current @base
+</span>  <span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_prefix'>prefix</span><span class='lparen'>(</span><span class='id identifier rubyid_prefix'>prefix</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_prefix'>prefix</span><span class='lparen'>(</span><span class='id identifier rubyid_prefix'>prefix</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_prefix'>prefix</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_validate?'>validate?</span>
+    <span class='id identifier rubyid_base_uri'>base_uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>undefined prefix</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:pname</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_prefix'>prefix</span><span class='rparen'>)</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_suffix'>suffix</span> <span class='op'>=</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\#</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_base'>base</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pname</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>base: &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base'>base</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;, suffix: &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_suffix'>suffix</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='id identifier rubyid_base'>base</span> <span class='op'>+</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="prefix-instance_method">
+  
+    #<strong>prefix</strong>(prefix, iri = nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Override #prefix to take a relative IRI</p>
+
+<p>prefix directives map a local name to an IRI, also resolved against the current In-Scope Base URI. Spec confusion, presume that an undefined empty prefix has an empty relative IRI, which uses string contatnation rules against the in-scope IRI at the time of use</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+212
+213
+214
+215
+216</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 212</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_prefix'>prefix</span><span class='lparen'>(</span><span class='id identifier rubyid_prefix'>prefix</span><span class='comma'>,</span> <span class='id identifier rubyid_iri'>iri</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='comment'># Relative IRIs are resolved against @base
+</span>  <span class='id identifier rubyid_iri'>iri</span> <span class='op'>=</span> <span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_iri'>iri</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_prefix'>prefix</span><span class='comma'>,</span> <span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="process_iri-instance_method">
+  
+    #<strong>process_iri</strong>(iri)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Process a URI against base</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 181</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_iri'>iri</span> <span class='op'>=</span> <span class='id identifier rubyid_iri'>iri</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>2</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_iri'>iri</span> <span class='op'>===</span> <span class='symbol'>:IRIREF</span>
+  <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>URI</span><span class='lparen'>(</span><span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_relative?'>relative?</span>
+  <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_validate!'>validate!</span> <span class='kw'>if</span> <span class='id identifier rubyid_validate?'>validate?</span>
+  <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize!'>canonicalize!</span> <span class='kw'>if</span> <span class='id identifier rubyid_canonicalize?'>canonicalize?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_frozen?'>frozen?</span>
+  <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>URI</span><span class='period'>.</span><span class='id identifier rubyid_intern'>intern</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_intern?'>intern?</span>
+  <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>rescue</span> <span class='const'>ArgumentError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>process_iri</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_e'>e</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="prod-instance_method">
+  
+    #<strong>prod</strong>(production, recover_to = [])  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 555</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='id identifier rubyid_production'>production</span><span class='comma'>,</span> <span class='id identifier rubyid_recover_to'>recover_to</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='ivar'>@prod_stack</span> <span class='op'>&lt;&lt;</span> <span class='lbrace'>{</span><span class='label'>prod:</span> <span class='id identifier rubyid_production'>production</span><span class='comma'>,</span> <span class='label'>recover_to:</span> <span class='id identifier rubyid_recover_to'>recover_to</span><span class='rbrace'>}</span>
+  <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span> <span class='op'>+=</span> <span class='int'>1</span>
+  <span class='id identifier rubyid_recover'>recover</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_production'>production</span><span class='embexpr_end'>}</span><span class='tstring_content'>(start)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+  <span class='kw'>yield</span>
+<span class='kw'>rescue</span> <span class='const'>EBNF</span><span class='op'>::</span><span class='const'>LL1</span><span class='op'>::</span><span class='const'>Lexer</span><span class='op'>::</span><span class='const'>Error</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="Reader/SyntaxError.html" title="RDF::Turtle::Reader::SyntaxError (class)">SyntaxError</a></span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="Reader/Recovery.html" title="RDF::Turtle::Reader::Recovery (class)">Recovery</a></span></span> <span class='op'>=&gt;</span>  <span class='id identifier rubyid_e'>e</span>
+  <span class='comment'># Lexer encountered an illegal token or the parser encountered
+</span>  <span class='comment'># a terminal which is inappropriate for the current production.
+</span>  <span class='comment'># Perform error recovery to find a reasonable terminal based
+</span>  <span class='comment'># on the follow sets of the relevant productions. This includes
+</span>  <span class='comment'># remaining terms from the current production and the stacked
+</span>  <span class='comment'># productions
+</span>  <span class='kw'>case</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='kw'>when</span> <span class='const'>EBNF</span><span class='op'>::</span><span class='const'>LL1</span><span class='op'>::</span><span class='const'>Lexer</span><span class='op'>::</span><span class='const'>Error</span>
+    <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_recover'>recover</span>
+    <span class='kw'>begin</span>
+      <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Lexer error</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>With input &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_input'>input</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+        <span class='label'>production:</span> <span class='id identifier rubyid_production'>production</span><span class='comma'>,</span>
+        <span class='label'>token:</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_token'>token</span><span class='rparen'>)</span>
+    <span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="Reader/SyntaxError.html" title="RDF::Turtle::Reader::SyntaxError (class)">SyntaxError</a></span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>EOFError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>End of input found when recovering</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>recovery</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>current token: </span><span class='embexpr_beg'>#{</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+  <span class='kw'>unless</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="Reader/Recovery.html" title="RDF::Turtle::Reader::Recovery (class)">Recovery</a></span></span><span class='rparen'>)</span>
+    <span class='comment'># Get the list of follows for this sequence, this production and the stacked productions.
+</span>    <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>recovery</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stack follows:</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='ivar'>@prod_stack</span><span class='period'>.</span><span class='id identifier rubyid_reverse'>reverse</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_prod'>prod</span><span class='op'>|</span>
+      <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>recovery</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>level:</span> <span class='int'>4</span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_prod'>prod</span><span class='lbracket'>[</span><span class='symbol'>:prod</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_prod'>prod</span><span class='lbracket'>[</span><span class='symbol'>:recover_to</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Find all follows to the top of the stack
+</span>  <span class='id identifier rubyid_follows'>follows</span> <span class='op'>=</span> <span class='ivar'>@prod_stack</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_prod'>prod</span><span class='op'>|</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_prod'>prod</span><span class='lbracket'>[</span><span class='symbol'>:recover_to</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
+
+  <span class='comment'># Skip tokens until one is found in follows
+</span>  <span class='kw'>while</span> <span class='lparen'>(</span><span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='kw'>rescue</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_recover'>recover</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_follows'>follows</span><span class='period'>.</span><span class='id identifier rubyid_none?'>none?</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>===</span> <span class='id identifier rubyid_t'>t</span><span class='rbrace'>}</span>
+    <span class='id identifier rubyid_skipped'>skipped</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+    <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>recovery</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>skip </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_skipped'>skipped</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>recovery</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>found </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'> in follows</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+
+  <span class='comment'># Re-raise the error unless token is a follows of this production
+</span>  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="Reader/Recovery.html" title="RDF::Turtle::Reader::Recovery (class)">Recovery</a></span></span> <span class='kw'>unless</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_recover_to'>recover_to</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>===</span> <span class='id identifier rubyid_t'>t</span><span class='rbrace'>}</span>
+
+  <span class='comment'># Skip that token to get something reasonable to start the next production with
+</span>  <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+<span class='kw'>ensure</span>
+  <span class='id identifier rubyid_progress'>progress</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_production'>production</span><span class='embexpr_end'>}</span><span class='tstring_content'>(finish)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span> <span class='op'>-=</span> <span class='int'>1</span>
+  <span class='ivar'>@prod_stack</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="progress-instance_method">
+  
+    #<strong>progress</strong>(*args, &amp;block)  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+609
+610
+611
+612
+613
+614
+615</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 609</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_progress'>progress</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span> <span class='op'>:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:level</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='int'>1</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:lineno</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='id identifier rubyid_lineno'>lineno</span>
+  <span class='id identifier rubyid_log_info'>log_info</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_opts'>opts</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_annotation-instance_method">
+  
+    #<strong>read_annotation</strong>(subject, predicate, object)  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Read an annotation on a triple</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 438</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_annotation'>read_annotation</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:annotation</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>{|</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:annotation</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%(</span><span class='tstring_content'>|}</span><span class='tstring_end'>)</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+
+      <span class='comment'># Statement becomes subject for predicateObjectList
+</span>      <span class='id identifier rubyid_statement'>statement</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Statement</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='label'>quoted:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_read_predicateObjectList'>read_predicateObjectList</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='rparen'>)</span> <span class='op'>||</span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected predicateObjectList</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:annotation</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>annotation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected closing &#39;|}&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>|}</span><span class='tstring_end'>&#39;</span></span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_BlankNode-instance_method">
+  
+    #<strong>read_BlankNode</strong>  &#x21d2; <tt>RDF::Node</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Node</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+547
+548
+549
+550
+551
+552
+553</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 547</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_BlankNode'>read_BlankNode</span>
+  <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+  <span class='kw'>when</span> <span class='symbol'>:BLANK_NODE_LABEL</span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:BlankNode</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_bnode'>bnode</span><span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>2</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>when</span> <span class='symbol'>:ANON</span> <span class='kw'>then</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:BlankNode</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_bnode'>bnode</span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_blankNodePropertyList-instance_method">
+  
+    #<strong>read_blankNodePropertyList</strong>  &#x21d2; <tt>RDF::Node</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Node</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 500</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_blankNodePropertyList'>read_blankNodePropertyList</span>
+  <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>[</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:blankNodePropertyList</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%{</span><span class='tstring_content'>]</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+      <span class='id identifier rubyid_progress'>progress</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>blankNodePropertyList</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>token: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+      <span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='id identifier rubyid_bnode'>bnode</span>
+      <span class='id identifier rubyid_read_predicateObjectList'>read_predicateObjectList</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>blankNodePropertyList</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected closing &#39;]&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>]</span><span class='tstring_end'>&#39;</span></span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+      <span class='id identifier rubyid_node'>node</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_collection-instance_method">
+  
+    #<strong>read_collection</strong>  &#x21d2; <tt>RDF::Node</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Node</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 516</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_collection'>read_collection</span>
+  <span class='kw'>if</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>(</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:collection</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%{</span><span class='tstring_content'>)</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+      <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+      <span class='id identifier rubyid_progress'>progress</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>token: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+      <span class='id identifier rubyid_objects'>objects</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+      <span class='kw'>while</span> <span class='id identifier rubyid_object'>object</span> <span class='op'>=</span> <span class='id identifier rubyid_read_object'>read_object</span>
+        <span class='id identifier rubyid_objects'>objects</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_object'>object</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_list'>list</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>List</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>values:</span> <span class='id identifier rubyid_objects'>objects</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_list'>list</span><span class='period'>.</span><span class='id identifier rubyid_each_statement'>each_statement</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_statement'>statement</span><span class='op'>|</span>
+        <span class='id identifier rubyid_add_statement'>add_statement</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_statement'>statement</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected closing &#39;)&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>)</span><span class='tstring_end'>&#39;</span></span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+      <span class='id identifier rubyid_list'>list</span><span class='period'>.</span><span class='id identifier rubyid_subject'>subject</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_directive-instance_method">
+  
+    #<strong>read_directive</strong>   <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 264</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_directive'>read_directive</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:directive</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+    <span class='kw'>when</span> <span class='symbol'>:BASE</span>
+      <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:base</span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='id identifier rubyid_terminated'>terminated</span> <span class='op'>=</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@base</span><span class='tstring_end'>&#39;</span></span>
+        <span class='id identifier rubyid_iri'>iri</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected IRIREF</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:base</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_iri'>iri</span> <span class='op'>===</span> <span class='symbol'>:IRIREF</span>
+        <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:base_uri</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>base</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_content'> should be downcased</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_start_with?'>start_with?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@base</span><span class='tstring_end'>&#39;</span></span>
+
+        <span class='kw'>if</span> <span class='id identifier rubyid_terminated'>terminated</span>
+          <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>base</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_content'> to be terminated</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span>
+          <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='kw'>elsif</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span>
+          <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>base</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_content'> not to be terminated</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> 
+        <span class='kw'>else</span>
+          <span class='kw'>true</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>when</span> <span class='symbol'>:PREFIX</span>
+      <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:prefixID</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='id identifier rubyid_pfx'>pfx</span><span class='comma'>,</span> <span class='id identifier rubyid_iri'>iri</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='comma'>,</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='id identifier rubyid_terminated'>terminated</span> <span class='op'>=</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@prefix</span><span class='tstring_end'>&#39;</span></span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected PNAME_NS</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:prefix</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_pfx'>pfx</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_pfx'>pfx</span> <span class='op'>===</span> <span class='symbol'>:PNAME_NS</span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected IRIREF</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:prefix</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_iri'>iri</span> <span class='op'>===</span> <span class='symbol'>:IRIREF</span>
+        <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prefixID</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Defined prefix </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pfx'>pfx</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'> mapping to </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_iri'>iri</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
+        <span class='id identifier rubyid_prefix'>prefix</span><span class='lparen'>(</span><span class='id identifier rubyid_pfx'>pfx</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='op'>-</span><span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='id identifier rubyid_iri'>iri</span><span class='rparen'>)</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prefixId</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_content'> should be downcased</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_start_with?'>start_with?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@prefix</span><span class='tstring_end'>&#39;</span></span>
+
+        <span class='kw'>if</span> <span class='id identifier rubyid_terminated'>terminated</span>
+          <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prefixID</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_content'> to be terminated</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span>
+          <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='kw'>elsif</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span>
+          <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prefixID</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_token'>token</span><span class='embexpr_end'>}</span><span class='tstring_content'> not to be terminated</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> 
+        <span class='kw'>else</span>
+          <span class='kw'>true</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_iri-instance_method">
+  
+    #<strong>read_iri</strong>  &#x21d2; <tt>RDF::URI</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::URI</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+538
+539
+540
+541
+542
+543
+544</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 538</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_iri'>read_iri</span>
+  <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+  <span class='kw'>when</span> <span class='symbol'>:IRIREF</span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:iri</span><span class='rparen'>)</span>  <span class='lbrace'>{</span><span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>when</span> <span class='symbol'>:PNAME_LN</span><span class='comma'>,</span> <span class='symbol'>:PNAME_NS</span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:iri</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_pname'>pname</span><span class='lparen'>(</span><span class='op'>*</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='int'>2</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_literal-instance_method">
+  
+    #<strong>read_literal</strong>  &#x21d2; <tt>RDF::Literal</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Literal</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 456</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_literal'>read_literal</span>
+  <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>||</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>when</span> <span class='symbol'>:INTEGER</span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>datatype:</span>  <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>XSD</span><span class='period'>.</span><span class='id identifier rubyid_integer'>integer</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>when</span> <span class='symbol'>:DECIMAL</span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
+      <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_start_with?'>start_with?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>datatype:</span>  <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>XSD</span><span class='period'>.</span><span class='id identifier rubyid_decimal'>decimal</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>when</span> <span class='symbol'>:DOUBLE</span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\.([eE])</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.0\1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>datatype:</span>  <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>XSD</span><span class='period'>.</span><span class='id identifier rubyid_double'>double</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>true</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>false</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>XSD</span><span class='period'>.</span><span class='id identifier rubyid_boolean'>boolean</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='kw'>when</span> <span class='symbol'>:STRING_LITERAL_QUOTE</span><span class='comma'>,</span> <span class='symbol'>:STRING_LITERAL_SINGLE_QUOTE</span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>2</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>read_literal</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+      <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>||</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
+      <span class='kw'>when</span> <span class='symbol'>:LANGTAG</span>
+        <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>language:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>^^</span><span class='tstring_end'>&#39;</span></span>
+        <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='id identifier rubyid_read_iri'>read_iri</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>when</span> <span class='symbol'>:STRING_LITERAL_LONG_QUOTE</span><span class='comma'>,</span> <span class='symbol'>:STRING_LITERAL_LONG_SINGLE_QUOTE</span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>3</span><span class='op'>..</span><span class='op'>-</span><span class='int'>4</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>read_literal</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+      <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>||</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
+      <span class='kw'>when</span> <span class='symbol'>:LANGTAG</span>
+        <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>language:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>^^</span><span class='tstring_end'>&#39;</span></span>
+        <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>datatype:</span> <span class='id identifier rubyid_read_iri'>read_iri</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_literal'>literal</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_object-instance_method">
+  
+    #<strong>read_object</strong>(subject = nil, predicate = nil)   <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 382</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_object'>read_object</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:object</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_object'>object</span> <span class='op'>=</span> <span class='id identifier rubyid_read_iri'>read_iri</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_read_BlankNode'>read_BlankNode</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_read_collection'>read_collection</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_read_blankNodePropertyList'>read_blankNodePropertyList</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_read_literal'>read_literal</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
+
+      <span class='id identifier rubyid_add_statement'>add_statement</span><span class='lparen'>(</span><span class='symbol'>:object</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Statement</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_subject'>subject</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_predicate'>predicate</span>
+      <span class='id identifier rubyid_object'>object</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_objectList-instance_method">
+  
+    #<strong>read_objectList</strong>(subject, predicate)  &#x21d2; <tt>RDF::Term</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the last matched subject.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Term</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the last matched subject</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 345</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_objectList'>read_objectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:objectList</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%{</span><span class='tstring_content'>,</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_last_object'>last_object</span> <span class='op'>=</span> <span class='kw'>nil</span>
+    <span class='kw'>while</span> <span class='id identifier rubyid_object'>object</span> <span class='op'>=</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:_objectList_2</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_read_object'>read_object</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+      <span class='id identifier rubyid_last_object'>last_object</span> <span class='op'>=</span> <span class='id identifier rubyid_object'>object</span>
+
+      <span class='comment'># If object is followed by an annotation, read that and also emit an embedded triple.
+</span>      <span class='id identifier rubyid_read_annotation'>read_annotation</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
+
+      <span class='kw'>break</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span> <span class='kw'>while</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_last_object'>last_object</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_predicateObjectList-instance_method">
+  
+    #<strong>read_predicateObjectList</strong>(subject)  &#x21d2; <tt>RDF::URI</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the last matched verb.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>subject</span>
+      
+      
+        <span class='type'>(<tt>RDF::Resource</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::URI</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the last matched verb</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 329</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_predicateObjectList'>read_predicateObjectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:predicateObjectList</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%{</span><span class='tstring_content'>;</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_last_verb'>last_verb</span> <span class='op'>=</span> <span class='kw'>nil</span>
+    <span class='kw'>while</span> <span class='id identifier rubyid_verb'>verb</span> <span class='op'>=</span> <span class='id identifier rubyid_read_verb'>read_verb</span>
+      <span class='id identifier rubyid_last_verb'>last_verb</span> <span class='op'>=</span> <span class='id identifier rubyid_verb'>verb</span>
+      <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:_predicateObjectList_5</span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='id identifier rubyid_read_objectList'>read_objectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_verb'>verb</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected objectList</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:predicateObjectList</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='kw'>break</span> <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span> <span class='kw'>while</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>;</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_last_verb'>last_verb</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_qtObject-instance_method">
+  
+    #<strong>read_qtObject</strong>(subject = nil, predicate = nil)  &#x21d2; <tt>RDF::Term</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Term</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+428
+429
+430
+431
+432
+433
+434
+435</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 428</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_qtObject'>read_qtObject</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:qtObject</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_read_iri'>read_iri</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_BlankNode'>read_BlankNode</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_literal'>read_literal</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_qtSubject-instance_method">
+  
+    #<strong>read_qtSubject</strong>  &#x21d2; <tt>RDF::Resource</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Resource</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+418
+419
+420
+421
+422
+423
+424
+425</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 418</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_qtSubject'>read_qtSubject</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:qtSubject</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_read_iri'>read_iri</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_BlankNode'>read_BlankNode</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected embedded subject</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:qtSubject</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_quotedTriple-instance_method">
+  
+    #<strong>read_quotedTriple</strong>  &#x21d2; <tt>RDF::Statement</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Read an RDF-star reified statement</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Statement</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 399</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:rdfstar</span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&lt;&lt;</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:quotedTriple</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span> <span class='comment'># eat &lt;&lt;
+</span>      <span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='id identifier rubyid_read_qtSubject'>read_qtSubject</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to parse subject</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:quotedTriple</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='id identifier rubyid_read_verb'>read_verb</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to parse predicate</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:quotedTriple</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_object'>object</span> <span class='op'>=</span> <span class='id identifier rubyid_read_qtObject'>read_qtObject</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to parse object</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:quotedTriple</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='kw'>unless</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>&gt;&gt;</span><span class='tstring_end'>&#39;</span></span>
+        <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to end of embedded triple</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:quotedTriple</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+      <span class='id identifier rubyid_statement'>statement</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Statement</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='label'>quoted:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_statement'>statement</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_statement-instance_method">
+  
+    #<strong>read_statement</strong>   <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 244</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_statement'>read_statement</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:statement</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>read_statement</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+    <span class='kw'>when</span> <span class='symbol'>:BASE</span><span class='comma'>,</span> <span class='symbol'>:PREFIX</span>
+      <span class='id identifier rubyid_read_directive'>read_directive</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to parse directive</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:directive</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_token'>token</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_read_triples'>read_triples</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected token</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:statement</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_token'>token</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_log_recovering?'>log_recovering?</span> <span class='op'>||</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span>
+        <span class='comment'># If recovering, we will have eaten the closing &#39;.&#39;
+</span>        <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+        <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span>
+          <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected &#39;.&#39; following triple</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:statement</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_token'>token</span><span class='rparen'>)</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_subject-instance_method">
+  
+    #<strong>read_subject</strong>  &#x21d2; <tt>RDF::Resource</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::Resource</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+371
+372
+373
+374
+375
+376
+377
+378
+379</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 371</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_subject'>read_subject</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:subject</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_read_iri'>read_iri</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_BlankNode'>read_BlankNode</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_collection'>read_collection</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected subject</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:subject</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_triples-instance_method">
+  
+    #<strong>read_triples</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the last verb matched, or subject BNode on predicateObjectList?</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>returns the last verb matched, or subject BNode on predicateObjectList?</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 311</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_triples'>read_triples</span>
+  <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:triples</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>read_triples</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>||</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
+    <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>[</span><span class='tstring_end'>&#39;</span></span>
+      <span class='comment'># blankNodePropertyList predicateObjectList? 
+</span>      <span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='id identifier rubyid_read_blankNodePropertyList'>read_blankNodePropertyList</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to parse blankNodePropertyList</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:triples</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_read_predicateObjectList'>read_predicateObjectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_subject'>subject</span>
+    <span class='kw'>else</span>
+      <span class='comment'># subject predicateObjectList
+</span>      <span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='id identifier rubyid_read_subject'>read_subject</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to parse subject</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:triples</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_read_predicateObjectList'>read_predicateObjectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Expected predicateObjectList</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:triples</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="read_verb-instance_method">
+  
+    #<strong>read_verb</strong>  &#x21d2; <tt>RDF::URI</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>RDF::URI</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+362
+363
+364
+365
+366
+367
+368</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 362</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_read_verb'>read_verb</span>
+  <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>read_verb</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>||</span> <span class='id identifier rubyid_token'>token</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>a</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>then</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:verb</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span> <span class='op'>&amp;&amp;</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span><span class='rbrace'>}</span>
+  <span class='kw'>else</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:verb</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='id identifier rubyid_read_iri'>read_iri</span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="recover-instance_method">
+  
+    #<strong>recover</strong>(*args, &amp;block)  &#x21d2; <tt>Object</tt>  <span class="extras">(protected)</span>
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+617
+618
+619
+620
+621
+622
+623</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 617</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_recover'>recover</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span> <span class='op'>:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:level</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='int'>1</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:lineno</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='id identifier rubyid_lineno'>lineno</span>
+  <span class='id identifier rubyid_log_recover'>log_recover</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_opts'>opts</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Fri Jan 28 19:53:35 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>
