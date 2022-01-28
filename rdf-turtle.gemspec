@@ -10,6 +10,13 @@ Gem::Specification.new do |gem|
   gem.license               = 'Unlicense'
   gem.summary               = "Turtle reader/writer for Ruby."
   gem.description           = %q{RDF::Turtle is an Turtle reader/writer for the RDF.rb library suite.}
+  gem.metadata           = {
+    "documentation_uri" => "https://ruby-rdf.github.io/rdf-turtle",
+    "bug_tracker_uri"   => "https://github.com/ruby-rdf/rdf-turtle/issues",
+    "homepage_uri"      => "https://github.com/ruby-rdf/rdf-turtle",
+    "mailing_list_uri"  => "https://lists.w3.org/Archives/Public/public-rdf-ruby/",
+    "source_code_uri"   => "https://github.com/ruby-rdf/rdf-turtle",
+  }
 
   gem.authors               = ['Gregg Kellogg']
   gem.email                 = 'public-rdf-ruby@w3.org'

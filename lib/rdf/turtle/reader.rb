@@ -40,7 +40,7 @@ module RDF::Turtle
 
     ##
     # Reader options
-    # @see https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Reader#options-class_method
+    # @see https://ruby-rdf.github.io/rdf/RDF/Reader#options-class_method
     def self.options
       super + [
         RDF::CLI::Option.new(
