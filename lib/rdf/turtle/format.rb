@@ -18,6 +18,7 @@ module RDF::Turtle
   class Format < RDF::Format
     content_type     'text/turtle',
                      extension: :ttl,
+                     uri: 'http://www.w3.org/ns/formats/Turtle',
                      aliases: %w(
                        text/rdf+turtle
                        application/turtle;q=0.2

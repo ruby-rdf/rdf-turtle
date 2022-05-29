@@ -5,7 +5,7 @@
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Ruby_(programming_language)> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#category> <http://dbpedia.org/resource/Resource_Description_Framework> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#programming-language> "Ruby" .
-<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#homepage> <https://ruby-rdf.github.com/rdf-turtle> .
+<https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#homepage> <https://ruby-rdf.github.io/rdf-turtle> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#shortdesc> "Turtle reader/writer for RDF.rb."@en .
 <https://rubygems.org/gems/rdf-turtle> <http://purl.org/dc/terms/creator> <https://greggkellogg.net/foaf#me> .
 <https://rubygems.org/gems/rdf-turtle> <http://usefulinc.com/ns/doap#created> "2011-08-29"^^<http://www.w3.org/2001/XMLSchema#date> .

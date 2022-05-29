@@ -185,12 +185,12 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [YARD]:         https://yardoc.org/
 [YARD-GS]:      https://rubydoc.info/docs/yard/file/docs/GettingStarted.md
 [PDD]:              https://unlicense.org/#unlicensing-contributions
-[RDF.rb]:       https://rubydoc.info/github/ruby-rdf/rdf
+[RDF.rb]:       https://ruby-rdf.github.io/rdf
 [EBNF]:         https://rubygems.org/gems/ebnf
 [Backports]:    https://rubygems.org/gems/backports
 [N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
 [Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
 [RDF-star]:         https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
-[Turtle doc]:   https://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md
+[Turtle doc]:   https://ruby-rdf.github.io/rdf-turtle/master/file/README.md
 [Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
 [Freebase Dumps]: https://developers.google.com/freebase/data

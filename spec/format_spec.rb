@@ -48,6 +48,10 @@ describe RDF::Turtle::Format do
     specify {expect(described_class.to_sym).to eq :turtle}
   end
 
+  describe "#to_uri" do
+    specify {expect(described_class.to_uri).to eq RDF::URI('http://www.w3.org/ns/formats/Turtle')}
+  end
+
   describe ".detect" do
     {
       ntriples:          "<a> <b> <c> .",

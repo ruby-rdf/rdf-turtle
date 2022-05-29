@@ -40,7 +40,7 @@ module RDF::Turtle
 
     ##
     # Reader options
-    # @see https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/Reader#options-class_method
+    # @see https://ruby-rdf.github.io/rdf/RDF/Reader#options-class_method
     def self.options
       super + [
         RDF::CLI::Option.new(
@@ -408,7 +408,7 @@ module RDF::Turtle
             error("Failed to end of embedded triple", production: :quotedTriple, token: @lexer.first)
           end
           @lexer.shift
-          statement = RDF::Statement(subject, predicate, object)
+          statement = RDF::Statement(subject, predicate, object, quoted: true)
           statement
         end
       end
@@ -442,7 +442,7 @@ module RDF::Turtle
           @lexer.shift
 
           # Statement becomes subject for predicateObjectList
-          statement = RDF::Statement(subject, predicate, object)
+          statement = RDF::Statement(subject, predicate, object, quoted: true)
           read_predicateObjectList(statement) ||
             error("Expected predicateObjectList", production: :annotation, token: @lexer.first)
           error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
