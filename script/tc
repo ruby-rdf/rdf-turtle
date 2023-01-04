@@ -151,7 +151,7 @@ OPT_ARGS = [
 
 def usage(**options)
   STDERR.puts %{
-    Turtle version #{RDF::N3::VERSION}
+    Turtle version #{RDF::Turtle::VERSION}
     Run Turtle tests.
     
     Usage: #{$0} [options] [test-number ...]
