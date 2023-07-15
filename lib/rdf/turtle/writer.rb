@@ -87,7 +87,7 @@ module RDF::Turtle
           symbol: :literal_shorthand,
           datatype: FalseClass,
           on: ["--no-literal-shorthand"],
-          description: "Do not ttempt to use Literal shorthands fo numbers and boolean values.") {false},
+          description: "Do not attempt to use Literal shorthands fo numbers and boolean values.") {false},
       ]
     end
 
@@ -215,7 +215,7 @@ module RDF::Turtle
       end
 
       pname = case
-      when @uri_to_pname.has_key?(uri)
+      when @uri_to_pname.key?(uri)
         return @uri_to_pname[uri]
       when u = @uri_to_prefix.keys.sort_by {|uu| uu.length}.reverse.detect {|uu| uri.index(uu.to_s) == 0}
         # Use a defined prefix
@@ -296,8 +296,9 @@ module RDF::Turtle
           in_form ? literal.value : literal.canonicalize.to_s.sub('E', 'e').to_s
         else
           text = quoted(literal.value)
-          text << "@#{literal.language}" if literal.has_language?
-          text << "^^#{format_uri(literal.datatype)}" if literal.has_datatype?
+          text << "@#{literal.language}" if literal.language?
+          text << "--#{literal.direction}" if literal.direction?
+          text << "^^#{format_uri(literal.datatype)}" if literal.datatype?
           text
         end
       else

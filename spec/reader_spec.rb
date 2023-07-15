@@ -280,6 +280,22 @@ describe RDF::Turtle::Reader do
       expect(statement.object.class).to eq RDF::Node
     end
 
+    context 'parse language/direction' do
+      {
+        "language" => '<http://subj> <http://pred>  "Hello"@en .',
+        "direction" => '<http://subj> <http://pred>  "Hello"@en--ltr .',
+      }.each_pair do |name, ttl|
+        specify "test #{name}" do
+          stmt = parse(ttl).statements.to_a.first
+          if name.include?('dir')
+            expect(stmt.object.datatype).to eql RDF.dirLangString
+          else
+            expect(stmt.object.datatype).to eql RDF.langString
+          end
+        end
+      end
+    end
+
     describe "IRIs" do
       {
         %(<http://example/joe> <http://xmlns.com/foaf/0.1/knows> <http://example/jane> .) =>
@@ -828,7 +844,7 @@ describe RDF::Turtle::Reader do
     end
   end
 
-  context "RDF-star" do
+  context "quoted triples" do
     {
       "subject-iii" => [
         %(
@@ -1010,6 +1026,7 @@ describe RDF::Turtle::Reader do
       %(true)               => %("true"^^<http://www.w3.org/2001/XMLSchema#boolean>),
       %("lang"@EN)          => %("lang"@en),
       %("""lang"""@EN)      => %("lang"@en),
+      %("""lang"""@EN--ltr) => %("lang"@en--ltr),
       %("""+1"""^^xsd:integer)  => %("1"^^<http://www.w3.org/2001/XMLSchema#integer>),
       %(<http://example/Dürst>) => %(<http://example/Dürst>)
     }.each_pair do |input, result|
@@ -1064,6 +1081,7 @@ describe RDF::Turtle::Reader do
       %(<a> <b> "12xyz"^^<http://www.w3.org/2001/XMLSchema#integer> .) => %r("12xyz" is not a valid .*),
       %(<a> <b> "xy.z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("xy\.z" is not a valid .*),
       %(<a> <b> "+1.0z"^^<http://www.w3.org/2001/XMLSchema#double> .) => %r("\+1.0z" is not a valid .*),
+      %(<a> <b> "a"@EN--utd .) => %r("a" is not a valid <http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString>),
       %(<a> <b> .) => RDF::ReaderError,
       %(<a> <b> <c>) => RDF::ReaderError,
       %(<a> <b> <c> ;) => RDF::ReaderError,
