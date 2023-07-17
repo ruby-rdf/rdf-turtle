@@ -48,7 +48,7 @@ module RDF::Turtle
     # 141s
     BLANK_NODE_LABEL     = /_:(?:[0-9]|#{PN_CHARS_U})(?:(?:#{PN_CHARS}|\.)*#{PN_CHARS})?/u.freeze
     # 144s
-    LANGDIR              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z]+)?)/u.freeze
+    LANG_DIR              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z]+)?)/u.freeze
     # 19
     INTEGER              = /[+-]?[0-9]+/u.freeze
     # 20

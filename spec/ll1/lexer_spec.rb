@@ -15,7 +15,7 @@ describe EBNF::LL1::Lexer do
       [:DECIMAL,              RDF::Turtle::Terminals::DECIMAL],
       [:DOUBLE,               RDF::Turtle::Terminals::DOUBLE],
       [:INTEGER,              RDF::Turtle::Terminals::INTEGER],
-      [:LANGDIR,              RDF::Turtle::Terminals::LANGDIR],
+      [:LANG_DIR,              RDF::Turtle::Terminals::LANG_DIR],
       [:PNAME_LN,             RDF::Turtle::Terminals::PNAME_LN],
       [:PNAME_NS,             RDF::Turtle::Terminals::PNAME_NS],
       [:STRING_LITERAL_LONG_SINGLE_QUOTE, RDF::Turtle::Terminals::STRING_LITERAL_LONG_SINGLE_QUOTE],
@@ -287,14 +287,14 @@ describe EBNF::LL1::Lexer do
           expect(tokens.size).to eql 2
           expect(tokens[0].type).to eq :STRING_LITERAL_QUOTE
           expect(tokens[0].value).to eq '"Hello, world!"'
-          expect(tokens[1].type).to eq :LANGDIR
+          expect(tokens[1].type).to eq :LANG_DIR
           expect(tokens[1].value).to eq "@en"
         end
         tokenize(%q("Hello, world!"@en-US)) do |tokens|
           expect(tokens.size).to eql 2
           expect(tokens[0].type).to eq :STRING_LITERAL_QUOTE
           expect(tokens[0].value).to eq '"Hello, world!"'
-          expect(tokens[1].type).to eq :LANGDIR
+          expect(tokens[1].type).to eq :LANG_DIR
           expect(tokens[1].value).to eq '@en-US'
         end
       end

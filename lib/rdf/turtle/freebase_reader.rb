@@ -79,7 +79,7 @@ module RDF::Turtle
       if literal_str = match(LITERAL_PLAIN)
         literal_str = self.class.unescape(literal_str)
         literal = case
-          when lang_dir = match(RDF::Turtle::Reader::LANGDIR)
+          when lang_dir = match(RDF::Turtle::Reader::LANG_DIR)
             language, direction = lang_dir.split('--')
             RDF::Literal.new(literal_str, language:  language, direction: direction)
           when datatype = match(/^(\^\^)/)

@@ -36,7 +36,7 @@ module RDF::Turtle
 
     terminal(:PREFIX,                           PREFIX)
     terminal(:BASE,                             BASE)
-    terminal(:LANGDIR,                          LANGDIR)
+    terminal(:LANG_DIR,                          LANG_DIR)
 
     ##
     # Reader options
@@ -470,7 +470,7 @@ module RDF::Turtle
           value = @lexer.shift.value[1..-2]
           error("read_literal", "Unexpected end of file") unless token = @lexer.first
           case token.type || token.value
-          when :LANGDIR
+          when :LANG_DIR
             lang_dir = @lexer.shift.value[1..-1]
             language, direction = lang_dir.split('--')
             literal(value, language: language, direction: direction)
@@ -486,7 +486,7 @@ module RDF::Turtle
           value = @lexer.shift.value[3..-4]
           error("read_literal", "Unexpected end of file") unless token = @lexer.first
           case token.type || token.value
-          when :LANGDIR
+          when :LANG_DIR
             lang_dir = @lexer.shift.value[1..-1]
             language, direction = lang_dir.split('--')
             literal(value, language: language, direction: direction)
