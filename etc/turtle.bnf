@@ -16,7 +16,7 @@ literal                           ::= RDFLiteral | NumericLiteral | BooleanLiter
 blankNodePropertyList             ::= "[" predicateObjectList "]" 
 collection                        ::= "(" object* ")" 
 NumericLiteral                    ::= INTEGER | DECIMAL | DOUBLE 
-RDFLiteral                        ::= String ( LANGDIR | ( "^^" iri ) )? 
+RDFLiteral                        ::= String ( LANG_DIR | ( "^^" iri ) )? 
 BooleanLiteral                    ::= "true" | "false" 
 String                            ::= STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE |
                                       STRING_LITERAL_LONG_QUOTE 
@@ -34,7 +34,7 @@ IRIREF                           ::=  '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
 PNAME_NS                         ::= PN_PREFIX? ":" 
 PNAME_LN                         ::= PNAME_NS PN_LOCAL 
 BLANK_NODE_LABEL                 ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-LANGDIR                          ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' [a-zA-Z]+)?`
+LANG_DIR                          ::= "@" [a-zA-Z]+ ( "-" [a-zA-Z0-9]+ )* ('--' [a-zA-Z]+)?`
 INTEGER                          ::= [+-]? [0-9]+
 DECIMAL                          ::= [+-]?  ( ([0-9])* '.' ([0-9])+  )
 DOUBLE                           ::= [+-]? ( [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT )
