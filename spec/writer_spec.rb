@@ -760,7 +760,7 @@ describe RDF::Turtle::Writer do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(manifest.ttl).each do |man|
+    %w(rdf11/rdf-turtle/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|

@@ -158,7 +158,7 @@ module Fixtures
       attr_accessor :logger
 
       def base
-        BASE + action.split('/').last
+        RDF::URI(action)
       end
 
       # Alias data and query
