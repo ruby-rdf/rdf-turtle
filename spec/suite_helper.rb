@@ -7,7 +7,7 @@ require 'json/ld'
 module RDF::Util
   module File
     REMOTE_PATH = "https://w3c.github.io/rdf-tests/rdf/"
-    LOCAL_PATH = ::File.expand_path("../w3c-rdf/rdf/", __FILE__) + '/'
+    LOCAL_PATH = ::File.expand_path("../w3c-rdf-tests/rdf/", __FILE__) + '/'
     REMOTE_PATH_STAR = "https://w3c.github.io/rdf-star/"
     LOCAL_PATH_STAR = ::File.expand_path("../w3c-rdf-star/", __FILE__) + '/'
 
