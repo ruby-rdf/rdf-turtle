@@ -6,7 +6,7 @@ describe RDF::NTriples::Reader do
   describe "w3c N-Triples tests" do
     require 'suite_helper'
 
-    %w(rdf11/rdf-n-triples/manifest.ttl).each do |man|
+    %w(rdf11/rdf-n-triples/manifest.ttl rdf12/rdf-n-triples/c14n/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|
@@ -37,6 +37,9 @@ describe RDF::NTriples::Reader do
               if t.evaluate?
                 output_graph = RDF::Graph.load(t.result, format:  :ntriples, base_uri:  t.base)
                 expect(graph).to be_equivalent_graph(output_graph, t)
+              elsif t.c14n?
+                c14n = RDF::NTriples::Writer.buffer {|w| w << graph}
+                expect(c14n).to eql t.expected
               else
                 expect(graph).to be_a(RDF::Enumerable)
               end

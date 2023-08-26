@@ -8,8 +8,6 @@ module RDF::Util
   module File
     REMOTE_PATH = "https://w3c.github.io/rdf-tests/rdf/"
     LOCAL_PATH = ::File.expand_path("../w3c-rdf-tests/rdf/", __FILE__) + '/'
-    REMOTE_PATH_STAR = "https://w3c.github.io/rdf-star/"
-    LOCAL_PATH_STAR = ::File.expand_path("../w3c-rdf-star/", __FILE__) + '/'
 
     class << self
       alias_method :original_open_file, :open_file
@@ -61,41 +59,11 @@ module RDF::Util
         else
           remote_document
         end
-      when (filename_or_url.to_s =~ %r{^#{REMOTE_PATH_STAR}} && Dir.exist?(LOCAL_PATH_STAR))
-        #puts "attempt to open #{filename_or_url} locally"
-        localpath = filename_or_url.to_s.sub(REMOTE_PATH_STAR, LOCAL_PATH_STAR)
-        response = begin
-          ::File.open(localpath)
-        rescue Errno::ENOENT => e
-          raise IOError, e.message
-        end
-        document_options = {
-          base_uri:     RDF::URI(filename_or_url),
-          charset:      Encoding::UTF_8,
-          code:         200,
-          headers:      {}
-        }
-        #puts "use #{filename_or_url} locally"
-        document_options[:headers][:content_type] = case filename_or_url.to_s
-        when /\.ttl$/    then 'text/turtle'
-        when /\.nt$/     then 'application/n-triples'
-        when /\.jsonld$/ then 'application/ld+json'
-        else                  'unknown'
-        end
-
-        document_options[:headers][:content_type] = response.content_type if response.respond_to?(:content_type)
-        # For overriding content type from test data
-        document_options[:headers][:content_type] = options[:contentType] if options[:contentType]
-
-        remote_document = RDF::Util::File::RemoteDocument.new(response.read, **document_options)
-        if block_given?
-          yield remote_document
-        else
-          remote_document
-        end
       else
         original_open_file(filename_or_url, **options, &block)
       end
+    rescue IOError => e
+      raise IOError, "Error opening #{filename_or_url.inspect}: #{e.message}"
     end
   end
 end
@@ -112,6 +80,7 @@ module Fixtures
         "rdft": "http://www.w3.org/ns/rdftest#",
 
         "label": "rdfs:label",
+        "baseIri": {"@id": "mf:assumedTestBase", "@type": "@id"},
         "comment": "rdfs:comment",
         "entries": {"@id": "mf:entries", "@container": "@list"},
         "name": "mf:name",
@@ -125,6 +94,8 @@ module Fixtures
           "rdft:TestTurtleNegativeSyntax",
           "rdft:TestNTriplesPositiveSyntax",
           "rdft:TestNTriplesNegativeSyntax",
+          "rdft:TestNTriplesPositiveC14N",
+          "rdft:TestNTriplesNegativeC14N",
           "rdft:TestTurtleEval",
           "rdft:TestTurtleNegativeEval"
         ]
@@ -150,15 +121,20 @@ module Fixtures
 
       def entries
         # Map entries to resources
-        attributes['entries'].map {|e| Entry.new(e)}
+        attributes['entries'].map {|e| Entry.new(e, base_iri: attributes['baseIri'])}
       end
     end
  
     class Entry < JSON::LD::Resource
       attr_accessor :logger
 
+      def initialize(json, base_iri:)
+        @base_iri = base_iri
+        super
+      end
+
       def base
-        RDF::URI(action)
+        RDF::URI(@base_iri || action)
       end
 
       # Alias data and query
@@ -167,7 +143,7 @@ module Fixtures
       end
 
       def expected
-        @expected ||= RDF::Util::File.open_file(result) {|f| f.read}
+        @expected ||= RDF::Util::File.open_file(result) {|f| f.read} if result
       end
       
       def evaluate?
@@ -175,15 +151,15 @@ module Fixtures
       end
 
       def syntax?
-        Array(attributes['@type']).join(" ").match(/Syntax/)
+        !!Array(attributes['@type']).join(" ").match(/Syntax/)
       end
 
       def entailment?
-        Array(attributes['@type']).join(" ").match(/Entailment/)
+        !!Array(attributes['@type']).join(" ").match(/Entailment/)
       end
 
       def ntriples?
-        Array(attributes['@type']).join(" ").match(/NTriples/)
+        !!Array(attributes['@type']).join(" ").match(/NTriples/)
       end
 
       def positive_test?
@@ -192,6 +168,10 @@ module Fixtures
 
       def negative_test?
         !positive_test?
+      end
+
+      def c14n?
+        !!Array(attributes['@type']).join(" ").match(/C14N/)
       end
 
       def inspect

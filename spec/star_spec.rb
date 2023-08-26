@@ -2,12 +2,15 @@ $:.unshift "."
 require 'spec_helper'
 
 describe RDF::Turtle::Reader do
-  # W3C Turtle Test suite from http://w3c.github.io/rdf-tests/turtle/manifest.ttl
+  # W3C Turtle Test suite from http://w3c.github.io/rdf-tests/rdf/rdf12/
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(nt/syntax turtle/syntax turtle/eval).each do |man|
-      Fixtures::SuiteTest::Manifest.open("https://w3c.github.io/rdf-star/tests/#{man}/manifest.ttl") do |m|
+    %w(
+      rdf12/rdf-n-triples/syntax/manifest.ttl
+      rdf12/rdf-turtle/syntax/manifest.ttl
+      rdf12/rdf-turtle/eval/manifest.ttl).each do |man|
+      Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe [m.label, m.comment].compact.join(': ') do
           m.entries.each do |t|
             specify "#{t.name}: #{t.comment}" do
