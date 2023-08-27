@@ -36,6 +36,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rdf-isomorphic',  '~> 3.3'
   gem.add_development_dependency 'json-ld',         '~> 3.3'
   gem.add_development_dependency 'rdf-spec',        '~> 3.3'
-  gem.add_development_dependency 'rdf-vocab',       '~> 3.2'
+  gem.add_development_dependency 'rdf-vocab',       '~> 3.3'
   gem.post_install_message  = nil
 end
