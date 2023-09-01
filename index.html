@@ -60,29 +60,29 @@
       <div id="content"><div id='filecontents'>
 <h1 id="label-RDF-3A-3ATurtle+reader-2Fwriter">RDF::Turtle reader/writer</h1>
 
-<p><a href="https://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> reader/writer for <a href="https://ruby-rdf.github.io/rdf">RDF.rb</a> .</p>
+<p><a href="https://www.w3.org/TR/rdf12-turtle">Turtle</a> reader/writer for <a href="https://ruby-rdf.github.io/rdf">RDF.rb</a> .</p>
 
-<p><a href="https://badge.fury.io/rb/rdf-turtle"><img src="https://badge.fury.io/rb/rdf-turtle.png"></a> <a href="https://github.com/ruby-rdf/rdf-turtle/actions?query=workflow%3ACI"><img src="https://github.com/ruby-rdf/rdf-turtle/workflows/CI/badge.svg?branch=develop"></a> <a href="https://coveralls.io/github/ruby-rdf/rdf-turtle?branch=develop"><img src="https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg?branch=develop"></a> <a href="https://gitter.im/ruby-rdf/rdf"><img src="https://badges.gitter.im/ruby-rdf/rdf.png"></a></p>
+<p><a href="https://badge.fury.io/rb/rdf-turtle"><img src="https://badge.fury.io/rb/rdf-turtle.svg"></a> <a href="https://github.com/ruby-rdf/rdf-turtle/actions?query=workflow%3ACI"><img src="https://github.com/ruby-rdf/rdf-turtle/workflows/CI/badge.svg?branch=develop"></a> <a href="https://coveralls.io/github/ruby-rdf/rdf-turtle?branch=develop"><img src="https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg?branch=develop"></a> <a href="https://gitter.im/ruby-rdf/rdf"><img src="https://badges.gitter.im/ruby-rdf/rdf.png"></a></p>
 
 <h2 id="label-Description">Description</h2>
 
-<p>This is a <a href="https://ruby-lang.org/">Ruby</a> implementation of a <a href="https://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> parser for <a href="https://ruby-rdf.github.io/rdf">RDF.rb</a>.</p>
+<p>This is a <a href="https://ruby-lang.org/">Ruby</a> implementation of a <a href="https://www.w3.org/TR/rdf12-turtle">Turtle</a> parser for <a href="https://ruby-rdf.github.io/rdf">RDF.rb</a>.</p>
 
 <h2 id="label-Features">Features</h2>
 
-<p>RDF::Turtle parses <a href="https://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> and <a href="https://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a> into statements or triples. It also serializes to Turtle.</p>
+<p>RDF::Turtle parses <a href="https://www.w3.org/TR/rdf12-turtle">Turtle</a> and <a href="https://www.w3.org/TR/rdf12-n-triples">N-Triples</a> into statements or triples. It also serializes to Turtle.</p>
 
 <p>Install with <code>gem install rdf-turtle</code></p>
 <ul><li>
 <p>100% free and unencumbered <a href="https://unlicense.org/">public domain</a> software.</p>
 </li><li>
-<p>Implements a complete parser for <a href="https://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a>.</p>
+<p>Implements a complete parser for <a href="https://www.w3.org/TR/rdf12-turtle">Turtle</a>.</p>
 </li><li>
-<p>Compatible with Ruby &gt;= 2.6.</p>
+<p>Compatible with Ruby &gt;= 3.0.</p>
 </li><li>
 <p>Optional streaming writer, to serialize large graphs</p>
 </li><li>
-<p>Provisional support for <a href="https://w3c.github.io/rdf-star/rdf-star-cg-spec.html">Turtle-star</a>.</p>
+<p>Provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a>.</p>
 </li></ul>
 
 <h2 id="label-Usage">Usage</h2>
@@ -103,15 +103,17 @@
 <span class='kw'>end</span>
 </code></pre>
 
-<h2 id="label-Turtle-star+-28RDF-star-29">Turtle-star (RDF-star)</h2>
+<h2 id="label-RDF+1.2">RDF 1.2</h2>
 
-<p>Both reader and writer include provisional support for <a href="https://w3c.github.io/rdf-star/rdf-star-cg-spec.html">Turtle-star</a>.</p>
+<p>Both reader and writer include provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a> quoted triples.</p>
+
+<p>Both reader and writer include provisional support for <a href="https://www.w3.org/TR/rdf12-concepts/">RDF 1.2</a> directional language-tagged strings, which are literals of type <code>rdf:dirLangString</code> having both a <code>language</code> and <code>direction</code>.</p>
 
 <p>Internally, an <code>RDF::Statement</code> is treated as another resource, along with <code>RDF::URI</code> and <code>RDF::Node</code>, which allows an <code>RDF::Statement</code> to have a <code>#subject</code> or <code>#object</code> which is also an <code>RDF::Statement</code>.</p>
 
 <p><strong>Note: This feature is subject to change or elimination as the standards process progresses.</strong></p>
 
-<h3 id="label-Serializing+a+Graph+containing+embedded+statements">Serializing a Graph containing embedded statements</h3>
+<h3 id="label-Serializing+a+Graph+containing+quoted+triples">Serializing a Graph containing quoted triples</h3>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rdf/turtle</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_statement'>statement</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Statement</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>URI</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bob</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Vocab</span><span class='op'>::</span><span class='const'>FOAF</span><span class='period'>.</span><span class='id identifier rubyid_age'>age</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Literal</span><span class='lparen'>(</span><span class='int'>23</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -120,7 +122,7 @@
 <span class='comment'># =&gt; &#39;&lt;&lt;&lt;bob&gt; foaf:age 23&gt;&gt; &lt;ex:certainty&gt; 9.0e-1 .&#39;
 </span></code></pre>
 
-<h3 id="label-Reading+a+Graph+containing+embedded+statements">Reading a Graph containing embedded statements</h3>
+<h3 id="label-Reading+a+Graph+containing+quoted+triples">Reading a Graph containing quoted triples</h3>
 
 <p>By default, the Turtle reader will reject a document containing a subject resource.</p>
 
@@ -177,7 +179,7 @@
 
 <p>In some cases, the specification is unclear on certain issues:</p>
 <ul><li>
-<p>The LC version of the <a href="https://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> specification separates rules for <code>@base</code> and <code>@prefix</code> with closing ‘.’ from the SPARQL-like <code>BASE</code> and <code>PREFIX</code> without closing ‘.’. This version implements a more flexible syntax where the <code>@</code> and closing <code>.</code> are optional and <code>base/prefix</code> are matched case independently.</p>
+<p>The LC version of the <a href="https://www.w3.org/TR/rdf12-turtle">Turtle</a> specification separates rules for <code>@base</code> and <code>@prefix</code> with closing ‘.’ from the SPARQL-like <code>BASE</code> and <code>PREFIX</code> without closing ‘.’. This version implements a more flexible syntax where the <code>@</code> and closing <code>.</code> are optional and <code>base/prefix</code> are matched case independently.</p>
 </li><li>
 <p>Additionally, both <code>a</code> and <code>A</code> match <code>rdf:type</code>.</p>
 </li></ul>
@@ -214,11 +216,11 @@
 
 <h2 id="label-Dependencies">Dependencies</h2>
 <ul><li>
-<p><a href="https://ruby-lang.org/">Ruby</a> (&gt;= 2.6)</p>
+<p><a href="https://ruby-lang.org/">Ruby</a> (&gt;= 3.0)</p>
 </li><li>
-<p><a href="https://rubygems.org/gems/rdf">RDF.rb</a> (~&gt; 3.2)</p>
+<p><a href="https://rubygems.org/gems/rdf">RDF.rb</a> (~&gt; 3.3)</p>
 </li><li>
-<p><a href="https://rubygems.org/gems/ebnf">EBNF</a> (~&gt; 1.2)</p>
+<p><a href="https://rubygems.org/gems/ebnf">EBNF</a> (~&gt; 2.4)</p>
 </li></ul>
 
 <h2 id="label-Installation">Installation</h2>
@@ -259,13 +261,13 @@
 
 <p>This is free and unencumbered public domain software. For more information, see <a href="https://unlicense.org">unlicense.org</a>/ or the accompanying <a href="file.UNLICENSE.html" title="UNLICENSE">UNLICENSE</a> file.</p>
 
-<p>A copy of the <a href="https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf">Turtle EBNF</a> and derived parser files are included in the repository, which are not covered under the UNLICENSE. These files are covered via the <a href="https://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231">W3C Document License</a>.</p>
+<p>A copy of the <a href="https://w3c.github.io/rdf-turtle/spec/turtle-bnf.html">Turtle EBNF</a> and derived parser files are included in the repository, which are not covered under the UNLICENSE. These files are covered via the <a href="https://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231">W3C Document License</a>.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sun May 29 00:39:48 2022 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.27 (ruby-3.1.2).
+  Generated on Fri Sep  1 20:23:27 2023 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.1.4).
 </div>
 
     </div>

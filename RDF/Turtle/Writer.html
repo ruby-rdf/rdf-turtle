@@ -1403,7 +1403,7 @@
       <span class='label'>symbol:</span> <span class='symbol'>:literal_shorthand</span><span class='comma'>,</span>
       <span class='label'>datatype:</span> <span class='const'>FalseClass</span><span class='comma'>,</span>
       <span class='label'>on:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--no-literal-shorthand</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
-      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Do not ttempt to use Literal shorthands fo numbers and boolean values.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='kw'>false</span><span class='rbrace'>}</span><span class='comma'>,</span>
+      <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Do not attempt to use Literal shorthands fo numbers and boolean values.</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='kw'>false</span><span class='rbrace'>}</span><span class='comma'>,</span>
   <span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1456,15 +1456,15 @@
       <pre class="lines">
 
 
-484
 485
 486
 487
 488
-489</pre>
+489
+490</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 484</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 485</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_blankNodePropertyList?'>blankNodePropertyList?</span><span class='lparen'>(</span><span class='id identifier rubyid_resource'>resource</span><span class='comma'>,</span> <span class='id identifier rubyid_position'>position</span><span class='rparen'>)</span>
   <span class='op'>!</span><span class='id identifier rubyid_resource'>resource</span><span class='period'>.</span><span class='id identifier rubyid_statement?'>statement?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_resource'>resource</span><span class='period'>.</span><span class='id identifier rubyid_node?'>node?</span> <span class='op'>&amp;&amp;</span>
@@ -1536,12 +1536,12 @@
       <pre class="lines">
 
 
-508
 509
-510</pre>
+510
+511</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 508</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 509</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bump_reference'>bump_reference</span><span class='lparen'>(</span><span class='id identifier rubyid_resource'>resource</span><span class='rparen'>)</span>
   <span class='ivar'>@references</span><span class='lbracket'>[</span><span class='id identifier rubyid_resource'>resource</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_ref_count'>ref_count</span><span class='lparen'>(</span><span class='id identifier rubyid_resource'>resource</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='int'>1</span>
@@ -1646,7 +1646,8 @@
 303
 304
 305
-306</pre>
+306
+307</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 276</span>
@@ -1674,8 +1675,9 @@
       <span class='id identifier rubyid_in_form'>in_form</span> <span class='op'>?</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>:</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_canonicalize'>canonicalize</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>E</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>e</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
     <span class='kw'>else</span>
       <span class='id identifier rubyid_text'>text</span> <span class='op'>=</span> <span class='id identifier rubyid_quoted'>quoted</span><span class='lparen'>(</span><span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_text'>text</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>@</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_language'>language</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_has_language?'>has_language?</span>
-      <span class='id identifier rubyid_text'>text</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>^^</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_datatype'>datatype</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_has_datatype?'>has_datatype?</span>
+      <span class='id identifier rubyid_text'>text</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>@</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_language'>language</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_language?'>language?</span>
+      <span class='id identifier rubyid_text'>text</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_direction'>direction</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_direction?'>direction?</span>
+      <span class='id identifier rubyid_text'>text</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>^^</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_datatype'>datatype</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_literal'>literal</span><span class='period'>.</span><span class='id identifier rubyid_datatype?'>datatype?</span>
       <span class='id identifier rubyid_text'>text</span>
     <span class='kw'>end</span>
   <span class='kw'>else</span>
@@ -1752,12 +1754,12 @@
       <pre class="lines">
 
 
-326
 327
-328</pre>
+328
+329</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 326</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 327</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_node'>format_node</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:unique_bnodes</span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_to_unique_base'>to_unique_base</span> <span class='op'>:</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_to_base'>to_base</span>
@@ -1832,13 +1834,13 @@
       <pre class="lines">
 
 
-336
 337
 338
-339</pre>
+339
+340</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 336</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 337</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_quotedTriple'>format_quotedTriple</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_log_debug'>log_debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rdfstar</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_statement'>statement</span><span class='period'>.</span><span class='id identifier rubyid_to_ntriples'>to_ntriples</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
@@ -1914,14 +1916,14 @@
       <pre class="lines">
 
 
-314
 315
 316
 317
-318</pre>
+318
+319</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 314</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 315</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_format_uri'>format_uri</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_md'>md</span> <span class='op'>=</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_relativize'>relativize</span><span class='lparen'>(</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='rparen'>)</span>
@@ -2047,7 +2049,7 @@
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_pname'>pname</span> <span class='op'>=</span> <span class='kw'>case</span>
-  <span class='kw'>when</span> <span class='ivar'>@uri_to_pname</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='rparen'>)</span>
+  <span class='kw'>when</span> <span class='ivar'>@uri_to_pname</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='rparen'>)</span>
     <span class='kw'>return</span> <span class='ivar'>@uri_to_pname</span><span class='lbracket'>[</span><span class='id identifier rubyid_uri'>uri</span><span class='rbracket'>]</span>
   <span class='kw'>when</span> <span class='id identifier rubyid_u'>u</span> <span class='op'>=</span> <span class='ivar'>@uri_to_prefix</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_sort_by'>sort_by</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_uu'>uu</span><span class='op'>|</span> <span class='id identifier rubyid_uu'>uu</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_reverse'>reverse</span><span class='period'>.</span><span class='id identifier rubyid_detect'>detect</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_uu'>uu</span><span class='op'>|</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_uu'>uu</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='int'>0</span><span class='rbrace'>}</span>
     <span class='comment'># Use a defined prefix
@@ -2147,12 +2149,12 @@
       <pre class="lines">
 
 
-455
 456
-457</pre>
+457
+458</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 455</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 456</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_indent'>indent</span><span class='lparen'>(</span><span class='id identifier rubyid_modifier'>modifier</span> <span class='op'>=</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='lparen'>(</span><span class='ivar'>@options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:log_depth</span><span class='comma'>,</span> <span class='id identifier rubyid_log_depth'>log_depth</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='int'>2</span> <span class='op'>+</span> <span class='id identifier rubyid_modifier'>modifier</span><span class='rparen'>)</span>
@@ -2199,12 +2201,12 @@
       <pre class="lines">
 
 
-512
 513
-514</pre>
+514
+515</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 512</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 513</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_is_done?'>is_done?</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span>
   <span class='ivar'>@serialized</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span>
@@ -2260,7 +2262,6 @@
       <pre class="lines">
 
 
-365
 366
 367
 368
@@ -2299,10 +2300,11 @@
 401
 402
 403
-404</pre>
+404
+405</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 365</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 366</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_order_subjects'>order_subjects</span>
   <span class='id identifier rubyid_seen'>seen</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -2388,10 +2390,10 @@
       <pre class="lines">
 
 
-359</pre>
+360</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 359</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 360</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_predicate_order'>predicate_order</span><span class='semicolon'>;</span> <span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>RDFS</span><span class='period'>.</span><span class='id identifier rubyid_label'>label</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>URI</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://purl.org/dc/terms/title</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
@@ -2425,7 +2427,6 @@
       <pre class="lines">
 
 
-407
 408
 409
 410
@@ -2440,10 +2441,11 @@
 419
 420
 421
-422</pre>
+422
+423</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 407</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 408</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_preprocess'>preprocess</span>
   <span class='comment'># Load defined prefixes
@@ -2507,7 +2509,6 @@
       <pre class="lines">
 
 
-427
 428
 429
 430
@@ -2530,10 +2531,11 @@
 447
 448
 449
-450</pre>
+450
+451</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 427</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 428</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_preprocess_statement'>preprocess_statement</span><span class='lparen'>(</span><span class='id identifier rubyid_statement'>statement</span><span class='rparen'>)</span>
   <span class='comment'>#log_debug(&quot;preprocess&quot;) {statement.to_ntriples}
@@ -2603,14 +2605,14 @@
       <pre class="lines">
 
 
-493
 494
 495
 496
-497</pre>
+497
+498</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 493</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 494</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_prop_count'>prop_count</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span>
   <span class='ivar'>@subjects</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span><span class='period'>.</span>
@@ -2676,7 +2678,6 @@
       <pre class="lines">
 
 
-473
 474
 475
 476
@@ -2684,10 +2685,11 @@
 478
 479
 480
-481</pre>
+481
+482</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 473</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 474</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quoted'>quoted</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[\t\n\r]</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
@@ -2742,12 +2744,12 @@
       <pre class="lines">
 
 
-501
 502
-503</pre>
+503
+504</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 501</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 502</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ref_count'>ref_count</span><span class='lparen'>(</span><span class='id identifier rubyid_resource'>resource</span><span class='rparen'>)</span>
   <span class='ivar'>@references</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_resource'>resource</span><span class='comma'>,</span> <span class='int'>0</span><span class='rparen'>)</span>
@@ -2783,16 +2785,16 @@
       <pre class="lines">
 
 
-460
 461
 462
 463
 464
 465
-466</pre>
+466
+467</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 460</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 461</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_reset'>reset</span>
   <span class='ivar'>@lists</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -2939,17 +2941,17 @@
       <pre class="lines">
 
 
-343
 344
 345
 346
 347
 348
 349
-350</pre>
+350
+351</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 343</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 344</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_start_document'>start_document</span>
   <span class='ivar'>@output</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_indent'>indent</span><span class='embexpr_end'>}</span><span class='tstring_content'>@base &lt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base_uri'>base_uri</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt; .\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_base_uri'>base_uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -2990,12 +2992,12 @@
       <pre class="lines">
 
 
-517
 518
-519</pre>
+519
+520</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 517</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 518</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subject_done'>subject_done</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span>
   <span class='ivar'>@serialized</span><span class='lbracket'>[</span><span class='id identifier rubyid_subject'>subject</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span>
@@ -3044,10 +3046,10 @@
       <pre class="lines">
 
 
-354</pre>
+355</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 354</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/writer.rb', line 355</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_top_classes'>top_classes</span><span class='semicolon'>;</span> <span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>RDFS</span><span class='period'>.</span><span class='const'>Class</span><span class='rbracket'>]</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
@@ -3299,9 +3301,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sun May 29 00:39:49 2022 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.27 (ruby-3.1.2).
+  Generated on Fri Sep  1 20:23:29 2023 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.1.4).
 </div>
 
     </div>
