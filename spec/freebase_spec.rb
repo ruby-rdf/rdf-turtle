@@ -89,6 +89,7 @@ describe RDF::Turtle::FreebaseReader do
     {
       qname:       %q(ns:m.012rkqx    ns:type.object.type ns:common.topic.),
       langString:  %q(ns:m.012rkqx    ns:type.object.name "High Fidelity"@en.),
+      LANG_DIRString:%q(ns:m.012rkqx    ns:type.object.name "High Fidelity"@en-ltr.),
       string:      %q(ns:m.012rkqx    key:authority.musicbrainz   "258c45bd-4437-4580-8988-b3f3be975f9c".),
       boolean:     %q(ns:american_football.football_historical_roster_position.number ns:type.property.unique true .),
       iri:         %q(ns:g.1hhc3t8lm ns:common.licensed_object.attribution_uri <http://data.worldbank.org/indicator/IS.VEH.NVEH.P3> .),

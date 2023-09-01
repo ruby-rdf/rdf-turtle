@@ -2,7 +2,7 @@
 
 [Turtle][] reader/writer for [RDF.rb][RDF.rb] .
 
-[![Gem Version](https://badge.fury.io/rb/rdf-turtle.png)](https://badge.fury.io/rb/rdf-turtle)
+[![Gem Version](https://badge.fury.io/rb/rdf-turtle.svg)](https://badge.fury.io/rb/rdf-turtle)
 [![Build Status](https://github.com/ruby-rdf/rdf-turtle/workflows/CI/badge.svg?branch=develop)](https://github.com/ruby-rdf/rdf-turtle/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/ruby-rdf/rdf-turtle/badge.svg?branch=develop)](https://coveralls.io/github/ruby-rdf/rdf-turtle?branch=develop)
 [![Gitter chat](https://badges.gitter.im/ruby-rdf/rdf.png)](https://gitter.im/ruby-rdf/rdf)
@@ -17,9 +17,9 @@ Install with `gem install rdf-turtle`
 
 * 100% free and unencumbered [public domain](https://unlicense.org/) software.
 * Implements a complete parser for [Turtle][].
-* Compatible with Ruby >= 2.6.
+* Compatible with Ruby >= 3.0.
 * Optional streaming writer, to serialize large graphs
-* Provisional support for [Turtle-star][RDF-star].
+* Provisional support for [RDF 1.2][].
 
 ## Usage
 Instantiate a reader from a local file:
@@ -36,15 +36,17 @@ Write a graph to a file:
        writer << graph
     end
 
-## Turtle-star (RDF-star)
+## RDF 1.2
 
-Both reader and writer include provisional support for [Turtle-star][RDF-star].
+Both reader and writer include provisional support for [RDF 1.2][] quoted triples.
+
+Both reader and writer include provisional support for [RDF 1.2][] directional language-tagged strings, which are literals of type `rdf:dirLangString` having both a `language` and `direction`.
 
 Internally, an `RDF::Statement` is treated as another resource, along with `RDF::URI` and `RDF::Node`, which allows an `RDF::Statement` to have a `#subject` or `#object` which is also an `RDF::Statement`.
 
 **Note: This feature is subject to change or elimination as the standards process progresses.**
 
-### Serializing a Graph containing embedded statements
+### Serializing a Graph containing quoted triples
 
     require 'rdf/turtle'
     statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
@@ -52,7 +54,7 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
     graph.dump(:ttl, validate: false, standard_prefixes: true)
     # => '<<<bob> foaf:age 23>> <ex:certainty> 9.0e-1 .'
 
-### Reading a Graph containing embedded statements
+### Reading a Graph containing quoted triples
 
 By default, the Turtle reader will reject a document containing a subject resource.
 
@@ -140,9 +142,9 @@ This version uses a hand-written parser using the Lexer from the [EBNF][] gem in
 
 ## Dependencies
 
-* [Ruby](https://ruby-lang.org/) (>= 2.6)
-* [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.2)
-* [EBNF][] (~> 1.2)
+* [Ruby](https://ruby-lang.org/) (>= 3.0)
+* [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.3)
+* [EBNF][] (~> 2.4)
 
 ## Installation
 
@@ -187,10 +189,10 @@ A copy of the [Turtle EBNF][] and derived parser files are included in the repos
 [PDD]:              https://unlicense.org/#unlicensing-contributions
 [RDF.rb]:       https://ruby-rdf.github.io/rdf
 [EBNF]:         https://rubygems.org/gems/ebnf
-[Backports]:    https://rubygems.org/gems/backports
-[N-Triples]:    https://www.w3.org/TR/rdf-testcases/#ntriples
-[Turtle]:       https://www.w3.org/TR/2012/WD-turtle-20120710/
-[RDF-star]:         https://w3c.github.io/rdf-star/rdf-star-cg-spec.html
+[N-Triples]:    https://www.w3.org/TR/rdf12-n-triples
+[Turtle]:       https://www.w3.org/TR/rdf12-turtle
+[RDF 1.1]:          https://www.w3.org/TR/rdf11-concepts/
+[RDF 1.2]:          https://www.w3.org/TR/rdf12-concepts/
 [Turtle doc]:   https://ruby-rdf.github.io/rdf-turtle/master/file/README.md
-[Turtle EBNF]:  https://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf
+[Turtle EBNF]:  https://w3c.github.io/rdf-turtle/spec/turtle-bnf.html
 [Freebase Dumps]: https://developers.google.com/freebase/data

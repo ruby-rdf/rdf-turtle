@@ -5,7 +5,6 @@ require "bundler/setup"
 require 'logger'
 require 'rdf'
 require 'rdf/turtle'
-require 'rdf/ordered_repo'
 begin
   require 'linkeddata'
 rescue LoadError
@@ -52,7 +51,7 @@ def run(input, **options)
     end
   else
     r = reader_class.new(input, **options[:parser_options])
-    g = RDF::OrderedRepo.new << r
+    g = RDF::Repository.new << r
     num = g.count
     options[:output].puts g.dump(options[:output_format], prefixes:  r.prefixes, **options[:writer_options])
   end
@@ -60,9 +59,8 @@ def run(input, **options)
     Profiler__::stop_profile
     Profiler__::print_profile($stderr)
   end
-  $stderr
   secs = Time.new - start
-  $stderr "Parsed #{num} statements in #{secs} seconds @ #{num/secs} statements/second."
+  $stderr.puts "Parsed #{num} statements in #{secs} seconds @ #{num/secs} statements/second."
 rescue Exception => e
   fname = input.respond_to?(:path) ? input.path : "-stdin-"
   $stderr.puts("Error in #{fname}: #{e.message}")

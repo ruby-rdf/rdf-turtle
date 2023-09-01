@@ -44,12 +44,12 @@ def earl_preamble(**options)
 end
 
 def run_tc(tc, **options)
-  STDERR.write "run #{tc.name}"
+  STDERR.write "run #{tc.name} "
 
   if options[:verbose]
     puts "\nTestCase: #{tc.inspect}"
     puts "\nInput:\n" + tc.input 
-    puts "\nExpected:\n" + tc.expected
+    puts "\nExpected:\n" + tc.expected if tc.expected
   end
 
   logger = options[:live] ? Logger.new(STDERR) : RDF::Spec.logger
@@ -61,6 +61,7 @@ def run_tc(tc, **options)
     options = {
       base_uri:  tc.base,
       validate:  true,
+      rdfstar: true,
       logger: logger
     }.merge(options)
 
@@ -86,11 +87,14 @@ def run_tc(tc, **options)
       end
     end
 
-    STDERR.puts "Result: #{graph.dump(:ntriples)}" if options[:verbose]
+    STDERR.puts "Result:\n#{graph.dump(:ntriples)}" if options[:verbose]
 
     if tc.evaluate? && result.nil?
       output_graph = RDF::Repository.load(tc.result, format:  :ntriples, base_uri: tc.base, rdfstar: true)
       result = graph.isomorphic_with?(output_graph) ? "passed" : "failed"
+    elsif tc.c14n? && result.nil?
+      c14n = RDF::NTriples::Writer.buffer {|w| w << graph}
+      result = c14n == tc.expected ? "passed" : "failed"
     else
       result ||= "passed"
     end
@@ -142,7 +146,6 @@ OPT_ARGS = [
   ["--ntriples",        GetoptLong::NO_ARGUMENT, "Run N-Triples tests"],
   ["--output", "-o",    GetoptLong::REQUIRED_ARGUMENT, "Output to specified file"],
   ["--quiet", "-q",     GetoptLong::NO_ARGUMENT, "Minimal output"],
-  ["--rdfstar",         GetoptLong::NO_ARGUMENT, "Run RDF-star tests"],
   ["--skip-slow", "-s", GetoptLong::NO_ARGUMENT, "Avoid files taking too much time"],
   ["--validate",        GetoptLong::NO_ARGUMENT, "Validate input"],
   ["--verbose", "-v",   GetoptLong::NO_ARGUMENT, "Verbose output"],
@@ -151,7 +154,7 @@ OPT_ARGS = [
 
 def usage(**options)
   STDERR.puts %{
-    Turtle version #{RDF::N3::VERSION}
+    Turtle version #{RDF::Turtle::VERSION}
     Run Turtle tests.
     
     Usage: #{$0} [options] [test-number ...]
@@ -185,7 +188,6 @@ opts.each do |opt, arg|
   when '--quiet'
     options[:quiet] = true
     options[:level] = Logger::FATAL
-  when '--rdfstar'          then options[:rdfstar] = true
   when '--skip-slow'        then options[:slow] = true
   when '--validate'         then options[:validate] = true
   when '--verbose'          then options[:verbose] = true
@@ -193,14 +195,18 @@ opts.each do |opt, arg|
   end
 end
 
-manifests = if options[:rdfstar]
-  %w{nt/syntax turtle/syntax turtle/eval}.map do
-    |man| "https://w3c.github.io/rdf-star/tests/#{man}/"
-  end
-elsif options[:ntriples]
-  [Fixtures::SuiteTest::NTBASE]
+manifests = if options[:ntriples]
+  [
+    Fixtures::SuiteTest::BASE + "rdf11/rdf-n-triples/",
+    Fixtures::SuiteTest::BASE + "rdf12/rdf-n-triples/syntax/",
+    Fixtures::SuiteTest::BASE + "rdf12/rdf-n-triples/c14n/",
+  ]
 else
-  [Fixtures::SuiteTest::BASE]
+  [
+    Fixtures::SuiteTest::BASE + "rdf11/rdf-turtle/",
+    Fixtures::SuiteTest::BASE + "rdf12/rdf-turtle/syntax/",
+    Fixtures::SuiteTest::BASE + "rdf12/rdf-turtle/eval/",
+  ]
 end.map {|m| "#{m}manifest.ttl"}
 
 earl_preamble(**options) if options[:earl]

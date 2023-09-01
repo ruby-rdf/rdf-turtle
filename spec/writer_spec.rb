@@ -345,6 +345,11 @@ describe RDF::Turtle::Writer do
         ttl = %q(<http://a> <http:/b> "string"@en .)
         serialize(ttl, [%r("string"@en)])
       end
+
+      it "specifies language for literal with language and direction" do
+        ttl = %q(<http://a> <http:/b> "string"@en-ltr .)
+        serialize(ttl, [%r("string"@en-ltr)])
+      end
     end
 
     describe "xsd:anyURI" do
@@ -595,7 +600,7 @@ describe RDF::Turtle::Writer do
     end
   end
 
-  context "RDF-star" do
+  context "quoted triples" do
     {
       "subject-iii": {
         input: RDF::Statement(
@@ -755,7 +760,7 @@ describe RDF::Turtle::Writer do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(manifest.ttl).each do |man|
+    %w(rdf11/rdf-turtle/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|
