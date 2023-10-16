@@ -2,8 +2,11 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc:   <http://purl.org/dc/terms/> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix ex:   <http://example.org/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
 <> a doap:Project ;
   doap:name          "RDF.rb" ;
@@ -75,7 +78,7 @@
   foaf:homepage      <https://greggkellogg.net/>;
   rdfs:isDefinedBy   <https://greggkellogg.net/foaf> .
 <> foaf:primaryTopic <https://rubygems.org/gems/rdf> ;
-  dc:issued "2020-05-20T17:02:56-07:00"^^xsd:dateTime ;
+  dc:issued "2023-10-16T12:05:22-07:00"^^xsd:dateTime ;
   foaf:maker <https://greggkellogg.net/foaf#me> .
 
 <https://greggkellogg.net/foaf#me> a foaf:Person, earl:Assertor;
@@ -84,688 +87,1208 @@
   foaf:homepage <https://greggkellogg.net/> .
 
 <https://rubygems.org/gems/rdf>
-  doap:release <https://github.com/ruby-rdf/rdf/tree/3.1.1> .
+  doap:release <https://github.com/ruby-rdf/rdf/tree/3.3.0> .
 
-<https://github.com/ruby-rdf/rdf/tree/3.1.1> a doap:Version;
-  doap:name "RDF.rb-3.1.1";
-  doap:revision "3.1.1" .
+<https://github.com/ruby-rdf/rdf/tree/3.3.0> a doap:Version;
+  doap:name "RDF.rb-3.3.0";
+  doap:revision "3.3.0" .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-file-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-file-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-file-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-file-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-file-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-file-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-uri-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-uri-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-uri-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-uri-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-uri-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-uri-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-uri-04>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-uri-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-string-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-string-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-string-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-string-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-string-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-string-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-str-esc-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-str-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-str-esc-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-str-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-str-esc-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-str-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bnode-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bnode-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bnode-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bnode-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bnode-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bnode-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-datatypes-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-datatypes-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-datatypes-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-datatypes-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-04>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-05>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-06>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-07>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-08>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-08>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-uri-09>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-uri-09>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-prefix-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-prefix-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-base-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-base-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-struct-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-bnode-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-struct-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-bnode-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-lang-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-struct-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-esc-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-struct-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-esc-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-lang-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-esc-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-esc-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-esc-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-esc-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-04>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-05>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-06>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-04>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-string-07>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-05>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-num-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-06>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-num-02>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-string-07>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-bad-num-03>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-num-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#nt-syntax-subm-01>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-num-02>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#comment_following_triple>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-bad-num-03>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#nt-syntax-subm-01>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_all_controls>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#comment_following_triple>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_all_punctuation>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_ascii_boundaries>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_all_controls>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_2_dquotes>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_all_punctuation>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_2_squotes>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_ascii_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_BACKSPACE>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_2_dquotes>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_CARRIAGE_RETURN>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_2_squotes>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_CHARACTER_TABULATION>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_BACKSPACE>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_dquote>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_CARRIAGE_RETURN>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_FORM_FEED>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_CHARACTER_TABULATION>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_LINE_FEED>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_dquote>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_numeric_escape4>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_FORM_FEED>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_numeric_escape8>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_LINE_FEED>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_REVERSE_SOLIDUS>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_numeric_escape4>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_REVERSE_SOLIDUS2>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_numeric_escape8>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_squote>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_REVERSE_SOLIDUS>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#literal_with_UTF8_boundaries>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_REVERSE_SOLIDUS2>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#langtagged_string>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_squote>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#lantag_with_subtag>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#literal_with_UTF8_boundaries>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
 
 [ a earl:Assertion;
   earl:assertedBy <https://greggkellogg.net/foaf#me>;
   earl:subject <https://rubygems.org/gems/rdf>;
-  earl:test <http://w3c.github.io/rdf-tests/ntriples/manifest.ttl#minimal_whitespace>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#langtagged_string>;
   earl:result [
     a earl:TestResult;
     earl:outcome earl:passed;
-    dc:date "2020-05-20T17:02:56-07:00"^^xsd:dateTime];
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#lantag_with_subtag>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-triples/manifest.ttl#minimal_whitespace>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-1>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-3>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-4>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-5>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bnode-1>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bnode-2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-nested-1>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-nested-2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bad-1>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bad-2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bad-3>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bad-4>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bnode-bad-annotated-syntax-1>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-bnode-bad-annotated-syntax-2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-nested-bad-annotated-syntax-1>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/syntax#ntriples-star-nested-bad-annotated-syntax-2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#comment_following_triple>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#extra_whitespace-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#extra_whitespace-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#extra_whitespace-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#extra_whitespace-04>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#langtagged_string>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_all_controls>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_all_punctuation>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_ascii_boundaries>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_2_dquotes>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_2_squotes>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_BACKSPACE>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_CARRIAGE_RETURN>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_CHARACTER_TABULATION>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_dquote>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_FORM_FEED>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_LINE_FEED>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_numeric_escape4>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_numeric_escape8>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_REVERSE_SOLIDUS>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_REVERSE_SOLIDUS2>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_squote>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_string_dt>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#literal_with_UTF8_boundaries>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#minimal_whitespace-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#minimal_whitespace-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-uri-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-uri-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-uri-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-uri-04>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-str-esc-01>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-str-esc-02>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
+  earl:mode earl:automatic ] .
+
+[ a earl:Assertion;
+  earl:assertedBy <https://greggkellogg.net/foaf#me>;
+  earl:subject <https://rubygems.org/gems/rdf>;
+  earl:test <https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-triples/c14n#nt-syntax-str-esc-03>;
+  earl:result [
+    a earl:TestResult;
+    earl:outcome earl:passed;
+    dc:date "2023-10-16T12:05:22-07:00"^^xsd:dateTime];
   earl:mode earl:automatic ] .
