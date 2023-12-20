@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 3.0'
   gem.requirements          = []
   gem.add_runtime_dependency     'rdf',             '~> 3.3'
-  gem.add_runtime_dependency     'ebnf',            '~> 2.4'
+  gem.add_runtime_dependency     'ebnf',            '~> 2.5'
   gem.add_development_dependency 'erubis',          '~> 2.7'
   gem.add_development_dependency 'htmlentities',    '~> 4.3'
   gem.add_development_dependency 'rspec',           '~> 3.12'
