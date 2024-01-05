@@ -227,7 +227,14 @@ module RDF::Turtle
         error("undefined prefix", production: :pname, token: prefix)
         ''
       end
-      suffix = suffix.to_s.sub(/^\#/, "") if base.index("#")
+
+      # Unescape PN_LOCAL_ESC
+      suffix = suffix.gsub(PN_LOCAL_ESC) {|esc| esc[1]} if
+        suffix.match?(PN_LOCAL_ESC)
+
+      # Remove any redundant leading hash from suffix
+      suffix = suffix.sub(/^\#/, "") if base.index("#")
+
       debug("pname", depth: options[:depth]) {"base: '#{base}', suffix: '#{suffix}'"}
       process_iri(base + suffix.to_s)
     end

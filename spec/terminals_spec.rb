@@ -44,21 +44,16 @@ describe RDF::Turtle::Terminals do
       ! # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : / < = ? @
       A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
       _ a b c d e f g h i j k l m n o p q r s t u v w x y z ~
-      ab\\u00E9xy ab\xC3\xA9xy>
-      \\u03B1:a \xCE\xB1:a
-      a\\u003Ab a\x3Ab
-      \\U00010000 \xF0\x90\x80\x80
-      \\U000EFFFF \xF3\xAF\xBF\xBF
+      ab\\u00E9xy
+      \\u03B1:a
+      a\\u003Ab
+      \\U00010000
+      \\U000EFFFF
     ).each do |string|
       it "matches <scheme:#{string.inspect}>" do
-        begin
-          string = "<scheme:#{string}>"
-          string.force_encoding(Encoding::UTF_8)
-          expect(string).to match(RDF::Turtle::Terminals::IRIREF)
-        rescue RSpec::Expectations::ExpectationNotMetError
-          pending "Escapes in IRIs"
-          fail
-        end
+        string = "<scheme:#{string}>"
+        string.force_encoding(Encoding::UTF_8)
+        expect(string).to match(RDF::Turtle::Terminals::IRIREF)
       end
     end
   end
