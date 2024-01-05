@@ -29,7 +29,10 @@ Gem::Specification.new do |gem|
   gem.requirements          = []
   gem.add_runtime_dependency     'rdf',             '~> 3.3'
   gem.add_runtime_dependency     'ebnf',            '~> 2.5'
+  gem.add_runtime_dependency     'base64',          '~> 0.2'
+  gem.add_runtime_dependency     'bigdecimal',      '~> 3.1', '>= 3.1.5'
   gem.add_development_dependency 'erubis',          '~> 2.7'
+  gem.add_development_dependency 'getoptlong',      '~> 0.2'
   gem.add_development_dependency 'htmlentities',    '~> 4.3'
   gem.add_development_dependency 'rspec',           '~> 3.12'
   gem.add_development_dependency 'rspec-its',       '~> 1.3'
