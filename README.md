@@ -148,7 +148,7 @@ See [Release Notes on GitHub](https://github.com/ruby-rdf/rdf-turtle/releases)
 
 * [Ruby](https://ruby-lang.org/) (>= 3.0)
 * [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.3)
-* [EBNF][] (~> 2.4)
+* [EBNF][] (~> 2.5)
 
 ## Installation
 
