@@ -1370,14 +1370,14 @@
       <pre class="lines">
 
 
-236
-237
-238
-239
-240</pre>
+243
+244
+245
+246
+247</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 236</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 243</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bnode'>bnode</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="../../RDF.html" title="RDF (module)">RDF</a></span></span><span class='op'>::</span><span class='const'>Node</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>unless</span> <span class='id identifier rubyid_value'>value</span>
@@ -1404,16 +1404,16 @@
       <pre class="lines">
 
 
-629
-630
-631
-632
-633
-634
-635</pre>
+636
+637
+638
+639
+640
+641
+642</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 629</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 636</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span><span class='rparen'>)</span>
@@ -1751,21 +1751,21 @@
       <pre class="lines">
 
 
-647
-648
-649
-650
-651
-652
-653
 654
 655
 656
 657
-658</pre>
+658
+659
+660
+661
+662
+663
+664
+665</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 647</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 654</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ctx'>ctx</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
@@ -1910,7 +1910,14 @@
 230
 231
 232
-233</pre>
+233
+234
+235
+236
+237
+238
+239
+240</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 220</span>
@@ -1925,7 +1932,14 @@
     <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>undefined prefix</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:pname</span><span class='comma'>,</span> <span class='label'>token:</span> <span class='id identifier rubyid_prefix'>prefix</span><span class='rparen'>)</span>
     <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_suffix'>suffix</span> <span class='op'>=</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\#</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_base'>base</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+
+  <span class='comment'># Unescape PN_LOCAL_ESC
+</span>  <span class='id identifier rubyid_suffix'>suffix</span> <span class='op'>=</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="Terminals.html#PN_LOCAL_ESC-constant" title="RDF::Turtle::Terminals::PN_LOCAL_ESC (constant)">PN_LOCAL_ESC</a></span></span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_esc'>esc</span><span class='op'>|</span> <span class='id identifier rubyid_esc'>esc</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span> <span class='kw'>if</span>
+    <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="Terminals.html#PN_LOCAL_ESC-constant" title="RDF::Turtle::Terminals::PN_LOCAL_ESC (constant)">PN_LOCAL_ESC</a></span></span><span class='rparen'>)</span>
+
+  <span class='comment'># Remove any redundant leading hash from suffix
+</span>  <span class='id identifier rubyid_suffix'>suffix</span> <span class='op'>=</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\#</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_base'>base</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+
   <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pname</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>depth:</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:depth</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>base: &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base'>base</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;, suffix: &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_suffix'>suffix</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
   <span class='id identifier rubyid_process_iri'>process_iri</span><span class='lparen'>(</span><span class='id identifier rubyid_base'>base</span> <span class='op'>+</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -2053,13 +2067,6 @@
       <pre class="lines">
 
 
-559
-560
-561
-562
-563
-564
-565
 566
 567
 568
@@ -2105,10 +2112,17 @@
 608
 609
 610
-611</pre>
+611
+612
+613
+614
+615
+616
+617
+618</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 559</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 566</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='id identifier rubyid_production'>production</span><span class='comma'>,</span> <span class='id identifier rubyid_recover_to'>recover_to</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='ivar'>@prod_stack</span> <span class='op'>&lt;&lt;</span> <span class='lbrace'>{</span><span class='label'>prod:</span> <span class='id identifier rubyid_production'>production</span><span class='comma'>,</span> <span class='label'>recover_to:</span> <span class='id identifier rubyid_recover_to'>recover_to</span><span class='rbrace'>}</span>
@@ -2183,16 +2197,16 @@
       <pre class="lines">
 
 
-613
-614
-615
-616
-617
-618
-619</pre>
+620
+621
+622
+623
+624
+625
+626</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 613</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 620</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_progress'>progress</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span><span class='rparen'>)</span>
@@ -2232,13 +2246,6 @@
       <pre class="lines">
 
 
-438
-439
-440
-441
-442
-443
-444
 445
 446
 447
@@ -2247,10 +2254,17 @@
 450
 451
 452
-453</pre>
+453
+454
+455
+456
+457
+458
+459
+460</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 438</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 445</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_annotation'>read_annotation</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:annotation</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -2310,16 +2324,16 @@
       <pre class="lines">
 
 
-551
-552
-553
-554
-555
-556
-557</pre>
+558
+559
+560
+561
+562
+563
+564</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 551</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 558</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_BlankNode'>read_BlankNode</span>
   <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -2370,23 +2384,23 @@
       <pre class="lines">
 
 
-504
-505
-506
-507
-508
-509
-510
 511
 512
 513
 514
 515
 516
-517</pre>
+517
+518
+519
+520
+521
+522
+523
+524</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 504</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 511</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_blankNodePropertyList'>read_blankNodePropertyList</span>
   <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -2444,13 +2458,6 @@
       <pre class="lines">
 
 
-520
-521
-522
-523
-524
-525
-526
 527
 528
 529
@@ -2463,10 +2470,17 @@
 536
 537
 538
-539</pre>
+539
+540
+541
+542
+543
+544
+545
+546</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 520</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 527</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_collection'>read_collection</span>
   <span class='kw'>if</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>===</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>(</span><span class='tstring_end'>&#39;</span></span>
@@ -2517,13 +2531,6 @@
       <pre class="lines">
 
 
-264
-265
-266
-267
-268
-269
-270
 271
 272
 273
@@ -2561,10 +2568,17 @@
 305
 306
 307
-308</pre>
+308
+309
+310
+311
+312
+313
+314
+315</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 264</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 271</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_directive'>read_directive</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:directive</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -2653,16 +2667,16 @@
       <pre class="lines">
 
 
-542
-543
-544
-545
-546
-547
-548</pre>
+549
+550
+551
+552
+553
+554
+555</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 542</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 549</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_iri'>read_iri</span>
   <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -2713,13 +2727,6 @@
       <pre class="lines">
 
 
-456
-457
-458
-459
-460
-461
-462
 463
 464
 465
@@ -2758,10 +2765,17 @@
 498
 499
 500
-501</pre>
+501
+502
+503
+504
+505
+506
+507
+508</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 456</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 463</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_literal'>read_literal</span>
   <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>production:</span> <span class='symbol'>:literal</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -2838,23 +2852,23 @@
       <pre class="lines">
 
 
-382
-383
-384
-385
-386
-387
-388
 389
 390
 391
 392
 393
 394
-395</pre>
+395
+396
+397
+398
+399
+400
+401
+402</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 382</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 389</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_object'>read_object</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:object</span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -2919,13 +2933,6 @@
       <pre class="lines">
 
 
-345
-346
-347
-348
-349
-350
-351
 352
 353
 354
@@ -2933,10 +2940,17 @@
 356
 357
 358
-359</pre>
+359
+360
+361
+362
+363
+364
+365
+366</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 345</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 352</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_objectList'>read_objectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:objectList</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%{</span><span class='tstring_content'>,</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3017,23 +3031,23 @@
       <pre class="lines">
 
 
-329
-330
-331
-332
-333
-334
-335
 336
 337
 338
 339
 340
 341
-342</pre>
+342
+343
+344
+345
+346
+347
+348
+349</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 329</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 336</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_predicateObjectList'>read_predicateObjectList</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:predicateObjectList</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>%{</span><span class='tstring_content'>;</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3091,17 +3105,17 @@
       <pre class="lines">
 
 
-428
-429
-430
-431
-432
-433
-434
-435</pre>
+435
+436
+437
+438
+439
+440
+441
+442</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 428</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 435</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_qtObject'>read_qtObject</span><span class='lparen'>(</span><span class='id identifier rubyid_subject'>subject</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_predicate'>predicate</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:qtObject</span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3153,17 +3167,17 @@
       <pre class="lines">
 
 
-418
-419
-420
-421
-422
-423
-424
-425</pre>
+425
+426
+427
+428
+429
+430
+431
+432</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 418</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 425</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_qtSubject'>read_qtSubject</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:qtSubject</span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3217,13 +3231,6 @@
       <pre class="lines">
 
 
-399
-400
-401
-402
-403
-404
-405
 406
 407
 408
@@ -3233,10 +3240,17 @@
 412
 413
 414
-415</pre>
+415
+416
+417
+418
+419
+420
+421
+422</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 399</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 406</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_quotedTriple'>read_quotedTriple</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='ivar'>@options</span><span class='lbracket'>[</span><span class='symbol'>:rdfstar</span><span class='rbracket'>]</span>
@@ -3284,13 +3298,6 @@
       <pre class="lines">
 
 
-244
-245
-246
-247
-248
-249
-250
 251
 252
 253
@@ -3301,10 +3308,17 @@
 258
 259
 260
-261</pre>
+261
+262
+263
+264
+265
+266
+267
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 244</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 251</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_statement'>read_statement</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:statement</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3366,18 +3380,18 @@
       <pre class="lines">
 
 
-371
-372
-373
-374
-375
-376
-377
 378
-379</pre>
+379
+380
+381
+382
+383
+384
+385
+386</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 371</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 378</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_subject'>read_subject</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:subject</span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3437,13 +3451,6 @@
       <pre class="lines">
 
 
-311
-312
-313
-314
-315
-316
-317
 318
 319
 320
@@ -3451,10 +3458,17 @@
 322
 323
 324
-325</pre>
+325
+326
+327
+328
+329
+330
+331
+332</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 311</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 318</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_triples'>read_triples</span>
   <span class='id identifier rubyid_prod'>prod</span><span class='lparen'>(</span><span class='symbol'>:triples</span><span class='comma'>,</span> <span class='qwords_beg'>%w{</span><span class='tstring_content'>.</span><span class='tstring_end'>}</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -3513,16 +3527,16 @@
       <pre class="lines">
 
 
-362
-363
-364
-365
-366
-367
-368</pre>
+369
+370
+371
+372
+373
+374
+375</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 362</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 369</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_read_verb'>read_verb</span>
   <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>read_verb</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unexpected end of file</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_token'>token</span> <span class='op'>=</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -3551,16 +3565,16 @@
       <pre class="lines">
 
 
-621
-622
-623
-624
-625
-626
-627</pre>
+628
+629
+630
+631
+632
+633
+634</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 621</span>
+      <pre class="code"><span class="info file"># File 'lib/rdf/turtle/reader.rb', line 628</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_recover'>recover</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_lineno'>lineno</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span> <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:lineno</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='ivar'>@lexer</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@lexer</span><span class='period'>.</span><span class='id identifier rubyid_lineno'>lineno</span><span class='rparen'>)</span>
@@ -3579,9 +3593,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Sep  1 20:23:28 2023 by
+  Generated on Sun Mar 17 21:06:45 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.1.4).
+  0.9.36 (ruby-3.1.4).
 </div>
 
     </div>
