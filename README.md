@@ -140,11 +140,15 @@ An example of reading Freebase dumps:
 ## Implementation Notes
 This version uses a hand-written parser using the Lexer from the [EBNF][] gem instead of a general [EBNF][] LL(1) parser for faster performance.
 
+## Change Log
+
+See [Release Notes on GitHub](https://github.com/ruby-rdf/rdf-turtle/releases)
+
 ## Dependencies
 
 * [Ruby](https://ruby-lang.org/) (>= 3.0)
 * [RDF.rb](https://rubygems.org/gems/rdf) (~> 3.3)
-* [EBNF][] (~> 2.4)
+* [EBNF][] (~> 2.5)
 
 ## Installation
 

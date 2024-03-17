@@ -83,6 +83,42 @@ describe RDF::Turtle::FreebaseReader do
       g = RDF::Graph.new << subject
       expect(g).to be_equivalent_graph("@prefix foo: <http://example/bar#> ." + input, logger: @logger)
     end
+
+    context "PN_LOCAL" do
+      {
+        "p:_a": "<http://a.example/_a>", # PN_CHARS_U
+        "p::": "<http://a.example/:>", # PN_LOCAL
+        "p:0": "<http://a.example/0>", # PN_LOCAL
+        "p:%B7": "<http://a.example/%B7>", # PN_LOCAL
+        "p:a.b": "<http://a.example/a.b>", # PN_LOCAL
+        
+        "p:\\_underscore": "<http://a.example/_underscore>", # PN_LOCAL_ESC
+        "p:\\~tilda": "<http://a.example/~tilda>", # PN_LOCAL_ESC
+        "p:\\.dot": "<http://a.example/.dot>", # PN_LOCAL_ESC
+        "p:\\-dash": "<http://a.example/-dash>", # PN_LOCAL_ESC
+        "p:\\!exclamation": "<http://a.example/!exclamation>", # PN_LOCAL_ESC
+        "p:\\$dollar": "<http://a.example/$dollar>", # PN_LOCAL_ESC
+        "p:\\&amper": "<http://a.example/&amper>", # PN_LOCAL_ESC
+        "p:\\'squote": "<http://a.example/'squote>", # PN_LOCAL_ESC
+        "p:\\(paren\\)": "<http://a.example/(paren)>", # PN_LOCAL_ESC
+        "p:\\*star": "<http://a.example/*star>", # PN_LOCAL_ESC
+        "p:\\+plus": "<http://a.example/+plus>", # PN_LOCAL_ESC
+        "p:\\,comma": "<http://a.example/,comma>", # PN_LOCAL_ESC
+        "p:\\;semi": "<http://a.example/;semi>", # PN_LOCAL_ESC
+        "p:\\=equal": "<http://a.example/=equal>", # PN_LOCAL_ESC
+        "p:\\/slash": "<http://a.example//slash>", # PN_LOCAL_ESC
+        "p:\\?question": "<http://a.example/?question>", # PN_LOCAL_ESC
+        "p:\\#numbersign": "<http://a.example/#numbersign>", # PN_LOCAL_ESC
+        "p:\\@ampersand": "<http://a.example/@ampersand>", # PN_LOCAL_ESC
+        "p:\\%percent": "<http://a.example/%percent>", # PN_LOCAL_ESC
+      }.each do |pn, iri|
+        it pn do
+          ttl = %(@prefix p: <http://a.example/> .\n p:s p:p #{pn} .)
+          nt = %(<http://a.example/s> <http://a.example/p> #{iri} .)
+          expect(parse(ttl, validate: false)).to be_equivalent_graph(nt, logger: @logger)
+        end
+      end
+    end
   end
 
   describe "with simple sample data" do

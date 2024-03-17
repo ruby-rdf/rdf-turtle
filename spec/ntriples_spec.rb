@@ -6,7 +6,7 @@ describe RDF::NTriples::Reader do
   describe "w3c N-Triples tests" do
     require 'suite_helper'
 
-    %w(rdf11/rdf-n-triples/manifest.ttl rdf12/rdf-n-triples/c14n/manifest.ttl).each do |man|
+    %w(rdf11/rdf-n-triples/manifest.ttl rdf12/rdf-n-triples/syntax/manifest.ttl rdf12/rdf-n-triples/c14n/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|
@@ -17,6 +17,7 @@ describe RDF::NTriples::Reader do
 
               reader = RDF::NTriples::Reader.new(t.input,
                 logger: t.logger,
+                rdfstar: true,
                 validate:  true)
 
               graph = RDF::Graph.new

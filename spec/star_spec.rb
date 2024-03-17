@@ -7,7 +7,6 @@ describe RDF::Turtle::Reader do
     require 'suite_helper'
 
     %w(
-      rdf12/rdf-n-triples/syntax/manifest.ttl
       rdf12/rdf-turtle/syntax/manifest.ttl
       rdf12/rdf-turtle/eval/manifest.ttl).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|

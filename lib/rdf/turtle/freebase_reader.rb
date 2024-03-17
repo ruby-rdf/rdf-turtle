@@ -64,6 +64,14 @@ module RDF::Turtle
         end
         pfx_iri = prefix(ns)
         raise RDF::ReaderError.new("ERROR [line #{lineno}] prefix #{ns.inspect} is not defined", lineno: lineno) unless pfx_iri
+
+        # Unescape PN_LOCAL_ESC
+        suffix = suffix.gsub(PN_LOCAL_ESC) {|esc| esc[1]} if
+          suffix.match?(PN_LOCAL_ESC)
+
+        # Remove any redundant leading hash from suffix
+        suffix = suffix.sub(/^\#/, "") if pfx_iri.to_s.index("#")
+
         uri = RDF::URI(pfx_iri + suffix)
         uri.validate!     if validate?
         uri
