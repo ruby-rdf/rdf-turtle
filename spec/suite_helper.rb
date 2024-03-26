@@ -119,6 +119,14 @@ module Fixtures
         json['@graph'].map {|e| Manifest.new(e)}
       end
 
+      def label
+        ll = [attributes['label']] unless attributes['label'].is_a?(Array)
+        l = ll.detect {|li| li.is_a?(String)}
+        l ||= ll.detect {|li| li['@language'] == 'en'}
+        l = l['@value'] if l.is_a?(Hash)
+        l
+      end
+
       def entries
         # Map entries to resources
         attributes['entries'].map {|e| Entry.new(e)}
@@ -140,7 +148,7 @@ module Fixtures
       def expected
         @expected ||= RDF::Util::File.open_file(result) {|f| f.read} if result
       end
-      
+
       def evaluate?
         Array(attributes['@type']).join(" ").match(/Eval/)
       end

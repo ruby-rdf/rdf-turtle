@@ -329,14 +329,14 @@ module RDF::Turtle
     end
 
     ##
-    # Returns an embedded triple.
+    # Returns a triple term
     #
     # @param [RDF::Statement] statement
     # @param [Hash{Symbol => Object}] options
     # @return [String]
-    def format_quotedTriple(statement, **options)
+    def format_tripleTerm(statement, **options)
       log_debug("rdfstar") {"#{statement.to_ntriples}"}
-      "<<%s %s %s>>" % statement.to_a.map { |value| format_term(value, **options) }
+      "<<(%s %s %s)>>" % statement.to_a.map { |value| format_term(value, **options) }
     end
 
     protected
@@ -368,7 +368,7 @@ module RDF::Turtle
       subjects = []
 
       # Start with base_uri
-      if base_uri && @subjects.keys.include?(base_uri)
+      if base_uri && @subjects.key?(base_uri)
         subjects << RDF::URI(base_uri)
         seen[RDF::URI(base_uri)] = true
       end
@@ -425,12 +425,29 @@ module RDF::Turtle
     # Perform any statement preprocessing required. This is used to perform reference counts and determine required
     # prefixes.
     # @param [Statement] statement
-    def preprocess_statement(statement)
+    # @param [Boolean] as_subject Count as a graph subject
+    def preprocess_statement(statement, as_subject: true)
       #log_debug("preprocess") {statement.to_ntriples}
       bump_reference(statement.object)
+
+      # Also count references of triple terms
+      preprocess_statement(statement.object, as_subject: false) if statement.object.statement?
+
       # Count properties of this subject
-      (@subjects[statement.subject] ||= {})[statement.predicate] ||= 0
-      @subjects[statement.subject][statement.predicate] += 1
+      if as_subject
+        (@subjects[statement.subject] ||= {})[statement.predicate] ||= 0
+        @subjects[statement.subject][statement.predicate] += 1
+      else
+        # Terms of statement are in triple terms
+        statement.to_a.each {|t| @in_triple_term[t] = true}
+      end
+
+      # If it fits, allow this to be rendered as a reification
+      if statement.object.statement? && statement.predicate == RDF.to_uri + 'reifies'
+        @reification[statement.subject] ||= []
+        @reification[statement.subject] << statement.object unless
+          @reification[statement.subject].include?(statement.object)
+      end
 
       # Collect lists
       if statement.predicate == RDF.first
@@ -464,6 +481,8 @@ module RDF::Turtle
       @references = {}
       @serialized = {}
       @subjects = {}
+      @reification = {}
+      @in_triple_term = {}
     end
 
     ##
@@ -479,14 +498,6 @@ module RDF::Turtle
       else
         "\"#{escaped(string)}\""
       end
-    end
-
-    # Can subject be represented as a blankNodePropertyList?
-    def blankNodePropertyList?(resource, position)
-      !resource.statement? && resource.node? &&
-        !collection?(resource) &&
-        (!is_done?(resource) || position == :subject) &&
-        ref_count(resource) == (position == :object ? 1 : 0)
     end
 
     # Return the number of statements having this resource as a subject other than for list properties
@@ -519,7 +530,10 @@ module RDF::Turtle
       @serialized[subject] = true
     end
 
-    private
+    # Resource is used within a triple term
+    def in_triple_term?(resource)
+      @in_triple_term.key?(resource)
+    end
 
     # Checks if l is a valid RDF list, i.e. no nodes have other properties.
     def collection?(l)
@@ -552,6 +566,16 @@ module RDF::Turtle
       @output.write(')')
     end
 
+    # Can subject be represented as a blankNodePropertyList?
+    def blankNodePropertyList?(resource, position)
+      !resource.statement? && resource.node? &&
+        !collection?(resource) &&
+        !reification?(resource) &&
+        !in_triple_term?(resource) &&
+        (!is_done?(resource) || position == :subject) &&
+        ref_count(resource) == (position == :object ? 1 : 0)
+    end
+
     # Represent resource as a blankNodePropertyList
     def blankNodePropertyList(resource, position)
       return false unless blankNodePropertyList?(resource, position)
@@ -561,6 +585,37 @@ module RDF::Turtle
       @output.write(position == :subject ? "\n#{indent} [" : '[')
       num_props = log_depth {predicateObjectList(resource, true)}
       @output.write((num_props > 1 ? "\n#{indent(2)}" : "") + (position == :object ? ']' : '] .'))
+      true
+    end
+
+    # Is this a reification?
+    def reification?(resource)
+      @reification.key?(resource)
+    end
+
+    # Render a reification
+    def reification(resource, position)
+      return false unless reification?(resource)
+      if position == :subject
+        return false if ref_count(resource) == 1
+      else
+        return false if ref_count(resource) > 1
+      end
+
+      log_debug("reification") {resource.to_ntriples}
+      subject_done(resource)
+      # There may be multiple reifications using this resource
+      @reification[resource].each do |tt|
+        @output.write(position == :subject ? "\n#{indent} << " : '<< ')
+        p_term(resource, :subject)
+        @output.write(' | ')
+        reification(tt.subject, :object) || p_term(tt.subject, :object)
+        @output.write(' ')
+        predicate(tt.predicate)
+        @output.write(' ')
+        reification(tt.object, :object) || p_term(tt.object, :object)
+        @output.write(' >>')
+      end
       true
     end
 
@@ -587,6 +642,7 @@ module RDF::Turtle
       end
       raise RDF::WriterError, "Cannot serialize resource '#{resource}'" unless
         collection(resource, position) ||
+        reification(resource, position) ||
         blankNodePropertyList(resource, position) ||
         p_term(resource, position)
     end

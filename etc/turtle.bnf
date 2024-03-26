@@ -9,9 +9,9 @@ triples               ::= subject predicateObjectList | blankNodePropertyList pr
 predicateObjectList   ::= verb objectList (';' (verb objectList)? )*
 objectList            ::= object annotation? ( ',' object annotation? )*
 verb                  ::= predicate | 'a'
-subject               ::= iri | BlankNode | collection | quotedTriple
+subject               ::= iri | BlankNode | collection | reification
 predicate             ::= iri
-object                ::= iri | BlankNode | collection | blankNodePropertyList | literal | quotedTriple
+object                ::= iri | BlankNode | collection | blankNodePropertyList | literal | tripleTerm | reification
 literal               ::= RDFLiteral | NumericLiteral | BooleanLiteral
 blankNodePropertyList ::= '[' predicateObjectList ']'
 collection            ::= '(' object* ')'
@@ -23,10 +23,10 @@ String                ::= STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE
 iri                   ::= IRIREF | PrefixedName
 PrefixedName          ::= PNAME_LN | PNAME_NS
 BlankNode             ::= BLANK_NODE_LABEL | ANON
-quotedTriple          ::= '<<' qtSubject predicate qtObject '>>'
-qtSubject             ::=	iri | BlankNode | quotedTriple
-qtObject              ::=	iri | BlankNode | literal | quotedTriple
-annotation            ::= '{|' predicateObjectList '|}'
+reification           ::= '<<' ((iri | BlankNode) '|' )? subject predicate object '>>'
+tripleTerm            ::= '<<(' subject predicate ttObject ')>>'
+ttObject              ::=	iri | BlankNode | literal | tripleTerm
+annotation            ::= '{|' ( (iri | BlankNode) '|' )? predicateObjectList '|}'
 
 @terminals
 

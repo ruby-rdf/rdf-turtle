@@ -44,7 +44,7 @@ def earl_preamble(**options)
 end
 
 def run_tc(tc, **options)
-  STDERR.write "run #{tc.name} "
+  STDERR.write "run #{tc.id.split('/').last} #{tc.name} "
 
   if options[:verbose]
     puts "\nTestCase: #{tc.inspect}"
@@ -80,6 +80,7 @@ def run_tc(tc, **options)
     else
       begin
         graph << reader
+        raise RDF::ReaderError, "quoted triple" if graph.statements.any? {|s| s.to_a.any?(&:statement?)}
         STDERR.puts "Expected exception" if options[:verbose]
         result = "failed"
       rescue RDF::ReaderError

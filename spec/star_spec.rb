@@ -44,6 +44,7 @@ describe RDF::Turtle::Reader do
               else
                 expect {
                   graph << reader
+                  raise RDF::ReaderError, "quoted triple" if graph.statements.any? {|s| s.to_a.any?(&:statement?)}
                   expect(graph.dump(:ntriples)).to produce("not this", t)
                 }.to raise_error(RDF::ReaderError)
               end

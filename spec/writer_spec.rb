@@ -600,67 +600,8 @@ describe RDF::Turtle::Writer do
     end
   end
 
-  context "quoted triples" do
+  context "triple terms" do
     {
-      "subject-iii": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        regexp: [%r(<<ex:s1 ex:p1 ex:o1>> ex:p ex:o \.)]
-      },
-      "subject-iib": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Node.new('o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        regexp: [%r(<<ex:s1 ex:p1 _:o1>> ex:p ex:o \.)]
-      },
-      "subject-iil": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Literal('o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        regexp: [%r(<<ex:s1 ex:p1 "o1">> ex:p ex:o \.)]
-      },
-      "subject-bii": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Node('s1'),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-          regexp: [%r(<<_:s1 ex:p1 ex:o1>> ex:p ex:o \.)]
-      },
-      "subject-bib": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Node('s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Node.new('o1')),
-          RDF::URI('http://example/p'), RDF::URI('http://example/o')),
-        regexp: [%r(<<_:s1 ex:p1 _:o1>> ex:p ex:o \.)]
-      },
-      "subject-bil": {
-        input: RDF::Statement(
-          RDF::Statement(
-            RDF::Node('s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Literal('o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
-        regexp: [%r(<<_:s1 ex:p1 "o1">> ex:p ex:o \.)]
-      },
       "object-iii":  {
         input: RDF::Statement(
           RDF::URI('http://example/s'),
@@ -668,8 +609,9 @@ describe RDF::Turtle::Writer do
           RDF::Statement(
             RDF::URI('http://example/s1'),
             RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1'))),
-        regexp: [%r(ex:s ex:p <<ex:s1 ex:p1 ex:o1>> .)]
+            RDF::URI('http://example/o1'),
+            tripleTerm: true)),
+        regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 ex:o1\)>> .)]
       },
       "object-iib":  {
         input: RDF::Statement(
@@ -678,8 +620,9 @@ describe RDF::Turtle::Writer do
           RDF::Statement(
             RDF::URI('http://example/s1'),
             RDF::URI('http://example/p1'),
-            RDF::Node.new('o1'))),
-        regexp: [%r(ex:s ex:p <<ex:s1 ex:p1 _:o1>> .)]
+            RDF::Node.new('o1'),
+            tripleTerm: true)),
+        regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 _:o1\)>> .)]
       },
       "object-iil":  {
         input: RDF::Statement(
@@ -688,28 +631,107 @@ describe RDF::Turtle::Writer do
           RDF::Statement(
             RDF::URI('http://example/s1'),
             RDF::URI('http://example/p1'),
-            RDF::Literal('o1'))),
-        regexp: [%r(ex:s ex:p <<ex:s1 ex:p1 "o1">> .)],
+            RDF::Literal('o1'),
+            tripleTerm: true)),
+        regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 "o1"\)>> .)],
       },
-      "recursive-subject": {
+      "recursive-object": {
         input: RDF::Statement(
+          RDF::URI('http://example/s'),
+          RDF::URI('http://example/p'),
           RDF::Statement(
+            RDF::URI('http://example/s1'),
+            RDF::URI('http://example/p1'),
             RDF::Statement(
               RDF::URI('http://example/s2'),
               RDF::URI('http://example/p2'),
-              RDF::URI('http://example/o2')),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1')),
-          RDF::URI('http://example/p'),
-          RDF::URI('http://example/o')),
+              RDF::URI('http://example/o2'),
+              tripleTerm: true),
+            tripleTerm: true
+          )
+        ),
         regexp: [
-          %r(<<\s*<<\s*ex:s2 ex:p2 ex:o2\s*>>\s*ex:p1 ex:o1\s*>> ex:p ex:o \.)
+          %r(ex:s ex:p <<\(\s*ex:s1 ex:p1 <<\(\s*ex:s2 ex:p2 ex:o2*\s*\)>>\s*\)>>)
         ]
       },
     }.each do |name, params|
       it name do
         graph = RDF::Graph.new {|g| g << params[:input]}
         serialize(graph, params.fetch(:regexp, []), prefixes: {ex: 'http://example/'}, **params)
+      end
+    end
+
+    context "reifications" do
+      {
+        "object-iii":  {
+          input: %(
+            PREFIX :    <http://example/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            :s :p << :s1 :p1 :o1 >> .
+          ),
+          regexp: [%r(ex:s ex:p <<ex:s1 ex:p1 ex:o1>> .)]
+        },
+        "bnode-01": {
+          input: %(
+            PREFIX : <http://example/>
+            _:a :p :o .
+            <<_:a :p :o >> :q 456 .
+          ),
+          regexp: [
+            %r(_:a ex:p ex:o .),
+            %r(<<\s*_:a ex:p ex:o\s*>> ex:q 456 .)
+          ]
+        },
+        #"object-iib":  {
+        #  input: RDF::Statement(
+        #    RDF::URI('http://example/s'),
+        #    RDF::URI('http://example/p'),
+        #    RDF::Statement(
+        #      RDF::URI('http://example/s1'),
+        #      RDF::URI('http://example/p1'),
+        #      RDF::Node.new('o1'),
+        #      tripleTerm: true)),
+        #  regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 _:o1\)>> .)]
+        #},
+        #"object-iil":  {
+        #  input: RDF::Statement(
+        #    RDF::URI('http://example/s'),
+        #    RDF::URI('http://example/p'),
+        #    RDF::Statement(
+        #      RDF::URI('http://example/s1'),
+        #      RDF::URI('http://example/p1'),
+        #      RDF::Literal('o1'),
+        #      tripleTerm: true)),
+        #  regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 "o1"\)>> .)],
+        #},
+        #"recursive-object": {
+        #  input: RDF::Statement(
+        #    RDF::URI('http://example/s'),
+        #    RDF::URI('http://example/p'),
+        #    RDF::Statement(
+        #      RDF::URI('http://example/s1'),
+        #      RDF::URI('http://example/p1'),
+        #      RDF::Statement(
+        #        RDF::URI('http://example/s2'),
+        #        RDF::URI('http://example/p2'),
+        #        RDF::URI('http://example/o2'),
+        #        tripleTerm: true),
+        #      tripleTerm: true
+        #    )
+        #  ),
+        #  regexp: [
+        #    %r(ex:s ex:p <<\(\s*ex:s1 ex:p1 <<\(\s*ex:s2 ex:p2 ex:o2*\s*\)>>\s*\)>>)
+        #  ]
+        #},
+      }.each do |name, params|
+        it name do
+          graph = RDF::Graph.new {|g| g << parse(params[:input], rdfstar: true)}
+          serialize(graph, params.fetch(:regexp, []),
+            prefixes: {
+              ex: 'http://example/',
+              rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+            }, **params)
+        end
       end
     end
 
