@@ -248,19 +248,19 @@ module RDF::Turtle
     # Take a hash from predicate uris to lists of values.
     # Sort the lists of values.  Return a sorted list of properties.
     # @param [Hash{String => Array<Resource>}] properties A hash of Property to Resource mappings
-    # @return [Array<String>}] Ordered list of properties. Uses predicate_order.
+    # @return [Array<RDF::URI>}] Ordered list of properties. Uses predicate_order.
     def sort_properties(properties)
       # Make sorted list of properties
       prop_list = []
 
       predicate_order.each do |prop|
-        next unless properties[prop.to_s]
-        prop_list << prop.to_s
+        next unless properties[prop]
+        prop_list << prop
       end
 
       properties.keys.sort.each do |prop|
-        next if prop_list.include?(prop.to_s)
-        prop_list << prop.to_s
+        next if prop_list.include?(prop)
+        prop_list << prop
       end
 
       log_debug("sort_properties") {prop_list.join(', ')}
@@ -401,7 +401,8 @@ module RDF::Turtle
         map {|r| [r.node? ? 2 : (r.statement? ? 1 : 0), ref_count(r), r]}.
         sort
 
-      subjects + recursable.map{|r| r.last}
+      # Sort recursable unto those that are not reifiers and those that are, so that reifieres come last.
+      subjects + recursable.map{|r| r.last}.partition {|r| !@reification.key?(r)}.flatten
     end
 
     # Perform any preprocessing of statements required
@@ -435,15 +436,15 @@ module RDF::Turtle
 
       # Count properties of this subject
       if as_subject
-        (@subjects[statement.subject] ||= {})[statement.predicate] ||= 0
-        @subjects[statement.subject][statement.predicate] += 1
+        (@subjects[statement.subject] ||= {})[statement.predicate] ||= []
+        @subjects[statement.subject][statement.predicate] << statement.object
       else
         # Terms of statement are in triple terms
         statement.to_a.each {|t| @in_triple_term[t] = true}
       end
 
       # If it fits, allow this to be rendered as a reification
-      if statement.object.statement? && statement.predicate == RDF.to_uri + 'reifies'
+      if statement.object.statement? && statement.predicate == RDF.reifies
         @reification[statement.subject] ||= []
         @reification[statement.subject] << statement.object unless
           @reification[statement.subject].include?(statement.object)
@@ -482,6 +483,7 @@ module RDF::Turtle
       @serialized = {}
       @subjects = {}
       @reification = {}
+      @as_reification = {}
       @in_triple_term = {}
     end
 
@@ -504,8 +506,8 @@ module RDF::Turtle
     # @return [Integer]
     def prop_count(subject)
       @subjects.fetch(subject, {}).
-        reject {|k, v| [RDF.type, RDF.first, RDF.rest].include?(k)}.
-        values.reduce(:+) || 0
+        reject {|p, o| [RDF.type, RDF.first, RDF.rest, RDF.reifies].include?(p)}.
+        values.flatten.length
     end
 
     # Return the number of times this node has been referenced in the object position
@@ -570,7 +572,7 @@ module RDF::Turtle
     def blankNodePropertyList?(resource, position)
       !resource.statement? && resource.node? &&
         !collection?(resource) &&
-        !reification?(resource) &&
+        !reification?(resource, position) &&
         !in_triple_term?(resource) &&
         (!is_done?(resource) || position == :subject) &&
         ref_count(resource) == (position == :object ? 1 : 0)
@@ -589,26 +591,27 @@ module RDF::Turtle
     end
 
     # Is this a reification?
-    def reification?(resource)
-      @reification.key?(resource)
+    def reification?(resource, position)
+      @reification.key?(resource) &&
+      (position == :subject ? (prop_count(resource) > 0) : (prop_count(resource) == 0))
     end
 
     # Render a reification
     def reification(resource, position)
-      return false unless reification?(resource)
-      if position == :subject
-        return false if ref_count(resource) == 1
-      else
-        return false if ref_count(resource) > 1
-      end
+      return false unless reification?(resource, position)
+      write_id = resource.iri? || ref_count(resource) > 1
+      @as_reification[resource] = true  # Prevent rdf:reifies from being emitted
 
       log_debug("reification") {resource.to_ntriples}
       subject_done(resource)
       # There may be multiple reifications using this resource
       @reification[resource].each do |tt|
         @output.write(position == :subject ? "\n#{indent} << " : '<< ')
-        p_term(resource, :subject)
-        @output.write(' | ')
+        if write_id
+          # Only need to output blank node identifiers if they have more than one reference
+          p_term(resource, :subject)
+          @output.write(' | ')
+        end
         reification(tt.subject, :object) || p_term(tt.subject, :object)
         @output.write(' ')
         predicate(tt.predicate)
@@ -669,13 +672,16 @@ module RDF::Turtle
         end
         path(obj, :object)
 
-        # If subject, predicate, and object are embedded, write those bits out too.
-        emb = RDF::Statement(subject, predicate, obj)
-        if !@graph.query({subject: emb}).empty?
+        # If there is a single reifier for this statement, write that out
+        tt = RDF::Statement(subject, predicate, obj)
+        reifs = @reification.select {|k, v| v.include?(tt)}.keys
+        if reifs.length == 1
+          reif = reifs.first
+          @as_reification[reif] = true
           @output.write ' {| '
-          predicateObjectList(emb, true)
+          predicateObjectList(reif, true)
           @output.write ' |}'
-          subject_done(emb)
+          subject_done(reif)
         end
       end
     end
@@ -683,24 +689,21 @@ module RDF::Turtle
     # Render a predicateObjectList having a common subject.
     # @return [Integer] the number of properties serialized
     def predicateObjectList(subject, from_bpl = false)
-      properties = {}
-      @graph.query({subject:  subject}) do |st|
-        (properties[st.predicate.to_s] ||= []) << st.object
-      end
+      properties = @subjects.fetch(subject, {})
 
       prop_list = sort_properties(properties)
-      prop_list -= [RDF.first.to_s, RDF.rest.to_s] if @lists.key?(subject)
+      prop_list -= [RDF.first, RDF.rest] if @lists.key?(subject)
+      prop_list -= [RDF.reifies] if @as_reification.key?(subject)
       log_debug("predicateObjectList") {prop_list.inspect}
       return 0 if prop_list.empty?
 
       @output.write("\n#{indent(2)}") if properties.keys.length > 1 && from_bpl
       prop_list.each_with_index do |prop, i|
         begin
-          pred = RDF::URI.intern(prop)
           @output.write(";\n#{indent(2)}") if i > 0
-          predicate(pred)
+          predicate(prop)
           @output.write(" ")
-          objectList(subject, pred, properties[prop])
+          objectList(subject, prop, properties[prop])
         end
       end
       properties.keys.length
