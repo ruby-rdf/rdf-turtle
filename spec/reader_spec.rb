@@ -1149,7 +1149,20 @@ describe RDF::Turtle::Reader do
             _:anno2 <http://example/graph> <http://host2/> .
             _:anno2 <http://example/date> "2020-12-31"^^<http://www.w3.org/2001/XMLSchema#date> .
           )
-        ]
+        ],
+        'multiple annotations' => [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| :id1 | :r :z |} {| :id2 | :s :w |}.
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <http://example/id1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            <http://example/id1> <http://example/r> <http://example/z> .
+            <http://example/id2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            <http://example/id2> <http://example/s> <http://example/w> .
+          )
+        ],
       }.each do |name, (ttl, nt)|
         it name do
           expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
