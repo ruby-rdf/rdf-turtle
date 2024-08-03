@@ -927,167 +927,296 @@ describe RDF::Turtle::Reader do
   end
 
   context "triple reifications" do
-    {
-      "subject-iii" => [
-        %(
-          @prefix ex: <http://example/> .
-          <<ex:s1 ex:p1 ex:o1>> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-iib": [
-        %(
-          @prefix ex: <http://example/> .
-          <<ex:s1 ex:p1 _:o1>> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-iil": [
-        %(
-          @prefix ex: <http://example/> .
-          <<ex:s1 ex:p1 "o1">> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> "o1")>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-iia": [
-        %(
-          @prefix ex: <http://example/> .
-          <<ex:s1 ex:p1 []>> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-bii": [
-        %(
-          @prefix ex: <http://example/> .
-          <<_:s1 ex:p1 ex:o1>> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> <http://example/o1>)>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-bib": [
-        %(
-          @prefix ex: <http://example/> .
-          <<_:s1 ex:p1 _:o1>> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> _:o1)>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-bil": [
-        %(
-          @prefix ex: <http://example/> .
-          <<_:s1 ex:p1 "o1">> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> "o1")>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "subject-bia": [
-        %(
-          @prefix ex: <http://example/> .
-          <<_:s1 ex:p1 []>> ex:p ex:o .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> _:o1)>> .
-          _:anon <http://example/p> <http://example/o> .
-        )
-      ],
-      "object-iii":  [
-        %(
-          @prefix ex: <http://example/> .
-          ex:s ex:p <<ex:s1 ex:p1 ex:o1>> .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
-          <http://example/s> <http://example/p> _:anon .
-        )
-      ],
-      "object-iib":  [
-        %(
-          @prefix ex: <http://example/> .
-          ex:s ex:p <<ex:s1 ex:p1 _:o1>> .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
-          <http://example/s> <http://example/p> _:anon .
-        )
-      ],
-      "object-iil":  [
-        %(
-          @prefix ex: <http://example/> .
-          ex:s ex:p <<ex:s1 ex:p1 "o1">> .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> "o1")>> .
-          <http://example/s> <http://example/p> _:anon .
-        )
-      ],
-      "object-iia":  [
-        %(
-          @prefix ex: <http://example/> .
-          ex:s ex:p <<ex:s1 ex:p1 []>> .
-        ),
-        %(
-          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
-          <http://example/s> <http://example/p> _:anon .
-        )
-      ],
-      "recursive-subject": [
-        %(
-          @prefix ex: <http://example/> .
-          <<
-            <<ex:s2 ex:p2 ex:o2>>
-              ex:p1 ex:o1 >>
-            ex:p ex:o .
-        ),
-        %(
-          _:a1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:a2 <http://example/p1> <http://example/o1>)>> .
-          _:a2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>> .
-          _:a1 <http://example/p> <http://example/o> .
-        )
-      ],
-      "IRI identifier":  [
-        %(
-          @prefix ex: <http://example/> .
-          ex:s ex:p <<ex:id | ex:s1 ex:p1 []>> .
-        ),
-        %(
-          <http://example/s> <http://example/p> <http://example/id> .
-          <http://example/id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
-        )
-      ],
-      "BNode identifier":  [
-        %(
-          @prefix ex: <http://example/> .
-          ex:s ex:p <<_:id | ex:s1 ex:p1 []>> .
-        ),
-        %(
-          <http://example/s> <http://example/p> _:id .
-          _:id <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
-        )
-      ],
-    }.each do |name, (ttl, nt)|
-      it name do
-        expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
-        g = parse(ttl, rdfstar: true, validate: true)
-        #require 'byebug'; byebug
-        expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+    context "triple terms" do
+      {
+        "subject-iii" => [
+          %(
+            @prefix ex: <http://example/> .
+            <<(ex:s1 ex:p1 ex:o1)>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-iib": [
+          %(
+            @prefix ex: <http://example/> .
+            <<(ex:s1 ex:p1 _:o1)>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-iil": [
+          %(
+            @prefix ex: <http://example/> .
+            <<(ex:s1 ex:p1 "o1")>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-iia": [
+          %(
+            @prefix ex: <http://example/> .
+            <<(ex:s1 ex:p1 [])>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-bii": [
+          %(
+            @prefix ex: <http://example/> .
+            <<_(:s1 ex:p1 ex:o1)>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-bib": [
+          %(
+            @prefix ex: <http://example/> .
+            <<(_:s1 ex:p1 _:o1)>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-bil": [
+          %(
+            @prefix ex: <http://example/> .
+            <<(_:s1 ex:p1 "o1")>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "subject-bia": [
+          %(
+            @prefix ex: <http://example/> .
+            <<(_:s1 ex:p1 [])>> ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "object-iii":  [
+          %(
+            @prefix ex: <http://example/> .
+            @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            ex:s rdf:reifies <<(ex:s1 ex:p1 ex:o1)>> .
+          ),
+          %(
+            <http://example/s> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
+          )
+        ],
+        "object-iib":  [
+          %(
+            @prefix ex: <http://example/> .
+            @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            ex:s rdf:reifies <<(ex:s1 ex:p1 _:o1)>> .
+          ),
+          %(
+            <http://example/s> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+          )
+        ],
+        "object-iil":  [
+          %(
+            @prefix ex: <http://example/> .
+            @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            ex:s rdf:reifies <<(ex:s1 ex:p1 "o1")>> .
+          ),
+          %(
+            <http://example/s> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> "o1")>> .
+          )
+        ],
+        "object-iia":  [
+          %(
+            @prefix ex: <http://example/> .
+            @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+            ex:s rdf:reifies <<(ex:s1 ex:p1 [])>> .
+          ),
+          %(
+            <http://example/s> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+          )
+        ],
+      }.each do |name, (ttl, nt)|
+        it name do
+          if nt.is_a?(String)
+            expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+            g = parse(ttl, rdfstar: true, validate: true)
+            expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+          else
+            expect { parse(ttl, rdfstar: true, validate: true) }.to raise_error(nt)
+          end
+        end
+      end
+    end
+
+    context "reified triples" do
+      {
+        "subject-iii" => [
+          %(
+            @prefix ex: <http://example/> .
+            <<ex:s1 ex:p1 ex:o1>> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-iib": [
+          %(
+            @prefix ex: <http://example/> .
+            <<ex:s1 ex:p1 _:o1>> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-iil": [
+          %(
+            @prefix ex: <http://example/> .
+            <<ex:s1 ex:p1 "o1">> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> "o1")>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-iia": [
+          %(
+            @prefix ex: <http://example/> .
+            <<ex:s1 ex:p1 []>> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-bii": [
+          %(
+            @prefix ex: <http://example/> .
+            <<_:s1 ex:p1 ex:o1>> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> <http://example/o1>)>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-bib": [
+          %(
+            @prefix ex: <http://example/> .
+            <<_:s1 ex:p1 _:o1>> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> _:o1)>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-bil": [
+          %(
+            @prefix ex: <http://example/> .
+            <<_:s1 ex:p1 "o1">> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> "o1")>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "subject-bia": [
+          %(
+            @prefix ex: <http://example/> .
+            <<_:s1 ex:p1 []>> ex:p ex:o .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:s1 <http://example/p1> _:o1)>> .
+            _:anon <http://example/p> <http://example/o> .
+          )
+        ],
+        "object-iii":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 ex:o1>> .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
+            <http://example/s> <http://example/p> _:anon .
+          )
+        ],
+        "object-iib":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 _:o1>> .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+            <http://example/s> <http://example/p> _:anon .
+          )
+        ],
+        "object-iil":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 "o1">> .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> "o1")>> .
+            <http://example/s> <http://example/p> _:anon .
+          )
+        ],
+        "object-iia":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 []>> .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+            <http://example/s> <http://example/p> _:anon .
+          )
+        ],
+        "recursive-subject": [
+          %(
+            @prefix ex: <http://example/> .
+            <<
+              <<ex:s2 ex:p2 ex:o2>>
+                ex:p1 ex:o1 >>
+              ex:p ex:o .
+          ),
+          RDF::ReaderError
+        ],
+        "IRI identifier":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 [] ~ex:id>> .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/id> .
+            <http://example/id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+          )
+        ],
+        "BNode identifier":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 [] ~_:id>> .
+          ),
+          %(
+            <http://example/s> <http://example/p> _:id .
+            _:id <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+          )
+        ],
+        "no identifier":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 [] ~>> .
+          ),
+          %(
+            <http://example/s> <http://example/p> _:anon .
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> _:o1)>> .
+          )
+        ],
+        "multiple identifiers":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 [] ~ ex:r1 ~ ex:r2>> .
+          ),
+          RDF::ReaderError
+        ],
+      }.each do |name, (ttl, nt)|
+        it name do
+          if nt.is_a?(String)
+            expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+            g = parse(ttl, rdfstar: true, validate: true)
+            expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+          else
+            expect { parse(ttl, rdfstar: true, validate: true) }.to raise_error(nt)
+          end
+        end
       end
     end
 
@@ -1107,7 +1236,7 @@ describe RDF::Turtle::Reader do
         "IRI identifier":  [
           %(
           PREFIX : <http://example/>
-          :s :p :o {| :id | :r :z |} .
+          :s :p :o ~:id {| :r :z |} .
           ),
           %(
             <http://example/s> <http://example/p> <http://example/o> .
@@ -1118,7 +1247,7 @@ describe RDF::Turtle::Reader do
         "BNode identifier":  [
           %(
             PREFIX : <http://example/>
-            :s :p :o {| _:id | :r :z |} .
+            :s :p :o ~ _:id {| :r :z |} .
           ),
           %(
             <http://example/s> <http://example/p> <http://example/o> .
@@ -1153,7 +1282,7 @@ describe RDF::Turtle::Reader do
         'multiple annotations' => [
           %(
             PREFIX : <http://example/>
-            :s :p :o {| :id1 | :r :z |} {| :id2 | :s :w |}.
+            :s :p :o ~ :id1 {| :r :z |} ~ :id2 {| :s :w |}.
           ),
           %(
             <http://example/s> <http://example/p> <http://example/o> .
@@ -1163,10 +1292,27 @@ describe RDF::Turtle::Reader do
             <http://example/id2> <http://example/s> <http://example/w> .
           )
         ],
+        'multiple reifiers' => [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~ :id1 ~:id2 ~ .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <http://example/id1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            <http://example/id2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+          )
+        ],
       }.each do |name, (ttl, nt)|
         it name do
-          expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
-          expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+          if nt.is_a?(String)
+            expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
+            g = parse(ttl, rdfstar: true, validate: true)
+            expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
+          else
+            expect { parse(ttl, rdfstar: true, validate: true) }.to raise_error(nt)
+          end
         end
       end
     end

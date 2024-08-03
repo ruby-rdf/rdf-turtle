@@ -27,7 +27,7 @@ module RDF::Turtle
     # String terminals
     terminal(nil,                               %r(
                                                     <<\(|\)>>
-                                                  | [\(\),.;\[\]Aa]
+                                                  | [\(\),.;~\[\]Aa]
                                                   | \^\^
                                                   | \{\|
                                                   | \|\}
@@ -38,7 +38,7 @@ module RDF::Turtle
 
     terminal(:PREFIX,                           PREFIX)
     terminal(:BASE,                             BASE)
-    terminal(:LANG_DIR,                          LANG_DIR)
+    terminal(:LANG_DIR,                         LANG_DIR)
 
     ##
     # Reader options
@@ -340,6 +340,9 @@ module RDF::Turtle
           # blankNodePropertyList predicateObjectList? 
           subject = read_blankNodePropertyList || error("Failed to parse blankNodePropertyList", production: :triples, token: @lexer.first)
           read_predicateObjectList(subject) || subject
+        when '<<'
+          subject = read_reifiedTriple || error("Failed to parse reifiedTriple", production: :triples, token: @lexer.first)
+          read_predicateObjectList(subject) || subject
         else
           # subject predicateObjectList
           subject = read_subject || error("Failed to parse subject", production: :triples, token: @lexer.first)
@@ -383,7 +386,7 @@ module RDF::Turtle
           last_object = object
 
           # If object is followed by annotations, read them.
-          read_annotations(subject, predicate, object)
+          read_annotation(subject, predicate, object)
 
           break unless @lexer.first === ','
           @lexer.shift while @lexer.first === ','
@@ -410,7 +413,7 @@ module RDF::Turtle
       end
     end
 
-    #   subject ::= iri | BlankNode | collection | reifier
+    #   subject ::= iri | BlankNode | collection
     #
     # @return [RDF::Resource]
     def read_subject
@@ -418,7 +421,6 @@ module RDF::Turtle
         read_iri ||
         read_BlankNode ||
         read_collection ||
-        read_reifier ||
         error( "Expected subject", production: :subject, token: @lexer.first)
       end
     end
@@ -427,7 +429,7 @@ module RDF::Turtle
     # Read object
     #
     #      object ::= iri | BlankNode | collection | blankNodePropertyList
-    #               | literal | tripleTerm | reifier
+    #               | literal | tripleTerm | reifiedTriple
     #
     # @return [void]
     def read_object(subject = nil, predicate = nil)
@@ -438,7 +440,7 @@ module RDF::Turtle
           read_blankNodePropertyList ||
           read_literal ||
           read_tripleTerm ||
-          read_reifier
+          read_reifiedTriple
 
           add_statement(:object, RDF::Statement(subject, predicate, object)) if subject && predicate
           object
@@ -447,38 +449,34 @@ module RDF::Turtle
     end
 
     ##
-    # Read reifier
+    # Read reifiedTriple
     #
-    #      reifier ::= '<<' ((iri | BlankNode) '|' )? subject predicate object '>>'
+    #      reifiedTriple ::= '<<' ttSubject predicate ttObject reifier? '>>'
     #
     # @return [RDF::Term]
-    def read_reifier
+    def read_reifiedTriple
       return unless @options[:rdfstar]
       if @lexer.first.value == '<<'
-        prod(:reifier) do
+        prod(:reifiedTriple) do
           @lexer.shift # eat <<
-          # Optional identifier for reifier
-          id = read_iri || read_BlankNode
-          if id && @lexer.first.value == '|'
-            @lexer.shift # eat |
-            subject = read_subject || error("Failed to parse subject", production: :reifier, token: @lexer.first)
-          elsif @lexer.first.value == '|'
-            error("Failed to parse reifier identifier", production: :reifier, token: @lexer.first)
-          else
-            # No ID read or missing separator
-            subject = id || read_subject || error("Failed to parse subject", production: :reifier, token: @lexer.first)
-            id = bnode
-          end
-          predicate = read_verb || error("Failed to parse predicate", production: :reifier, token: @lexer.first)
-          object = read_object || error("Failed to parse object", production: :reifier, token: @lexer.first)
+          subject = read_ttSubject || error("Failed to parse subject", production: :reifiedTriple, token: @lexer.first)
+          predicate = read_verb || error("Failed to parse predicate", production: :reifiedTriple, token: @lexer.first)
+          object = read_ttObject || error("Failed to parse object", production: :reifiedTriple, token: @lexer.first)
+          tt = RDF::Statement(subject, predicate, object, tripleTerm: true)
+
+          # An optional reifier. If not specified it is a new blank node.
+          id = if @lexer.first.value == '~'
+            @lexer.shift
+            read_iri || read_BlankNode
+          end || bnode
+
+          statement = RDF::Statement(id, RDF.to_uri + 'reifies', tt)
+          add_statement('reifiedTriple', statement)
+
           unless @lexer.first.value == '>>'
-            error("Failed to end of triple occurence", production: :reifier, token: @lexer.first)
+            error("Failed to end of triple occurence", production: :reifiedTriple, token: @lexer.first)
           end
           @lexer.shift
-          tt = RDF::Statement(subject, predicate, object, tripleTerm: true)
-          ## XXX replacement for rdf:reifies
-          statement = RDF::Statement(id, RDF.to_uri + 'reifies', tt)
-          add_statement('tripleOccurence', statement)
           id
         end
       end
@@ -487,15 +485,15 @@ module RDF::Turtle
     ##
     # Read triple term
     #
-    #      tripleTerm ::= '<<(' subject predicate ttObject ')>>'
+    #      tripleTerm ::= '<<(' ttSubject predicate ttObject ')>>'
     #
-    # @return [RDF::Term]
+    # @return [RDF::Statement]
     def read_tripleTerm
       return unless @options[:rdfstar]
       if @lexer.first.value == '<<('
         prod(:tripleTerm) do
           @lexer.shift # eat <<(
-          subject = read_subject || error("Failed to parse subject", production: :tripleTerm, token: @lexer.first)
+          subject = read_ttSubject || error("Failed to parse subject", production: :tripleTerm, token: @lexer.first)
           predicate = read_verb || error("Failed to parse predicate", production: :tripleTerm, token: @lexer.first)
           object = read_ttObject || error("Failed to parse object", production: :tripleTerm, token: @lexer.first)
           unless @lexer.first.value == ')>>'
@@ -505,6 +503,19 @@ module RDF::Turtle
           statement = RDF::Statement(subject, predicate, object, tripleTerm: true)
           statement
         end
+      end
+    end
+
+    ##
+    # Read ttSubject
+    #
+    #      ttSubject::=	iri | BlankNode
+    #
+    # @return [RDF::Term]
+    def read_ttSubject
+      prod(:ttSubject) do
+        read_iri ||
+        read_BlankNode
       end
     end
 
@@ -526,46 +537,42 @@ module RDF::Turtle
     ##
     # Read an annotation on a triple
     #
-    #      annotation := ('{|' ( (iri | BlankNode) '|' )? predicateObjectList '|}')*
-    def read_annotations(subject, predicate, object)
+    #      annotation := (reifier | '{|' predicateObjectList '|}')*
+    #
+    # The `reifier` becomes the identifier for a subsequent annotation block (if it exists). If there is no reifier, then a blank node is created.
+    def read_annotation(subject, predicate, object)
       error("Unexpected end of file", production: :annotation) unless @lexer.first
-      while @lexer.first === '{|'
-        prod(:annotation, %(|})) do
-          @lexer.shift
-          # Optional identifier for reifier
-          tt = RDF::Statement(subject, predicate, object, tripleTerm: true)
-          id = read_iri || read_BlankNode
-          if id && @lexer.first.value == '|'
-            @lexer.shift # eat |
-            progress("anotation", depth: options[:depth]) {"identifier: #{id.to_ntriples}"}
-            # Parsed annotation identifier
-          elsif @lexer.first.value == '|'
-            # expected annotation identifier
-            error("Failed to parse annotation identifier", production: :annotation, token: @lexer.first)
-          elsif id
-            error("Expected IRI to use as predicate in predicateObjectList",
-                  production: :annotation,
-                  token: id) if id.node?
-            # Remember any IRI that was read anticipating that it would be an identifier to use as the verb of a prdicateObjectList.
-            @cached_verb = id if id
-            # No identifier, use a new blank node
-            id = bnode
-          else
-            # No identifier, use a new blank node
-            id = bnode
+
+      tt = RDF::Statement(subject, predicate, object, tripleTerm: true)
+      id = nil
+
+      while %w(~ {|).include? @lexer.first.to_s
+        if @lexer.first === '~'
+          prod(:annotation, %(~})) do
+            @lexer.shift # eat '~'
+            # Emit any pending reifiedTriple if there was no annotation block
+            add_statement('annotation', RDF::Statement(id, RDF.reifies, tt)) if id
+            id = read_iri || read_BlankNode || bnode
           end
+        else
+          prod(:annotation, %({||})) do
+            @lexer.shift # eat '{|'
+            id ||= bnode
+            # Emit the reifiedTriple
+            add_statement('annotation', RDF::Statement(id, RDF.reifies, tt))
 
-          statement = RDF::Statement(id, RDF.reifies, tt)
-          add_statement('annotation', statement)
-
-          # id becomes subject for predicateObjectList
-          read_predicateObjectList(id) ||
-            error("Expected predicateObjectList", production: :annotation, token: @lexer.first)
-          error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
-          @lexer.shift
+            # id becomes subject for predicateObjectList
+            read_predicateObjectList(id) ||
+              error("Expected predicateObjectList", production: :annotation, token: @lexer.first)
+            error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
+            @lexer.shift # eat '|}'
+            id = nil
+          end
         end
       end
 
+      # Emit any pending reifiedTriple if there was no annotation block
+      add_statement('annotation', RDF::Statement(id, RDF.reifies, tt)) if id
     end
 
     # @return [RDF::Literal]

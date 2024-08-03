@@ -80,7 +80,7 @@ def run_tc(tc, **options)
     else
       begin
         graph << reader
-        raise RDF::ReaderError, "quoted triple" if graph.statements.any? {|s| s.to_a.any?(&:statement?)}
+        raise RDF::ReaderError, "triple term" if graph.statements.any? {|s| s.to_a.any?(&:statement?)}
         STDERR.puts "Expected exception" if options[:verbose]
         result = "failed"
       rescue RDF::ReaderError

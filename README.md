@@ -38,7 +38,7 @@ Write a graph to a file:
 
 ## RDF 1.2
 
-Both reader and writer include provisional support for [RDF 1.2][] quoted triples.
+Both reader and writer include provisional support for [RDF 1.2][] triple terms.
 
 Both reader and writer include provisional support for [RDF 1.2][] directional language-tagged strings, which are literals of type `rdf:dirLangString` having both a `language` and `direction`.
 
@@ -46,15 +46,16 @@ Internally, an `RDF::Statement` is treated as another resource, along with `RDF:
 
 **Note: This feature is subject to change or elimination as the standards process progresses.**
 
-### Serializing a Graph containing quoted triples
+### Serializing a Graph containing reified triples
 
     require 'rdf/turtle'
-    statement = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
-    graph = RDF::Graph.new << [statement, RDF::URI("ex:certainty"), RDF::Literal(0.9)]
+    triple = RDF::Statement(RDF::URI('bob'), RDF::Vocab::FOAF.age, RDF::Literal(23))
+    graph = RDF::Graph.new << [RDF::URI('r'), RDF::URI("ex:certainty"), RDF::Literal(0.9)]
+    graph << RDF::Statement(RDF::URI('r'), RDF.reifies, triple)
     graph.dump(:ttl, validate: false, standard_prefixes: true)
     # => '<<<bob> foaf:age 23>> <ex:certainty> 9.0e-1 .'
 
-### Reading a Graph containing quoted triples
+### Reading a Graph containing reified triples
 
 By default, the Turtle reader will reject a document containing a subject resource.
 
@@ -73,7 +74,7 @@ Readers support a boolean valued `rdfstar` option; only one statement is asserte
     graph = RDF::Graph.new do |graph|
       RDF::Turtle::Reader.new(ttl, rdfstar: true) {|reader| graph << reader}
     end
-    graph.count #=> 1
+    graph.count #=> 2
 
 ### Reading a Graph containing statement annotations
 
@@ -88,7 +89,21 @@ where the subject is the the triple ending with that annotation.
     graph = RDF::Graph.new do |graph|
       RDF::Turtle::Reader.new(ttl) {|reader| graph << reader}
     end
-    # => RDF::ReaderError
+    # => RDF::Graph.new do |g|
+      triple = RDF::Statement.new(RDF::URI('bob'), RDF::FOAF.age, RDF::Literal(23))
+      bn = RDF::Node.new('anno)
+      g << triple
+      g << RDF::Statement.new(bn, RDF.reifies, triple)
+      g << RDF::Statement.new(bn, RDF::URI("http://example.com/certainty"), RDF::Literal.new(9.0e-1))
+    end
+
+Annotations can also have a reifier identifier
+
+    ttl = %(
+      @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+      @prefix ex: <http://example.com/> .
+      <bob> foaf:age 23 ~ ex:anno {| ex:certainty 9.0e-1 |} .
+    )
 
 Note that this requires the `rdfstar` option to be set.
 
