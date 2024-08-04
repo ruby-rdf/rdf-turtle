@@ -451,7 +451,7 @@ module RDF::Turtle
     ##
     # Read reifiedTriple
     #
-    #      reifiedTriple ::= '<<' ttSubject predicate ttObject reifier? '>>'
+    #      reifiedTriple ::= '<<' (subject | reifiedTriple) predicate object reifier* '>>'
     #
     # @return [RDF::Term]
     def read_reifiedTriple
@@ -459,9 +459,9 @@ module RDF::Turtle
       if @lexer.first.value == '<<'
         prod(:reifiedTriple) do
           @lexer.shift # eat <<
-          subject = read_ttSubject || error("Failed to parse subject", production: :reifiedTriple, token: @lexer.first)
+          subject = read_ttSubject || read_reifiedTriple || error("Failed to parse subject", production: :reifiedTriple, token: @lexer.first)
           predicate = read_verb || error("Failed to parse predicate", production: :reifiedTriple, token: @lexer.first)
-          object = read_ttObject || error("Failed to parse object", production: :reifiedTriple, token: @lexer.first)
+          object = read_object || error("Failed to parse object", production: :reifiedTriple, token: @lexer.first)
           tt = RDF::Statement(subject, predicate, object, tripleTerm: true)
 
           # An optional reifier. If not specified it is a new blank node.

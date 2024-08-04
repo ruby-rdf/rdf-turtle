@@ -1168,7 +1168,11 @@ describe RDF::Turtle::Reader do
                 ex:p1 ex:o1 >>
               ex:p ex:o .
           ),
-          RDF::ReaderError
+          %(
+            _:anon1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>> .
+            _:anon2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(_:anon1 <http://example/p1> <http://example/o1>)>> .
+            _:anon2 <http://example/p> <http://example/o> .
+          )
         ],
         "IRI identifier":  [
           %(

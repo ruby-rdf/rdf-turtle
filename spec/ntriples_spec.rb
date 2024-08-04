@@ -31,8 +31,6 @@ describe RDF::NTriples::Reader do
               else
                 expect {
                   graph << reader
-                  raise RDF::ReaderError, "triple term" if graph.statements.any? {|s| s.to_a.any?(&:statement?)}
-                  #expect(graph.dump(:ntriples).should produce("", t.debug)
                 }.to raise_error RDF::ReaderError
               end
 

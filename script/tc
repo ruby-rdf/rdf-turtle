@@ -74,13 +74,13 @@ def run_tc(tc, **options)
       begin
         graph << reader
       rescue Exception => e
+        #require 'byebug'; byebug
         STDERR.puts "Unexpected exception: #{e.inspect}" if options[:verbose]
         result = "failed"
       end
     else
       begin
         graph << reader
-        raise RDF::ReaderError, "triple term" if graph.statements.any? {|s| s.to_a.any?(&:statement?)}
         STDERR.puts "Expected exception" if options[:verbose]
         result = "failed"
       rescue RDF::ReaderError
