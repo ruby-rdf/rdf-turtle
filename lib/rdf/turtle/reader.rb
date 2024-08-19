@@ -451,7 +451,7 @@ module RDF::Turtle
     ##
     # Read reifiedTriple
     #
-    #      reifiedTriple ::= '<<' (subject | reifiedTriple) predicate object reifier* '>>'
+    #      reifiedTriple ::= '<<' (subject | reifiedTriple) predicate object reifier? '>>'
     #
     # @return [RDF::Term]
     def read_reifiedTriple
@@ -537,7 +537,7 @@ module RDF::Turtle
     ##
     # Read an annotation on a triple
     #
-    #      annotation := (reifier | '{|' predicateObjectList '|}')*
+    #      annotation := (reifier | annotationBlock)*
     #
     # The `reifier` becomes the identifier for a subsequent annotation block (if it exists). If there is no reifier, then a blank node is created.
     def read_annotation(subject, predicate, object)
@@ -548,7 +548,7 @@ module RDF::Turtle
 
       while %w(~ {|).include? @lexer.first.to_s
         if @lexer.first === '~'
-          prod(:annotation, %(~})) do
+          prod(:annotation, %(~)) do
             @lexer.shift # eat '~'
             # Emit any pending reifiedTriple if there was no annotation block
             add_statement('annotation', RDF::Statement(id, RDF.reifies, tt)) if id

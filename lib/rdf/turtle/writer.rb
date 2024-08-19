@@ -335,7 +335,7 @@ module RDF::Turtle
     # @param [Hash{Symbol => Object}] options
     # @return [String]
     def format_tripleTerm(statement, **options)
-      log_debug("rdfstar") {"#{statement.to_ntriples}"}
+      log_debug("tripleTerm") {"#{statement.to_ntriples}"}
       "<<(%s %s %s)>>" % statement.to_a.map { |value| format_term(value, **options) }
     end
 
@@ -443,7 +443,7 @@ module RDF::Turtle
         statement.to_a.each {|t| @in_triple_term[t] = true}
       end
 
-      # If it fits, allow this to be rendered as a reification
+      # If it fits, allow this to be rendered as a reifiedTriple
       if statement.object.statement? && statement.predicate == RDF.reifies
         @reification[statement.subject] ||= []
         @reification[statement.subject] << statement.object unless
@@ -483,7 +483,7 @@ module RDF::Turtle
       @serialized = {}
       @subjects = {}
       @reification = {}
-      @as_reification = {}
+      @as_reifiedTriple = {}
       @in_triple_term = {}
     end
 
@@ -572,7 +572,7 @@ module RDF::Turtle
     def blankNodePropertyList?(resource, position)
       !resource.statement? && resource.node? &&
         !collection?(resource) &&
-        !reification?(resource, position) &&
+        !reifiedTriple?(resource, position) &&
         !in_triple_term?(resource) &&
         (!is_done?(resource) || position == :subject) &&
         ref_count(resource) == (position == :object ? 1 : 0)
@@ -590,33 +590,34 @@ module RDF::Turtle
       true
     end
 
-    # Is this a reification?
-    def reification?(resource, position)
+    # Is this a reifiedTriple?
+    def reifiedTriple?(resource, position)
       @reification.key?(resource) &&
       (position == :subject ? (prop_count(resource) > 0) : (prop_count(resource) == 0))
     end
 
-    # Render a reification
-    def reification(resource, position)
-      return false unless reification?(resource, position)
+    # Render a reifiedTriple
+    def reifiedTriple(resource, position)
+      return false unless reifiedTriple?(resource, position)
       write_id = resource.iri? || ref_count(resource) > 1
-      @as_reification[resource] = true  # Prevent rdf:reifies from being emitted
+      @as_reifiedTriple[resource] = true  # Prevent rdf:reifies from being emitted
 
-      log_debug("reification") {resource.to_ntriples}
+      log_debug("reifiedTriple") {resource.to_ntriples}
       subject_done(resource)
-      # There may be multiple reifications using this resource
+      # There may be multiple reifiedTriples using this resource
       @reification[resource].each do |tt|
         @output.write(position == :subject ? "\n#{indent} << " : '<< ')
-        if write_id
-          # Only need to output blank node identifiers if they have more than one reference
-          p_term(resource, :subject)
-          @output.write(' | ')
-        end
-        reification(tt.subject, :object) || p_term(tt.subject, :object)
+        reifiedTriple(tt.subject, :object) || p_term(tt.subject, :object)
         @output.write(' ')
         predicate(tt.predicate)
         @output.write(' ')
-        reification(tt.object, :object) || p_term(tt.object, :object)
+        reifiedTriple(tt.object, :object) || p_term(tt.object, :object)
+
+        if write_id
+          # Only need to output blank node identifiers if they have more than one reference
+          @output.write(' ~')
+          p_term(resource, :subject)
+        end
         @output.write(' >>')
       end
       true
@@ -645,7 +646,7 @@ module RDF::Turtle
       end
       raise RDF::WriterError, "Cannot serialize resource '#{resource}'" unless
         collection(resource, position) ||
-        reification(resource, position) ||
+        reifiedTriple(resource, position) ||
         blankNodePropertyList(resource, position) ||
         p_term(resource, position)
     end
@@ -677,7 +678,7 @@ module RDF::Turtle
         reifs = @reification.select {|k, v| v.include?(tt)}.keys
         if reifs.length == 1
           reif = reifs.first
-          @as_reification[reif] = true
+          @as_reifiedTriple[reif] = true
           @output.write ' {| '
           predicateObjectList(reif, true)
           @output.write ' |}'
@@ -693,7 +694,7 @@ module RDF::Turtle
 
       prop_list = sort_properties(properties)
       prop_list -= [RDF.first, RDF.rest] if @lists.key?(subject)
-      prop_list -= [RDF.reifies] if @as_reification.key?(subject)
+      prop_list -= [RDF.reifies] if @as_reifiedTriple.key?(subject)
       log_debug("predicateObjectList") {prop_list.inspect}
       return 0 if prop_list.empty?
 

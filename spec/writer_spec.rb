@@ -653,7 +653,7 @@ describe RDF::Turtle::Writer do
         regexp: [
           %r(ex:s ex:p <<\(\s*ex:s1 ex:p1 <<\(\s*ex:s2 ex:p2 ex:o2*\s*\)>>\s*\)>>)
         ]
-      },
+      }
     }.each do |name, params|
       it name do
         graph = RDF::Graph.new {|g| g << params[:input]}
@@ -661,7 +661,7 @@ describe RDF::Turtle::Writer do
       end
     end
 
-    context "reifications" do
+    context "reifiedTriples" do
       {
         "subject-iii":  {
           input: %(
@@ -763,6 +763,28 @@ describe RDF::Turtle::Writer do
           ),
           regexp: [
             %r(<<\s*<<\s*ex:s2 ex:p2 ex:o2\s*>> ex:p1 ex:o1\s*>> ex:p ex:o .)
+          ]
+        },
+        "explicit reifier as subject": {
+          input: %(
+            PREFIX : <http://example/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            :r rdf:reifies <<( :s :p :o )>> .
+            :r :p1 :o1 .
+          ),
+          regexp: [
+            %r(<<\s*ex:s ex:p ex:o\s*~\s*ex:r\s*>>\s*ex:p1 ex:o1 .)
+          ]
+        },
+        "explicit reifier as object": {
+          input: %(
+            PREFIX : <http://example/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            :r rdf:reifies <<( :s :p :o )>> .
+            :s1 :p1 :r .
+          ),
+          regexp: [
+            %r(ex:s1 ex:p1 <<\s*ex:s ex:p ex:o\s*~\s*ex:r\s*>>\s*.)
           ]
         },
       }.each do |name, params|
