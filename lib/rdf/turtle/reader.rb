@@ -544,35 +544,33 @@ module RDF::Turtle
       error("Unexpected end of file", production: :annotation) unless @lexer.first
 
       tt = RDF::Statement(subject, predicate, object, tripleTerm: true)
-      id = nil
+      reifier = nil
 
       while %w(~ {|).include? @lexer.first.to_s
         if @lexer.first === '~'
           prod(:annotation, %(~)) do
             @lexer.shift # eat '~'
-            # Emit any pending reifiedTriple if there was no annotation block
-            add_statement('annotation', RDF::Statement(id, RDF.reifies, tt)) if id
-            id = read_iri || read_BlankNode || bnode
+            reifier = read_iri || read_BlankNode || bnode
+            add_statement('annotation', RDF::Statement(reifier, RDF.reifies, tt))
           end
         else
           prod(:annotation, %({||})) do
             @lexer.shift # eat '{|'
-            id ||= bnode
-            # Emit the reifiedTriple
-            add_statement('annotation', RDF::Statement(id, RDF.reifies, tt))
+            unless reifier
+              # Emit the reifiedTriple
+              reifier = bnode
+              add_statement('annotation', RDF::Statement(reifier, RDF.reifies, tt))
+            end
 
             # id becomes subject for predicateObjectList
-            read_predicateObjectList(id) ||
+            read_predicateObjectList(reifier) ||
               error("Expected predicateObjectList", production: :annotation, token: @lexer.first)
             error("annotation", "Expected closing '|}'") unless @lexer.first === '|}'
             @lexer.shift # eat '|}'
-            id = nil
+            reifier = nil
           end
         end
       end
-
-      # Emit any pending reifiedTriple if there was no annotation block
-      add_statement('annotation', RDF::Statement(id, RDF.reifies, tt)) if id
     end
 
     # @return [RDF::Literal]
