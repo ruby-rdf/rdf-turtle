@@ -1029,7 +1029,6 @@ describe RDF::Turtle::Reader do
         it name do
           if nt.is_a?(String)
             expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
-            g = parse(ttl, rdfstar: true, validate: true)
             expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
           else
             expect { parse(ttl, rdfstar: true, validate: true) }.to raise_error(nt)
@@ -1040,6 +1039,15 @@ describe RDF::Turtle::Reader do
 
     context "reified triples" do
       {
+        "solo-iii" => [
+          %(
+            @prefix ex: <http://example/> .
+            <<ex:s1 ex:p1 ex:o1>> .
+          ),
+          %(
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
+          )
+        ],
         "subject-iii" => [
           %(
             @prefix ex: <http://example/> .
@@ -1211,11 +1219,17 @@ describe RDF::Turtle::Reader do
           ),
           RDF::ReaderError
         ],
+        "list form of reifier":  [
+          %(
+            @prefix ex: <http://example/> .
+            ex:s ex:p <<ex:s1 ex:p1 [] ~ (ex:r1 ex:r2) >> .
+          ),
+          RDF::ReaderError
+        ],
       }.each do |name, (ttl, nt)|
         it name do
           if nt.is_a?(String)
             expect_graph = RDF::Graph.new {|g| g << RDF::NTriples::Reader.new(nt, rdfstar: true)}
-            g = parse(ttl, rdfstar: true, validate: true)
             expect(parse(ttl, rdfstar: true, validate: true)).to be_equivalent_graph(expect_graph, logger: @logger)
           else
             expect { parse(ttl, rdfstar: true, validate: true) }.to raise_error(nt)
@@ -1237,7 +1251,7 @@ describe RDF::Turtle::Reader do
             _:anon <http://example/r> <http://example/z> .
           )
         ],
-        "IRI identifier":  [
+        "IRI reifier":  [
           %(
           PREFIX : <http://example/>
           :s :p :o ~:id {| :r :z |} .
@@ -1248,7 +1262,7 @@ describe RDF::Turtle::Reader do
             <http://example/id> <http://example/r> <http://example/z> .
           )
         ],
-        "BNode identifier":  [
+        "BNode reifier":  [
           %(
             PREFIX : <http://example/>
             :s :p :o ~ _:id {| :r :z |} .
@@ -1259,7 +1273,58 @@ describe RDF::Turtle::Reader do
             _:id <http://example/r> <http://example/z> .
           )
         ],
-        'turtle-star-annotation-2' => [
+        'predicateObjectList after annotation' => [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| :x :y |} ; :q :r .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:anon <http://example/x> <http://example/y> .
+            <http://example/s> <http://example/q> <http://example/r> .
+          )
+        ],
+        'reifier only': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~:e .
+          ),
+          %(
+          <http://example/s> <http://example/p> <http://example/o> .
+          <http://example/e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+          )
+        ],
+        'empty reifier': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~ .
+          ),
+          %(
+          <http://example/s> <http://example/p> <http://example/o> .
+          _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+          )
+        ],
+        'multiple statements': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| :q1 :r1 ; :q2 :r2 ; |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:anon <http://example/q1> <http://example/r1> .
+            _:anon <http://example/q2> <http://example/r2> .
+          )
+        ],
+        'no statements': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| |} .
+          ),
+          RDF::ReaderError
+        ],
+        'turtle-star-annotation-2': [
           %(
             PREFIX :       <http://example/>
             PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
@@ -1283,7 +1348,7 @@ describe RDF::Turtle::Reader do
             _:anno2 <http://example/date> "2020-12-31"^^<http://www.w3.org/2001/XMLSchema#date> .
           )
         ],
-        'multiple annotations' => [
+        'multiple annotations with iri refiers': [
           %(
             PREFIX : <http://example/>
             :s :p :o ~ :id1 {| :r :z |} ~ :id2 {| :s :w |}.
@@ -1296,7 +1361,20 @@ describe RDF::Turtle::Reader do
             <http://example/id2> <http://example/s> <http://example/w> .
           )
         ],
-        'multiple reifiers' => [
+        'multiple annotations with empty refiers': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~ {| :r :z |} ~ {| :s :w |}.
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            _:bn1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn1 <http://example/r> <http://example/z> .
+            _:bn2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn2 <http://example/s> <http://example/w> .
+          )
+        ],
+        'multiple IRI reifiers': [
           %(
             PREFIX : <http://example/>
             :s :p :o ~ :id1 ~:id2 ~ .
@@ -1306,6 +1384,55 @@ describe RDF::Turtle::Reader do
             <http://example/id1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
             <http://example/id2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
             _:anon <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+          )
+        ],
+        'multiple mixed reifiers': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~:e ~ .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <http://example/e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+          )
+        ],
+        'empty reifier and empty reified annotation block': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~ ~ {| :y :z |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            _:bn1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn2 <http://example/y> <http://example/z> .
+          )
+        ],
+        'mix of reifiers and annotation blocks': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o ~:e {| :q :r |} ~:r {| :q :r |} ~:r .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            <http://example/e> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            <http://example/e> <http://example/q> <http://example/r> .
+            <http://example/r> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            <http://example/r> <http://example/q> <http://example/r> .
+          )
+        ],
+        'mix of annotation blocks': [
+          %(
+            PREFIX : <http://example/>
+            :s :p :o {| :q :r |} {| :q :r |} .
+          ),
+          %(
+            <http://example/s> <http://example/p> <http://example/o> .
+            _:bn1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn1 <http://example/q> <http://example/r> .
+            _:bn2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s> <http://example/p> <http://example/o>)>> .
+            _:bn2 <http://example/q> <http://example/r> .
           )
         ],
       }.each do |name, (ttl, nt)|
