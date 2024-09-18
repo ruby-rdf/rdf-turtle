@@ -1435,6 +1435,29 @@ describe RDF::Turtle::Reader do
             _:bn2 <http://example/q> <http://example/r> .
           )
         ],
+        'included triple terms': [
+          %(
+            PREFIX : <http://example/>
+            :s :p <<( :s1 :p1 <<( :s2 :p2 :o2 )>> )>>, <<( :s3 :p3 :o3)>> .
+          ),
+          %(
+            <http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>>)>> .
+            <http://example/s> <http://example/p> <<(<http://example/s3> <http://example/p3> <http://example/o3>)>>
+          )
+        ],
+        'included reified triples': [
+          %(
+            PREFIX : <http://example/>
+            :s :p << :s1 :p1 << :s2 :p2 :o2 >> >>, << :s3 :p3 :o3 >> .
+          ),
+          %(
+            <http://example/s> <http://example/p> _:r0 .
+            _:r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s2> <http://example/p2> <http://example/o2> )>> .
+            _:r0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s1> <http://example/p1> _:r1 )>> .
+            <http://example/s> <http://example/p> _:r2 .
+            _:r2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s3> <http://example/p3> <http://example/o3> )>> .
+          )
+        ],
       }.each do |name, (ttl, nt)|
         it name do
           if nt.is_a?(String)

@@ -26,11 +26,14 @@ iri                   ::= IRIREF | PrefixedName
 PrefixedName          ::= PNAME_LN | PNAME_NS
 BlankNode             ::= BLANK_NODE_LABEL | ANON
 reifier               ::= '~' (iri | BlankNode)?
-reifiedTriple         ::= '<<' (subject | reifiedTriple) predicate object reifier? '>>'
-tripleTerm            ::= '<<(' ttSubject predicate ttObject ')>>'
+reifiedTriple         ::= '<<' rtSubject verb rtObject reifier? '>>'
+rtSubject             ::= iri | BlankNode | reifiedTriple
+rtObject              ::= iri | BlankNode | literal | tripleTerm | reifiedTriple
+tripleTerm            ::= '<<(' ttSubject verb ttObject ')>>'
 ttSubject             ::=	iri | BlankNode
 ttObject              ::=	iri | BlankNode | literal | tripleTerm
-annotation            ::= (reifier | '{|' predicateObjectList '|}')*
+annotation            ::= (reifier | annotationBlock)*
+annotationBlock       ::= '{|' predicateObjectList '|}'
 
 @terminals
 
