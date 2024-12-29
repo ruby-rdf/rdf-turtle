@@ -5,6 +5,7 @@ require "bundler/setup"
 require 'logger'
 require 'rdf'
 require 'rdf/turtle'
+require 'sxp'
 begin
   require 'linkeddata'
 rescue LoadError
@@ -44,6 +45,10 @@ def run(input, **options)
        options[:output].puts statement.to_ntriples
       end
     end
+  elsif options[:output_format] == :sxp
+    r = reader_class.new(input, **options[:parser_options])
+    g = RDF::Repository.new << r
+    SXP::Generator.write(options[:output], g.statements.map{|s| s.to_sxp_bin})
   elsif options[:output_format] == :inspect
     reader_class.new(input, **options[:parser_options]).each do |statement|
       num += 1
@@ -53,7 +58,7 @@ def run(input, **options)
     r = reader_class.new(input, **options[:parser_options])
     g = RDF::Repository.new << r
     num = g.count
-    options[:output].puts g.dump(options[:output_format], prefixes:  r.prefixes, **options[:writer_options])
+    options[:output].puts g.dump(options[:output_format], prefixes: r.prefixes, **options[:writer_options])
   end
   if options[:profile]
     Profiler__::stop_profile

@@ -1348,6 +1348,18 @@ describe RDF::Turtle::Reader do
             _:anno2 <http://example/date> "2020-12-31"^^<http://www.w3.org/2001/XMLSchema#date> .
           )
         ],
+        'annotation with embedded reified triple': [
+          %(
+            PREFIX : <http://example/>
+            :bob :age "42" ~:r {| :p << :s1 :p1 :o1 ~:r1 >> |} .
+          ),
+          %(
+            <http://example/bob> <http://example/age> "42" .
+            <http://example/r> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/bob> <http://example/age> "42")>> .
+            <http://example/r> <http://example/p> <http://example/r1> .
+            <http://example/r1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
+          )
+        ],
         'multiple annotations with iri refiers': [
           %(
             PREFIX : <http://example/>
