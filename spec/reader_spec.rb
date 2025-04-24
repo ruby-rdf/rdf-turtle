@@ -1710,10 +1710,10 @@ describe RDF::Turtle::Reader do
   
   describe "NTriples", skip: ENV["CI"] do
     subject {
-      RDF::Graph.load("http://www.w3.org/2000/10/rdf-tests/rdfcore/ntriples/test.nt", format:  :ttl)
+      RDF::Graph.load(doap_nt, format:  :ttl)
     }
     it "parses test file" do
-      expect(subject.count).to eq 30
+      expect(subject.count).to eq 23
     end
   end 
 
