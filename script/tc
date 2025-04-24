@@ -8,6 +8,7 @@ require 'rdf/isomorphic'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'spec_helper'))
 require File.expand_path(File.join(File.dirname(__FILE__), "..", 'spec', 'suite_helper'))
 require 'getoptlong'
+require 'amazing_print'
 
 ASSERTOR = "https://greggkellogg.net/foaf#me"
 RUN_TIME = Time.now
@@ -74,7 +75,6 @@ def run_tc(tc, **options)
       begin
         graph << reader
       rescue Exception => e
-        #require 'byebug'; byebug
         STDERR.puts "Unexpected exception: #{e.inspect}" if options[:verbose]
         result = "failed"
       end

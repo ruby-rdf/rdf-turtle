@@ -19,6 +19,7 @@ end
 require 'rdf/ntriples'
 require 'ebnf/ll1/parser'
 require 'getoptlong'
+require 'amazing_print'
 
 def run(input, **options)
   if options[:profile]
@@ -106,7 +107,6 @@ OPT_ARGS = [
   ["--errors", GetoptLong::NO_ARGUMENT, "Display invalid statements"],
   ["--execute", "-e", GetoptLong::REQUIRED_ARGUMENT, "Run against source in argument"],
   ["--format", GetoptLong::REQUIRED_ARGUMENT, "Output format, any RDF format symbol, sxp, or inspect"],
-  ["--freebase", GetoptLong::NO_ARGUMENT, "Use Freebase reader (obsolete)"],
   ["--help", "-?", GetoptLong::NO_ARGUMENT, "print this message"],
   ["--input-format", GetoptLong::REQUIRED_ARGUMENT, "Format of the input file, defaults to ttl"],
   ["--info", GetoptLong::NO_ARGUMENT, "Show progress on execution"],
@@ -118,6 +118,7 @@ OPT_ARGS = [
   ["--uri", GetoptLong::REQUIRED_ARGUMENT, "Default base URI"],
   ["--validate", GetoptLong::NO_ARGUMENT, "Run parser in strict validation mode"],
   ["--verbose", GetoptLong::NO_ARGUMENT, "Verbose output"],
+  ["--version", GetoptLong::REQUIRED_ARGUMENT, "Version of RDF (1.1, 1.2, or 1.2-basic)"],
 ]
 
 def usage
@@ -143,14 +144,13 @@ opts = GetoptLong.new(*OPT_ARGS.map {|o| o[0..-2]})
 
 opts.each do |opt, arg|
   case opt
-  when '--debug'        then logger.level = Logger::DEBUG
   when '--uri'          then parser_options[:base_uri] = writer_options[:base_uri] = arg
   when '--benchmark'    then options[:benchmark] = true
   when '--canonicalize' then parser_options[:canonicalize] = true
+  when '--debug'        then logger.level = Logger::DEBUG
   when '--errors'       then options[:errors] = true
   when '--execute'      then input = arg
   when '--format'       then options[:output_format] = arg.to_sym
-  when '--freebase'     then parser_options[:freebase] = true
   when "--help"         then usage()
   when '--info'         then logger.level = Logger::INFO
   when '--input-format' then options[:input_format] = arg.to_sym
@@ -163,6 +163,7 @@ opts.each do |opt, arg|
   when '--stream'       then writer_options[:stream] = true
   when '--validate'     then parser_options[:validate] = true
   when '--verbose'      then $verbose = true
+  when '--version'      then writer_options[:version] = parser_options[:version] = arg
   end
 end
 

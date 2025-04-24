@@ -647,7 +647,70 @@ describe RDF::Turtle::Reader do
         end
       end
     end
-    
+
+    describe "@prefix" do
+      it "sets RDF version from option" do
+        inner = double("inner")
+        expect(inner).to receive(:called)
+        RDF::Turtle::Reader.new(%{<a> <b> <c> .}, version: "1.2") do |reader|
+          inner.called(reader.class)
+          expect(reader.version).to eq "1.2"
+        end
+      end
+
+      it "sets RDF version from @version" do
+        inner = double("inner")
+        expect(inner).to receive(:called)
+        RDF::Turtle::Reader.new(%{@version "1.2" . <a> <b> <c> .}) do |reader|
+          inner.called(reader.class)
+          expect(reader.statements.count).to eq 1
+          expect(reader.version).to eq "1.2"
+        end
+      end
+
+      it "sets RDF version from VERSION" do
+        inner = double("inner")
+        expect(inner).to receive(:called)
+        RDF::Turtle::Reader.new(%{VERSION "1.2" <a> <b> <c> .}) do |reader|
+          inner.called(reader.class)
+          expect(reader.statements.count).to eq 1
+          expect(reader.version).to eq "1.2"
+        end
+      end
+
+      it "sets RDF version from version" do
+        inner = double("inner")
+        expect(inner).to receive(:called)
+        RDF::Turtle::Reader.new(%{version "1.2" <a> <b> <c> .}) do |reader|
+          inner.called(reader.class)
+          expect(reader.statements.count).to eq 1
+          expect(reader.version).to eq "1.2"
+        end
+      end
+
+      it "sets RDF version from version (single quotes)" do
+        inner = double("inner")
+        expect(inner).to receive(:called)
+        RDF::Turtle::Reader.new(%{version '1.2' <a> <b> <c> .}) do |reader|
+          inner.called(reader.class)
+          expect(reader.statements.count).to eq 1
+          expect(reader.version).to eq "1.2"
+        end
+      end
+
+      it "warns if version is not 1.2" do
+        logger = RDF::Spec.logger
+        inner = double("inner")
+        expect(inner).to receive(:called)
+        RDF::Turtle::Reader.new(%{@version "1.1" . <a> <b> <c> .}, logger: logger) do |reader|
+          inner.called(reader.class)
+          expect(reader.statements.count).to eq 1
+          expect(reader.version).to eq "1.1"
+          expect(logger.to_s).to include('Expected version to be 1.2, was 1.1')
+        end
+      end
+    end
+
     describe "BNodes" do
       it "should create BNode for identifier with '_' prefix" do
         ttl = %(@prefix a: <http://foo/a#> . _:a a:p a:v .)
@@ -1712,7 +1775,7 @@ describe RDF::Turtle::Reader do
     subject {
       RDF::Graph.load(doap_nt, format:  :ttl)
     }
-    it "parses test file" do
+    it "parses DOAP file" do
       expect(subject.count).to eq 23
     end
   end 

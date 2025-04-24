@@ -38,7 +38,20 @@ module RDF::Turtle
 
     terminal(:PREFIX,                           PREFIX)
     terminal(:BASE,                             BASE)
+    terminal(:VERSION,                          RDF_VERSION)
     terminal(:LANG_DIR,                         LANG_DIR)
+
+    ##
+    # Returns the RDF version determined by this reader.
+    #
+    # @example
+    #   reader.version  #=> RDF::URI('http://purl.org/dc/terms/')
+    #
+    # @return [String]
+    # @since  3.3.2
+    def version
+      @options[:version]
+    end
 
     ##
     # Reader options
@@ -50,6 +63,12 @@ module RDF::Turtle
           datatype: TrueClass,
           on: ["--freebase"],
           description: "Use optimized Freebase reader.") {true},
+        RDF::CLI::Option.new(
+          symbol: :version,
+          control: :select,
+          datatype: %w{1.1 1.2 1.2-basic},
+          on: ["--version"],
+          description: "RDF Version."),
       ]
     end
 
@@ -90,6 +109,8 @@ module RDF::Turtle
     #   Record error/info/debug output
     # @option options [Boolean] :freebase (false)
     #   Use optimized Freebase reader
+    # @option options [String] :version ("1.2")
+    #   Parse a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
     # @return [RDF::Turtle::Reader]
     def initialize(input = nil, **options, &block)
       super do
@@ -259,7 +280,7 @@ module RDF::Turtle
       prod(:statement, %w{.}) do
         error("read_statement", "Unexpected end of file") unless token = @lexer.first
         case token.type
-        when :BASE, :PREFIX
+        when :BASE, :PREFIX, :VERSION
           read_directive || error("Failed to parse directive", production: :directive, token: token)
         else
           read_triples || error("Expected token", production: :statement, token: token)
@@ -277,7 +298,8 @@ module RDF::Turtle
     ##
     # Read directive
     #
-    #     directive ::= prefixID | base | sparqlPrefix | sparqlBase
+    #     directive ::= prefixID | base | version
+    #                 | sparqlPrefix | sparqlBase | sparqlVersion
     #
     # @return [void]
     def read_directive
@@ -318,6 +340,26 @@ module RDF::Turtle
               @lexer.shift
             elsif @lexer.first === '.'
               error("prefixID", "Expected #{token} not to be terminated") 
+            else
+              true
+            end
+          end
+        when :VERSION
+          prod(:version) do
+            @lexer.shift
+            terminated = token.value == '@version'
+            @options[:version] = @lexer.shift.value[1..-2]
+            if %w(1.2).include?(@options[:version])
+              progress("version") {@options[:version]}
+            else
+              warn("version", "Expected version to be 1.2, was #{@options[:version]}") unless @options[:version] == "1.2"
+            end
+
+            if terminated
+              error("version", "Expected #{token} to be terminated") unless @lexer.first === '.'
+              @lexer.shift
+            elsif @lexer.first === '.'
+              error("version", "Expected #{token} not to be terminated") 
             else
               true
             end
@@ -753,6 +795,14 @@ module RDF::Turtle
       opts[:level] ||= 0
       opts[:lineno] ||= lineno
       log_debug(*args, **opts, &block)
+    end
+
+    def warn(*args, &block)
+      lineno = (options[:token].lineno if options[:token].respond_to?(:lineno)) || (@lexer && @lexer.lineno)
+      opts = args.last.is_a?(Hash) ? args.pop : {}
+      opts[:level] ||= 0
+      opts[:lineno] ||= lineno
+      log_warn(*args, **opts, &block)
     end
 
     ##

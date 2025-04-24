@@ -34,6 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'erubis',          '~> 2.7'
   gem.add_development_dependency 'getoptlong',      '~> 0.2'
   gem.add_development_dependency 'htmlentities',    '~> 4.3'
+  gem.add_runtime_dependency     'readline',        '~> 0.0'
   gem.add_development_dependency 'rspec',           '~> 3.12'
   gem.add_development_dependency 'rspec-its',       '~> 1.3'
   gem.add_development_dependency 'rdf-isomorphic',  '~> 3.3'
