@@ -348,7 +348,9 @@ module RDF::Turtle
           prod(:version) do
             @lexer.shift
             terminated = token.value == '@version'
-            @options[:version] = @lexer.shift.value[1..-2]
+            vers_tok = @lexer.shift
+            error("version", "Expected #{vers_tok} to be a string") unless [:STRING_LITERAL_QUOTE, :STRING_LITERAL_SINGLE_QUOTE].include?(vers_tok.type)
+            @options[:version] = vers_tok.value[1..-2]
             if %w(1.2).include?(@options[:version])
               progress("version") {@options[:version]}
             else
