@@ -347,8 +347,8 @@ describe RDF::Turtle::Writer do
       end
 
       it "specifies language for literal with language and direction" do
-        ttl = %q(<http://a> <http:/b> "string"@en-ltr .)
-        serialize(ttl, [%r("string"@en-ltr)])
+        ttl = %q(<http://a> <http:/b> "string"@en--ltr .)
+        serialize(ttl, [%r(@version "1.2" \.), %r("string"@en--ltr)])
       end
     end
 
@@ -611,7 +611,10 @@ describe RDF::Turtle::Writer do
             RDF::URI('http://example/p1'),
             RDF::URI('http://example/o1'),
             tripleTerm: true)),
-        regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 ex:o1\)>> .)]
+        regexp: [
+          %r(@version "1.2" \.),
+          %r(ex:s ex:p <<\(ex:s1 ex:p1 ex:o1\)>> .)
+        ]
       },
       "object-iib":  {
         input: RDF::Statement(
@@ -622,7 +625,10 @@ describe RDF::Turtle::Writer do
             RDF::URI('http://example/p1'),
             RDF::Node.new('o1'),
             tripleTerm: true)),
-        regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 _:o1\)>> .)]
+        regexp: [
+          %r(@version "1.2" \.),
+          %r(ex:s ex:p <<\(ex:s1 ex:p1 _:o1\)>> .)
+        ]
       },
       "object-iil":  {
         input: RDF::Statement(
@@ -633,7 +639,10 @@ describe RDF::Turtle::Writer do
             RDF::URI('http://example/p1'),
             RDF::Literal('o1'),
             tripleTerm: true)),
-        regexp: [%r(ex:s ex:p <<\(ex:s1 ex:p1 "o1"\)>> .)],
+        regexp: [
+          %r(@version "1.2" \.),
+          %r(ex:s ex:p <<\(ex:s1 ex:p1 "o1"\)>> .)
+        ],
       },
       "recursive-object": {
         input: RDF::Statement(
@@ -651,6 +660,7 @@ describe RDF::Turtle::Writer do
           )
         ),
         regexp: [
+          %r(@version "1.2" \.),
           %r(ex:s ex:p <<\(\s*ex:s1 ex:p1 <<\(\s*ex:s2 ex:p2 ex:o2*\s*\)>>\s*\)>>)
         ]
       }
@@ -669,7 +679,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             << :s1 :p1 :o1 >> :p :o .
           ),
-          regexp: [%r(<<\s*ex:s1 ex:p1 ex:o1\s*>> ex:p ex:o .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(<<\s*ex:s1 ex:p1 ex:o1\s*>> ex:p ex:o .)
+          ]
         },
         "subject-iib":  {
           input: %(
@@ -677,7 +690,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             << :s1 :p1 _:o1 >> :p :o .
           ),
-          regexp: [%r(<<\s*ex:s1 ex:p1 _:o1\s*>> ex:p ex:o .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(<<\s*ex:s1 ex:p1 _:o1\s*>> ex:p ex:o .)
+          ]
         },
         "subject-iil":  {
           input: %(
@@ -685,7 +701,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             << :s1 :p1 "o1" >> :p :o .
           ),
-          regexp: [%r(<<\s*ex:s1 ex:p1 "o1"\s*>> ex:p ex:o .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(<<\s*ex:s1 ex:p1 "o1"\s*>> ex:p ex:o .)
+          ]
         },
         "subject-bn-no-prop":  {
           input: %(
@@ -693,7 +712,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             _:reif rdf:reifies <<( :s1 :p1 :o1 )>> .
           ),
-          regexp: [%r(\[\s*rdf:reifies <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>>\] .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(\[\s*rdf:reifies <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>>\] .)
+          ]
         },
         "subject-iri-no-prop":  {
           input: %(
@@ -701,7 +723,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             :reif rdf:reifies <<( :s1 :p1 :o1 )>> .
           ),
-          regexp: [%r(ex:reif *rdf:reifies <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>> .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:reif *rdf:reifies <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>> .)
+          ]
         },
         "subject-bn-no-prop-multiple":  {
           input: %(
@@ -709,7 +734,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             _:reif rdf:reifies <<( :s1 :p1 :o1 )>>, <<( :s2 :p2 :o2 )>> .
           ),
-          regexp: [%r(\[\s*rdf:reifies <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>>,\s+<<\(\s*ex:s2 ex:p2 ex:o2\s*\)>>\] .)m]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(\[\s*rdf:reifies <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>>,\s+<<\(\s*ex:s2 ex:p2 ex:o2\s*\)>>\] .)m
+          ]
         },
         "object-iii":  {
           input: %(
@@ -717,7 +745,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             :s :p << :s1 :p1 :o1 >> .
           ),
-          regexp: [%r(ex:s ex:p <<\s*ex:s1 ex:p1 ex:o1\s*>> .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:s ex:p <<\s*ex:s1 ex:p1 ex:o1\s*>> .)
+          ]
         },
         "object-iib":  {
           input: %(
@@ -725,7 +756,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             :s :p << :s1 :p1 _:o1 >> .
           ),
-          regexp: [%r(ex:s ex:p <<\s*ex:s1 ex:p1 _:o1\s*>> .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:s ex:p <<\s*ex:s1 ex:p1 _:o1\s*>> .)
+          ]
         },
         "object-iil":  {
           input: %(
@@ -733,7 +767,10 @@ describe RDF::Turtle::Writer do
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             :s :p << :s1 :p1 "o1" >> .
           ),
-          regexp: [%r(ex:s ex:p <<\s*ex:s1 ex:p1 "o1"\s*>> .)]
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:s ex:p <<\s*ex:s1 ex:p1 "o1"\s*>> .)
+          ]
         },
         "bnode-01": {
           # Bnode in two positions
@@ -743,6 +780,7 @@ describe RDF::Turtle::Writer do
             <<_:a :p2 :o2 >> :q 456 .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(_:a ex:p1 ex:o1 .),
             %r(<<\s*_:a ex:p2 ex:o2\s*>> ex:q 456 .)
           ]
@@ -753,6 +791,7 @@ describe RDF::Turtle::Writer do
             :s :p << :s1 :p1 << :s2 :p2 :o2 >> >> .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(ex:s ex:p <<\s*ex:s1 ex:p1 <<\s*ex:s2 ex:p2 ex:o2\s*>>\s*>> .)
           ]
         },
@@ -762,6 +801,7 @@ describe RDF::Turtle::Writer do
             << << :s2 :p2 :o2 >> :p1 :o1 >> :p :o .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(<<\s*<<\s*ex:s2 ex:p2 ex:o2\s*>> ex:p1 ex:o1\s*>> ex:p ex:o .)
           ]
         },
@@ -773,6 +813,7 @@ describe RDF::Turtle::Writer do
             :r :p1 :o1 .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(<<\s*ex:s ex:p ex:o\s*~\s*ex:r\s*>>\s*ex:p1 ex:o1 .)
           ]
         },
@@ -784,6 +825,7 @@ describe RDF::Turtle::Writer do
             :s1 :p1 :r .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(ex:s1 ex:p1 <<\s*ex:s ex:p ex:o\s*~\s*ex:r\s*>>\s*.)
           ]
         },
@@ -807,6 +849,7 @@ describe RDF::Turtle::Writer do
             :s :p :o {| :r :z |} .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(ex:s ex:p ex:o {\|\s+ex:r ex:z\s+\|} \.)m
           ]
         },
@@ -824,6 +867,7 @@ describe RDF::Turtle::Writer do
                       |} .
           ),
           regexp: [
+            %r(@version "1.2" \.),
             %r(ex:s ex:p ex:o {\|\s+ex:source \[)m,
             %r(\s+ex:date "2020-01-20"\^\^<http://www.w3.org/2001/XMLSchema#date>;),
             %r(\s+ex:graph <http://host1/>),
@@ -846,7 +890,10 @@ describe RDF::Turtle::Writer do
   describe "w3c turtle tests" do
     require 'suite_helper'
 
-    %w(rdf11/rdf-turtle/manifest.ttl).each do |man|
+    %w(rdf11/rdf-turtle/manifest.ttl
+       rdf12/rdf-turtle/syntax/manifest.ttl
+       rdf12/rdf-turtle/eval/manifest.ttl
+    ).each do |man|
       Fixtures::SuiteTest::Manifest.open(Fixtures::SuiteTest::BASE + man) do |m|
         describe m.comment do
           m.entries.each do |t|

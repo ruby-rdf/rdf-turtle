@@ -63,6 +63,9 @@ module RDF::Turtle
     # @return [Graph] Graph of statements serialized
     attr_accessor :graph
 
+    # @return [String] RDF Version of output
+    attr_accessor :version
+
     ##
     # Writer options
     # @see https://ruby-rdf.github.io/rdf/RDF/Writer#options-class_method
@@ -88,6 +91,12 @@ module RDF::Turtle
           datatype: FalseClass,
           on: ["--no-literal-shorthand"],
           description: "Do not attempt to use Literal shorthands fo numbers and boolean values.") {false},
+        RDF::CLI::Option.new(
+          symbol: :version,
+          control: :select,
+          datatype: %w{1.1 1.2 1.2-basic},
+          on: ["--version"],
+          description: "RDF Version."),
       ]
     end
 
@@ -118,6 +127,8 @@ module RDF::Turtle
     #   Use unique node identifiers, defaults to using the identifier which the node was originall initialized with (if any).
     # @option options [Boolean] :literal_shorthand (true)
     #   Attempt to use Literal shorthands for numbers and boolean values
+    # @option options [String] :version ("1.2")
+    #   Emit a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
@@ -127,6 +138,7 @@ module RDF::Turtle
       @graph = RDF::Graph.new
       @uri_to_pname = {}
       @uri_to_prefix = {}
+      @version = options[:version]
       options = {literal_shorthand: true}.merge(options)
       super do
         reset
@@ -340,8 +352,9 @@ module RDF::Turtle
     end
 
     protected
-    # Output @base and @prefix definitions
+    # Output @base, @prefix, and @version definitions
     def start_document
+      @output.write("#{indent}@version #{version.inspect} .\n") if version
       @output.write("#{indent}@base <#{base_uri}> .\n") unless base_uri.to_s.empty?
 
       log_debug("start_document") {prefixes.inspect}
@@ -430,6 +443,13 @@ module RDF::Turtle
     def preprocess_statement(statement, as_subject: true)
       #log_debug("preprocess") {statement.to_ntriples}
       bump_reference(statement.object)
+
+      # Set RDF version to 1.2, if unset and required.
+      if version.nil? && (statement.object.statement? || statement.object.literal? && statement.object.direction?)
+        @version = "1.2"
+      end
+
+      # TODO: what to do if version is "1.1" or "1.2-basic"?
 
       # Also count references of triple terms
       preprocess_statement(statement.object, as_subject: false) if statement.object.statement?
