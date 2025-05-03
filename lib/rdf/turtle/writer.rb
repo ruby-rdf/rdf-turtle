@@ -129,6 +129,7 @@ module RDF::Turtle
     #   Attempt to use Literal shorthands for numbers and boolean values
     # @option options [String] :version ("1.2")
     #   Emit a specific version of RDF ("1.1', "1.2", or "1.2-basic"")
+    # @todo Get version parameter from ACCEPT header parameter
     # @yield  [writer] `self`
     # @yieldparam  [RDF::Writer] writer
     # @yieldreturn [void]
