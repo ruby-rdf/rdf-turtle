@@ -603,70 +603,46 @@ describe RDF::Turtle::Writer do
   context "triple terms" do
     {
       "object-iii":  {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::URI('http://example/o1'),
-            tripleTerm: true)),
+        input: %(<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .),
         regexp: [
           %r(@version "1.2" \.),
           %r(ex:s ex:p <<\(ex:s1 ex:p1 ex:o1\)>> .)
         ]
       },
       "object-iib":  {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Node.new('o1'),
-            tripleTerm: true)),
+        input: %(<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> _:o1)>> .),
         regexp: [
           %r(@version "1.2" \.),
           %r(ex:s ex:p <<\(ex:s1 ex:p1 _:o1\)>> .)
         ]
       },
       "object-iil":  {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Literal('o1'),
-            tripleTerm: true)),
+        input: %(<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> "o1")>> .),
         regexp: [
           %r(@version "1.2" \.),
           %r(ex:s ex:p <<\(ex:s1 ex:p1 "o1"\)>> .)
         ],
       },
       "recursive-object": {
-        input: RDF::Statement(
-          RDF::URI('http://example/s'),
-          RDF::URI('http://example/p'),
-          RDF::Statement(
-            RDF::URI('http://example/s1'),
-            RDF::URI('http://example/p1'),
-            RDF::Statement(
-              RDF::URI('http://example/s2'),
-              RDF::URI('http://example/p2'),
-              RDF::URI('http://example/o2'),
-              tripleTerm: true),
-            tripleTerm: true
-          )
-        ),
+        input: %(<http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>>)>> .),
         regexp: [
           %r(@version "1.2" \.),
           %r(ex:s ex:p <<\(\s*ex:s1 ex:p1 <<\(\s*ex:s2 ex:p2 ex:o2*\s*\)>>\s*\)>>)
         ]
+      },
+      "two-objects": {
+        input: %(
+          <http://example/s> <http://example/p> <<(<http://example/s1> <http://example/p1> <http://example/o1>)>> .
+          <http://example/s> <http://example/p> <<(<http://example/s2> <http://example/p2> <http://example/o2>)>> .
+        ),
+        regexp: [
+          %r(@version "1.2" \.),
+          %r(ex:s ex:p <<\(\s*ex:s1 ex:p1 ex:o1\s*\)>>,\s*<<\(\s*ex:s2 ex:p2 ex:o2\s*\)>>)
+        ]
       }
     }.each do |name, params|
       it name do
-        graph = RDF::Graph.new {|g| g << params[:input]}
+        graph = RDF::Graph.new {|g| g << parse(params[:input], rdfstar: true)}
         serialize(graph, params.fetch(:regexp, []), prefixes: {ex: 'http://example/'}, **params)
       end
     end
@@ -853,6 +829,38 @@ describe RDF::Turtle::Writer do
             %r(ex:s ex:p ex:o {\|\s+ex:r ex:z\s+\|} \.)m
           ]
         },
+        'IRI reifier' => {
+          input: %(
+            PREFIX : <http://example/>
+            :s :p :o ~:id {| :r :z |} .
+          ),
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:s ex:p ex:o ~ ex:id {\|\s+ex:r ex:z\s+\|} \.)m
+          ]
+        },
+        'BNode reifier' => {
+          input: %(
+            PREFIX : <http://example/>
+            :s :p :o ~ _:id {| :r :z |} .
+          ),
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:s ex:p ex:o {\|\s+ex:r ex:z\s+\|} \.)m,
+          ]
+        },
+        'BNode reifier used as object' => {
+          input: %(
+            PREFIX : <http://example/>
+            :s :p :o ~ _:id {| :r :z |} .
+            :s1 :p1 _:id .
+          ),
+          regexp: [
+            %r(@version "1.2" \.),
+            %r(ex:s ex:p ex:o ~ _:id {\|\s+ex:r ex:z\s+\|} \.)m,
+            %r(ex:s1 ex:p1 _:id \.)m,
+          ]
+        },
         'turtle-star-annotation-2' => {
           input: %(
             PREFIX :       <http://example/>
@@ -880,6 +888,8 @@ describe RDF::Turtle::Writer do
       }.each do |name, params|
         it name do
           graph = RDF::Graph.new {|g| g << parse(params[:input], rdfstar: true)}
+          #res = serialize(graph, prefixes: {ex: 'http://example/'})
+          #require 'byebug'; byebug
           serialize(graph, params.fetch(:regexp, []), prefixes: {ex: 'http://example/'}, **params)
         end
       end

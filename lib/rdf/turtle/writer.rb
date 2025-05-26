@@ -694,12 +694,15 @@ module RDF::Turtle
         end
         path(obj, :object)
 
-        # If there is a single reifier for this statement, write that out
+        # If there is a reifier for this statement, write that out
         tt = RDF::Statement(subject, predicate, obj)
         reifs = @reification.select {|k, v| v.include?(tt)}.keys
-        if reifs.length == 1
-          reif = reifs.first
+        reifs.each do |reif|
           @as_reifiedTriple[reif] = true
+          if reif.iri? || ref_count(reif) > 0
+            @output.write ' ~ '
+            p_term(reif, :subject)
+          end
           @output.write ' {| '
           predicateObjectList(reif, true)
           @output.write ' |}'
