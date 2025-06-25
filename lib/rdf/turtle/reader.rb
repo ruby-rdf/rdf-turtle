@@ -619,16 +619,17 @@ module RDF::Turtle
 
     # @return [RDF::Literal]
     def read_literal
-      error("Unexpected end of file", production: :literal) unless token = @lexer.first
+      token = @lexer.first
+      error("Unexpected end of file", production: :literal) unless token
       case token.type || token.value
-      when :INTEGER then prod(:literal) {literal(@lexer.shift.value, datatype:  RDF::XSD.integer)}
+      when :DOUBLE then prod(:literal) {literal(@lexer.shift.value.sub(/\.([eE])/, '.0\1'), datatype:  RDF::XSD.double)}
       when :DECIMAL
         prod(:literal) do
           value = @lexer.shift.value
           value = "0#{value}" if value.start_with?(".")
           literal(value, datatype:  RDF::XSD.decimal)
         end
-      when :DOUBLE then prod(:literal) {literal(@lexer.shift.value.sub(/\.([eE])/, '.0\1'), datatype:  RDF::XSD.double)}
+      when :INTEGER then prod(:literal) {literal(@lexer.shift.value, datatype:  RDF::XSD.integer)}
       when "true", "false" then prod(:literal) {literal(@lexer.shift.value, datatype: RDF::XSD.boolean)}
       when :STRING_LITERAL_QUOTE, :STRING_LITERAL_SINGLE_QUOTE
         prod(:literal) do

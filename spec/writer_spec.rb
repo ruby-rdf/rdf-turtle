@@ -888,8 +888,6 @@ describe RDF::Turtle::Writer do
       }.each do |name, params|
         it name do
           graph = RDF::Graph.new {|g| g << parse(params[:input], rdfstar: true)}
-          #res = serialize(graph, prefixes: {ex: 'http://example/'})
-          #require 'byebug'; byebug
           serialize(graph, params.fetch(:regexp, []), prefixes: {ex: 'http://example/'}, **params)
         end
       end
