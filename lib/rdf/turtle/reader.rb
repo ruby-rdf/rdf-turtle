@@ -42,18 +42,6 @@ module RDF::Turtle
     terminal(:LANG_DIR,                         LANG_DIR)
 
     ##
-    # Returns the RDF version determined by this reader.
-    #
-    # @example
-    #   reader.version  #=> RDF::URI('http://purl.org/dc/terms/')
-    #
-    # @return [String]
-    # @since  3.3.2
-    def version
-      @options[:version]
-    end
-
-    ##
     # Reader options
     # @see https://ruby-rdf.github.io/rdf/RDF/Reader#options-class_method
     def self.options
@@ -63,12 +51,6 @@ module RDF::Turtle
           datatype: TrueClass,
           on: ["--freebase"],
           description: "Use optimized Freebase reader.") {true},
-        RDF::CLI::Option.new(
-          symbol: :version,
-          control: :select,
-          datatype: %w{1.1 1.2 1.2-basic},
-          on: ["--version"],
-          description: "RDF Version."),
       ]
     end
 
@@ -351,10 +333,10 @@ module RDF::Turtle
             vers_tok = @lexer.shift
             error("version", "Expected #{vers_tok} to be a string") unless [:STRING_LITERAL_QUOTE, :STRING_LITERAL_SINGLE_QUOTE].include?(vers_tok.type)
             @options[:version] = vers_tok.value[1..-2]
-            if %w(1.2).include?(@options[:version])
+            if %w(1.1 1.2 1.2-basic).include?(@options[:version])
               progress("version") {@options[:version]}
             else
-              warn("version", "Expected version to be 1.2, was #{@options[:version]}") unless @options[:version] == "1.2"
+              warn("version", "Expected version to be one of #{RDF::Format::VERSIONS.join(', ')}, was #{@options[:version]}") unless @options[:version] == "1.2"
             end
 
             if terminated

@@ -698,15 +698,15 @@ describe RDF::Turtle::Reader do
         end
       end
 
-      it "warns if version is not 1.2" do
+      it "warns if version is not 1.1, 1.2, or 1.2-basic" do
         logger = RDF::Spec.logger
         inner = double("inner")
         expect(inner).to receive(:called)
-        RDF::Turtle::Reader.new(%{@version "1.1" . <a> <b> <c> .}, logger: logger) do |reader|
+        RDF::Turtle::Reader.new(%{@version "1.0" . <a> <b> <c> .}, logger: logger) do |reader|
           inner.called(reader.class)
           expect(reader.statements.count).to eq 1
-          expect(reader.version).to eq "1.1"
-          expect(logger.to_s).to include('Expected version to be 1.2, was 1.1')
+          expect(reader.version).to eq "1.0"
+          expect(logger.to_s).to include('Expected version to be one of 1.1, 1.2-basic, 1.2, was 1.0')
         end
       end
     end

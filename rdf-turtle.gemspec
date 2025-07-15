@@ -30,7 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency     'base64',          '~> 0.2'
   gem.add_runtime_dependency     'bigdecimal',      '~> 3.1', '>= 3.1.9'
   gem.add_runtime_dependency     'ebnf',            '~> 2.6'
-  gem.add_runtime_dependency     'rdf',             '~> 3.3'
+  gem.add_runtime_dependency     'rdf',             '~> 3.3', '>= 3.3.4'
   gem.add_runtime_dependency     'readline',        '~> 0.0'
   gem.add_development_dependency 'erubis',          '~> 2.7'
   gem.add_development_dependency 'getoptlong',      '~> 0.2'

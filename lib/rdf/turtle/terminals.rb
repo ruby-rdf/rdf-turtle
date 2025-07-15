@@ -35,7 +35,7 @@ module RDF::Turtle
     LANG_DIR              = /@([a-zA-Z]+(?:-[a-zA-Z0-9]+)*(?:--[a-zA-Z]+)?)/u.freeze
     INTEGER              = /[+-]?\d+/u.freeze
     DECIMAL              = /[+-]?(?:\d*\.\d+)/u.freeze
-    DOUBLE               = /[+-]?(?:\d+\.\d*#{EXPONENT}|\.\d+#{EXPONENT}|\d+#{EXPONENT})/u.freeze
+    DOUBLE               = /[+-]?(?:\d+(?:\.\d*)?|\.\d+)#{EXPONENT}/u.freeze
     STRING_LITERAL_SINGLE_QUOTE      = /'(?:[^\'\\\n\r]|#{ECHAR}|#{UCHAR})*'/u.freeze
     STRING_LITERAL_QUOTE             = /"(?:[^\"\\\n\r]|#{ECHAR}|#{UCHAR})*"/u.freeze
     STRING_LITERAL_LONG_SINGLE_QUOTE = /'''(?:(?:'|'')?(?:[^'\\]|#{ECHAR}|#{UCHAR}))*'''/um.freeze
