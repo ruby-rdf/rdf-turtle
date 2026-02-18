@@ -28,7 +28,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 3.0'
   gem.requirements          = []
   gem.add_runtime_dependency     'base64',          '~> 0.2'
-  gem.add_runtime_dependency     'bigdecimal',      '~> 3.1', '>= 3.1.9'
   gem.add_runtime_dependency     'ebnf',            '~> 2.6'
   gem.add_runtime_dependency     'rdf',             '~> 3.3', '>= 3.3.4'
   gem.add_runtime_dependency     'readline',        '~> 0.0'
